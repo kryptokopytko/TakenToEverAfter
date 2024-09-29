@@ -1,7 +1,8 @@
 # Taken to Ever After
 
 A comprehensive web application designed to help couples plan their wedding seamlessly. It offers a range of features for both the bride and groom, as well as their guests, to simplify the entire planning process.
-![](https://imgur.com/xs5sW3M)
+
+![](https://github.com/user-attachments/assets/85dbfe32-b172-4411-8e63-254d28380af5)
 
 ## Features
 
