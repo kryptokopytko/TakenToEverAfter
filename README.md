@@ -2,6 +2,8 @@
 
 A comprehensive web application designed to help couples plan their wedding seamlessly. It offers a range of features for both the bride and groom, as well as their guests, to simplify the entire planning process.
 
+![dancing1](https://hackmd.io/_uploads/rydn5Qw0R.png)
+
 ## Features
 
 ### For the Couple
