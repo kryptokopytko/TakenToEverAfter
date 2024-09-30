@@ -20,7 +20,7 @@ const Svg = styled.svg`
 `;
 
 const Label = styled.text`
-  font-size: 1rem;
+  font-size: 20px;
   text-anchor: middle;
   fill: black;
   font-family: 'Great Vibes', cursive; 

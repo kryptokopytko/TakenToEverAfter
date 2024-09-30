@@ -21,18 +21,18 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
     const selectedTheme = themes[selectedThemeKey as keyof typeof themes];
     if (selectedTheme) {
       setTheme(selectedTheme);
-      setIsThemeOpen(false); 
+      setIsThemeOpen(false);
     }
   };
 
   const toggleThemeDropdown = () => {
     setIsThemeOpen(prev => !prev);
-    setIsSectionOpen(false); 
+    setIsSectionOpen(false);
   };
 
   const toggleSectionDropdown = () => {
     setIsSectionOpen(prev => !prev);
-    setIsThemeOpen(false); 
+    setIsThemeOpen(false);
   };
 
   const toggleBurgerMenu = () => {
@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
               ))}
             </DropdownMenu>
           </ThemeSelectorContainer>
-          <Label color="primary">{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
+          <Label color="primary" style={{ marginTop: "2.2rem" }}>{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
         </ButtonsContainer>
 
         <BurgerMenu onClick={toggleBurgerMenu}>

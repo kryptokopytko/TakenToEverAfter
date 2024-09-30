@@ -61,12 +61,6 @@ const StyledCheckbox = styled.div<{ checked: boolean }>`
 `;
 
 
-const TaskContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-`;
 
 const initialTasks = [
   {
@@ -143,7 +137,7 @@ const ToDo = () => {
           </Heading>
         </SpaceBetweenContainer>
 
-        <GridContainer isExpanded={isExpanded}>
+        <GridContainer isExpanded={isExpanded} minWidth='28rem'>
           {tasks.map((task, categoryIndex) => (
             <Card color="primary" key={categoryIndex}>
               <SpaceBetweenContainer border>
@@ -164,21 +158,19 @@ const ToDo = () => {
                           onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
                         />
                         <StyledCheckbox checked={subTask.completed}>
-                          <svg viewBox="0 0 24 24" width="18" height="18">
+                          <svg viewBox="0 -2 24 24" width="18" height="18">
                             <polyline points="4 6 10 17 22 3 11 12" />
 
                           </svg>
                         </StyledCheckbox>
                       </CustomCheckboxLabel>
                     </CustomCheckboxWrapper>
-                    <TaskContainer>
-                      <Body size="big" style={{ marginLeft: '0.5rem' }}>
-                        {subTask.subCategory}
-                      </Body>
-                      <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
-                        {subTask.deadline}
-                      </Label>
-                    </TaskContainer>
+                    <Body size="big" style={{ marginLeft: '0.5rem' }}>
+                      {subTask.subCategory}
+                    </Body>
+                    <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
+                      {subTask.deadline}
+                    </Label>
                   </SpaceBetweenContainer>
                 ))}
               </SubTaskList>

@@ -8,6 +8,7 @@ export const SpaceBetweenContainer = styled.div<{ border?: boolean }>`
   padding: 0 1rem;
   align-items: center;
   flex-wrap: wrap;
+  gap: 1rem;
 `;
 
 export const GridContainer = styled.div<{
@@ -21,7 +22,7 @@ export const GridContainer = styled.div<{
     minmax(${({ minWidth = "20rem" }) => minWidth}, 1fr)
   );
   gap: 3rem;
-  max-height: ${({ isExpanded }) => (isExpanded ? "auto" : "60vh")};
+  max-height: ${({ isExpanded }) => (isExpanded ? "auto" : "40vh")};
   overflow-y: auto;
   transition: height 0.3s ease;
   background: ${({ isExpanded }) =>

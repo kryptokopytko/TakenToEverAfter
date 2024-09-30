@@ -84,7 +84,7 @@ const Choices = () => {
         setChoices(newChoices);
     };
 
-    
+
     const totalPicked = choices.flatMap(choice => choice.options).filter(option => option.isPicked);
     const totalCount = totalPicked.length;
     const totalAmount = totalPicked.reduce((sum, option) => sum + option.amount, 0);
@@ -98,7 +98,7 @@ const Choices = () => {
                     <Heading level={1}>Total: ${totalAmount}</Heading>
                 </SpaceBetweenContainer>
 
-                <GridContainer isExpanded={isExpanded} minWidth='25rem'>
+                <GridContainer isExpanded={isExpanded} minWidth='28rem'>
                     {choices.map((choice, choiceIndex) => {
                         const selectedOptions = choice.options.filter(option => option.isPicked);
                         const selectedCount = selectedOptions.length;

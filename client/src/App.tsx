@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import TableChart from "./components/TableChart";
 import ThemeConstructor from "./components/ThemeConstructor";
 import Choices from "./components/Choices";
+import { createGlobalStyle } from 'styled-components';
 
 const AppContainer = styled.div`
   background-color: ${({ theme }) => theme.primary};
@@ -23,7 +24,12 @@ const AppContainer = styled.div`
   margin-top: 5rem;
 `;
 
+const GlobalStyles = createGlobalStyle`
+  :root {
+    font-size: clamp(10px, 1.25vw + 5px, 20px); 
+  }
 
+`;
 
 const AppContent = () => {
   const { theme } = useTheme();
@@ -32,6 +38,7 @@ const AppContent = () => {
 
 
     <StyledThemeProvider theme={theme}>
+      <GlobalStyles />
       <AppContainer>
         <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor']} />
 

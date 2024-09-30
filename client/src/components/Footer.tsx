@@ -20,11 +20,12 @@ const Container = styled.div`
 const Section = styled.div`
   flex: 1;
   min-width: 12rem; 
-  margin: 1rem;
+  margin: 1rem 3rem;
   display:flex;
   flex-direction: column;
   align-items:center;
 max-width: 25rem;
+
 `;
 
 const ListContainer = styled.div`
@@ -38,7 +39,7 @@ width:100%;
 const Footer = () => {
   return (
     <Container>
-      {}
+      { }
       <Section>
         <Heading level={3}>Sections</Heading>
         <ListContainer>
@@ -51,7 +52,7 @@ const Footer = () => {
           <Body>Table Chart</Body></ListContainer>
       </Section>
 
-      {}
+      { }
       <Section>
         <Heading level={3}>Taken to Ever After</Heading>
         <Body>
@@ -59,7 +60,7 @@ const Footer = () => {
         </Body>
       </Section>
 
-      {}
+      { }
       <Section>
         <Heading level={3}>Contact</Heading>
         <div>
