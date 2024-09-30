@@ -6,6 +6,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.primaryLight};
   color: ${({ theme }) => theme.text};
   width: 100%;
+  padding-bottom: 2rem;
 `;
 
 const Content = styled.div`
@@ -42,8 +43,11 @@ const ImageSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: left;
-  
+  text-align: center;
+  @media (max-width: 1200px) {
+
+  margin-top: -4rem;
+  }
 `;
 
 const HiddenText = styled.div`

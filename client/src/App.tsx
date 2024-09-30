@@ -9,6 +9,7 @@ import PhotoAlbum from "./components/PhotoAlbum";
 import Footer from "./components/Footer";
 import TableChart from "./components/TableChart";
 import ThemeConstructor from "./components/ThemeConstructor";
+import Choices from "./components/Choices";
 
 const AppContainer = styled.div`
   background-color: ${({ theme }) => theme.primary};
@@ -38,6 +39,7 @@ const AppContent = () => {
         <GuestList />
         <Budget />
         <ToDo />
+        <Choices />
         <PhotoAlbum />
         <TableChart />
         <ThemeConstructor />

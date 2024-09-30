@@ -74,7 +74,7 @@ const GuestList = () => {
         </SpaceBetweenContainer>
         <SummaryContainer>
           {decisionTypes.map((decision) => (
-            <Subtitle key={decision} level={3}>
+            <Subtitle key={decision} level={1}>
               {decision.charAt(0).toUpperCase() + decision.slice(1)}: {countDecisions(decision)}
             </Subtitle>
           ))}

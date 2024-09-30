@@ -9,10 +9,16 @@ export const SpaceBetweenContainer = styled.div<{ border?: boolean }>`
   align-items: center;
 `;
 
-export const GridContainer = styled.div<{ isExpanded: boolean }>`
+export const GridContainer = styled.div<{
+  isExpanded: boolean;
+  minWidth?: string;
+}>`
   position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(${({ minWidth = "20rem" }) => minWidth}, 1fr)
+  );
   gap: 3rem;
   height: ${({ isExpanded }) => (isExpanded ? "auto" : "50vh")};
   overflow-y: auto;
