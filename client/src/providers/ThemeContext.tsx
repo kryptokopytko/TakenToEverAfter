@@ -3,47 +3,48 @@ import { initialThemes, Theme } from "../themes/theme";
 
 
 interface Themes {
-  [key: string]: Theme; 
+  [key: string]: Theme;
 }
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  themes: Themes;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themes, setThemes] = useState<Themes>(initialThemes);
-  const [theme, setCurrentTheme] = useState<Theme>(themes.nudeTheme);
+  const [theme, setCurrentTheme] = useState<Theme>(themes.nude);
   const [customThemeCount, setCustomThemeCount] = useState(0);
 
   const setTheme = (newTheme: Theme) => {
-    
+
     const themeKeys = Object.keys(themes);
     const isThemeExisting = themeKeys.some(key => {
       return JSON.stringify(themes[key]) === JSON.stringify(newTheme);
     });
 
     if (!isThemeExisting) {
-      
+
       const customThemeKey = `custom${customThemeCount + 1}`;
       setThemes(prevThemes => ({
         ...prevThemes,
-        [customThemeKey]: newTheme, 
+        [customThemeKey]: newTheme,
       }));
-      setCustomThemeCount(prevCount => prevCount + 1); 
-      setCurrentTheme(newTheme); 
+      setCustomThemeCount(prevCount => prevCount + 1);
+      setCurrentTheme(newTheme);
       console.log("Custom theme added:", customThemeKey, newTheme);
     } else {
-      
+
       setCurrentTheme(newTheme);
       console.log("Theme updated:", newTheme);
     }
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, themes }}>
       {children}
     </ThemeContext.Provider>
   );

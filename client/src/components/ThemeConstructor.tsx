@@ -5,6 +5,7 @@ import { Card, GridContainer } from "../themes/section";
 import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
 import { useTheme } from "../providers/ThemeContext";
+import Button from "./Button";
 
 const Container = styled.div`
   width: 100%;
@@ -40,10 +41,9 @@ const ThemeConstructor = () => {
                         <HslColorPicker color={color} setColor={setColor} />
                     </Card>
                     <ColorCompositions color={color} />
-
                 </GridContainer>
+                <Button> Manage Themes</Button>
             </ContentContainer>
-
         </Container>
     );
 };

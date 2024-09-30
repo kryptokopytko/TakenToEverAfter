@@ -1,5 +1,5 @@
 export const initialThemes = {
-  nudeTheme: {
+  nude: {
     tertiary: "#bb877a",
     secondary: "#d5a294",
     primary: "#f7f7f6",
@@ -10,7 +10,7 @@ export const initialThemes = {
     saturation: 32,
     lightness: 61,
   },
-  violetTheme: {
+  violet: {
     primary: "#fdfbfe",
     secondary: "#a66cd5",
     tertiary: "#642a93",
@@ -23,4 +23,4 @@ export const initialThemes = {
   },
 };
 
-export type Theme = typeof initialThemes.nudeTheme;
+export type Theme = typeof initialThemes.nude;

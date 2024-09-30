@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useTheme } from "../providers/ThemeContext";
-import { initialThemes } from "../themes/theme";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../themes/typography";
 
@@ -20,7 +19,7 @@ const ContentContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-height: 100%;
+  height: 100%;
 `;
 
 const ThemeSelector = styled.div`
@@ -40,51 +39,46 @@ const RadioButton = styled.label`
   gap: 0.5rem;
 
   input {
-    appearance: none; 
+    appearance: none;
     -webkit-appearance: none;
-    width: 20px; 
-    height: 20px; 
-    border: 2px solid ${({ theme }) => theme.dark}; 
-    border-radius: 50%; 
-    cursor: pointer; 
-    outline: none; 
-    position: relative; 
-    background-color: transparent; 
-    transition: background-color 0.3s, border-color 0.3s; 
+    width: 20px;
+    height: 20px;
+    border: 2px solid ${({ theme }) => theme.dark};
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    background-color: transparent;
+    transition: background-color 0.3s, border-color 0.3s;
   }
 
   input:checked {
-    border-color: ${({ theme }) => theme.dark}; 
+    border-color: ${({ theme }) => theme.dark};
   }
 
   input:checked::after {
-    content: ''; 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    width: 12px; 
-    height: 12px; 
-    border-radius: 50%; 
-    background-color: ${({ theme }) => theme.dark}; 
-    transform: translate(-50%, -50%); 
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: ${({ theme }) => theme.dark};
+    transform: translate(-50%, -50%);
   }
 `;
 
 const Navbar = () => {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme, themes } = useTheme();
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedTheme = event.target.value;
-
-    switch (selectedTheme) {
-      case "violet":
-        setTheme(initialThemes.violetTheme);
-        break;
-      default:
-        setTheme(initialThemes.nudeTheme);
+    const selectedThemeKey = event.target.value;
+    const selectedTheme = themes[selectedThemeKey as keyof typeof themes];
+    if (selectedTheme) {
+      setTheme(selectedTheme);
     }
   };
-
   return (
     <NavbarContainer>
       <ContentContainer>
@@ -93,26 +87,18 @@ const Navbar = () => {
           <Heading level={3} color={'primary'}>Imie1 & Imie2</Heading>
         </LogoContainer>
         <ThemeSelector>
-          <RadioButton>
-            <input
-              type="radio"
-              value="violet"
-              name="theme"
-              checked={theme === initialThemes.violetTheme}
-              onChange={handleThemeChange}
-            />
-            <Label color='primary'>Violet</Label>
-          </RadioButton>
-          <RadioButton>
-            <input
-              type="radio"
-              value="nude"
-              name="theme"
-              checked={theme === initialThemes.nudeTheme}
-              onChange={handleThemeChange}
-            />
-            <Label color='primary'>Nude</Label>
-          </RadioButton>
+          {Object.keys(themes).map((themeKey) => (
+            <RadioButton key={themeKey}>
+              <input
+                type="radio"
+                value={themeKey}
+                name="theme"
+                checked={theme === themes[themeKey as keyof typeof themes]}
+                onChange={handleThemeChange}
+              />
+              <Label color='primary'>{themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}</Label>
+            </RadioButton>
+          ))}
         </ThemeSelector>
       </ContentContainer>
     </NavbarContainer>
