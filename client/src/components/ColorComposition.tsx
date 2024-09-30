@@ -1,34 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Body, Heading } from '../themes/typography';
+import ColorVariation from './ColorVariation';
 import { Card } from '../themes/section';
-import Button from './Button';
+import { Body, Heading } from '../themes/typography';
 
 interface ColorCompositionProps {
     color: { hue: number; saturation: number; lightness: number };
 }
-
-
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-`;
-
-const ColorRow = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`;
-
-const ColorBox = styled.div<{ color: string }>`
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: ${(props) => props.color};
-`;
-
 
 function getRandomFromRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -37,8 +14,6 @@ function getRandomFromRange(min: number, max: number) {
 function generateArithmeticProgression(value: number, length: number, diff: number): number[] {
     return Array.from({ length }, (_, index) => value + index * diff);
 }
-
-
 
 function randomCompositionLightness(num: number) {
     const ranges = [
@@ -54,113 +29,45 @@ function randomCompositionLightness(num: number) {
     });
 }
 
+const generateLightnessVariations = (hue: number, saturation: number, lightnessArray: number[]) => {
+    return lightnessArray.map((light) => ({
+        hsl: `hsl(${hue}, ${saturation}%, ${light}%)`,
+        label: `L: ${light}%`,
+    }));
+};
+
 const ColorComposition: React.FC<ColorCompositionProps> = ({ color }) => {
     const { hue, saturation, lightness } = color;
 
-    const lightVariations = [40, 65, 80, 93, 98].map((light) => ({
-        hsl: `hsl(${hue}, ${saturation}%, ${light}%)`,
-        label: `L: ${light}%`,
-    }));
-
-    const randomVariations = randomCompositionLightness(lightness).map((light) => ({
-        hsl: `hsl(${hue}, ${saturation}%, ${light}%)`,
-        label: `L: ${light}%`,
-    }));
-
-    const darkVariations = [20, 38, 70, 89, 98].map((light) => ({
-        hsl: `hsl(${hue}, ${saturation}%, ${light}%)`,
-        label: `L: ${light}%`,
-    }));
+    const lightVariations = generateLightnessVariations(hue, saturation, [20, 38, 70, 89, 98]);
+    const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
+    const darkVariations = generateLightnessVariations(hue, saturation, [10, 34, 60, 85, 95]);
 
     const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal) => (
         { hue: hueVal, saturation: saturation, lightness: lightness }
     ));
-    const lightColorsForHueVariation = baseColorsForHueVariation.map((color) => ({ hue: color.hue, saturation: color.saturation, lightness: color.lightness / 4 + 60 }))
 
     const hueVariations = baseColorsForHueVariation.map((color) => ({
         hsl: `hsl(${color.hue}, ${color.saturation}%, ${color.lightness}%)`,
-        label: `${color.hue}`,
+        label: `H: ${Math.round(Number(color.hue))}°`,
     }));
 
-    const lighthueVariations = lightColorsForHueVariation.map((color) => ({
-        hsl: `hsl(${color.hue}, ${color.saturation}%, ${color.lightness}%)`,
-        label: `${color.hue}`,
-    }));
     const hslBodyColor = `hsl(${hue}, ${saturation}%, 5%)`;
+
     return (
         <>
+            <ColorVariation title="Light Variation" variations={lightVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Dark Variation" variations={darkVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Random Variation" variations={randomVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Hue Variation" variations={hueVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
             <Card color='light'>
-                <Container>
-                    <Heading level={3}>Light Variation</Heading>
-                    <ColorRow>
-                        {lightVariations.map((color, index) => (
-                            <div key={index}>
-                                <ColorBox color={color.hsl} />
-                                <Body hslColor={hslBodyColor}>{color.label}</Body>
-                            </div>
-                        ))}
-                    </ColorRow>
-                    <Button>Pick this one</Button>
-                </Container>
+                <Heading level={3}> Suggestions</Heading>
+                <Body size='bold'>Stay between 30-75% saturation,</Body>
+                <Body >vibrant colors tire eyes,<br /> desaturated ones are grey</Body>
+                <Body size='bold'>Avoid hue variation</Body>
+                <Body >for now</Body>
 
             </Card>
-            <Card color='light'>
-                <Container>
-
-                    <Heading level={3}>Dark Variation</Heading>
-                    <ColorRow>
-                        {darkVariations.map((color, index) => (
-                            <div key={index}>
-                                <ColorBox color={color.hsl} />
-                                <Body hslColor={hslBodyColor}>{color.label}</Body>
-                            </div>
-                        ))}
-                    </ColorRow>
-                    <Button>Pick this one</Button>
-
-                </Container>
-
-            </Card>
-            <Card color='light' centered='center'>
-                <Container>
-
-                    <Heading level={3}>Random Variation</Heading>
-                    <ColorRow>
-                        {randomVariations.map((color, index) => (
-                            <div key={index}>
-                                <ColorBox color={color.hsl} />
-                                <Body hslColor={hslBodyColor}>{color.label}</Body>
-                            </div>
-                        ))}
-                    </ColorRow>
-                    <Button>Pick this one</Button>
-                </Container>
-
-            </Card>
-            <Card color='light'>
-                <Container >
-
-                    <Heading level={3}>Hue Variation</Heading>
-                    <ColorRow>
-                        {hueVariations.map((color, index) => (
-                            <div key={index}>
-                                <ColorBox color={color.hsl} />
-                            </div>
-                        ))}
-                    </ColorRow>
-                    <ColorRow>
-                        {lighthueVariations.map((color, index) => (
-                            <div key={index}>
-                                <ColorBox color={color.hsl} />
-                                <Body hslColor={hslBodyColor}>H: {Math.round(Number(color.label))}°</Body>
-                            </div>
-                        ))}
-                    </ColorRow>
-                    <Button>Pick this one</Button>
-
-                </Container>
-
-            </Card >
         </>
     );
 };

@@ -15,7 +15,7 @@ width: 100%;
 `;
 const PhotoContainer = styled.div`
   width: 70vw;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${({ theme }) => theme.primary};
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   transition: transform 0.2s; 
@@ -27,7 +27,6 @@ const PhotoContainer = styled.div`
   }
 `;
 const StyledImage = styled.img`
-
   width: 60vw; 
   height: auto; 
   margin: 1rem 0; 
@@ -36,17 +35,17 @@ const StyledImage = styled.img`
 
 const TableChart = () => {
 
-    return (
-        <Container>
-            <Heading level={2}>Table Chart</Heading>
-            <PhotoContainer>
-            <StyledImage src={tables} alt='table chart image' />
-            </PhotoContainer>
-            <ButtonContainer>
-                <Button>Manage Table Chart</Button>
-            </ButtonContainer>
-        </Container>
-    );
+  return (
+    <Container>
+      <Heading level={2}>Table Chart</Heading>
+      <PhotoContainer>
+        <StyledImage src={tables} alt='table chart image' />
+      </PhotoContainer>
+      <ButtonContainer>
+        <Button>Manage Table Chart</Button>
+      </ButtonContainer>
+    </Container>
+  );
 };
 
 

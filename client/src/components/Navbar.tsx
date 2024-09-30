@@ -90,7 +90,7 @@ const Navbar = () => {
       <ContentContainer>
         <LogoContainer>
           <img src={logo} alt='logo' style={{ height: '6rem', marginTop: '1.1rem' }} />
-          <Heading level={3} color={'white'}>Imie1 & Imie2</Heading>
+          <Heading level={3} color={'primary'}>Imie1 & Imie2</Heading>
         </LogoContainer>
         <ThemeSelector>
           <RadioButton>
@@ -101,7 +101,7 @@ const Navbar = () => {
               checked={theme === violetTheme}
               onChange={handleThemeChange}
             />
-            <Label color='white'>Violet</Label>
+            <Label color='primary'>Violet</Label>
           </RadioButton>
           <RadioButton>
             <input
@@ -111,7 +111,7 @@ const Navbar = () => {
               checked={theme === nudeTheme}
               onChange={handleThemeChange}
             />
-            <Label color='white'>Nude</Label>
+            <Label color='primary'>Nude</Label>
           </RadioButton>
         </ThemeSelector>
       </ContentContainer>

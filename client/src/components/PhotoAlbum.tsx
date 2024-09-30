@@ -35,6 +35,7 @@ const StyledImage = styled.img`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   transition: transform 0.2s; 
 padding: 1rem;
+background-color: #fff;
   &:hover {
     z-index: 1;
     transform: scale(1.05); 
