@@ -3,7 +3,7 @@ import ColorVariation from './ColorVariation';
 import { Card } from '../themes/section';
 import { Body, Heading } from '../themes/typography';
 
-interface ColorCompositionProps {
+interface ColorCompositionsProps {
     color: { hue: number; saturation: number; lightness: number };
 }
 
@@ -36,15 +36,15 @@ const generateLightnessVariations = (hue: number, saturation: number, lightnessA
     }));
 };
 
-const ColorComposition: React.FC<ColorCompositionProps> = ({ color }) => {
+const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
     const { hue, saturation, lightness } = color;
 
     const lightVariations = generateLightnessVariations(hue, saturation, [20, 38, 70, 89, 98]);
     const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
     const darkVariations = generateLightnessVariations(hue, saturation, [10, 34, 60, 85, 95]);
 
-    const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal) => (
-        { hue: hueVal, saturation: saturation, lightness: lightness }
+    const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal, index) => (
+        { hue: hueVal, saturation: saturation, lightness: [40, 50, 60, 79, 98][index] }
     ));
 
     const hueVariations = baseColorsForHueVariation.map((color) => ({
@@ -72,4 +72,4 @@ const ColorComposition: React.FC<ColorCompositionProps> = ({ color }) => {
     );
 };
 
-export default ColorComposition;
+export default ColorCompositions;

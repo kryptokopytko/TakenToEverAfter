@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTheme } from "../providers/ThemeContext";
-import { violetTheme, nudeTheme } from "../themes/theme";
+import { initialThemes } from "../themes/theme";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../themes/typography";
 
@@ -78,10 +78,10 @@ const Navbar = () => {
 
     switch (selectedTheme) {
       case "violet":
-        setTheme(violetTheme);
+        setTheme(initialThemes.violetTheme);
         break;
       default:
-        setTheme(nudeTheme);
+        setTheme(initialThemes.nudeTheme);
     }
   };
 
@@ -98,7 +98,7 @@ const Navbar = () => {
               type="radio"
               value="violet"
               name="theme"
-              checked={theme === violetTheme}
+              checked={theme === initialThemes.violetTheme}
               onChange={handleThemeChange}
             />
             <Label color='primary'>Violet</Label>
@@ -108,7 +108,7 @@ const Navbar = () => {
               type="radio"
               value="nude"
               name="theme"
-              checked={theme === nudeTheme}
+              checked={theme === initialThemes.nudeTheme}
               onChange={handleThemeChange}
             />
             <Label color='primary'>Nude</Label>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Heading } from "../themes/typography";
 import HslColorPicker from "./HslColorPicker";
 import { Card, GridContainer } from "../themes/section";
-import ColorComposition from "./ColorComposition";
+import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
 import { useTheme } from "../providers/ThemeContext";
 
@@ -39,7 +39,7 @@ const ThemeConstructor = () => {
                     <Card color='light'>
                         <HslColorPicker color={color} setColor={setColor} />
                     </Card>
-                    <ColorComposition color={color} />
+                    <ColorCompositions color={color} />
 
                 </GridContainer>
             </ContentContainer>
