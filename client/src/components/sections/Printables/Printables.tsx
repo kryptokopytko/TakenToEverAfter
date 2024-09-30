@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { Heading } from "../../styles/typography";
+import { Heading } from "../../../styles/typography";
 import tables from '/pictures/tables.png';
-import Button, { ButtonContainer } from "../Button";
+import Button, { ButtonContainer } from "../../Button";
+import { exportToPDF } from "./exportToPdf";
 
 const Container = styled.div`
     padding: 2rem 0;
@@ -44,6 +45,10 @@ const Printables = () => {
       </PhotoContainer>
       <ButtonContainer>
         <Button>Manage Prints</Button>
+        <Button onClick={() => exportToPDF("budget")}>Download PDF of Budget</Button>
+        <Button onClick={() => exportToPDF("todo-list")}>Download PDF of To Do List</Button>
+        <Button onClick={() => exportToPDF("guest-list")}>Download PDF of Guest List</Button>
+
       </ButtonContainer>
     </Container>
   );

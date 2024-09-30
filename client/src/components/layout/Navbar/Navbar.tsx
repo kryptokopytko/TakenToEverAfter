@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
-import { Body, Heading, Label } from "../../../styles/typography";
+import { Heading, Label } from "../../../styles/typography";
 import { LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 
 interface NavbarProps {

@@ -17,17 +17,14 @@ interface ListProps {
 const List: React.FC<ListProps> = ({ list, isExpanded }) => {
 
   return (
-    <div>
-
-      <GridContainer isExpanded={isExpanded}>
-        {list.map((guest, index) => (
-          <GuestItem key={index}>
-            <Body size="big">{guest.name}</Body>
-            <Label size="small">{guest.decision}</Label>
-          </GuestItem>
-        ))}
-      </GridContainer>
-    </div>
+    <GridContainer isExpanded={isExpanded}>
+      {list.map((guest, index) => (
+        <GuestItem key={index}>
+          <Body size="big">{guest.name}</Body>
+          <Label size="small">{guest.decision}</Label>
+        </GuestItem>
+      ))}
+    </GridContainer>
   );
 };
 

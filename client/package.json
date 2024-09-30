@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@types/styled-components": "^5.1.34",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
     "polished": "^4.3.1",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",

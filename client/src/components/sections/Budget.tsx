@@ -4,6 +4,7 @@ import Button, { ButtonContainer } from "../Button";
 import PieChart from "../PieChart";
 import { Card, GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";
+import { exportToPDF } from "./Printables/exportToPdf";
 
 const HeaderContainer = styled.div`
   display: grid;
@@ -78,52 +79,52 @@ const Budget = () => {
     };
 
     return (
-        <>
-            <div>
-                <HeaderContainer>
-                    <div>
-                        <SpaceBetweenContainer>
-                            <Heading level={1}>Budget:</Heading>
-                            <Heading level={1}>${totalBudget}</Heading>
-                        </SpaceBetweenContainer>
-                        <SpaceBetweenContainer>
-                            <Heading level={2}>Remaining:</Heading>
-                            <Heading level={2}>${remainingBudget}</Heading>
-                        </SpaceBetweenContainer>
-                        <SpaceBetweenContainer>
-                            <Heading level={3}>Spent:</Heading>
-                            <Heading level={3}>${totalSpent}</Heading>
-                        </SpaceBetweenContainer>
-                    </div>
-                    <PieChart data={pieData} />
-                </HeaderContainer>
-                <GridContainer isExpanded={isExpanded}>
-                    {expenses.map((expense, index) => (
-                        <Card color='light' key={index}>
+        <div id='budget'>
+            <HeaderContainer>
+                <div>
+                    <SpaceBetweenContainer>
+                        <Heading level={1}>Budget:</Heading>
+                        <Heading level={1}>${totalBudget}</Heading>
+                    </SpaceBetweenContainer>
+                    <SpaceBetweenContainer>
+                        <Heading level={2}>Remaining:</Heading>
+                        <Heading level={2}>${remainingBudget}</Heading>
+                    </SpaceBetweenContainer>
+                    <SpaceBetweenContainer>
+                        <Heading level={3}>Spent:</Heading>
+                        <Heading level={3}>${totalSpent}</Heading>
+                    </SpaceBetweenContainer>
+                </div>
+                <PieChart data={pieData} />
+            </HeaderContainer>
+            <GridContainer isExpanded={isExpanded}>
+                {expenses.map((expense, index) => (
+                    <Card color='light' key={index}>
 
-                            <SpaceBetweenContainer border>
-                                <Heading level={4}>{expense.category}</Heading>
-                                <Heading level={4}>${expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)}</Heading>
+                        <SpaceBetweenContainer border>
+                            <Heading level={4}>{expense.category}</Heading>
+                            <Heading level={4}>${expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)}</Heading>
+                        </SpaceBetweenContainer>
+
+                        {expense.subExpenses.map((subExpense, subIndex) => (
+                            <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
+                                <Body size='big'>{subExpense.subCategory}</Body>
+                                <Body size='big'>${subExpense.amount}</Body>
                             </SpaceBetweenContainer>
+                        ))}
+                    </Card>
+                ))}
+            </GridContainer>
+            <ButtonContainer>
+                <Button>Add Expense</Button>
+                <Button>Manage Expenses</Button>
+                <Button onClick={toggleList}>
+                    {isExpanded ? 'Collapse List' : 'Expand List'}
+                </Button>
+                <Button onClick={() => exportToPDF("budget")}>Export to PDF</Button>
 
-                            {expense.subExpenses.map((subExpense, subIndex) => (
-                                <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
-                                    <Body size='big'>{subExpense.subCategory}</Body>
-                                    <Body size='big'>${subExpense.amount}</Body>
-                                </SpaceBetweenContainer>
-                            ))}
-                        </Card>
-                    ))}
-                </GridContainer>
-                <ButtonContainer>
-                    <Button>Add Expense</Button>
-                    <Button>Manage Expenses</Button>
-                    <Button onClick={toggleList}>
-                        {isExpanded ? 'Collapse List' : 'Expand List'}
-                    </Button>
-                </ButtonContainer>
-            </div>
-        </>
+            </ButtonContainer>
+        </div>
     );
 };
 

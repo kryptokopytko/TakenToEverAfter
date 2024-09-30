@@ -11,7 +11,7 @@ import TableChart from "./components/sections/TableChart";
 import ThemeConstructor from "./components/sections/ThemeConstructor/ThemeConstructor";
 import Choices from "./components/sections/Choices";
 import { createGlobalStyle } from 'styled-components';
-import Printables from "./components/sections/Printables";
+import Printables from "./components/sections/Printables/Printables";
 
 const AppContainer = styled.div`
   background-color: ${({ theme }) => theme.primary};

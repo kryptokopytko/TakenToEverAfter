@@ -4,6 +4,7 @@ import Button, { ButtonContainer } from "../../Button";
 import { Card, GridContainer, SpaceBetweenContainer } from "../../../styles/section";
 import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
+import { exportToPDF } from "../Printables/exportToPdf";
 
 const initialTasks = [
   {
@@ -48,28 +49,6 @@ const ToDo = () => {
     (completed, task) => completed + task.subTasks.filter((subTask) => subTask.completed).length,
     0
   );
-
-  const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
-    const updatedTasks = tasks.map((task, index) => {
-      if (index === categoryIndex) {
-        const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {
-          if (subIndex === subTaskIndex) {
-            return { ...subTask, completed: !subTask.completed };
-          }
-          return subTask;
-        });
-        return { ...task, subTasks: updatedSubTasks };
-      }
-      return task;
-    });
-
-    setTasks(updatedTasks);
-  };
-
-  const toggleList = () => {
-    setIsExpanded((prev) => !prev);
-  };
-
   const getTasksForDate = (date: Date) => {
     return tasks
       .flatMap((task) => task.subTasks)
@@ -102,8 +81,30 @@ const ToDo = () => {
     return null;
   };
 
+  const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
+    const updatedTasks = tasks.map((task, index) => {
+      if (index === categoryIndex) {
+        const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {
+          if (subIndex === subTaskIndex) {
+            return { ...subTask, completed: !subTask.completed };
+          }
+          return subTask;
+        });
+        return { ...task, subTasks: updatedSubTasks };
+      }
+      return task;
+    });
+
+    setTasks(updatedTasks);
+  };
+
+  const toggleList = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+
   return (
-    <div>
+    <div id="todo-list">
       <SpaceBetweenContainer>
         <Heading level={1}>To Do:</Heading>
         <Heading level={1}>
@@ -118,47 +119,50 @@ const ToDo = () => {
         tileContent={tileContent}
       />
 
-      <GridContainer isExpanded={isExpanded} minWidth="28rem">
-        {tasks.map((task, categoryIndex) => (
-          <Card color="primary" key={categoryIndex}>
-            <SpaceBetweenContainer border>
-              <Heading level={4}>{task.category}</Heading>
-              <Heading level={4}>
-                {task.subTasks.filter((subTask) => subTask.completed).length}/
-                {task.subTasks.length}
-              </Heading>
-            </SpaceBetweenContainer>
+      <div> 
+        <GridContainer isExpanded={isExpanded} minWidth="28rem">
+          {tasks.map((task, categoryIndex) => (
+            <Card color="primary" key={categoryIndex}>
+              <SpaceBetweenContainer border>
+                <Heading level={4}>{task.category}</Heading>
+                <Heading level={4}>
+                  {task.subTasks.filter((subTask) => subTask.completed).length}/
+                  {task.subTasks.length}
+                </Heading>
+              </SpaceBetweenContainer>
 
-            <SubTaskList>
-              {task.subTasks.map((subTask, subTaskIndex) => (
-                <SpaceBetweenContainer key={subTaskIndex}>
-                  <CustomCheckboxWrapper>
-                    <CustomCheckboxLabel>
-                      <HiddenCheckbox
-                        checked={subTask.completed}
-                        onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
-                      />
-                      <StyledCheckbox checked={subTask.completed}>
-                        <svg viewBox="0 -2 24 24" width="18" height="18">
-                          <polyline points="4 6 10 17 22 3 11 12" />
-                        </svg>
-                      </StyledCheckbox>
-                    </CustomCheckboxLabel>
-                  </CustomCheckboxWrapper>
-                  <Body size="big" style={{ marginLeft: '0.5rem' }}>
-                    {subTask.subCategory}
-                  </Body>
-                  <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
-                    {subTask.deadline}
-                  </Label>
-                </SpaceBetweenContainer>
-              ))}
-            </SubTaskList>
-          </Card>
-        ))}
-      </GridContainer>
+              <SubTaskList>
+                {task.subTasks.map((subTask, subTaskIndex) => (
+                  <SpaceBetweenContainer key={subTaskIndex}>
+                    <CustomCheckboxWrapper>
+                      <CustomCheckboxLabel>
+                        <HiddenCheckbox
+                          checked={subTask.completed}
+                          onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                        />
+                        <StyledCheckbox checked={subTask.completed}>
+                          <svg viewBox="4 6 10 10" width="18" height="18">
+                            <polyline points="4 6 10 17 22 3 11 12" />
+                          </svg>
+                        </StyledCheckbox>
+                      </CustomCheckboxLabel>
+                    </CustomCheckboxWrapper>
+                    <Body size="big" style={{ marginLeft: '0.5rem' }}>
+                      {subTask.subCategory}
+                    </Body>
+                    <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
+                      {subTask.deadline}
+                    </Label>
+                  </SpaceBetweenContainer>
+                ))}
+              </SubTaskList>
+            </Card>
+          ))}
+        </GridContainer>
+      </div>
 
       <ButtonContainer>
+        <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
         <Button>Add Task</Button>
         <Button>Manage Tasks</Button>
         <Button onClick={toggleList}>

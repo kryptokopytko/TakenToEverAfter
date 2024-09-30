@@ -4,6 +4,7 @@ import List from "../List";
 import Button, { ButtonContainer } from "../Button";
 import { useState } from "react";
 import { SpaceBetweenContainer } from "../../styles/section";
+import { exportToPDF } from "./Printables/exportToPdf";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -54,7 +55,7 @@ const GuestList = () => {
   };
 
   return (
-    <div>
+    <div id='guest-list'>
       <SpaceBetweenContainer>
         <Heading level={1}>Guest List:</Heading>
         <Button onClick={toggleList}>
@@ -69,10 +70,11 @@ const GuestList = () => {
         ))}
       </SummaryContainer>
       <List list={guests} isExpanded={isExpanded} />
-
       <ButtonContainer>
         <Button>Invite more</Button>
         <Button>Manage Guests</Button>
+        <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
+
       </ButtonContainer>
     </div>
   );
