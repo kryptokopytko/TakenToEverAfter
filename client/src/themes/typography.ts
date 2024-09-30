@@ -17,7 +17,7 @@ interface BodyProps {
 }
 
 interface LabelProps {
-  size?: "big" | "small" | "bold";
+  size?: "big" | "small" | "bold" | "extraSmall";
   color?: string;
 }
 
@@ -129,6 +129,12 @@ const Label = styled.p<LabelProps>`
     size === "small" &&
     css`
       font-size: 1.5rem;
+      font-weight: 400;
+    `}
+     ${({ size }) =>
+    size === "extraSmall" &&
+    css`
+      font-size: 1rem;
       font-weight: 400;
     `}
   ${({ size }) =>

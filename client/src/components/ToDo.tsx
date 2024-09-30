@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Body, Heading } from "../themes/typography";
+import { Body, Heading, Label } from "../themes/typography";
 import Button, { ButtonContainer } from "./Button";
 import { Card, GridContainer, SpaceBetweenContainer } from "../themes/section";
 
@@ -9,12 +9,10 @@ const ToDoContainer = styled.div`
   padding: 1rem 3rem;
 `;
 
-
 const Container = styled.div`
   padding: 2rem 0;
   width: 100%;
 `;
-
 
 const SubTaskList = styled.ul`
   list-style-type: none;
@@ -62,35 +60,43 @@ const StyledCheckbox = styled.div<{ checked: boolean }>`
   }
 `;
 
+
+const TaskContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+`;
+
 const initialTasks = [
   {
     category: 'Planning',
     subTasks: [
-      { subCategory: 'Create guest list', completed: false },
-      { subCategory: 'Select venue', completed: true },
+      { subCategory: 'Create guest list', completed: false, deadline: '2024-10-05' },
+      { subCategory: 'Select venue', completed: true, deadline: '2024-09-25' },
     ],
   },
   {
     category: 'Catering',
     subTasks: [
-      { subCategory: 'Confirm menu', completed: false },
-      { subCategory: 'Hire caterer', completed: true },
+      { subCategory: 'Confirm menu', completed: false, deadline: '2024-10-10' },
+      { subCategory: 'Hire caterer', completed: true, deadline: '2024-09-28' },
     ],
   },
   {
     category: 'Decorations',
     subTasks: [
-      { subCategory: 'Choose flowers', completed: false },
-      { subCategory: 'Design table setup', completed: false },
-      { subCategory: 'Choose color theme', completed: false },
-      { subCategory: 'Choose kayaks', completed: true },
+      { subCategory: 'Choose flowers', completed: false, deadline: '2024-10-15' },
+      { subCategory: 'Design table setup', completed: false, deadline: '2024-10-12' },
+      { subCategory: 'Choose color theme', completed: false, deadline: '2024-10-20' },
+      { subCategory: 'Choose kayaks', completed: true, deadline: '2024-09-30' },
     ],
   },
   {
     category: 'Entertainment',
     subTasks: [
-      { subCategory: 'Book DJ', completed: true },
-      { subCategory: 'Plan activities', completed: true },
+      { subCategory: 'Book DJ', completed: true, deadline: '2024-09-22' },
+      { subCategory: 'Plan activities', completed: true, deadline: '2024-09-23' },
     ],
   },
 ];
@@ -120,12 +126,12 @@ const ToDo = () => {
 
     setTasks(updatedTasks);
   };
-  const [isExpanded, setIsExpanded] = useState(false); 
+
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleList = () => {
-    setIsExpanded((prev) => !prev); 
+    setIsExpanded((prev) => !prev);
   };
-
 
   return (
     <Container>
@@ -139,7 +145,7 @@ const ToDo = () => {
 
         <GridContainer isExpanded={isExpanded}>
           {tasks.map((task, categoryIndex) => (
-            <Card color='primary' key={categoryIndex}>
+            <Card color="primary" key={categoryIndex}>
               <SpaceBetweenContainer border>
                 <Heading level={4}>{task.category}</Heading>
                 <Heading level={4}>
@@ -162,11 +168,16 @@ const ToDo = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </StyledCheckbox>
-                        <Body size="big" style={{ marginLeft: '0.5rem' }}>
-                          {subTask.subCategory}
-                        </Body>
                       </CustomCheckboxLabel>
                     </CustomCheckboxWrapper>
+                    <TaskContainer>
+                      <Body size="big" style={{ marginLeft: '0.5rem' }}>
+                        {subTask.subCategory}
+                      </Body>
+                      <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
+                        {subTask.deadline}
+                      </Label>
+                    </TaskContainer>
                   </SpaceBetweenContainer>
                 ))}
               </SubTaskList>
@@ -178,8 +189,8 @@ const ToDo = () => {
           <Button>Add Task</Button>
           <Button>Manage Tasks</Button>
           <Button onClick={toggleList}>
-        {isExpanded ? 'Collapse List' : 'Expand List'}
-      </Button>
+            {isExpanded ? 'Collapse List' : 'Expand List'}
+          </Button>
         </ButtonContainer>
       </ToDoContainer>
     </Container>

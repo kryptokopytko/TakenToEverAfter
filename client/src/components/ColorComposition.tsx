@@ -121,7 +121,7 @@ const ColorComposition: React.FC<ColorCompositionProps> = ({ color }) => {
                 </Container>
 
             </Card>
-            <Card color='light'>
+            <Card color='light' centered='center'>
                 <Container>
 
                     <Heading level={3}>Random Variation</Heading>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Heading } from "../themes/typography";
+import { Heading, Subtitle } from "../themes/typography";
 import List from "./List";
-import Button, {ButtonContainer} from "./Button";
+import Button, { ButtonContainer } from "./Button";
 import { useState } from "react";
 import { SpaceBetweenContainer } from "../themes/section";
 
@@ -15,6 +15,14 @@ const Container = styled.div`
   width: 100%;
 `;
 
+const SummaryContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+`
 
 const guests = [
   { name: 'Papa Smurf', decision: 'yes' },
@@ -38,27 +46,41 @@ const guests = [
   { name: 'Scaredy Smurf', decision: 'no' },
   { name: 'Dizzy Smurf', decision: 'yes' },
   { name: 'Snappy Smurf', decision: 'yes' },
+  { name: 'New Smurf', decision: 'not invited' },
 ];
 
 
-const GuestList = () => {
-  const [isExpanded, setIsExpanded] = useState(false); 
+const decisionTypes = ['yes', 'maybe', 'no', 'not invited'];
 
-  const toggleList = () => {
-    setIsExpanded((prev) => !prev); 
+const GuestList = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const countDecisions = (decisionType: string) => {
+    return guests.filter((guest) => guest.decision === decisionType).length;
   };
 
+  const toggleList = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   return (
     <Container>
       <GuestListContainer>
         <SpaceBetweenContainer>
-        <Heading level={1}>Guest List</Heading>
-        <Button onClick={toggleList}>
-        {isExpanded ? 'Collapse List' : 'Expand List'}
-      </Button>
-      </SpaceBetweenContainer>
+          <Heading level={1}>Guest List:</Heading>
+          <Button onClick={toggleList}>
+            {isExpanded ? 'Collapse List' : 'Expand List'}
+          </Button>
+        </SpaceBetweenContainer>
+        <SummaryContainer>
+          {decisionTypes.map((decision) => (
+            <Subtitle key={decision} level={3}>
+              {decision.charAt(0).toUpperCase() + decision.slice(1)}: {countDecisions(decision)}
+            </Subtitle>
+          ))}
+        </SummaryContainer>
         <List list={guests} isExpanded={isExpanded} />
+
         <ButtonContainer>
           <Button>Invite more</Button>
           <Button>Manage Guests</Button>
