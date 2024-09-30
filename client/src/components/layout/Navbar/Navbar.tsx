@@ -9,10 +9,9 @@ interface NavbarProps {
   sections: string[];
   isLogged: boolean;
   weddingDate: string;
-  daysLeft: number;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate, daysLeft }) => {
+const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate }) => {
   const { setTheme, theme, themes } = useTheme();
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState(false);
@@ -40,6 +39,17 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate,
   const toggleBurgerMenu = () => {
     setIsBurgerOpen(prev => !prev);
   };
+  const convertDateFormat = (dateString: string) => {
+    const [day, month, year] = dateString.split('.'); 
+    return `${year}-${month}-${day}`;
+  };
+
+  const calculateDaysLeft = () => {
+    const today = new Date();
+    const wedding = new Date(convertDateFormat(weddingDate)); 
+    const differenceInTime = wedding.getTime() - today.getTime();
+    return Math.ceil(differenceInTime / (1000 * 3600 * 24));
+  };
 
   return (
     <NavbarContainer>
@@ -50,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate,
             <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
           </NamesContainer>
         </LogoContainer>
-        <Label size='small' >{daysLeft} days left</Label>
+        <Label size='small' >{calculateDaysLeft()} days left</Label>
         <Label size='small'>{weddingDate} </Label>
         <ButtonsContainer>
           <ThemeSelectorContainer>
