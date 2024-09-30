@@ -1,38 +1,75 @@
 import styled from "styled-components";
-import { Body, Heading, Label, Subtitle } from "../themes/typography";
+import { Body, Heading } from "../themes/typography";
 
 const Container = styled.div`
-  padding: 2rem 0;
-  text-align: center;
+  padding: 2rem 0rem; 
   background-color: ${({ theme }) => theme.light};
-width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  text-align: left;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+`;
+
+const Section = styled.div`
+  flex: 1;
+  min-width: 12rem; 
+  margin: 1rem;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+max-width: 25rem;
+`;
+
+const ListContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+margin-top: -2rem;
+gap: 0.5rem;
+width:100%;
 `;
 
 const Footer = () => {
-
   return (
     <Container>
-      <Heading level={1} color="secondary">This is a Heading</Heading>
-      <Heading level={2} color="secondary">This is a Heading</Heading>
-      <Heading level={3} color="secondary">This is a Heading</Heading>
-      <Heading level={4} color="secondary">This is a Heading</Heading>
+      {}
+      <Section>
+        <Heading level={3}>Sections</Heading>
+        <ListContainer>
+          <Body>Guest List</Body>
+          <Body>To Do</Body>
+          <Body>Choices</Body>
+          <Body>Budget</Body>
+          <Body>Create Theme</Body>
+          <Body>Photo Album</Body>
+          <Body>Table Chart</Body></ListContainer>
+      </Section>
 
-      <Subtitle level={1}>This is a Subtitle</Subtitle>
-      <Subtitle level={2}>This is a Subtitle</Subtitle>
-      <Subtitle level={3}>This is a Subtitle</Subtitle>
-      <Subtitle level={4}>This is a Subtitle</Subtitle>
-      <Body size="small" color="secondary">This is Body text</Body>
-      <Body size="bold" color="secondary">This is Body text</Body>
-      <Body color="secondary">This is Body text</Body>
-      <Body size="big" color="secondary">This is Body text</Body>
-      <Label size="big" color="tertiary">This is a Label</Label>
-      <Label size="bold" color="tertiary">This is a Label</Label>
-      <Label size="small" color="tertiary">This is a Label</Label>
-      <Label color="tertiary">This is a Label</Label>
+      {}
+      <Section>
+        <Heading level={3}>Taken to Ever After</Heading>
+        <Body>
+          <Body>Your wedding planning made easy</Body>
+        </Body>
+      </Section>
 
+      {}
+      <Section>
+        <Heading level={3}>Contact</Heading>
+        <div>
+          <Body>Address: 123 Wedding Lane</Body>
+          <Body>City, State, ZIP: Wedding City, WC 12345</Body>
+          <Body>Phone: (123) 456-7890</Body>
+          <Body>Email: contact@takentoeverafter.com</Body>
+        </div>  </Section>
     </Container>
   );
 };
-
 
 export default Footer;
