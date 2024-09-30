@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../themes/typography";
@@ -16,67 +16,41 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
-  const themeDropdownRef = useRef<HTMLDivElement>(null);
-  const sectionDropdownRef = useRef<HTMLDivElement>(null);
-
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedThemeKey = event.target.value;
     const selectedTheme = themes[selectedThemeKey as keyof typeof themes];
     if (selectedTheme) {
       setTheme(selectedTheme);
-      setIsThemeOpen(false);
+      setIsThemeOpen(false); 
     }
   };
 
   const toggleThemeDropdown = () => {
-    setIsThemeOpen(!isThemeOpen);
+    setIsThemeOpen(prev => !prev);
+    setIsSectionOpen(false); 
   };
 
   const toggleSectionDropdown = () => {
-    setIsSectionOpen(!isSectionOpen);
+    setIsSectionOpen(prev => !prev);
+    setIsThemeOpen(false); 
   };
 
   const toggleBurgerMenu = () => {
-    setIsBurgerOpen(!isBurgerOpen);
+    setIsBurgerOpen(prev => !prev);
   };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      themeDropdownRef.current &&
-      !themeDropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsThemeOpen(false);
-    }
-    if (
-      sectionDropdownRef.current &&
-      !sectionDropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsSectionOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <NavbarContainer>
       <ContentContainer>
         <LogoContainer>
           <img src={logo} alt="logo" style={{ height: "6rem", marginTop: "1.1rem" }} />
-
           <NamesContainer>
             <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
           </NamesContainer>
         </LogoContainer>
 
-
         <ButtonsContainer>
-
-          <ThemeSelectorContainer ref={themeDropdownRef}>
+          <ThemeSelectorContainer>
             <SelectorButton onClick={toggleThemeDropdown}>
               <Label color="primary">Select Theme {isThemeOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
@@ -96,8 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
             </DropdownMenu>
           </ThemeSelectorContainer>
 
-
-          <ThemeSelectorContainer ref={sectionDropdownRef}>
+          <ThemeSelectorContainer>
             <SelectorButton onClick={toggleSectionDropdown}>
               <Label color="primary">Select Section {isSectionOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
@@ -110,11 +83,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
               ))}
             </DropdownMenu>
           </ThemeSelectorContainer>
-          <Label color="primary">
-            {isLogged ? 'Wyloguj' : 'Zaloguj'}
-          </Label>
+          <Label color="primary">{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
         </ButtonsContainer>
-
 
         <BurgerMenu onClick={toggleBurgerMenu}>
           <div />
@@ -122,15 +92,11 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
           <div />
         </BurgerMenu>
 
-
         <MobileMenu isOpen={isBurgerOpen}>
-
           <span>
-            <Label color="dark">
-              {isLogged ? 'Wyloguj' : 'Zaloguj'}
-            </Label>
-            <ThemeSelectorContainer ref={themeDropdownRef}>
-              <Label color="dark">Select Theme </Label>
+            <Label color="dark">{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
+            <ThemeSelectorContainer>
+              <Label color="dark">Select Theme</Label>
               <DropdownMenu isOpen={isThemeOpen}>
                 {Object.keys(themes).map((themeKey) => (
                   <RadioButton key={themeKey}>
@@ -147,7 +113,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
               </DropdownMenu>
             </ThemeSelectorContainer>
           </span>
-          <ThemeSelectorContainer ref={sectionDropdownRef}>
+
+          <ThemeSelectorContainer>
             <Label color="dark">Select Section</Label>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
@@ -158,8 +125,6 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
               ))}
             </DropdownMenu>
           </ThemeSelectorContainer>
-
-
         </MobileMenu>
       </ContentContainer>
     </NavbarContainer>

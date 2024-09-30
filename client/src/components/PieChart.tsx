@@ -8,12 +8,10 @@ interface PieChartData {
   label: string;
 }
 
-
 interface PieChartProps {
   data: PieChartData[];
-  size?: number; 
+  size?: number;
 }
-
 
 const Svg = styled.svg`
   width: 100%;
@@ -21,21 +19,18 @@ const Svg = styled.svg`
   display: block;
 `;
 
-
 const Label = styled.text`
-  font-size: 14px;
+  font-size: 1rem;
   text-anchor: middle;
   fill: black;
+  font-family: 'Great Vibes', cursive; 
 `;
 
 const PieChart: React.FC<PieChartProps> = ({ data, size = 400 }) => {
-  
-  const total = data.reduce((acc, item) => acc + item.value, 0);
 
-  
+  const total = data.reduce((acc, item) => acc + item.value, 0);
   const radius = size / 2;
 
-  
   let cumulativeValue = 0;
   const { theme } = useTheme();
 
@@ -46,24 +41,19 @@ const PieChart: React.FC<PieChartProps> = ({ data, size = 400 }) => {
         cumulativeValue += item.value;
         const endAngle = cumulativeValue / total;
 
-        
         const [startX, startY] = getCoordinatesForPercent(startAngle, radius, size);
         const [endX, endY] = getCoordinatesForPercent(endAngle, radius, size);
         const largeArcFlag = item.value / total > 0.5 ? 1 : 0;
 
-        
         const middleAngle = (startAngle + endAngle) / 2;
-        const [labelX, labelY] = getCoordinatesForPercent(middleAngle, radius * 1.2, size); 
+        const [labelX, labelY] = getCoordinatesForPercent(middleAngle, radius * 1.2, size);
 
         return (
           <g key={index}>
-            {}
             <path
               d={`M ${radius},${radius} L ${startX},${startY} A ${radius},${radius} 0 ${largeArcFlag} 1 ${endX},${endY} Z`}
               fill={getRandomColor(theme)}
             />
-
-            {}
             <Label x={labelX} y={labelY}>
               {item.label}
             </Label>
@@ -80,7 +70,6 @@ const getCoordinatesForPercent = (percent: number, radius: number, size: number)
   return [x, y];
 };
 
-
 function* generateModulo90() {
   let value = 0;
 
@@ -93,7 +82,6 @@ function* generateModulo90() {
 const generator = generateModulo90();
 
 const getRandomColor = (theme: Theme) => {
-
   return `hsl(${theme.hue}, ${theme.saturation}%, ${generator.next().value as number}%)`;
 };
 

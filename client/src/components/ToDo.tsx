@@ -165,7 +165,8 @@ const ToDo = () => {
                         />
                         <StyledCheckbox checked={subTask.completed}>
                           <svg viewBox="0 0 24 24" width="18" height="18">
-                            <polyline points="20 6 9 17 4 12" />
+                            <polyline points="4 6 10 17 22 3 11 12" />
+
                           </svg>
                         </StyledCheckbox>
                       </CustomCheckboxLabel>

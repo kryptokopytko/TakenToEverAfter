@@ -77,7 +77,7 @@ export const DropdownMenu = styled.div<{ isOpen: boolean }>`
   padding: 0.5rem;
   z-index: 101;
   width: 100%;
-  @media (mim-width: ${BurgerBreakpoint}) {
+  @media (min-width: ${BurgerBreakpoint}) {
     max-height: 85vh;
     overflow: auto;
   }

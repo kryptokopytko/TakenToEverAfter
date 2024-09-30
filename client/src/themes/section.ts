@@ -21,7 +21,7 @@ export const GridContainer = styled.div<{
     minmax(${({ minWidth = "20rem" }) => minWidth}, 1fr)
   );
   gap: 3rem;
-  height: ${({ isExpanded }) => (isExpanded ? "auto" : "50vh")};
+  max-height: ${({ isExpanded }) => (isExpanded ? "auto" : "60vh")};
   overflow-y: auto;
   transition: height 0.3s ease;
   background: ${({ isExpanded }) =>
