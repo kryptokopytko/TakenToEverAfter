@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../themes/typography";
-import { LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer } from "./NavbarStyles";
+import { LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 
 interface NavbarProps {
   names: [string, string];
@@ -68,8 +68,9 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
         <LogoContainer>
           <img src={logo} alt="logo" style={{ height: "6rem", marginTop: "1.1rem" }} />
 
-
-          <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
+          <NamesContainer>
+            <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
+          </NamesContainer>
         </LogoContainer>
 
 
@@ -124,7 +125,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
 
         <MobileMenu isOpen={isBurgerOpen}>
 
-          <div>
+          <span>
             <Label color="dark">
               {isLogged ? 'Wyloguj' : 'Zaloguj'}
             </Label>
@@ -145,8 +146,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
                 ))}
               </DropdownMenu>
             </ThemeSelectorContainer>
-          </div>
-
+          </span>
           <ThemeSelectorContainer ref={sectionDropdownRef}>
             <Label color="dark">Select Section</Label>
             <DropdownMenu isOpen={isSectionOpen}>

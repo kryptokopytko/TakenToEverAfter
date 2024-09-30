@@ -24,6 +24,12 @@ export const ThemeSelectorContainer = styled.div`
   position: relative;
 `;
 
+export const NamesContainer = styled.div`
+  @media (max-width: 520px) {
+    display: none;
+  }
+`;
+
 export const ButtonsContainer = styled.div`
   display: flex;
   gap: 1rem;
@@ -43,9 +49,9 @@ export const BurgerMenu = styled.div`
     gap: 0.3rem;
 
     div {
-      width: 2rem;
-      height: 0.2rem;
-      background-color: ${({ theme }) => theme.body};
+      width: 1.5rem;
+      height: 2px;
+      background-color: ${({ theme }) => theme.primary};
     }
   }
 `;
@@ -98,8 +104,11 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
     z-index: 100;
     flex-wrap: wrap;
     padding: 1rem;
-    max-height: 90vh;
+    max-height: calc(100vh - 6rem);
     overflow: auto;
+  }
+  @media (max-width: 420px) {
+    justify-content: flex-start;
   }
 
   ${DropdownMenu} {
@@ -155,4 +164,7 @@ export const RadioButton = styled.label`
 export const LogoContainer = styled.div`
   display: flex;
   gap: 1rem;
+  @media (max-width: 520px) {
+    margin-top: -1.1rem;
+  }
 `;
