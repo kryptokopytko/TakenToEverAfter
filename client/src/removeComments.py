@@ -2,10 +2,12 @@ import os
 import re
 
 def remove_comments_from_file(file_path):
-    single_line_comment = r'//.*?$'         
+    single_line_comment = r'//.*?$' 
+    mmulti_line_comment = r'{/\*.*?\*/}'     
+            
     multi_line_comment = r'/\*.*?\*/'     
     
-    pattern = re.compile(f'({single_line_comment}|{multi_line_comment})', re.MULTILINE | re.DOTALL)
+    pattern = re.compile(f'({single_line_comment}|{mmulti_line_comment}|{multi_line_comment})', re.MULTILINE | re.DOTALL)
 
     try:
         with open(file_path, 'r', encoding='utf-8') as file:

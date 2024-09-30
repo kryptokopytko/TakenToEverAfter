@@ -25,7 +25,7 @@ const Content = styled.div`
 
 const TextSection = styled.div`
   margin: 2rem 2rem;
-  max-width: 35rem;
+  max-width: 40rem;
 
   @media (min-width: 1200px) {
     margin-left: 2rem;
@@ -90,16 +90,16 @@ const Hero = () => {
               Let us help you with:
             </Subtitle>
             <ul>
-              <Body>Guest Confirmations with QR codes</Body>
-              <Body>Budget Management and expense tracking</Body>
-              <Body>Task Management with deadlines and calendar views</Body>
-              <Body>Guest List Management with invitation status</Body>
-              <Body>Customized Email Notifications for RSVP updates</Body>
-              <Body>Personalized Theme customization</Body>
-              <Body>Seating Arrangement Suggestions with various table options</Body>
-              <Body>Exportable Seating Plan with guest names</Body>
-              <Body>Photo Album and guest photo uploads</Body>
-              <Body>Invitation and Place Card Generation</Body>
+              <Body size='big'>♠ Guest Confirmations with QR codes</Body>
+              <Body size='big'>♠ Budget Management and expense tracking</Body>
+              <Body size='big'>♠ Task Management with deadlines and calendar views</Body>
+              <Body size='big'>♠ Guest List Management with invitation status</Body>
+              <Body size='big'>♠ Customized Email Notifications for RSVP updates</Body>
+              <Body size='big'>♠ Personalized Theme customization</Body>
+              <Body size='big'>♠ Seating Arrangement Suggestions with various table options</Body>
+              <Body size='big'>♠ Exportable Seating Plan with guest names</Body>
+              <Body size='big'>♠ Photo Album and guest photo uploads</Body>
+              <Body size='big'>♠ Invitation and Place Card Generation</Body>
             </ul>
           </HiddenText>
         </TextSection>

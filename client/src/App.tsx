@@ -1,5 +1,5 @@
 import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar/Navbar";
 import { ThemeProvider, useTheme } from "./providers/ThemeContext";
 import GuestList from "./components/GuestList";
 import Budget from "./components/Budget";
@@ -33,7 +33,7 @@ const AppContent = () => {
 
     <StyledThemeProvider theme={theme}>
       <AppContainer>
-        <Navbar />
+        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor']} />
 
         <Hero />
         <GuestList />

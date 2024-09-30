@@ -7,6 +7,7 @@ export const SpaceBetweenContainer = styled.div<{ border?: boolean }>`
     ${({ theme, border }) => (border ? theme.secondary : "transparent")};
   padding: 0 1rem;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const GridContainer = styled.div<{

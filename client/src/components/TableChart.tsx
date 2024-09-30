@@ -15,6 +15,7 @@ width: 100%;
 `;
 const PhotoContainer = styled.div`
   width: 70vw;
+  max-width: 40rem;
   background-color: ${({ theme }) => theme.primary};
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
@@ -30,6 +31,7 @@ const StyledImage = styled.img`
   width: 60vw; 
   height: auto; 
   margin: 1rem 0; 
+  max-width: 90%;
 
 `;
 
