@@ -7,12 +7,8 @@ import { useState, useEffect } from "react";
 import { useTheme } from "../providers/ThemeContext";
 import Button from "./Button";
 
-const Container = styled.div`
-  width: 100%;
-`;
 
 const ContentContainer = styled.div`
-  margin: 3rem;
   text-align: center;
 `;
 
@@ -33,7 +29,7 @@ const ThemeConstructor = () => {
     }, [theme]);
 
     return (
-        <Container>
+        <>
             <ContentContainer>
                 <Heading level={1}>Establish a theme</Heading>
                 <GridContainer isExpanded={true}>
@@ -44,7 +40,7 @@ const ThemeConstructor = () => {
                 </GridContainer>
                 <Button> Manage Themes</Button>
             </ContentContainer>
-        </Container>
+        </>
     );
 };
 

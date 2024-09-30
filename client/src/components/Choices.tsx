@@ -8,18 +8,6 @@ const BudgetContainer = styled.div`
   padding: 1rem 3rem;
 `;
 
-const Container = styled.div`
-  padding: 2rem 0;
-  width: 100%;
-`;
-
-const SubExpenseList = styled.ul`
-  list-style-type: none; 
-  padding: 0 1rem; 
-`;
-
-
-
 const choicesData = [
     {
         choice: 'Venue',
@@ -90,7 +78,7 @@ const Choices = () => {
     const totalAmount = totalPicked.reduce((sum, option) => sum + option.amount, 0);
 
     return (
-        <Container>
+        <>
             <BudgetContainer>
                 <SpaceBetweenContainer>
                     <Heading level={1}>Choices:</Heading>
@@ -114,23 +102,21 @@ const Choices = () => {
                                     <Heading level={4}>${selectedAmount}</Heading>
                                 </SpaceBetweenContainer>
 
-                                <SubExpenseList>
-                                    {choice.options.map((option, optionIndex) => (
-                                        <SpaceBetweenContainer key={optionIndex}>
-                                            <Body size='big'>{option.option}</Body>
-                                            <Body size='big'>${option.amount}</Body>
-                                            {option.isPicked ? (
-                                                <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
-                                                    Unpick
-                                                </Button>
-                                            ) : (
-                                                <Button onClick={() => handlePick(choiceIndex, optionIndex)}>
-                                                    Pick
-                                                </Button>
-                                            )}
-                                        </SpaceBetweenContainer>
-                                    ))}
-                                </SubExpenseList>
+                                {choice.options.map((option, optionIndex) => (
+                                    <SpaceBetweenContainer key={optionIndex} style={{ marginLeft: '1rem' }}>
+                                        <Body size='big'>{option.option}</Body>
+                                        <Body size='big'>${option.amount}</Body>
+                                        {option.isPicked ? (
+                                            <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
+                                                Unpick
+                                            </Button>
+                                        ) : (
+                                            <Button onClick={() => handlePick(choiceIndex, optionIndex)}>
+                                                Pick
+                                            </Button>
+                                        )}
+                                    </SpaceBetweenContainer>
+                                ))}
                             </Card>
                         );
                     })}
@@ -143,7 +129,7 @@ const Choices = () => {
                     </Button>
                 </ButtonContainer>
             </BudgetContainer>
-        </Container>
+        </>
     );
 };
 

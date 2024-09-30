@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Body, Heading } from "../themes/typography"; 
-import { Card } from "../themes/section"; 
-import Button from "./Button"; 
+import { Body, Heading } from "../themes/typography";
+import { Card } from "../themes/section";
+import Button from "./Button";
 import { useTheme } from "../providers/ThemeContext";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,8 +26,8 @@ const ColorBox = styled.div<{ color: string }>`
 
 interface ColorVariationProps {
   title: string;
-  variations: { hsl: string; label: string }[]; 
-  hslBodyColor: string; 
+  variations: { hsl: string; label: string }[];
+  hslBodyColor: string;
   hue: number;
   saturation: number;
   lightness: number;
@@ -58,13 +59,13 @@ const ColorVariation: React.FC<ColorVariationProps> = ({
         <ColorRow>
           {variations.map((color, index) => (
             <div key={index}>
-              <ColorBox color={color.hsl} /> {}
+              <ColorBox color={color.hsl} /> { }
               <Body hslColor={hslBodyColor}>{color.label}</Body>{" "}
-              {}
+              { }
             </div>
           ))}
         </ColorRow>
-        <Button onClick={() => { setTheme(makeTheme(variations, hslBodyColor, hue, saturation, lightness)); }}>Pick this one</Button> {}
+        <Button onClick={() => { setTheme(makeTheme(variations, hslBodyColor, hue, saturation, lightness)); }}>Pick this one</Button> { }
       </Container>
     </Card>
   );

@@ -5,16 +5,6 @@ import Button, { ButtonContainer } from "./Button";
 import { useState } from "react";
 import { SpaceBetweenContainer } from "../themes/section";
 
-const GuestListContainer = styled.div`
-  padding: 3rem;
-`;
-
-const Container = styled.div`
-  background-color: ${({ theme }) => theme.light};
-  padding: 2rem 0;
-  width: 100%;
-`;
-
 const SummaryContainer = styled.div`
   display: flex;
   gap: 2rem;
@@ -64,29 +54,27 @@ const GuestList = () => {
   };
 
   return (
-    <Container>
-      <GuestListContainer>
-        <SpaceBetweenContainer>
-          <Heading level={1}>Guest List:</Heading>
-          <Button onClick={toggleList}>
-            {isExpanded ? 'Collapse List' : 'Expand List'}
-          </Button>
-        </SpaceBetweenContainer>
-        <SummaryContainer>
-          {decisionTypes.map((decision) => (
-            <Subtitle key={decision} level={1}>
-              {decision.charAt(0).toUpperCase() + decision.slice(1)}: {countDecisions(decision)}
-            </Subtitle>
-          ))}
-        </SummaryContainer>
-        <List list={guests} isExpanded={isExpanded} />
+    <div>
+      <SpaceBetweenContainer>
+        <Heading level={1}>Guest List:</Heading>
+        <Button onClick={toggleList}>
+          {isExpanded ? 'Collapse List' : 'Expand List'}
+        </Button>
+      </SpaceBetweenContainer>
+      <SummaryContainer>
+        {decisionTypes.map((decision) => (
+          <Subtitle key={decision} level={1}>
+            {decision.charAt(0).toUpperCase() + decision.slice(1)}: {countDecisions(decision)}
+          </Subtitle>
+        ))}
+      </SummaryContainer>
+      <List list={guests} isExpanded={isExpanded} />
 
-        <ButtonContainer>
-          <Button>Invite more</Button>
-          <Button>Manage Guests</Button>
-        </ButtonContainer>
-      </GuestListContainer>
-    </Container>
+      <ButtonContainer>
+        <Button>Invite more</Button>
+        <Button>Manage Guests</Button>
+      </ButtonContainer>
+    </div>
   );
 };
 

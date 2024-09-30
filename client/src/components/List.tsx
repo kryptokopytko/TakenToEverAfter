@@ -7,16 +7,10 @@ const GuestItem = styled.div`
   justify-content: space-between;
   padding: 0.5rem 0;
   border-bottom: 1px solid ${({ theme }) => theme.secondary};
-
-  &:last-child {
-    border-bottom: none; 
-  }
 `;
 
-
-
 interface ListProps {
-  list: { name: string; decision: string }[]; 
+  list: { name: string; decision: string }[];
   isExpanded: boolean;
 }
 
@@ -24,7 +18,7 @@ const List: React.FC<ListProps> = ({ list, isExpanded }) => {
 
   return (
     <div>
-    
+
       <GridContainer isExpanded={isExpanded}>
         {list.map((guest, index) => (
           <GuestItem key={index}>

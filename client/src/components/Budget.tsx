@@ -4,9 +4,7 @@ import Button, { ButtonContainer } from "./Button";
 import PieChart from "./PieChart";
 import { Card, GridContainer, SpaceBetweenContainer } from "../themes/section";
 import { useState } from "react";
-const BudgetContainer = styled.div`
-  padding: 1rem 3rem;
-`;
+
 const HeaderContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -15,20 +13,6 @@ const HeaderContainer = styled.div`
   @media (max-width: 1100px) {
     grid-template-columns: 1fr;
   }
-`;
-
-
-
-const Container = styled.div`
-  padding: 2rem 0;
-  width: 100%;
-`;
-
-
-
-const SubExpenseList = styled.ul`
-  list-style-type: none; 
-  padding: 0 1rem; 
 `;
 
 const expenses = [
@@ -87,15 +71,15 @@ if (remainingBudget > 0)
 
 const Budget = () => {
 
-    const [isExpanded, setIsExpanded] = useState(false); 
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleList = () => {
-        setIsExpanded((prev) => !prev); 
+        setIsExpanded((prev) => !prev);
     };
 
     return (
-        <Container>
-            <BudgetContainer>
+        <>
+            <div>
                 <HeaderContainer>
                     <div>
                         <SpaceBetweenContainer>
@@ -122,13 +106,12 @@ const Budget = () => {
                                 <Heading level={4}>${expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)}</Heading>
                             </SpaceBetweenContainer>
 
-                            <SubExpenseList>
-                                {expense.subExpenses.map((subExpense, subIndex) => (
-                                    <SpaceBetweenContainer key={subIndex}>
-                                        <Body size='big'>{subExpense.subCategory}</Body>
-                                        <Body size='big'>${subExpense.amount}</Body></SpaceBetweenContainer>
-                                ))}
-                            </SubExpenseList>
+                            {expense.subExpenses.map((subExpense, subIndex) => (
+                                <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
+                                    <Body size='big'>{subExpense.subCategory}</Body>
+                                    <Body size='big'>${subExpense.amount}</Body>
+                                </SpaceBetweenContainer>
+                            ))}
                         </Card>
                     ))}
                 </GridContainer>
@@ -139,8 +122,8 @@ const Budget = () => {
                         {isExpanded ? 'Collapse List' : 'Expand List'}
                     </Button>
                 </ButtonContainer>
-            </BudgetContainer>
-        </Container>
+            </div>
+        </>
     );
 };
 
