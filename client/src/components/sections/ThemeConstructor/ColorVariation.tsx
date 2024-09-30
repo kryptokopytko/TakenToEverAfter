@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Body, Heading } from "../styles/typography";
-import { Card } from "../styles/section";
-import Button from "./Button";
-import { useTheme } from "../providers/ThemeContext";
+import { Body, Heading } from "../../../styles/typography";
+import { Card } from "../../../styles/section";
+import Button from "../../Button";
+import { useTheme } from "../../../providers/ThemeContext";
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ const ColorVariation: React.FC<ColorVariationProps> = ({
   const { setTheme } = useTheme();
 
   return (
-    <Card color="light">
+    <Card color="primary">
       <Container>
         <Heading level={3}>{title}</Heading>
         <ColorRow>

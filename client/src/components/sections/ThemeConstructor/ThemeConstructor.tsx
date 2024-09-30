@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { Heading } from "../styles/typography";
+import { Heading } from "../../../styles/typography";
 import HslColorPicker from "./HslColorPicker/HslColorPicker";
-import { Card, GridContainer } from "../styles/section";
+import { Card, GridContainer, SpaceBetweenContainer } from "../../../styles/section";
 import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
-import { useTheme } from "../providers/ThemeContext";
-import Button from "./Button";
+import { useTheme } from "../../../providers/ThemeContext";
+import Button from "../../Button";
 
 
 const ContentContainer = styled.div`
@@ -19,6 +19,10 @@ const ThemeConstructor = () => {
         saturation: theme.saturation,
         lightness: theme.lightness,
     });
+    const [isExpanded, setIsExpanded] = useState(false);
+    const toggleList = () => {
+        setIsExpanded((prev) => !prev);
+    };
 
     useEffect(() => {
         setColor({
@@ -31,9 +35,14 @@ const ThemeConstructor = () => {
     return (
         <>
             <ContentContainer>
-                <Heading level={1}>Establish a theme</Heading>
-                <GridContainer isExpanded={true}>
-                    <Card color='light'>
+                <SpaceBetweenContainer>
+                    <Heading level={1}>Establish a theme</Heading>
+                    <Button onClick={toggleList}>
+                        {isExpanded ? "Collapse List" : "Expand List"}
+                    </Button>
+                </SpaceBetweenContainer>
+                <GridContainer isExpanded={isExpanded} minHeight='60vh'>
+                    <Card color='primary'>
                         <HslColorPicker color={color} setColor={setColor} />
                     </Card>
                     <ColorCompositions color={color} />

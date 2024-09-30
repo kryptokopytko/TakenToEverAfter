@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
 import Calendar from "react-calendar";
-import { fontStyles } from "../../styles/typography";
+import { fontStyles } from "../../../styles/typography";
 import { darken } from "polished";
 
 export const StyledCalendar = styled(Calendar)`
@@ -20,14 +20,14 @@ export const StyledCalendar = styled(Calendar)`
     margin-bottom: 1rem;
 
     button {
-      color: ${({ theme }) => theme.tertiary};
+      color: ${({ theme }) => theme.body};
       background: none;
       border: none;
       font-size: 2.5rem;
       cursor: pointer;
       font-family: ${fontStyles.labelFont};
       &:hover {
-        color: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.tertiary};
         background-color: ${({ theme }) => theme.primary};
       }
     }

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { Body, Heading } from "../styles/typography";
-import Button, { ButtonContainer } from "./Button";
-import PieChart from "./PieChart";
-import { Card, GridContainer, SpaceBetweenContainer } from "../styles/section";
+import { Body, Heading } from "../../styles/typography";
+import Button, { ButtonContainer } from "../Button";
+import PieChart from "../PieChart";
+import { Card, GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";
 
 const HeaderContainer = styled.div`

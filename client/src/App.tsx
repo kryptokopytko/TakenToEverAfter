@@ -1,17 +1,17 @@
 import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
 import Navbar from "./components/layout/Navbar/Navbar";
 import { ThemeProvider, useTheme } from "./providers/ThemeContext";
-import GuestList from "./components/GuestList";
-import Budget from "./components/Budget";
-import ToDo from "./components/ToDo/ToDo";
-import Hero from "./components/Hero/Hero";
-import PhotoAlbum from "./components/PhotoAlbum/PhotoAlbum";
+import GuestList from "./components/sections/GuestList";
+import Budget from "./components/sections/Budget";
+import ToDo from "./components/sections/ToDo/ToDo";
+import Hero from "./components/sections/Hero/Hero";
+import PhotoAlbum from "./components/sections/PhotoAlbum/PhotoAlbum";
 import Footer from "./components/layout/Footer/Footer";
-import TableChart from "./components/TableChart";
-import ThemeConstructor from "./components/ThemeConstructor";
-import Choices from "./components/Choices";
+import TableChart from "./components/sections/TableChart";
+import ThemeConstructor from "./components/sections/ThemeConstructor/ThemeConstructor";
+import Choices from "./components/sections/Choices";
 import { createGlobalStyle } from 'styled-components';
-import Printables from "./components/Printables";
+import Printables from "./components/sections/Printables";
 
 const AppContainer = styled.div`
   background-color: ${({ theme }) => theme.primary};

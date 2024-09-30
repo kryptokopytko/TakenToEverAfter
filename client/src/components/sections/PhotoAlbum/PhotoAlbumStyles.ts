@@ -10,10 +10,13 @@ export const HeadingContainer = styled.div`
 `;
 
 export const PhotosContainer = styled.div`
-  padding: 0 2rem;
   display: flex;
   gap: 3rem;
   overflow: auto;
+  width: calc(100vw - 6rem);
+  position: absolute;
+  left: 0;
+  padding: 0 3rem;
 `;
 
 export const StyledImage = styled.img`

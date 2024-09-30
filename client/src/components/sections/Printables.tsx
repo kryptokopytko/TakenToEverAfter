@@ -1,18 +1,17 @@
 import styled from "styled-components";
-import { Heading } from "../styles/typography";
+import { Heading } from "../../styles/typography";
 import tables from '/pictures/tables.png';
-import Button, { ButtonContainer } from "./Button";
+import Button, { ButtonContainer } from "../Button";
 
 const Container = styled.div`
-  padding: 2rem 0;
-  text-align: center;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    padding: 2rem 0;
+    text-align: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 `;
-
 const PhotoContainer = styled.div`
   width: 70vw;
   max-width: 40rem;
@@ -35,20 +34,20 @@ const StyledImage = styled.img`
 
 `;
 
-const TableChart = () => {
+const Printables = () => {
 
   return (
     <Container>
-      <Heading level={2}>Table Chart</Heading>
+      <Heading level={2}>Print</Heading>
       <PhotoContainer>
         <StyledImage src={tables} alt='table chart image' />
       </PhotoContainer>
       <ButtonContainer>
-        <Button>Manage Table Chart</Button>
+        <Button>Manage Prints</Button>
       </ButtonContainer>
     </Container>
   );
 };
 
 
-export default TableChart;
+export default Printables;

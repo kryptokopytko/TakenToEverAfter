@@ -1,6 +1,6 @@
 import React from "react";
-import { Body, Heading } from "../../styles/typography";
-import Button from "../Button";
+import { Body, Heading } from "../../../../styles/typography";
+import Button from "../../../Button";
 import { Slider, Container } from "./HslColorPickerStyles";
 
 interface HslColorPickerProps {

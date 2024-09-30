@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Body, Heading, Label } from "../../styles/typography";
-import Button, { ButtonContainer } from "../Button";
-import { Card, GridContainer, SpaceBetweenContainer } from "../../styles/section";
+import { Body, Heading, Label } from "../../../styles/typography";
+import Button, { ButtonContainer } from "../../Button";
+import { Card, GridContainer, SpaceBetweenContainer } from "../../../styles/section";
 import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 
@@ -115,7 +115,7 @@ const ToDo = () => {
         value={selectedDate}
         onClickDay={(date) => setSelectedDate(date)}
         tileClassName={tileClassName}
-        tileContent={tileContent} 
+        tileContent={tileContent}
       />
 
       <GridContainer isExpanded={isExpanded} minWidth="28rem">

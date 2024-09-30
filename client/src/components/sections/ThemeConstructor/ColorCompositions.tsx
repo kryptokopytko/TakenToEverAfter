@@ -1,7 +1,7 @@
 import React from 'react';
 import ColorVariation from './ColorVariation';
-import { Card } from '../styles/section';
-import { Body, Heading } from '../styles/typography';
+import { Card } from '../../../styles/section';
+import { Body, Heading } from '../../../styles/typography';
 
 interface ColorCompositionsProps {
     color: { hue: number; saturation: number; lightness: number };
@@ -60,7 +60,7 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
             <ColorVariation title="Dark Variation" variations={darkVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
             <ColorVariation title="Random Variation" variations={randomVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
             <ColorVariation title="Hue Variation" variations={hueVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <Card color='light'>
+            <Card color='primary'>
                 <Heading level={3}> Suggestions</Heading>
                 <Body size='bold'>Stay between 30-75% saturation,</Body>
                 <Body >vibrant colors tire eyes,<br /> desaturated ones are grey</Body>
