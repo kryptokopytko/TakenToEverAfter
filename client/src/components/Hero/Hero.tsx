@@ -1,4 +1,4 @@
-import { Heading, Body, Subtitle } from "../../themes/typography";
+import { Heading, Body, Subtitle } from "../../styles/typography";
 import dancingPair from '/pictures/dancing1.png';
 import { Container, Content, TextSection, HiddenText, ImageSection, Image, SummaryText } from "./HeroStyles";
 const Hero = () => {

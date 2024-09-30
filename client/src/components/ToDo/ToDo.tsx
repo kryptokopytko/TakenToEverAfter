@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Body, Heading, Label } from "../../themes/typography";
+import { Body, Heading, Label } from "../../styles/typography";
 import Button, { ButtonContainer } from "../Button";
-import { Card, GridContainer, SpaceBetweenContainer } from "../../themes/section";
+import { Card, GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from "./ToDoStyles";
+import { StyledCalendar } from "./Calendar";
+
 const initialTasks = [
   {
     category: 'Planning',
@@ -24,7 +26,7 @@ const initialTasks = [
       { subCategory: 'Choose flowers', completed: false, deadline: '2024-10-15' },
       { subCategory: 'Design table setup', completed: false, deadline: '2024-10-12' },
       { subCategory: 'Choose color theme', completed: false, deadline: '2024-10-20' },
-      { subCategory: 'Choose kayaks', completed: true, deadline: '2024-09-30' },
+      { subCategory: 'Choose kayaks', completed: true, deadline: '2024-09-29' },
     ],
   },
   {
@@ -38,6 +40,8 @@ const initialTasks = [
 
 const ToDo = () => {
   const [tasks, setTasks] = useState(initialTasks);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const totalTasks = tasks.reduce((total, task) => total + task.subTasks.length, 0);
   const completedTasks = tasks.reduce(
@@ -62,10 +66,40 @@ const ToDo = () => {
     setTasks(updatedTasks);
   };
 
-  const [isExpanded, setIsExpanded] = useState(false);
-
   const toggleList = () => {
     setIsExpanded((prev) => !prev);
+  };
+
+  const getTasksForDate = (date: Date) => {
+    return tasks
+      .flatMap((task) => task.subTasks)
+      .filter((subTask) => new Date(subTask.deadline).toDateString() === date.toDateString())
+      .map((subTask) => subTask.subCategory);
+  };
+
+  const isDateDeadline = (date: Date) => {
+    return getTasksForDate(date).length > 0;
+  };
+
+  const tileClassName = ({ date }: { date: Date }) => {
+    if (isDateDeadline(date)) {
+      return 'highlight';
+    }
+    return null;
+  };
+
+  const tileContent = ({ date }: { date: Date }) => {
+    const tasksForDate = getTasksForDate(date);
+    if (tasksForDate.length > 0) {
+      return (
+        <Body size='small' color='primary'>
+          {tasksForDate.map((task, index) => (
+            <span key={index}>{task}</span>
+          ))}
+        </Body>
+      );
+    }
+    return null;
   };
 
   return (
@@ -77,7 +111,14 @@ const ToDo = () => {
         </Heading>
       </SpaceBetweenContainer>
 
-      <GridContainer isExpanded={isExpanded} minWidth='28rem'>
+      <StyledCalendar
+        value={selectedDate}
+        onClickDay={(date) => setSelectedDate(date)}
+        tileClassName={tileClassName}
+        tileContent={tileContent} 
+      />
+
+      <GridContainer isExpanded={isExpanded} minWidth="28rem">
         {tasks.map((task, categoryIndex) => (
           <Card color="primary" key={categoryIndex}>
             <SpaceBetweenContainer border>
@@ -100,7 +141,6 @@ const ToDo = () => {
                       <StyledCheckbox checked={subTask.completed}>
                         <svg viewBox="0 -2 24 24" width="18" height="18">
                           <polyline points="4 6 10 17 22 3 11 12" />
-
                         </svg>
                       </StyledCheckbox>
                     </CustomCheckboxLabel>
@@ -122,7 +162,7 @@ const ToDo = () => {
         <Button>Add Task</Button>
         <Button>Manage Tasks</Button>
         <Button onClick={toggleList}>
-          {isExpanded ? 'Collapse List' : 'Expand List'}
+          {isExpanded ? "Collapse List" : "Expand List"}
         </Button>
       </ButtonContainer>
     </div>

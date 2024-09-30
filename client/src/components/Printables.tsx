@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Heading } from "../themes/typography";
+import { Heading } from "../styles/typography";
 import tables from '/pictures/tables.png';
 import Button, { ButtonContainer } from "./Button";
 
@@ -36,17 +36,17 @@ const StyledImage = styled.img`
 
 const Printables = () => {
 
-    return (
-        <Container>
-            <Heading level={2}>Print</Heading>
-            <PhotoContainer>
-                <StyledImage src={tables} alt='table chart image' />
-            </PhotoContainer>
-            <ButtonContainer>
-                <Button>Manage Prints</Button>
-            </ButtonContainer>
-        </Container>
-    );
+  return (
+    <Container>
+      <Heading level={2}>Print</Heading>
+      <PhotoContainer>
+        <StyledImage src={tables} alt='table chart image' />
+      </PhotoContainer>
+      <ButtonContainer>
+        <Button>Manage Prints</Button>
+      </ButtonContainer>
+    </Container>
+  );
 };
 
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Heading } from "../themes/typography";
+import { Heading } from "../styles/typography";
 import tables from '/pictures/tables.png';
 import Button, { ButtonContainer } from "./Button";
 

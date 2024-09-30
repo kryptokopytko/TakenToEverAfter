@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Body, Label } from "../themes/typography";
-import { GridContainer } from "../themes/section";
+import { Body, Label } from "../styles/typography";
+import { GridContainer } from "../styles/section";
 
 const GuestItem = styled.div`
   display: flex;

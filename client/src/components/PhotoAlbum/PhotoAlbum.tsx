@@ -1,4 +1,4 @@
-import { Heading } from "../../themes/typography";
+import { Heading } from "../../styles/typography";
 import dancing1 from "/pictures/dancing1.png";
 import flowers from "/pictures/flowers.png";
 import car from "/pictures/car.png";

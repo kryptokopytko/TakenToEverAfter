@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Label } from "../themes/typography";
+import { Label } from "../styles/typography";
 
 export const ButtonContainer = styled.div`
 padding: 3rem 0;

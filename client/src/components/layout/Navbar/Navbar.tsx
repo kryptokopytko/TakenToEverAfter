@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
-import { Heading, Label } from "../../../themes/typography";
+import { Body, Heading, Label } from "../../../styles/typography";
 import { LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 
 interface NavbarProps {
   names: [string, string];
   sections: string[];
   isLogged: boolean;
+  weddingDate: string;
+  daysLeft: number;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
+const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate, daysLeft }) => {
   const { setTheme, theme, themes } = useTheme();
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState(false);
@@ -48,7 +50,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged }) => {
             <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
           </NamesContainer>
         </LogoContainer>
-
+        <Label size='small' >{daysLeft} days left</Label>
+        <Label size='small'>{weddingDate} </Label>
         <ButtonsContainer>
           <ThemeSelectorContainer>
             <SelectorButton onClick={toggleThemeDropdown}>

@@ -1,4 +1,4 @@
-import { Body, Heading } from "../../../themes/typography";
+import { Body, Heading } from "../../../styles/typography";
 import { Container, Section, ListContainer } from "./FooterStyles";
 const Footer = () => {
   return (

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const BurgerBreakpoint = "1050px";
+export const BurgerBreakpoint = "1600px";
 
 export const NavbarContainer = styled.nav`
   background-color: ${({ theme }) => theme.secondary};
@@ -125,7 +125,7 @@ export const RadioButton = styled.label`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  margin: -1rem 0;
+  margin: -2.1rem 0;
   input {
     appearance: none;
     width: 20px;

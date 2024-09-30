@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Heading, Subtitle } from "../themes/typography";
+import { Heading, Subtitle } from "../styles/typography";
 import List from "./List";
 import Button, { ButtonContainer } from "./Button";
 import { useState } from "react";
-import { SpaceBetweenContainer } from "../themes/section";
+import { SpaceBetweenContainer } from "../styles/section";
 
 const SummaryContainer = styled.div`
   display: flex;

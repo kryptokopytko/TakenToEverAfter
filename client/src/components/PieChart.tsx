@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../providers/ThemeContext';
-import { Theme } from '../themes/theme';
+import { Theme } from '../styles/theme';
 
 interface PieChartData {
   value: number;

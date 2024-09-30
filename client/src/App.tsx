@@ -59,7 +59,7 @@ const AppContent = () => {
     <StyledThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
-        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor']} />
+        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor']} weddingDate="26.04.25" daysLeft={233} />
         <SectionsContainer>
           <Hero />
           <GuestList />

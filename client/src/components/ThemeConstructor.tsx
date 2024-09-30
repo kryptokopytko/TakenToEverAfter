@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Heading } from "../themes/typography";
+import { Heading } from "../styles/typography";
 import HslColorPicker from "./HslColorPicker/HslColorPicker";
-import { Card, GridContainer } from "../themes/section";
+import { Card, GridContainer } from "../styles/section";
 import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
 import { useTheme } from "../providers/ThemeContext";

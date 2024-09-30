@@ -21,7 +21,7 @@ interface LabelProps {
   color?: string;
 }
 
-const fontStyles = {
+export const fontStyles = {
   headingFont: "'Great Vibes', cursive",
   bodyFont: "'Didact Gothic', sans-serif",
   labelFont: "'Dancing Script', cursive",

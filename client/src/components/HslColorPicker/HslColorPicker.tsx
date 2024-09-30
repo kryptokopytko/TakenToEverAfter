@@ -1,5 +1,5 @@
 import React from "react";
-import { Body, Heading } from "../../themes/typography";
+import { Body, Heading } from "../../styles/typography";
 import Button from "../Button";
 import { Slider, Container } from "./HslColorPickerStyles";
 

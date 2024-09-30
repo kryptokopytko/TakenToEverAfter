@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Body, Heading } from "../themes/typography";
+import { Body, Heading } from "../styles/typography";
 import Button, { ButtonContainer } from "./Button";
-import { Card, GridContainer, SpaceBetweenContainer } from "../themes/section";
+import { Card, GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useState } from "react";
 
 const BudgetContainer = styled.div`
