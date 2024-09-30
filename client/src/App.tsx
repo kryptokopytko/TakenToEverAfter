@@ -19,7 +19,7 @@ const AppContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin: -8px;
-  margin-top: 7rem;
+  margin-top: 5rem;
 `;
 
 
@@ -28,8 +28,8 @@ const AppContent = () => {
   const { theme } = useTheme();
 
   return (
-    
-    
+
+
     <StyledThemeProvider theme={theme}>
       <AppContainer>
         <Navbar />

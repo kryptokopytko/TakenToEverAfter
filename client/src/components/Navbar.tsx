@@ -12,6 +12,7 @@ const NavbarContainer = styled.nav`
   top: 0;
   width: 100%;
   z-index: 100;
+  height: 5rem;
 `;
 
 const ContentContainer = styled.div`
@@ -19,6 +20,7 @@ const ContentContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+height: 100%;
 `;
 
 const ThemeSelector = styled.div`
@@ -87,7 +89,7 @@ const Navbar = () => {
     <NavbarContainer>
       <ContentContainer>
         <LogoContainer>
-          <img src={logo} alt='logo' style={{ height: '7rem' }} />
+          <img src={logo} alt='logo' style={{ height: '6rem', marginTop: '1.1rem' }} />
           <Heading level={3} color={'white'}>Imie1 & Imie2</Heading>
         </LogoContainer>
         <ThemeSelector>
