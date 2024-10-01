@@ -5,6 +5,12 @@ export const SubTaskList = styled.ul`
   padding: 0 1rem;
 `;
 
+export const Container = styled.div`
+  @media (max-width: 400px) {
+    margin: -3rem;
+  }
+`;
+
 export const CustomCheckboxWrapper = styled.div`
   display: flex;
   align-items: center;

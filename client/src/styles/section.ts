@@ -23,6 +23,7 @@ export const GridContainer = styled.div<{
     minmax(${({ minWidth = "20rem" }) => minWidth}, 1fr)
   );
   gap: 3rem;
+  margin: 1rem 0;
 
   max-height: ${({ isExpanded, minHeight }) =>
     isExpanded ? "auto" : minHeight ? minHeight : "40vh"};
@@ -33,15 +34,4 @@ export const GridContainer = styled.div<{
       ? "transparent"
       : "linear-gradient(to bottom, transparent 90%, rgba(0, 0, 0, 0.1))"};
   width: 100%;
-`;
-
-export const Card = styled.div<{ color: string; centered?: string }>`
-  background-color: ${({ theme, color }) => theme[color]};
-  padding: 1rem;
-  border: 2px solid ${({ theme }) => theme.secondary};
-  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: ${({ centered }) => centered};
 `;

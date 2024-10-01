@@ -2,9 +2,10 @@ import styled from "styled-components";
 import { Body, Heading } from "../../styles/typography";
 import Button, { ButtonContainer } from "../Button";
 import PieChart from "../PieChart";
-import { Card, GridContainer, SpaceBetweenContainer } from "../../styles/section";
+import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";
 import { exportToPDF } from "./Printables/exportToPdf";
+import { Card } from "../../styles/card";
 
 const HeaderContainer = styled.div`
   display: grid;
@@ -116,7 +117,6 @@ const Budget = () => {
                 ))}
             </GridContainer>
             <ButtonContainer>
-                <Button>Add Expense</Button>
                 <Button>Manage Expenses</Button>
                 <Button onClick={toggleList}>
                     {isExpanded ? 'Collapse List' : 'Expand List'}

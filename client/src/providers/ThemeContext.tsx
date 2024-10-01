@@ -22,20 +22,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [fontSize, setFontSize] = useState(16);
 
   useEffect(() => {
-
     const calculateFontSize = () => {
       const screenWidth = window.innerWidth;
 
-      const newFontSize = Math.max(10, Math.min(20, screenWidth / 80));
+      const newFontSize = Math.max(10, Math.min(18, (screenWidth - 400) / 35));
       setFontSize(newFontSize);
     };
 
-
     calculateFontSize();
-
-
     window.addEventListener('resize', calculateFontSize);
-
 
     return () => {
       window.removeEventListener('resize', calculateFontSize);

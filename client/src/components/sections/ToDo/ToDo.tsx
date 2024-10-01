@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Body, Heading, Label } from "../../../styles/typography";
 import Button, { ButtonContainer } from "../../Button";
-import { Card, GridContainer, SpaceBetweenContainer } from "../../../styles/section";
-import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from "./ToDoStyles";
+import { GridContainer, SpaceBetweenContainer } from "../../../styles/section";
+import { Card } from "../../../styles/card";
+import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 
@@ -104,7 +105,7 @@ const ToDo = () => {
 
 
   return (
-    <div id="todo-list">
+    <Container id="todo-list">
       <SpaceBetweenContainer>
         <Heading level={1}>To Do:</Heading>
         <Heading level={1}>
@@ -163,13 +164,12 @@ const ToDo = () => {
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
-        <Button>Add Task</Button>
         <Button>Manage Tasks</Button>
         <Button onClick={toggleList}>
           {isExpanded ? "Collapse List" : "Expand List"}
         </Button>
       </ButtonContainer>
-    </div>
+    </Container>
   );
 };
 

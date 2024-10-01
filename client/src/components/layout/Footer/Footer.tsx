@@ -11,12 +11,7 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
   const { fontSize, setFontSize, theme } = useTheme();
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-
-
     setFontSize(Number(e.target.value));
-
-
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);
@@ -28,9 +23,11 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
         <Heading level={3}>Sections</Heading>
 
         <ListContainer>
-          {sections.map((section) => (
-            <Body key={section} style={{ fontSize: `${fontSize}px` }}>{section}</Body>
-          ))}
+          {sections
+            .filter(section => section !== 'Home') 
+            .sort().map((section) => (
+              <Body>{section}</Body>
+            ))}
         </ListContainer>
       </HidingSection>
 
@@ -39,30 +36,32 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
           <Heading level={3}>Taken to Ever After</Heading>
         </span>
 
-        <Body style={{ fontSize: `${fontSize}px` }}>
-          Your wedding planning made easy
-        </Body>
 
         <div style={{ textAlign: 'center', display: "flex", alignItems: 'center' }}>
           <label htmlFor="fontSizeSlider"><Body>Adjust font size:</Body></label>
           <input
             type="range"
             id="fontSizeSlider"
-            min="12"
-            max="24"
+            min="10"
+            max="22"
             value={fontSize}
             onChange={handleFontSizeChange}
             style={{
               marginLeft: '1rem',
               appearance: 'none',
-              width: '200px', 
-              height: '6px', 
-              background: theme.secondary, 
-              borderRadius: '1rem', 
+              width: '200px',
+              height: '6px',
+              background: theme.secondary,
+              borderRadius: '1rem',
             }}
           />
-          <span style={{ marginLeft: '0.5rem' }}><Body>{fontSize}px</Body></span>
+          <span style={{ marginLeft: '0.5rem' }}><Body>{Math.round(fontSize)}px</Body></span>
+
         </div>
+
+        <Body style={{ fontSize: `${fontSize}px` }}>
+          Your wedding planning made easy
+        </Body>
       </Section>
 
       <Section>

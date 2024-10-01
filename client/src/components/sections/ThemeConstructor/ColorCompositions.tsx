@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorVariation from './ColorVariation';
-import { Card } from '../../../styles/section';
+import { Card } from '../../../styles/card';
 import { Body, Heading } from '../../../styles/typography';
 
 interface ColorCompositionsProps {
@@ -64,8 +64,7 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
                 <Heading level={3}> Suggestions</Heading>
                 <Body size='bold'>Stay between 30-75% saturation,</Body>
                 <Body >vibrant colors tire eyes,<br /> desaturated ones are grey</Body>
-                <Body size='bold'>Avoid hue variation</Body>
-                <Body >for now</Body>
+                <Body size='bold'>More saturation is going to give<br /> better contrast</Body>
 
             </Card>
         </>

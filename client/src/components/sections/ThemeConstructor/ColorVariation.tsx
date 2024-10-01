@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Body, Heading } from "../../../styles/typography";
-import { Card } from "../../../styles/section";
+import { Card } from "../../../styles/card";
 import Button from "../../Button";
 import { useTheme } from "../../../providers/ThemeContext";
 

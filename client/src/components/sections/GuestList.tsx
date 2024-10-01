@@ -71,7 +71,6 @@ const GuestList = () => {
       </SummaryContainer>
       <List list={guests} isExpanded={isExpanded} />
       <ButtonContainer>
-        <Button>Invite more</Button>
         <Button>Manage Guests</Button>
         <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
 

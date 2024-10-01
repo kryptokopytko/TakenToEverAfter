@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
-import { LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
+import { DateContainer, LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 
 interface NavbarProps {
   names: [string, string];
@@ -40,13 +40,13 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
     setIsBurgerOpen(prev => !prev);
   };
   const convertDateFormat = (dateString: string) => {
-    const [day, month, year] = dateString.split('.'); 
+    const [day, month, year] = dateString.split('.');
     return `${year}-${month}-${day}`;
   };
 
   const calculateDaysLeft = () => {
     const today = new Date();
-    const wedding = new Date(convertDateFormat(weddingDate)); 
+    const wedding = new Date(convertDateFormat(weddingDate));
     const differenceInTime = wedding.getTime() - today.getTime();
     return Math.ceil(differenceInTime / (1000 * 3600 * 24));
   };
@@ -60,8 +60,10 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
           </NamesContainer>
         </LogoContainer>
-        <Label size='small' >{calculateDaysLeft()} days left</Label>
-        <Label size='small'>{weddingDate} </Label>
+        <DateContainer>
+          <Label size='small' >{calculateDaysLeft()} days left</Label>
+          <Label size='small'>{weddingDate} </Label>
+        </DateContainer>
         <ButtonsContainer>
           <ThemeSelectorContainer>
             <SelectorButton onClick={toggleThemeDropdown}>

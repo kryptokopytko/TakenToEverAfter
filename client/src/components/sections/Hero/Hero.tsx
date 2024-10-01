@@ -6,7 +6,7 @@ const Hero = () => {
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' }); 
+      section.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -58,7 +58,7 @@ const Hero = () => {
             <Body size="big" style={{ display: 'inline', marginTop: '-2rem' }}>
               A comprehensive wedding planning app designed to help couples manage their special day effortlessly.
             </Body>
-            <SummaryText>
+            <SummaryText>{' '}
               <Body size='big' style={{ display: 'inline' }}>
                 From guest lists and RSVPs to budgeting and seating arrangements, we provide all the tools you need for a smooth and memorable wedding.
               </Body>

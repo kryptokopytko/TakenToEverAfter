@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import Navbar from "../layout/Navbar/Navbar";
-import GuestList from "./GuestList";
-import Budget from "./Budget";
-import ToDo from "./ToDo/ToDo";
-import Hero from "./Hero/Hero";
-import PhotoAlbum from "./PhotoAlbum/PhotoAlbum";
-import Footer from "../layout/Footer/Footer";
-import TableChart from "./TableChart";
-import ThemeConstructor from "./ThemeConstructor/ThemeConstructor";
-import Choices from "./Choices";
-import Printables from "./Printables/Printables";
+import Navbar from "./layout/Navbar/Navbar";
+import GuestList from "./sections/GuestList";
+import Budget from "./sections/Budget";
+import ToDo from "./sections/ToDo/ToDo";
+import Hero from "./sections/Hero/Hero";
+import PhotoAlbum from "./sections/PhotoAlbum/PhotoAlbum";
+import Footer from "./layout/Footer/Footer";
+import TableChart from "./sections/TableChart";
+import ThemeConstructor from "./sections/ThemeConstructor/ThemeConstructor";
+import Choices from "./sections/Choices";
+import Printables from "./sections/Printables/Printables";
 
 const SectionsContainer = styled.div`
   width: 100%;
@@ -18,6 +18,7 @@ const SectionsContainer = styled.div`
   & > * {
     padding: 3rem;
     width: calc(100% - 6rem);
+   
 
   }
    & > *:nth-child(even) {
@@ -29,13 +30,15 @@ const SectionsContainer = styled.div`
   }
 `
 
-const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor'];
+const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Maker', 'Printables'];
 
 const Home = () => {
 
   return (
     <div>
       <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
+
+
       <SectionsContainer>
         <Hero />
         <div id="guest-list">

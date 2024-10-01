@@ -1,5 +1,5 @@
 import { ThemeProvider } from "./providers/ThemeContext";
-import Home from "./components/sections/Home";
+import Home from "./components/Home";
 import { createGlobalStyle } from 'styled-components';
 import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { useTheme } from "./providers/ThemeContext";

@@ -19,7 +19,6 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 0rem 2rem;
 
   @media (min-width: 1200px) {
     flex-direction: row;

@@ -19,7 +19,6 @@ const PhotoAlbum = () => {
         </PhotosContainer>
       </div>
       <ButtonContainer>
-        <Button>Add Yours</Button>
         <Button>Manage Photos</Button>
       </ButtonContainer>
     </Container>

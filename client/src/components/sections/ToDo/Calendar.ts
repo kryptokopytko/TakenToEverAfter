@@ -5,15 +5,13 @@ import { fontStyles } from "../../../styles/typography";
 import { darken } from "polished";
 
 export const StyledCalendar = styled(Calendar)`
-  width: 100%;
-  margin: 2rem auto;
   background-color: ${({ theme }) => theme.primary};
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  width: 100%;
   border: 2px solid ${({ theme }) => theme.secondary};
   font-family: ${fontStyles.bodyFont};
-
   .react-calendar__navigation {
     display: flex;
     justify-content: space-between;
@@ -72,16 +70,16 @@ export const StyledCalendar = styled(Calendar)`
     &--active {
       background: ${({ theme }) => theme.secondary};
       color: ${({ theme }) => theme.primary};
-      font-weight: bold; 
-      border: 2px solid ${({ theme }) => theme.tertiary}; 
+      font-weight: bold;
+      border: 2px solid ${({ theme }) => theme.tertiary};
     }
   }
 
   .react-calendar__tile--active {
     background: ${({ theme }) => theme.light} !important;
     color: ${({ theme }) => theme.body};
-    font-weight: bold; 
-    border: 2px solid ${({ theme }) => theme.tertiary}; 
+    font-weight: bold;
+    border: 2px solid ${({ theme }) => theme.tertiary};
   }
 
   .react-calendar__tile--hover {

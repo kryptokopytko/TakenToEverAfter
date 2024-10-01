@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const BurgerBreakpoint = "1600px";
+export const BurgerBreakpoint = "1630px";
 
 export const NavbarContainer = styled.nav`
   background-color: ${({ theme }) => theme.secondary};
@@ -23,6 +23,14 @@ export const ContentContainer = styled.div`
 
 export const ThemeSelectorContainer = styled.div`
   position: relative;
+`;
+
+export const DateContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  @media (max-width: 400px) {
+    display: none;
+  }
 `;
 
 export const NamesContainer = styled.div`
