@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { Label } from "../styles/typography";
 
 export const ButtonContainer = styled.div`
-padding: 3rem 0;
-display: flex;
-justify-content: space-around;
-width: 100%;
+  padding: 3rem 0;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  flex-wrap: wrap;
 `;
 
 const StyledButton = styled.button<{ variant?: 'primary' | 'secondary'; size?: 'small' | 'medium' | 'large'; hslColor?: string }>`

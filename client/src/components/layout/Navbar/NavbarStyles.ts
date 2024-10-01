@@ -104,7 +104,7 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
     z-index: 100;
     flex-wrap: wrap;
     padding: 1rem;
-    max-height: calc(100vh - 6rem);
+    height: calc(100vh - 6rem);
     overflow: auto;
   }
   @media (max-width: 420px) {

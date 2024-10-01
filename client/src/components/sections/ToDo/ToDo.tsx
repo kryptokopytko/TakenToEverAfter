@@ -119,7 +119,7 @@ const ToDo = () => {
         tileContent={tileContent}
       />
 
-      <div> 
+      <div>
         <GridContainer isExpanded={isExpanded} minWidth="28rem">
           {tasks.map((task, categoryIndex) => (
             <Card color="primary" key={categoryIndex}>
@@ -141,7 +141,7 @@ const ToDo = () => {
                           onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
                         />
                         <StyledCheckbox checked={subTask.completed}>
-                          <svg viewBox="4 6 10 10" width="18" height="18">
+                          <svg viewBox="8 4 10 14" width="18" height="18">
                             <polyline points="4 6 10 17 22 3 11 12" />
                           </svg>
                         </StyledCheckbox>

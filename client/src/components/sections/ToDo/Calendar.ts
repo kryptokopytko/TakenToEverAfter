@@ -72,12 +72,16 @@ export const StyledCalendar = styled(Calendar)`
     &--active {
       background: ${({ theme }) => theme.secondary};
       color: ${({ theme }) => theme.primary};
+      font-weight: bold; 
+      border: 2px solid ${({ theme }) => theme.tertiary}; 
     }
   }
 
   .react-calendar__tile--active {
-    background: ${({ theme }) => theme.secondary};
-    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.light} !important;
+    color: ${({ theme }) => theme.body};
+    font-weight: bold; 
+    border: 2px solid ${({ theme }) => theme.tertiary}; 
   }
 
   .react-calendar__tile--hover {

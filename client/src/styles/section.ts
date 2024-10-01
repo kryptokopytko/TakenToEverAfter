@@ -33,7 +33,6 @@ export const GridContainer = styled.div<{
       ? "transparent"
       : "linear-gradient(to bottom, transparent 90%, rgba(0, 0, 0, 0.1))"};
   width: 100%;
-  
 `;
 
 export const Card = styled.div<{ color: string; centered?: string }>`
