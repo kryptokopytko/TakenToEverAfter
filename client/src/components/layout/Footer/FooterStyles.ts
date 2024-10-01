@@ -7,11 +7,11 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  text-align: center;
 
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: center;
-    text-align: center;
   }
 `;
 
@@ -33,18 +33,29 @@ export const HidingSection = styled(Section)`
 
 export const ListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
-  margin-top: -2rem;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(6rem, 1fr)
+  ); 
+  margin-top: -1rem;
   width: 100%;
   height: fit-content;
   text-align: center;
   gap: 2px;
   padding: 2px;
   background-color: ${({ theme }) => theme.tertiary};
+
+  
+  @media (min-width: 1200px) {
+    
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   & > * {
     background-color: ${({ theme }) => theme.light};
     margin: 0rem;
     padding: 0.2rem;
+
     &:hover {
       border-radius: 1rem;
     }

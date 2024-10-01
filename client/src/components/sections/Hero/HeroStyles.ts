@@ -4,6 +4,16 @@ export const Container = styled.div`
   padding-bottom: 2rem;
 `;
 
+export const LinkList = styled.ul`
+  & > * {
+    margin: 0;
+    padding: 0.5rem;
+    &:hover {
+      color: ${({ theme }) => theme.tertiary};
+    }
+  }
+`;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,7 +30,7 @@ export const Content = styled.div`
 
 export const TextSection = styled.div`
   margin: 2rem 2rem;
-
+  max-width: 34rem;
   @media (min-width: 1200px) {
     margin-left: 2rem;
     flex: 1;
