@@ -7,7 +7,6 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  text-align: left;
 
   @media (max-width: 800px) {
     flex-direction: column;
@@ -26,10 +25,28 @@ export const Section = styled.div`
   max-width: 25rem;
 `;
 
+export const HidingSection = styled(Section)`
+  @media (max-width: 850px) {
+    display: none;
+  }
+`;
+
 export const ListContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
   margin-top: -2rem;
-  gap: 0.5rem;
   width: 100%;
+  height: fit-content;
+  text-align: center;
+  gap: 2px;
+  padding: 2px;
+  background-color: ${({ theme }) => theme.tertiary};
+  & > * {
+    background-color: ${({ theme }) => theme.light};
+    margin: 0rem;
+    padding: 0.2rem;
+    &:hover {
+      border-radius: 1rem;
+    }
+  }
 `;

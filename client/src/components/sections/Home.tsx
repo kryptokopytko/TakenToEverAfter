@@ -49,6 +49,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
 `;
+const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor'];
 
 const Home = () => {
   const { theme } = useTheme();
@@ -57,7 +58,7 @@ const Home = () => {
     <StyledThemeProvider theme={theme}>
       <GlobalStyles />
       <HomeContainer>
-        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'TableChart', 'Theme Constructor']} weddingDate="26.04.2025" />
+        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
         <SectionsContainer>
           <Hero />
           <GuestList />
@@ -69,7 +70,7 @@ const Home = () => {
           <ThemeConstructor />
           <Printables />
         </SectionsContainer>
-        <Footer />
+        <Footer sections={sections} />
       </HomeContainer>
     </StyledThemeProvider>
   );
