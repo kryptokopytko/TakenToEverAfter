@@ -13,6 +13,8 @@ import Printables from "./Printables/Printables";
 
 const SectionsContainer = styled.div`
   width: 100%;
+  position:relative;
+  overflow: hidden;
   & > * {
     padding: 3rem;
     width: calc(100% - 6rem);
