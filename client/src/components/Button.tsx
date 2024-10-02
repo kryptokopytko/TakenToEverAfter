@@ -3,18 +3,19 @@ import styled from "styled-components";
 import { Label } from "../styles/typography";
 
 export const ButtonContainer = styled.div`
-  padding: 3rem 0;
+  padding: 1rem 0;
   display: flex;
   justify-content: space-around;
   width: 100%;
   flex-wrap: wrap;
 `;
 
-const StyledButton = styled.button<{ variant?: 'primary' | 'secondary'; size?: 'small' | 'medium' | 'large'; hslColor?: string }>`
+const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string }>`
   background-color: ${({ variant, theme, hslColor }) =>
     variant === 'primary' ? theme.primary :
       variant === 'secondary' ? theme.secondary :
-        hslColor ? hslColor : theme.tertiary};
+        variant === 'transparent' ? 'transparent' :
+          hslColor ? hslColor : theme.tertiary};
     color: ${({ variant, theme }) =>
     !variant ? theme.primary : theme.body};
   border: none;
@@ -25,7 +26,7 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary'; size?: '
   padding: 0 1.5rem;
   max-height: 5rem;
   &:hover {
-    opacity: 0.9;
+    opacity: ${({ variant }) => variant === 'transparent' ? 0.5 : 0.9};
   }
 
   &:disabled {
@@ -35,7 +36,7 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary'; size?: '
 `;
 
 interface ButtonProps {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'transparent';
   size?: 'small' | 'medium' | 'large';
   onClick?: () => void;
   disabled?: boolean;

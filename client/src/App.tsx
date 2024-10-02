@@ -5,11 +5,12 @@ import { useTheme } from "./providers/ThemeContext";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
 import GuestPage from "./pages/GuestPage";
-import Home from "./pages/Home";
+import { guests } from './dummyData'
+import { fontStyles } from "./styles/typography";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
-        `linear-gradient(to right, ${theme.secondary} -2000%, 
+    `linear-gradient(to right, ${theme.secondary} -2000%, 
    ${theme.light} 2000%)`};
   color: ${({ theme }) => theme.body};
   min-height: 100vh;
@@ -21,41 +22,57 @@ const AppContainer = styled.div`
 `;
 
 interface GlobalStylesProps {
-    fontSize: number;
+  fontSize: number;
 }
 
 const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
   :root {
     font-size: ${({ fontSize }) => fontSize}px; 
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.body};
+    font-family: ${fontStyles.bodyFont};
   }
 `;
 const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Maker', 'Printables'];
 
+const PageContainer = styled.div`
+  width: 100%;
+  position:relative;
+  overflow: hidden;
+  & > * {
+    padding: 0 3rem;
+    width: calc(100% - 6rem);
+  }
+  margin-top: 5rem;
+`
+
+
 const AppContent = () => {
-    const { theme, fontSize } = useTheme();
+  const { theme, fontSize } = useTheme();
 
-    return (
-        <StyledThemeProvider theme={theme}>
-            <AppContainer>
-                <GlobalStyles fontSize={fontSize} />
-                <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
-                <Home />
-                <Footer sections={sections} />
+  return (
+    <StyledThemeProvider theme={theme}>
+      <AppContainer>
+        <GlobalStyles fontSize={fontSize} />
+        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
+        <PageContainer>
+          <GuestPage guests={guests} updateGuestTags={() => { }} addGuest={() => { }} removeGuest={() => { }} />
+        </PageContainer>
 
-            </AppContainer>
-        </StyledThemeProvider>
+        <Footer sections={sections} />
 
-    );
+      </AppContainer>
+    </StyledThemeProvider>
+
+  );
 }
 
 const App = () => {
 
-    return (
-        <ThemeProvider>
-            <AppContent />
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
 };
 
 export default App;
