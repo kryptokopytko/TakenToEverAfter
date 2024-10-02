@@ -57,7 +57,7 @@ interface ToDoProps {
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage }) => {
   const [tasks, setTasks] = useState(initialTasks);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const totalTasks = tasks.reduce((total, task) => total + task.subTasks.length, 0);
@@ -179,11 +179,11 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage }) => {
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
-        {isHomePage ?
-          <Button>Manage To Do</Button> : <></>}
-        <Button onClick={toggleList}>
-          {isExpanded ? "Collapse List" : "Expand List"}
-        </Button>
+        {isHomePage ? <>
+          <Button>Manage To Do</Button>
+          <Button onClick={toggleList}>
+            {isExpanded ? "Collapse List" : "Expand List"}
+          </Button> </> : <></>}
       </ButtonContainer>
     </Container>
   );

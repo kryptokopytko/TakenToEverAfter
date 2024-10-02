@@ -77,7 +77,7 @@ interface BudgetProps {
 
 const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(!isHomePage);
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -121,11 +121,12 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
                 ))}
             </GridContainer>
             <ButtonContainer>
-                {isHomePage ?
-                    <Button>Manage budget</Button> : <></>}
-                <Button onClick={toggleList}>
-                    {isExpanded ? 'Collapse List' : 'Expand List'}
-                </Button>
+                {isHomePage ? <>
+                    <Button>Manage budget</Button>
+                    <Button onClick={toggleList}>
+                        {isExpanded ? 'Collapse List' : 'Expand List'}
+                    </Button>
+                </> : <></>}
                 <Button onClick={() => exportToPDF("budget")}>Export to PDF</Button>
 
             </ButtonContainer>

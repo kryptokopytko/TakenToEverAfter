@@ -55,7 +55,7 @@ interface ChoicesProps {
 const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
 
     const [choices, setChoices] = useState(choicesData);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(!isHomePage);
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -124,9 +124,11 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
             <ButtonContainer>
                 {isHomePage ?
                     <Button>Manage Choices</Button> : <></>}
-                <Button onClick={toggleList}>
-                    {isExpanded ? 'Collapse List' : 'Expand List'}
-                </Button>
+                <div style={{ display: isHomePage ? 'block' : 'none' }}>
+                    <Button onClick={toggleList} >
+                        {isExpanded ? 'Collapse List' : 'Expand List'}
+                    </Button>
+                </div>
             </ButtonContainer>
         </>
     );

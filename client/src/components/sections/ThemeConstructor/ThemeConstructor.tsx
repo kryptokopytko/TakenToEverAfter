@@ -23,7 +23,7 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
         saturation: theme.saturation,
         lightness: theme.lightness,
     });
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(!isHomePage);
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
     };
@@ -41,9 +41,10 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
             <ContentContainer>
                 <SpaceBetweenContainer>
                     <Heading level={1}>Establish a theme</Heading>
-                    <Button onClick={toggleList}>
-                        {isExpanded ? "Collapse List" : "Expand List"}
-                    </Button>
+                    {isHomePage ?
+                        <Button onClick={toggleList}>
+                            {isExpanded ? "Collapse List" : "Expand List"}
+                        </Button> : <></>}
                 </SpaceBetweenContainer>
                 <GridContainer isExpanded={isExpanded} minHeight='60vh'>
                     <Card color='primary'>
