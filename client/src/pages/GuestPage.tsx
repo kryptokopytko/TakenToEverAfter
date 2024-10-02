@@ -10,6 +10,9 @@ import { Tag, TagContainer } from "../styles/tag";
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 3rem;
+  padding-bottom: 3rem;
+
   & > *:last-child {
     background-color: ${({ theme }) => theme.primary};
     padding: 0 3rem;
@@ -46,7 +49,7 @@ const GuestPage: React.FC<GuestListProps> = ({ guests: initialGuests, updateGues
   const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
-  const [guests, setGuests] = useState<Guest[]>(initialGuests); 
+  const [guests, setGuests] = useState<Guest[]>(initialGuests);
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -99,9 +102,9 @@ const GuestPage: React.FC<GuestListProps> = ({ guests: initialGuests, updateGues
       if (existingGuest) {
         setNotification(`Guest "${trimmedName}" already exists!`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: 'maybe' }; 
-        setGuests(prevGuests => [...prevGuests, newGuest]); 
-        addGuest(trimmedName); 
+        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: 'maybe' };
+        setGuests(prevGuests => [...prevGuests, newGuest]);
+        addGuest(trimmedName);
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -111,8 +114,8 @@ const GuestPage: React.FC<GuestListProps> = ({ guests: initialGuests, updateGues
 
   const handleDeleteGuest = () => {
     if (currentGuest) {
-      setGuests(prevGuests => prevGuests.filter(guest => guest.name !== currentGuest.name)); 
-      removeGuest(currentGuest.name); 
+      setGuests(prevGuests => prevGuests.filter(guest => guest.name !== currentGuest.name));
+      removeGuest(currentGuest.name);
       setNotification(`Removed: ${currentGuest.name}`);
     } else {
       alert("Please select a guest to delete!");
@@ -167,7 +170,7 @@ const GuestPage: React.FC<GuestListProps> = ({ guests: initialGuests, updateGues
           </>
         )}
       </MenuContainer>
-      <GuestList isHomePage={false} guests={guests} /> 
+      <GuestList isHomePage={false} guests={guests} />
     </Container>
   );
 };

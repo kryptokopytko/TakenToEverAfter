@@ -12,6 +12,7 @@ import { guests } from "../dummyData";
 
 const SectionsContainer = styled.div`
   width: 100%;
+  margin: 0 -3rem;
   position:relative;
   overflow: hidden;
   & > * {

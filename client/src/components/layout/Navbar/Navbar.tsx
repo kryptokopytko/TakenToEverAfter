@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
+import { Link } from "react-router-dom"; 
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
 import { DateContainer, LogoContainer, ButtonsContainer, SelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
@@ -39,6 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
   const toggleBurgerMenu = () => {
     setIsBurgerOpen(prev => !prev);
   };
+
   const convertDateFormat = (dateString: string) => {
     const [day, month, year] = dateString.split('.');
     return `${year}-${month}-${day}`;
@@ -61,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
           </NamesContainer>
         </LogoContainer>
         <DateContainer>
-          <Label size='small' >{calculateDaysLeft()} days left</Label>
+          <Label size='small'>{calculateDaysLeft()} days left</Label>
           <Label size='small'>{weddingDate} </Label>
         </DateContainer>
         <ButtonsContainer>
@@ -93,7 +95,11 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
               {sections.map((section) => (
                 <RadioButton key={section}>
                   <input type="radio" name="section" value={section} />
-                  <Label color="tertiary">{section.charAt(0).toUpperCase() + section.slice(1)}</Label>
+                  <Label color="tertiary">
+                    <Link to={`/${section.toLowerCase().replace(" ", "_")}`}> 
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </Link>
+                  </Label>
                 </RadioButton>
               ))}
             </DropdownMenu>
@@ -135,7 +141,11 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
               {sections.map((section) => (
                 <RadioButton key={section}>
                   <input type="radio" name="section" value={section} />
-                  <Label color="tertiary">{section.charAt(0).toUpperCase() + section.slice(1)}</Label>
+                  <Label color="tertiary">
+                    <Link to={`/${section.toLowerCase().replace(" ", "_")}`}>
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </Link>
+                  </Label>
                 </RadioButton>
               ))}
             </DropdownMenu>
