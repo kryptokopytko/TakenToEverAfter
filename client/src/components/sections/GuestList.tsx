@@ -44,10 +44,10 @@ const guests = [
 const decisionTypes = ['yes', 'maybe', 'no', 'not invited'];
 
 interface GuestListProps {
-  manageSectionButton?: boolean;
+  isHomePage?: boolean;
 }
 
-const GuestList: React.FC<GuestListProps> = ({ manageSectionButton }) => {
+const GuestList: React.FC<GuestListProps> = ({ isHomePage }) => {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -76,7 +76,7 @@ const GuestList: React.FC<GuestListProps> = ({ manageSectionButton }) => {
       </SummaryContainer>
       <List list={guests} isExpanded={isExpanded} />
       <ButtonContainer>
-        {manageSectionButton ?
+        {isHomePage ?
           <Button>Manage Guests</Button> : <></>}
         <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
 

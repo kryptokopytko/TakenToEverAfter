@@ -52,10 +52,10 @@ const initialTasks: Task[] = [
 ];
 
 interface ToDoProps {
-  manageSectionButton?: boolean;
+  isHomePage?: boolean;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ manageSectionButton }) => {
+const ToDo: React.FC<ToDoProps> = ({ isHomePage }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -179,7 +179,7 @@ const ToDo: React.FC<ToDoProps> = ({ manageSectionButton }) => {
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
-        {manageSectionButton ?
+        {isHomePage ?
           <Button>Manage To Do</Button> : <></>}
         <Button onClick={toggleList}>
           {isExpanded ? "Collapse List" : "Expand List"}

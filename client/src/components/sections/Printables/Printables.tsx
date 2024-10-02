@@ -32,17 +32,17 @@ const PhotoContainer = styled.div`
   }
 `;
 interface PrintablesProps {
-  manageSectionButton?: boolean;
+  isHomePage?: boolean;
 }
 
-const Printables: React.FC<PrintablesProps> = ({ manageSectionButton }) => {
+const Printables: React.FC<PrintablesProps> = ({ isHomePage }) => {
 
   return (
     <>
 
       <SpaceBetweenContainer>
         <Heading level={2}>Prints</Heading>
-        {manageSectionButton ?
+        {isHomePage ?
           <Button>Manage Prints</Button> : <></>}
       </SpaceBetweenContainer>
       <Container>

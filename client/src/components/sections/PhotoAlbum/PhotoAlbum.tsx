@@ -6,10 +6,10 @@ import Button, { ButtonContainer } from "../../Button";
 import { Container, PhotosContainer, StyledImage } from './PhotoAlbumStyles'
 
 interface PhotoAlbumProps {
-  manageSectionButton?: boolean;
+  isHomePage?: boolean;
 }
 
-const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ manageSectionButton }) => {
+const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isHomePage }) => {
   return (
     <Container>
       <Heading level={1}>Photos</Heading>
@@ -20,7 +20,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ manageSectionButton }) => {
           <StyledImage src={car} alt="Car" />
         </PhotosContainer>
       </div>
-      {manageSectionButton ?
+      {isHomePage ?
         <ButtonContainer>
           <Button>Manage Photos</Button>
         </ButtonContainer>

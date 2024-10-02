@@ -35,10 +35,10 @@ const StyledImage = styled.img`
 
 `;
 interface TableChartProps {
-  manageSectionButton?: boolean;
+  isHomePage?: boolean;
 }
 
-const TableChart: React.FC<TableChartProps> = ({ manageSectionButton }) => {
+const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
 
   return (
     <Container>
@@ -46,7 +46,7 @@ const TableChart: React.FC<TableChartProps> = ({ manageSectionButton }) => {
       <PhotoContainer>
         <StyledImage src={tables} alt='table chart image' />
       </PhotoContainer>
-      {manageSectionButton ?
+      {isHomePage ?
         <Button>Manage Table Chart</Button> : <></>}
     </Container>
   );

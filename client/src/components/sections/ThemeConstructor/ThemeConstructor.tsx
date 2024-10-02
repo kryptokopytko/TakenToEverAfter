@@ -13,10 +13,10 @@ const ContentContainer = styled.div`
 `;
 
 interface ThemeConstructorProps {
-    manageSectionButton?: boolean;
+    isHomePage?: boolean;
 }
 
-const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ manageSectionButton }) => {
+const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
     const { theme } = useTheme();
     const [color, setColor] = useState<{ hue: number; saturation: number; lightness: number }>({
         hue: theme.hue,
@@ -51,7 +51,7 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ manageSectionButton
                     </Card>
                     <ColorCompositions color={color} />
                 </GridContainer>
-                {manageSectionButton ?
+                {isHomePage ?
                     <Button>Manage Theme</Button>
                     : <></>}
             </ContentContainer>

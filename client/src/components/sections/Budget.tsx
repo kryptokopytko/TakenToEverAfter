@@ -72,10 +72,10 @@ if (remainingBudget > 0)
     pieData.push({ value: remainingBudget, label: 'Remaining' });
 
 interface BudgetProps {
-    manageSectionButton?: boolean;
+    isHomePage?: boolean;
 }
 
-const Budget: React.FC<BudgetProps> = ({ manageSectionButton }) => {
+const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -121,7 +121,7 @@ const Budget: React.FC<BudgetProps> = ({ manageSectionButton }) => {
                 ))}
             </GridContainer>
             <ButtonContainer>
-                {manageSectionButton ?
+                {isHomePage ?
                     <Button>Manage budget</Button> : <></>}
                 <Button onClick={toggleList}>
                     {isExpanded ? 'Collapse List' : 'Expand List'}

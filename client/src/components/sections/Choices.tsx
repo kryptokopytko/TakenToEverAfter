@@ -49,10 +49,10 @@ const choicesData = [
 ];
 
 interface ChoicesProps {
-    manageSectionButton?: boolean;
+    isHomePage?: boolean;
 }
 
-const Choices: React.FC<ChoicesProps> = ({ manageSectionButton }) => {
+const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
 
     const [choices, setChoices] = useState(choicesData);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -122,7 +122,7 @@ const Choices: React.FC<ChoicesProps> = ({ manageSectionButton }) => {
                 })}
             </GridContainer>
             <ButtonContainer>
-                {manageSectionButton ?
+                {isHomePage ?
                     <Button>Manage Choices</Button> : <></>}
                 <Button onClick={toggleList}>
                     {isExpanded ? 'Collapse List' : 'Expand List'}
