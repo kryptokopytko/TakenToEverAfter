@@ -15,9 +15,8 @@ const Container = styled.div`
 `;
 
 const PhotoContainer = styled.div`
-    max-width: 35rem;
-
-  background-color: ${({ theme }) => theme.primary};
+  max-width: 35rem;
+  background-color: #fff;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   transition: transform 0.2s; 

@@ -25,6 +25,7 @@ export const StyledImage = styled.img`
   transition: transform 0.2s;
   padding: 1rem;
   background-color: #fff;
+
   &:hover {
     z-index: 1;
     transform: scale(1.05);
