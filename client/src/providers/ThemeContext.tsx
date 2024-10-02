@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, ReactNode, useContext } from "react";
+import { createContext, useState, useLayoutEffect, ReactNode, useContext } from "react";
 import { initialThemes, Theme } from "../styles/theme";
 
 interface Themes {
@@ -15,41 +15,50 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const debounce = (func: () => void, delay: number) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return () => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(func, delay);
+  };
+};
+
+
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themes, setThemes] = useState<Themes>(initialThemes);
   const [theme, setCurrentTheme] = useState<Theme>(themes.nude);
   const [customThemeCount, setCustomThemeCount] = useState(0);
   const [fontSize, setFontSize] = useState(16);
 
-  useEffect(() => {
-    const calculateFontSize = () => {
-      const screenWidth = window.innerWidth;
+  const calculateFontSize = () => {
+    const screenWidth = window.innerWidth;
+    const newFontSize = Math.max(10, Math.min(18, (screenWidth - 400) / 35));
+    setFontSize(newFontSize);
+  };
 
-      const newFontSize = Math.max(10, Math.min(18, (screenWidth - 400) / 35));
-      setFontSize(newFontSize);
-    };
 
+  useLayoutEffect(() => {
+    const debouncedResizeHandler = debounce(calculateFontSize, 150);
     calculateFontSize();
-    window.addEventListener('resize', calculateFontSize);
-
+    window.addEventListener("resize", debouncedResizeHandler);
     return () => {
-      window.removeEventListener('resize', calculateFontSize);
+      window.removeEventListener("resize", debouncedResizeHandler);
     };
   }, []);
 
   const setTheme = (newTheme: Theme) => {
     const themeKeys = Object.keys(themes);
-    const isThemeExisting = themeKeys.some(key => {
-      return JSON.stringify(themes[key]) === JSON.stringify(newTheme);
-    });
+    const isThemeExisting = themeKeys.some(
+      (key) => JSON.stringify(themes[key]) === JSON.stringify(newTheme)
+    );
 
     if (!isThemeExisting) {
       const customThemeKey = `custom${customThemeCount + 1}`;
-      setThemes(prevThemes => ({
+      setThemes((prevThemes) => ({
         ...prevThemes,
         [customThemeKey]: newTheme,
       }));
-      setCustomThemeCount(prevCount => prevCount + 1);
+      setCustomThemeCount((prevCount) => prevCount + 1);
       setCurrentTheme(newTheme);
       console.log("Custom theme added:", customThemeKey, newTheme);
     } else {

@@ -2,10 +2,9 @@ import styled from "styled-components";
 import { Heading } from "../../styles/typography";
 import tables from '/pictures/tables.png';
 import Button, { ButtonContainer } from "../Button";
+import { SpaceBetweenContainer } from "../../styles/section";
 
 const Container = styled.div`
-  padding: 2rem 0;
-  text-align: center;
   display:flex;
   flex-direction: column;
   justify-content: center;
@@ -27,6 +26,7 @@ const PhotoContainer = styled.div`
     transform: scale(1.05); 
   }
 `;
+
 const StyledImage = styled.img`
   width: 60vw; 
   height: auto; 
@@ -43,9 +43,7 @@ const TableChart = () => {
       <PhotoContainer>
         <StyledImage src={tables} alt='table chart image' />
       </PhotoContainer>
-      <ButtonContainer>
-        <Button>Manage Table Chart</Button>
-      </ButtonContainer>
+      <Button>Manage Table Chart</Button>
     </Container>
   );
 };

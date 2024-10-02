@@ -3,14 +3,12 @@ import dancing1 from "/pictures/dancing1.png";
 import flowers from "/pictures/flowers.png";
 import car from "/pictures/car.png";
 import Button, { ButtonContainer } from "../../Button";
-import { Container, PhotosContainer, StyledImage, HeadingContainer } from './PhotoAlbumStyles'
+import { Container, PhotosContainer, StyledImage } from './PhotoAlbumStyles'
 
 const PhotoAlbum = () => {
   return (
     <Container>
-      <HeadingContainer>
-        <Heading level={1}>Photos</Heading>
-      </HeadingContainer>
+      <Heading level={1}>Photos</Heading>
       <div style={{ height: '60vh' }}>
         <PhotosContainer>
           <StyledImage src={dancing1} alt="Dancing 1" />

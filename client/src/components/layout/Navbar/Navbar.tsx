@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
-import { DateContainer, LogoContainer, ButtonsContainer, ThemeSelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
+import { DateContainer, LogoContainer, ButtonsContainer, SelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 
 interface NavbarProps {
   names: [string, string];
@@ -65,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
           <Label size='small'>{weddingDate} </Label>
         </DateContainer>
         <ButtonsContainer>
-          <ThemeSelectorContainer>
+          <SelectorContainer>
             <SelectorButton onClick={toggleThemeDropdown}>
               <Label color="primary">Select Theme {isThemeOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
@@ -83,9 +83,9 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                 </RadioButton>
               ))}
             </DropdownMenu>
-          </ThemeSelectorContainer>
+          </SelectorContainer>
 
-          <ThemeSelectorContainer>
+          <SelectorContainer>
             <SelectorButton onClick={toggleSectionDropdown}>
               <Label color="primary">Select Section {isSectionOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
@@ -97,7 +97,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                 </RadioButton>
               ))}
             </DropdownMenu>
-          </ThemeSelectorContainer>
+          </SelectorContainer>
           <Label color="primary" style={{ marginTop: "2.2rem" }}>{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
         </ButtonsContainer>
 
@@ -109,8 +109,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
 
         <MobileMenu isOpen={isBurgerOpen}>
           <span>
-            <Label color="dark">{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
-            <ThemeSelectorContainer>
+            <Label color="dark">{isLogged ? 'Log out' : 'Log in'}</Label>
+            <SelectorContainer>
               <Label color="dark">Select Theme</Label>
               <DropdownMenu isOpen={isThemeOpen}>
                 {Object.keys(themes).map((themeKey) => (
@@ -126,10 +126,10 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                   </RadioButton>
                 ))}
               </DropdownMenu>
-            </ThemeSelectorContainer>
+            </SelectorContainer>
           </span>
 
-          <ThemeSelectorContainer>
+          <SelectorContainer>
             <Label color="dark">Select Section</Label>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
@@ -139,7 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                 </RadioButton>
               ))}
             </DropdownMenu>
-          </ThemeSelectorContainer>
+          </SelectorContainer>
         </MobileMenu>
       </ContentContainer>
     </NavbarContainer>

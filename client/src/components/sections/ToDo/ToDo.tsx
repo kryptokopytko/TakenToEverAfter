@@ -7,7 +7,18 @@ import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 
-const initialTasks = [
+interface SubTask {
+  subCategory: string;
+  completed: boolean;
+  deadline: string;
+}
+
+interface Task {
+  category: string;
+  subTasks: SubTask[];
+}
+
+const initialTasks: Task[] = [
   {
     category: 'Planning',
     subTasks: [
@@ -164,6 +175,7 @@ const ToDo = () => {
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
+        <Button>Add Task</Button>
         <Button>Manage Tasks</Button>
         <Button onClick={toggleList}>
           {isExpanded ? "Collapse List" : "Expand List"}

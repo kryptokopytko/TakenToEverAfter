@@ -21,7 +21,7 @@ export const ContentContainer = styled.div`
   height: 100%;
 `;
 
-export const ThemeSelectorContainer = styled.div`
+export const SelectorContainer = styled.div`
   position: relative;
 `;
 
@@ -56,7 +56,7 @@ export const BurgerMenu = styled.div`
     cursor: pointer;
     flex-direction: column;
     gap: 0.3rem;
-
+    padding: 1rem;
     div {
       width: 1.5rem;
       height: 2px;

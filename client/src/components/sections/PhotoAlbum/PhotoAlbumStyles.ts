@@ -5,10 +5,6 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-export const HeadingContainer = styled.div`
-  padding: 0 3rem;
-`;
-
 export const PhotosContainer = styled.div`
   display: flex;
   gap: 3rem;
