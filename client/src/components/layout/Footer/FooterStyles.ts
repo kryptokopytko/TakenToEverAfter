@@ -15,6 +15,27 @@ export const Container = styled.div`
   }
 `;
 
+export const Slider = styled.input.attrs({ type: "range" })`
+  margin-left: 1rem;
+  appearance: none;
+  width: 200px;
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    ${({ theme }) => theme.body},
+    ${({ theme }) => theme.secondary}
+  );
+  border-radius: 1rem;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+  }
+
+  &::-moz-range-thumb {
+    appearance: none;
+  }
+`;
+
 export const Section = styled.div`
   flex: 1;
   min-width: 12rem;

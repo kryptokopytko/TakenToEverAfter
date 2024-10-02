@@ -1,6 +1,6 @@
 import React from 'react';
 import { Body, Heading } from "../../../styles/typography";
-import { HidingSection, Container, Section, ListContainer } from "./FooterStyles";
+import { Slider, HidingSection, Container, Section, ListContainer } from "./FooterStyles";
 import { useTheme } from "../../../providers/ThemeContext";
 
 interface FooterProps {
@@ -8,7 +8,7 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ sections }) => {
-  const { fontSize, setFontSize, theme } = useTheme();
+  const { fontSize, setFontSize } = useTheme();
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFontSize(Number(e.target.value));
@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
 
         <ListContainer>
           {sections
-            .filter(section => section !== 'Home') 
+            .filter(section => section !== 'Home')
             .sort().map((section) => (
               <Body>{section}</Body>
             ))}
@@ -39,27 +39,19 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
 
         <div style={{ textAlign: 'center', display: "flex", alignItems: 'center' }}>
           <label htmlFor="fontSizeSlider"><Body>Adjust font size:</Body></label>
-          <input
+          <Slider
             type="range"
             id="fontSizeSlider"
             min="10"
             max="22"
             value={fontSize}
             onChange={handleFontSizeChange}
-            style={{
-              marginLeft: '1rem',
-              appearance: 'none',
-              width: '200px',
-              height: '6px',
-              background: theme.secondary,
-              borderRadius: '1rem',
-            }}
           />
           <span style={{ marginLeft: '0.5rem' }}><Body>{Math.round(fontSize)}px</Body></span>
 
         </div>
 
-        <Body style={{ fontSize: `${fontSize}px` }}>
+        <Body>
           Your wedding planning made easy
         </Body>
       </Section>
@@ -67,10 +59,10 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
       <Section>
         <Heading level={3}>Contact</Heading>
         <div style={{ marginTop: '-2rem' }}>
-          <Body style={{ fontSize: `${fontSize}px` }}>City, State, ZIP: Wedding City, WC 12345</Body>
-          <Body style={{ fontSize: `${fontSize}px` }}>Email: contact@takentoeverafter.com</Body>
-          <Body style={{ fontSize: `${fontSize}px` }}>Address: 123 Wedding Lane</Body>
-          <Body style={{ fontSize: `${fontSize}px` }}>Phone: (123) 456-7890</Body>
+          <Body>City, State, ZIP: Wedding City, WC 12345</Body>
+          <Body>Email: contact@takentoeverafter.com</Body>
+          <Body>Address: 123 Wedding Lane</Body>
+          <Body>Phone: (123) 456-7890</Body>
         </div>
       </Section>
     </Container>

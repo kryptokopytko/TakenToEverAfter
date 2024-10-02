@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { Heading } from "../../styles/typography";
 import tables from '/pictures/tables.png';
-import Button, { ButtonContainer } from "../Button";
-import { SpaceBetweenContainer } from "../../styles/section";
+import Button from "../Button";
 
 const Container = styled.div`
   display:flex;
