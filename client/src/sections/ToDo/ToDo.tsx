@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Body, Heading, Label } from "../../../styles/typography";
-import Button, { ButtonContainer } from "../../Button";
-import { GridContainer, SpaceBetweenContainer } from "../../../styles/section";
-import { Card } from "../../../styles/card";
+import { Body, Heading, Label } from "../../styles/typography";
+import Button, { ButtonContainer } from "../../components/Button";
+import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
+import { Card } from "../../styles/card";
 import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";

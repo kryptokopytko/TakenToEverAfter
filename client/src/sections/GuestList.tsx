@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Heading, Subtitle } from "../../styles/typography";
-import List from "../List";
-import Button, { ButtonContainer } from "../Button";
+import { Heading, Subtitle } from "../styles/typography";
+import List from "../components/List";
+import Button, { ButtonContainer } from "../components/Button";
 import { useState } from "react";
-import { SpaceBetweenContainer } from "../../styles/section";
+import { SpaceBetweenContainer } from "../styles/section";
 import { exportToPDF } from "./Printables/exportToPdf";
 
 const SummaryContainer = styled.div`

@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { Heading } from "../../../styles/typography";
+import { Heading } from "../../styles/typography";
 import HslColorPicker from "./HslColorPicker/HslColorPicker";
-import { GridContainer, SpaceBetweenContainer } from "../../../styles/section";
+import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
-import { useTheme } from "../../../providers/ThemeContext";
-import Button from "../../Button";
-import { Card } from "../../../styles/card";
+import { useTheme } from "../../providers/ThemeContext";
+import Button from "../../components/Button";
+import { Card } from "../../styles/card";
 
 const ContentContainer = styled.div`
   text-align: center;

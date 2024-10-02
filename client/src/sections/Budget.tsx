@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { Body, Heading } from "../../styles/typography";
-import Button, { ButtonContainer } from "../Button";
-import PieChart from "../PieChart";
-import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
+import { Body, Heading } from "../styles/typography";
+import Button, { ButtonContainer } from "../components/Button";
+import PieChart from "../components/PieChart";
+import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useState } from "react";
 import { exportToPDF } from "./Printables/exportToPdf";
-import { Card } from "../../styles/card";
+import { Card } from "../styles/card";
 
 const HeaderContainer = styled.div`
   display: grid;

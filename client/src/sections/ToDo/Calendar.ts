@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
 import Calendar from "react-calendar";
-import { fontStyles } from "../../../styles/typography";
+import { fontStyles } from "../../styles/typography";
 import { darken } from "polished";
 
 export const StyledCalendar = styled(Calendar)`

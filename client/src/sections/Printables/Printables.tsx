@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Heading } from "../../../styles/typography";
+import { Heading } from "../../styles/typography";
 import tables from '/pictures/tables.png';
-import Button, { ButtonContainer } from "../../Button";
+import Button, { ButtonContainer } from "../../components/Button";
 import { exportToPDF } from "./exportToPdf";
-import { SpaceBetweenContainer } from "../../../styles/section";
+import { SpaceBetweenContainer } from "../../styles/section";
 
 const Container = styled.div`
     text-align: center;

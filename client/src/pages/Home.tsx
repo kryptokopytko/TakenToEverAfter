@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import GuestList from "../components/sections/GuestList";
-import Budget from "../components/sections/Budget";
-import ToDo from "../components/sections/ToDo/ToDo";
-import Hero from "../components/sections/Hero/Hero";
-import PhotoAlbum from "../components/sections/PhotoAlbum/PhotoAlbum";
-import TableChart from "../components/sections/TableChart";
-import ThemeConstructor from "../components/sections/ThemeConstructor/ThemeConstructor";
-import Choices from "../components/sections/Choices";
-import Printables from "../components/sections/Printables/Printables";
+import GuestList from "../sections/GuestList";
+import Budget from "../sections/Budget";
+import ToDo from "../sections/ToDo/ToDo";
+import Hero from "../sections/Hero/Hero";
+import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
+import TableChart from "../sections/TableChart";
+import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
+import Choices from "../sections/Choices";
+import Printables from "../sections/Printables/Printables";
 
 const SectionsContainer = styled.div`
   width: 100%;

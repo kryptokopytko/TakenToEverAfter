@@ -1,7 +1,7 @@
 import React from 'react';
 import ColorVariation from './ColorVariation';
-import { Card } from '../../../styles/card';
-import { Body, Heading } from '../../../styles/typography';
+import { Card } from '../../styles/card';
+import { Body, Heading } from '../../styles/typography';
 
 interface ColorCompositionsProps {
     color: { hue: number; saturation: number; lightness: number };

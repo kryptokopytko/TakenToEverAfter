@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Body, Heading } from "../../../styles/typography";
-import { Card } from "../../../styles/card";
-import Button from "../../Button";
-import { useTheme } from "../../../providers/ThemeContext";
+import { Body, Heading } from "../../styles/typography";
+import { Card } from "../../styles/card";
+import Button from "../../components/Button";
+import { useTheme } from "../../providers/ThemeContext";
 
 const Container = styled.div`
   display: flex;

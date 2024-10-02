@@ -1,8 +1,8 @@
-import { Body, Heading } from "../../styles/typography";
-import Button, { ButtonContainer } from "../Button";
-import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
+import { Body, Heading } from "../styles/typography";
+import Button, { ButtonContainer } from "../components/Button";
+import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useState } from "react";
-import { Card } from "../../styles/card";
+import { Card } from "../styles/card";
 
 const choicesData = [
     {

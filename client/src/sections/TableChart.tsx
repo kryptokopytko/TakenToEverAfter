@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Heading } from "../../styles/typography";
+import { Heading } from "../styles/typography";
 import tables from '/pictures/tables.png';
-import Button from "../Button";
+import Button from "../components/Button";
 
 const Container = styled.div`
   display:flex;

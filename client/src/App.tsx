@@ -4,7 +4,6 @@ import styled, { ThemeProvider as StyledThemeProvider } from "styled-components"
 import { useTheme } from "./providers/ThemeContext";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
-import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
 
 const AppContainer = styled.div`
