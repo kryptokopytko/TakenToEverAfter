@@ -24,9 +24,10 @@ function randomCompositionLightness(num: number) {
         { min: 97, max: 99 }
     ];
 
-    return ranges.map(({ min, max }) => {
-        return num >= min && num <= max ? num : getRandomFromRange(min, max);
-    });
+    const result = ranges.map(({ min, max }) => num >= min && num <= max ? num : getRandomFromRange(min, max));
+    if (Math.random() > 0.5)
+        [result[1], result[2]] = [result[2], result[1]];
+    return result;
 }
 
 const generateLightnessVariations = (hue: number, saturation: number, lightnessArray: number[]) => {
