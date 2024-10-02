@@ -43,7 +43,12 @@ const guests = [
 
 const decisionTypes = ['yes', 'maybe', 'no', 'not invited'];
 
-const GuestList = () => {
+interface GuestListProps {
+  manageSectionButton?: boolean;
+}
+
+const GuestList: React.FC<GuestListProps> = ({ manageSectionButton }) => {
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const countDecisions = (decisionType: string) => {
@@ -71,7 +76,8 @@ const GuestList = () => {
       </SummaryContainer>
       <List list={guests} isExpanded={isExpanded} />
       <ButtonContainer>
-        <Button>Manage Guests</Button>
+        {manageSectionButton ?
+          <Button>Manage Guests</Button> : <></>}
         <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
 
       </ButtonContainer>

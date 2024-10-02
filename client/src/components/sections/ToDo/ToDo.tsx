@@ -51,7 +51,11 @@ const initialTasks: Task[] = [
   },
 ];
 
-const ToDo = () => {
+interface ToDoProps {
+  manageSectionButton?: boolean;
+}
+
+const ToDo: React.FC<ToDoProps> = ({ manageSectionButton }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -175,8 +179,8 @@ const ToDo = () => {
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
-        <Button>Add Task</Button>
-        <Button>Manage Tasks</Button>
+        {manageSectionButton ?
+          <Button>Manage To Do</Button> : <></>}
         <Button onClick={toggleList}>
           {isExpanded ? "Collapse List" : "Expand List"}
         </Button>

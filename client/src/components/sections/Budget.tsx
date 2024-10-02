@@ -71,7 +71,11 @@ const pieData = expenses.map((expense) => ({
 if (remainingBudget > 0)
     pieData.push({ value: remainingBudget, label: 'Remaining' });
 
-const Budget = () => {
+interface BudgetProps {
+    manageSectionButton?: boolean;
+}
+
+const Budget: React.FC<BudgetProps> = ({ manageSectionButton }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -117,7 +121,8 @@ const Budget = () => {
                 ))}
             </GridContainer>
             <ButtonContainer>
-                <Button>Manage Expenses</Button>
+                {manageSectionButton ?
+                    <Button>Manage budget</Button> : <></>}
                 <Button onClick={toggleList}>
                     {isExpanded ? 'Collapse List' : 'Expand List'}
                 </Button>

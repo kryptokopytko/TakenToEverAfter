@@ -5,7 +5,11 @@ import car from "/pictures/car.png";
 import Button, { ButtonContainer } from "../../Button";
 import { Container, PhotosContainer, StyledImage } from './PhotoAlbumStyles'
 
-const PhotoAlbum = () => {
+interface PhotoAlbumProps {
+  manageSectionButton?: boolean;
+}
+
+const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ manageSectionButton }) => {
   return (
     <Container>
       <Heading level={1}>Photos</Heading>
@@ -16,9 +20,11 @@ const PhotoAlbum = () => {
           <StyledImage src={car} alt="Car" />
         </PhotosContainer>
       </div>
-      <ButtonContainer>
-        <Button>Manage Photos</Button>
-      </ButtonContainer>
+      {manageSectionButton ?
+        <ButtonContainer>
+          <Button>Manage Photos</Button>
+        </ButtonContainer>
+        : <></>}
     </Container>
   );
 };

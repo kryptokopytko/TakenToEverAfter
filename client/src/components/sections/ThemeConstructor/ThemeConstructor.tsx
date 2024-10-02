@@ -12,7 +12,11 @@ const ContentContainer = styled.div`
   text-align: center;
 `;
 
-const ThemeConstructor = () => {
+interface ThemeConstructorProps {
+    manageSectionButton?: boolean;
+}
+
+const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ manageSectionButton }) => {
     const { theme } = useTheme();
     const [color, setColor] = useState<{ hue: number; saturation: number; lightness: number }>({
         hue: theme.hue,
@@ -47,7 +51,9 @@ const ThemeConstructor = () => {
                     </Card>
                     <ColorCompositions color={color} />
                 </GridContainer>
-                <Button> Manage Themes</Button>
+                {manageSectionButton ?
+                    <Button>Manage Theme</Button>
+                    : <></>}
             </ContentContainer>
         </>
     );

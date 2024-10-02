@@ -42,28 +42,28 @@ const Home = () => {
       <SectionsContainer>
         <Hero />
         <div id="guest-list">
-          <GuestList />
+          <GuestList manageSectionButton={true} />
         </div>
         <div id="budget">
-          <Budget />
+          <Budget manageSectionButton={true} />
         </div>
         <div id="to-do">
-          <ToDo />
+          <ToDo manageSectionButton={true} />
         </div>
         <div id="choices">
-          <Choices />
+          <Choices manageSectionButton={true} />
         </div>
         <div id="photo-album">
-          <PhotoAlbum />
+          <PhotoAlbum manageSectionButton={true} />
         </div>
         <div id="table-chart">
-          <TableChart />
+          <TableChart manageSectionButton={true} />
         </div>
         <div id="theme-constructor">
-          <ThemeConstructor />
+          <ThemeConstructor manageSectionButton={true} />
         </div>
         <div id="printables">
-          <Printables />
+          <Printables manageSectionButton={true} />
         </div>
       </SectionsContainer>
 

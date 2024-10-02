@@ -3,7 +3,7 @@ import { Heading } from "../../../styles/typography";
 import tables from '/pictures/tables.png';
 import Button, { ButtonContainer } from "../../Button";
 import { exportToPDF } from "./exportToPdf";
-import { GridContainer, SpaceBetweenContainer } from "../../../styles/section";
+import { SpaceBetweenContainer } from "../../../styles/section";
 
 const Container = styled.div`
     text-align: center;
@@ -31,15 +31,19 @@ const PhotoContainer = styled.div`
     max-width: 90%;
   }
 `;
+interface PrintablesProps {
+  manageSectionButton?: boolean;
+}
 
-const Printables = () => {
+const Printables: React.FC<PrintablesProps> = ({ manageSectionButton }) => {
 
   return (
     <>
 
       <SpaceBetweenContainer>
         <Heading level={2}>Prints</Heading>
-        <Button>Manage Prints</Button>
+        {manageSectionButton ?
+          <Button>Manage Prints</Button> : <></>}
       </SpaceBetweenContainer>
       <Container>
         <PhotoContainer>

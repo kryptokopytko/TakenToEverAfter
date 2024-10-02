@@ -34,8 +34,11 @@ const StyledImage = styled.img`
   max-width: 90%;
 
 `;
+interface TableChartProps {
+  manageSectionButton?: boolean;
+}
 
-const TableChart = () => {
+const TableChart: React.FC<TableChartProps> = ({ manageSectionButton }) => {
 
   return (
     <Container>
@@ -43,7 +46,8 @@ const TableChart = () => {
       <PhotoContainer>
         <StyledImage src={tables} alt='table chart image' />
       </PhotoContainer>
-      <Button>Manage Table Chart</Button>
+      {manageSectionButton ?
+        <Button>Manage Table Chart</Button> : <></>}
     </Container>
   );
 };
