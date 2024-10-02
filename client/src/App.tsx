@@ -1,8 +1,11 @@
 import { ThemeProvider } from "./providers/ThemeContext";
-import Home from "./components/Home";
 import { createGlobalStyle } from 'styled-components';
 import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { useTheme } from "./providers/ThemeContext";
+import Navbar from "./components/layout/Navbar/Navbar";
+import Footer from "./components/layout/Footer/Footer";
+import GuestPage from "./pages/GuestPage";
+import Home from "./pages/Home";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -27,6 +30,7 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
     color: ${({ theme }) => theme.text};
   }
 `;
+const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Maker', 'Printables'];
 
 const AppContent = () => {
     const { theme, fontSize } = useTheme();
@@ -35,7 +39,10 @@ const AppContent = () => {
         <StyledThemeProvider theme={theme}>
             <AppContainer>
                 <GlobalStyles fontSize={fontSize} />
+                <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
                 <Home />
+                <Footer sections={sections} />
+
             </AppContainer>
         </StyledThemeProvider>
 

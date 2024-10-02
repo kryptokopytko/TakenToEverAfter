@@ -49,7 +49,7 @@ interface GuestListProps {
 
 const GuestList: React.FC<GuestListProps> = ({ isHomePage }) => {
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!isHomePage);
 
   const countDecisions = (decisionType: string) => {
     return guests.filter((guest) => guest.decision === decisionType).length;
@@ -63,9 +63,10 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage }) => {
     <div id='guest-list'>
       <SpaceBetweenContainer>
         <Heading level={1}>Guest List:</Heading>
-        <Button onClick={toggleList}>
-          {isExpanded ? 'Collapse List' : 'Expand List'}
-        </Button>
+        {isHomePage ?
+          <Button onClick={toggleList}>
+            {isExpanded ? 'Collapse List' : 'Expand List'}
+          </Button> : <></>}
       </SpaceBetweenContainer>
       <SummaryContainer>
         {decisionTypes.map((decision) => (
