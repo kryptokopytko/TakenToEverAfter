@@ -23,8 +23,8 @@ export const GridContainer = styled.div<{
     minmax(${({ minWidth = "20rem" }) => minWidth}, 1fr)
   );
   gap: 3rem;
-  margin: 2rem 1rem;
-
+  margin: 2rem 0;
+  width: 100%;
   max-height: ${({ isExpanded, minHeight }) =>
     isExpanded ? "auto" : minHeight ? minHeight : "40vh"};
   overflow-y: auto;
@@ -33,5 +33,4 @@ export const GridContainer = styled.div<{
     isExpanded
       ? "transparent"
       : "linear-gradient(to bottom, transparent 90%, rgba(0, 0, 0, 0.1))"};
-  width: calc(100% - 2rem);
 `;
