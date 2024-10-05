@@ -7,7 +7,7 @@ import Footer from "./components/layout/Footer/Footer";
 import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { guests as initialGuests } from './dummyData';
+import { guests } from './dummyData';
 import { fontStyles } from "./styles/typography";
 import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";
@@ -16,7 +16,6 @@ import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/Choices";
 import PrintablesPage from "./pages/PrintablesPage";
 import ToDoPage from "./pages/ToDoPage";
-import { useState } from "react";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -60,33 +59,6 @@ const PageContainer = styled.div`
 
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
-  const [guests, setGuests] = useState(initialGuests);
-
-
-  const addGuest = (guestName: string) => {
-    setGuests(prevGuests => [
-      ...prevGuests,
-      { name: guestName, tags: [], decision: 'maybe' }
-    ]);
-  };
-
-
-  const updateGuestTags = (guestName: string, updatedTags: string[]) => {
-    setGuests(prevGuests =>
-      prevGuests.map(guest =>
-        guest.name === guestName ? { ...guest, tags: updatedTags } : guest
-      )
-    );
-  };
-
-  const handleDecision = (guestName: string, decision: 'yes' | 'no') => {
-    console.log(guestName, decision, guests);
-  };
-
-  const removeGuest = (guestName: string) => {
-    setGuests(prevGuests => prevGuests.filter(guest => guest.name !== guestName));
-  };
-
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
@@ -107,19 +79,7 @@ const AppContent = () => {
             <Route path="/photo_album" element={<PhotosPage />} />
             <Route path="/choices" element={<ChoicesPage />} />
             <Route path="/printables" element={<PrintablesPage />} />
-            <Route
-              path="/guest_list"
-              element={
-                <GuestPage
-                  guests={guests}
-                  updateGuestTags={updateGuestTags}
-                  addGuest={addGuest}
-                  removeGuest={removeGuest}
-                  handleDecision={handleDecision}
-                  handleInvite={(guestName) => { console.log('invited ', guestName) }}
-                />
-              }
-            />
+            <Route path="/guest_list" element={<GuestPage guests={guests} />} />
             <Route path="/to_do" element={<ToDoPage />} />
           </Routes>
         </PageContainer>

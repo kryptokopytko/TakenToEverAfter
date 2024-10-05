@@ -11,6 +11,7 @@ import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "..
 import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../styles/Checkbox";
 import { SpaceBetweenContainer } from "../styles/section";
 import styled from "styled-components";
+import { removeGuest, addGuest, updateGuestTags, handleDecision, handleInvite } from "../dummyDBApi";
 
 export const Notification = styled.span`
   color: ${({ theme }) => theme.body};
@@ -19,20 +20,10 @@ export const Notification = styled.span`
 
 interface GuestListProps {
   guests: Guest[];
-  updateGuestTags: (guestName: string, updatedTags: string[]) => void;
-  addGuest: (guestName: string) => void;
-  removeGuest: (guestName: string) => void;
-  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
-  handleInvite: (guestName: string) => void;
 }
 
 const GuestPage: React.FC<GuestListProps> = ({
   guests: initialGuests,
-  updateGuestTags,
-  addGuest,
-  removeGuest,
-  handleDecision,
-  handleInvite
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [newTag, setNewTag] = useState('');

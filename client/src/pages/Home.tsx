@@ -9,6 +9,7 @@ import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
 import { guests } from "../dummyData";
+import { handleDecision, handleInvite } from "../dummyDBApi";
 
 const SectionsContainer = styled.div`
   width: 100%;
@@ -37,7 +38,11 @@ const Home = () => {
     <SectionsContainer>
       <Hero />
       <div id="guest-list">
-        <GuestList isHomePage={true} guests={guests} />
+        <GuestList
+          guests={guests}
+          handleInvite={handleInvite}
+          handleDecision={handleDecision}
+          isHomePage={true} />
       </div>
       <div id="budget">
         <Budget isHomePage={true} />
