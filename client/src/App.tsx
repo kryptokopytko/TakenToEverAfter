@@ -4,7 +4,7 @@ import styled, { ThemeProvider as StyledThemeProvider } from "styled-components"
 import { useTheme } from "./providers/ThemeContext";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
-import GuestPage from "./pages/GuestPage/GuestPage";
+import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { guests as initialGuests } from './dummyData';
@@ -95,7 +95,7 @@ const AppContent = () => {
           isLogged={true}
           names={['Smurf', 'Smurfette']}
           sections={sections}
-          weddingDate="26.04.2025"
+          weddingDate="06.12.2024"
         />
         <PageContainer>
           <Routes>

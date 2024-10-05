@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Heading } from "../styles/typography";
-import Budget from "../sections/Budget";
+import Budget from "../sections/Budget/Budget";
 
 const Container = styled.div`
 

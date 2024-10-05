@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import GuestList from "../../sections/GuestList/GuestList";
-import Button, { ButtonContainer } from "../../components/Button";
-import { Heading, Label, Subtitle } from "../../styles/typography";
-import { Decision, Guest } from "../../types";
-import GuidedInput from "../../components/GuidedInput";
-import { Tag, TagContainer } from "../../styles/tag";
-import Input from "../../components/Input";
-import { Container, MenuContainer, Notification } from "./GuestsPageStyles";
-import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../styles/Dropdown";
-import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../../styles/Checkbox";
-import { SpaceBetweenContainer } from "../../styles/section";
+import GuestList from "../sections/GuestList/GuestList";
+import Button, { ButtonContainer } from "../components/Button";
+import { Heading, Label, Subtitle } from "../styles/typography";
+import { Decision, Guest } from "../types";
+import GuidedInput from "../components/GuidedInput";
+import { Tag, TagContainer } from "../styles/tag";
+import Input from "../components/Input";
+import { Container, MenuContainer } from "../styles/page";
+import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../styles/Dropdown";
+import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../styles/Checkbox";
+import { SpaceBetweenContainer } from "../styles/section";
+import styled from "styled-components";
+
+export const Notification = styled.span`
+  color: ${({ theme }) => theme.body};
+  margin: 1rem 0;
+`;
 
 interface GuestListProps {
   guests: Guest[];
@@ -175,7 +181,7 @@ const GuestPage: React.FC<GuestListProps> = ({
 
   return (
     <Container>
-      <MenuContainer>
+      <MenuContainer >
         <Heading level={2}>Manage guests</Heading>
         <SpaceBetweenContainer>
           <Subtitle level={3}>Name:</Subtitle>

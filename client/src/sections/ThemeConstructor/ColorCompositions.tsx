@@ -43,6 +43,7 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
     const lightVariations = generateLightnessVariations(hue, saturation, [20, 38, 70, 89, 98]);
     const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
     const darkVariations = generateLightnessVariations(hue, saturation, [10, 34, 60, 85, 95]);
+    const contrastVariations = generateLightnessVariations(hue, saturation, [10, 24, 50, 85, 95]);
 
     const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal, index) => (
         { hue: hueVal, saturation: saturation, lightness: [40, 50, 60, 90, 98][index] }
@@ -57,15 +58,19 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
 
     return (
         <>
-            <ColorVariation title="Light Variation" variations={lightVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Dark Variation" variations={darkVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Random Variation" variations={randomVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Hue Variation" variations={hueVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Contrast Variation" variation={contrastVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Hue Variation" variation={hueVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+
+            <ColorVariation title="Light Variation" variation={lightVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Dark Variation" variation={darkVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation title="Random Variation" variation={randomVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
             <Card color='primary'>
-                <Heading level={3}> Suggestions</Heading>
-                <Body size='bold'>Stay between 30-75% saturation,</Body>
-                <Body >vibrant colors tire eyes,<br /> desaturated ones are grey</Body>
-                <Body size='bold'>More saturation is going to give<br /> better contrast</Body>
+                <Heading level={3}>Suggestion</Heading>
+                <Body size='bold'>Aim for a saturation between 30-75%</Body>
+                <Body>Vibrant colors can be tiring for the eyes,<br /> while desaturated colors may appear dull</Body>
+                <Body size='bold'>For greens use Contrast or Hue Variation</Body>
+                <Body>The human eye is most sensitive to shades of green, use more contrasting combinations </Body>
+
 
             </Card>
         </>

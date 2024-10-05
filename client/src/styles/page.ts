@@ -10,13 +10,15 @@ export const Container = styled.div`
     background-color: ${({ theme }) => theme.primary};
     padding: 0 3rem;
     flex: 100;
+    height: fit-content;
   }
 `;
 
-export const MenuContainer = styled.div`
+export const MenuContainer = styled.div<{ color?: string }>`
   padding: 0 2rem;
   padding-bottom: 2rem;
-  background-color: ${({ theme }) => theme.light};
+  background-color: ${({ theme, color }) =>
+    color ? theme[color] : theme.primary};
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -24,9 +26,4 @@ export const MenuContainer = styled.div`
   height: fit-content;
   min-width: 22rem;
   flex: 1 1 auto;
-`;
-
-export const Notification = styled.span`
-  color: ${({ theme }) => theme.body};
-  margin: 1rem 0;
 `;

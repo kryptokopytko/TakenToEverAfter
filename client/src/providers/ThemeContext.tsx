@@ -11,6 +11,7 @@ interface ThemeContextType {
   themes: Themes;
   fontSize: number;
   setFontSize: (size: number) => void;
+  setThemes: (themes: Themes) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -68,7 +69,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, themes, fontSize, setFontSize }}>
+    <ThemeContext.Provider value={{ theme, setTheme, themes, setThemes, fontSize, setFontSize }}>
       {children}
     </ThemeContext.Provider>
   );
