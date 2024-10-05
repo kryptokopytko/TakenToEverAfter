@@ -1,6 +1,7 @@
 import styled from "styled-components";
-
-export const BurgerBreakpoint = "1630px";
+import { Link } from "react-router-dom";
+import { DropdownMenu } from "../../../styles/Dropdown";
+import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 
 export const NavbarContainer = styled.nav`
   background-color: ${({ theme }) => theme.secondary};
@@ -21,10 +22,6 @@ export const ContentContainer = styled.div`
   height: 100%;
 `;
 
-export const SelectorContainer = styled.div`
-  position: relative;
-`;
-
 export const DateContainer = styled.div`
   display: flex;
   gap: 2rem;
@@ -33,7 +30,15 @@ export const DateContainer = styled.div`
   }
 `;
 
+export const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  min-width: 11rem;
+`;
+
 export const NamesContainer = styled.div`
+  text-decoration: none important!;
   @media (max-width: 520px) {
     display: none;
   }
@@ -65,39 +70,6 @@ export const BurgerMenu = styled.div`
   }
 `;
 
-export const SelectorButton = styled.div`
-  color: ${({ theme }) => theme.body};
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-export const DropdownMenu = styled.div<{ isOpen: boolean }>`
-  position: absolute;
-  top: 6.05rem;
-  left: 0;
-  background-color: ${({ theme }) => theme.light};
-  border: 2px solid ${({ theme }) => theme.secondary};
-  border-radius: 0.5rem;
-  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-  padding: 0.5rem;
-  z-index: 101;
-  width: 100%;
-  @media (min-width: ${BurgerBreakpoint}) {
-    max-height: 85vh;
-    overflow: auto;
-  }
-  @media (max-width: ${BurgerBreakpoint}) {
-    position: static;
-    border: none;
-    background-color: transparent;
-    display: block;
-    max-height: none;
-  }
-`;
 export const MobileMenu = styled.div<{ isOpen: boolean }>`
   display: none;
 
@@ -126,47 +98,6 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
     border: none;
     background-color: transparent;
     padding: 0;
-  }
-`;
-
-export const RadioButton = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  margin: -2.1rem 0;
-  input {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid ${({ theme }) => theme.dark};
-    border-radius: 50%;
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    background-color: transparent;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-
-  &:hover {
-    opacity: 0.5;
-    border-radius: 0.5rem;
-  }
-
-  input:checked {
-    border-color: ${({ theme }) => theme.dark};
-  }
-
-  input:checked::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: ${({ theme }) => theme.dark};
-    transform: translate(-50%, -50%);
   }
 `;
 

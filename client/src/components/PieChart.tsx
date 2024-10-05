@@ -35,7 +35,7 @@ const PieChart: React.FC<PieChartProps> = ({ data, size = 400 }) => {
   const { theme } = useTheme();
 
   return (
-    <Svg style={{ height: '50rem' }} viewBox={`-70 -70 ${size + 140} ${size + 140}`} width={size} height={size}>
+    <Svg style={{ height: '50rem' }} viewBox={`-90 -70 ${size + 140} ${size + 140}`} width={size} height={size}>
       {data.map((item, index) => {
         const startAngle = cumulativeValue / total;
         cumulativeValue += item.value;
@@ -46,7 +46,7 @@ const PieChart: React.FC<PieChartProps> = ({ data, size = 400 }) => {
         const largeArcFlag = item.value / total > 0.5 ? 1 : 0;
 
         const middleAngle = (startAngle + endAngle) / 2;
-        const [labelX, labelY] = getCoordinatesForPercent(middleAngle, radius * 1.2, size);
+        const [labelX, labelY] = getCoordinatesForPercent(middleAngle, radius * 1.25, size);
 
         return (
           <g key={index}>

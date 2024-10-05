@@ -17,6 +17,14 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
     }, 0);
   };
 
+  
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <Container>
       <HidingSection>
@@ -24,9 +32,11 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
 
         <ListContainer>
           {sections
-            .filter(section => section !== 'Home')
+            .filter(section => section !== 'Home') 
             .sort().map((section) => (
-              <Body>{section}</Body>
+              <Body key={section} onClick={() => scrollToSection(section.toLowerCase().replace(/\s+/g, '-'))}>
+                {section}
+              </Body>
             ))}
         </ListContainer>
       </HidingSection>
@@ -35,7 +45,6 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
         <span style={{ textAlign: 'center', marginBottom: '-1rem' }}>
           <Heading level={3}>Taken to Ever After</Heading>
         </span>
-
 
         <div style={{ textAlign: 'center', display: "flex", alignItems: 'center' }}>
           <label htmlFor="fontSizeSlider"><Body>Adjust font size:</Body></label>
@@ -48,7 +57,6 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
             onChange={handleFontSizeChange}
           />
           <span style={{ marginLeft: '0.5rem' }}><Body>{Math.round(fontSize)}px</Body></span>
-
         </div>
 
         <Body>

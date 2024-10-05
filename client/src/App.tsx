@@ -4,12 +4,23 @@ import styled, { ThemeProvider as StyledThemeProvider } from "styled-components"
 import { useTheme } from "./providers/ThemeContext";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
-import GuestPage from "./pages/GuestPage";
+import GuestPage from "./pages/GuestPage/GuestPage";
 import Home from "./pages/Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { guests as initialGuests } from './dummyData';
+import { fontStyles } from "./styles/typography";
+import TableChartPage from "./pages/TableChartPage";
+import BudgetPage from "./pages/BudgetPage";
+import ThemeConstructorPage from "./pages/ThemeConstructorPage";
+import PhotosPage from "./pages/PhotosPage";
+import ChoicesPage from "./pages/Choices";
+import PrintablesPage from "./pages/PrintablesPage";
+import ToDoPage from "./pages/ToDoPage";
+import { useState } from "react";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
-        `linear-gradient(to right, ${theme.secondary} -2000%, 
+    `linear-gradient(to right, ${theme.secondary} -2000%, 
    ${theme.light} 2000%)`};
   color: ${({ theme }) => theme.body};
   min-height: 100vh;
@@ -21,41 +32,111 @@ const AppContainer = styled.div`
 `;
 
 interface GlobalStylesProps {
-    fontSize: number;
+  fontSize: number;
 }
 
 const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
   :root {
     font-size: ${({ fontSize }) => fontSize}px; 
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.body};
+    font-family: ${fontStyles.bodyFont};
   }
 `;
-const sections = ['Home', 'Hero', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Maker', 'Printables'];
+
+const sections = ['Home', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Constructor', 'Printables'];
+
+const PageContainer = styled.div`
+  width: 100%;
+  position:relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+
+  & > * {
+    width: 100%;
+  }
+  margin-top: 5rem;
+`;
 
 const AppContent = () => {
-    const { theme, fontSize } = useTheme();
+  const { theme, fontSize } = useTheme();
+  const [guests, setGuests] = useState(initialGuests);
 
-    return (
-        <StyledThemeProvider theme={theme}>
-            <AppContainer>
-                <GlobalStyles fontSize={fontSize} />
-                <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
-                <Home />
-                <Footer sections={sections} />
 
-            </AppContainer>
-        </StyledThemeProvider>
+  const addGuest = (guestName: string) => {
+    setGuests(prevGuests => [
+      ...prevGuests,
+      { name: guestName, tags: [], decision: 'maybe' }
+    ]);
+  };
 
+
+  const updateGuestTags = (guestName: string, updatedTags: string[]) => {
+    setGuests(prevGuests =>
+      prevGuests.map(guest =>
+        guest.name === guestName ? { ...guest, tags: updatedTags } : guest
+      )
     );
-}
+  };
+
+  const handleDecision = (guestName: string, decision: 'yes' | 'no') => {
+    console.log(guestName, decision, guests);
+  };
+
+  const removeGuest = (guestName: string) => {
+    setGuests(prevGuests => prevGuests.filter(guest => guest.name !== guestName));
+  };
+
+  return (
+    <StyledThemeProvider theme={theme}>
+      <AppContainer>
+        <GlobalStyles fontSize={fontSize} />
+        <Navbar
+          isLogged={true}
+          names={['Smurf', 'Smurfette']}
+          sections={sections}
+          weddingDate="26.04.2025"
+        />
+        <PageContainer>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/table_chart" element={<TableChartPage />} />
+            <Route path="/budget" element={<BudgetPage />} />
+            <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
+            <Route path="/photo_album" element={<PhotosPage />} />
+            <Route path="/choices" element={<ChoicesPage />} />
+            <Route path="/printables" element={<PrintablesPage />} />
+            <Route
+              path="/guest_list"
+              element={
+                <GuestPage
+                  guests={guests}
+                  updateGuestTags={updateGuestTags}
+                  addGuest={addGuest}
+                  removeGuest={removeGuest}
+                  handleDecision={handleDecision}
+                  handleInvite={(guestName) => { console.log('invited ', guestName) }}
+                />
+              }
+            />
+            <Route path="/to_do" element={<ToDoPage />} />
+          </Routes>
+        </PageContainer>
+        <Footer sections={sections} />
+      </AppContainer>
+    </StyledThemeProvider>
+  );
+};
 
 const App = () => {
-
-    return (
-        <ThemeProvider>
-            <AppContent />
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
+  );
 };
 
 export default App;
