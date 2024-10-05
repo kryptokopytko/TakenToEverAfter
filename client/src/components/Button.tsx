@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Label } from "../styles/typography";
 
 export const ButtonContainer = styled.div`
-  padding: 1rem 0;
   display: flex;
   justify-content: space-around;
   width: 100%;

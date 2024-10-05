@@ -37,26 +37,24 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
     }, [theme]);
 
     return (
-        <>
-            <ContentContainer>
-                <SpaceBetweenContainer>
-                    <Heading level={1}>Establish a theme</Heading>
-                    {isHomePage ?
-                        <Button onClick={toggleList}>
-                            {isExpanded ? "Collapse List" : "Expand List"}
-                        </Button> : <></>}
-                </SpaceBetweenContainer>
-                <GridContainer isExpanded={isExpanded} minHeight='60vh'>
-                    <Card color='primary'>
-                        <HslColorPicker color={color} setColor={setColor} />
-                    </Card>
-                    <ColorCompositions color={color} />
-                </GridContainer>
+        <ContentContainer>
+            <SpaceBetweenContainer>
+                <Heading level={1}>Establish a theme</Heading>
                 {isHomePage ?
-                    <Button>Manage Theme</Button>
-                    : <></>}
-            </ContentContainer>
-        </>
+                    <Button onClick={toggleList}>
+                        {isExpanded ? "Collapse List" : "Expand List"}
+                    </Button> : <></>}
+            </SpaceBetweenContainer>
+            <GridContainer isExpanded={isExpanded} minHeight='60vh'>
+                <Card color='primary'>
+                    <HslColorPicker color={color} setColor={setColor} />
+                </Card>
+                <ColorCompositions color={color} />
+            </GridContainer>
+            {isHomePage ?
+                <Button>Manage Theme</Button>
+                : <></>}
+        </ContentContainer>
     );
 };
 

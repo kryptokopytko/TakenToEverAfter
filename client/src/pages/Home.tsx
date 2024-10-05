@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import GuestList from "../sections/GuestList/GuestList";
-import Budget from "../sections/Budget";
+import Budget from "../sections/Budget/Budget";
 import ToDo from "../sections/ToDo/ToDo";
 import Hero from "../sections/Hero/Hero";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";

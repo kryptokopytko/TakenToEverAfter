@@ -4,6 +4,7 @@ import { Body, Heading } from "../../styles/typography";
 import { Card } from "../../styles/card";
 import Button from "../../components/Button";
 import { useTheme } from "../../providers/ThemeContext";
+import { ColorBox, ColorRow } from "./ColorBox";
 
 const Container = styled.div`
   display: flex;
@@ -12,21 +13,9 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const ColorRow = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`;
-
-const ColorBox = styled.div<{ color: string }>`
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: ${(props) => props.color};
-`;
-
 interface ColorVariationProps {
   title: string;
-  variations: { hsl: string; label: string }[];
+  variation: { hsl: string; label: string }[];
   hslBodyColor: string;
   hue: number;
   saturation: number;
@@ -48,7 +37,7 @@ function makeTheme(variations: { hsl: string; label: string }[], hslBodyColor: s
 }
 
 const ColorVariation: React.FC<ColorVariationProps> = ({
-  title, variations, hslBodyColor, hue, saturation, lightness
+  title, variation, hslBodyColor, hue, saturation, lightness
 }) => {
   const { setTheme } = useTheme();
 
@@ -57,15 +46,14 @@ const ColorVariation: React.FC<ColorVariationProps> = ({
       <Container>
         <Heading level={3}>{title}</Heading>
         <ColorRow>
-          {variations.map((color, index) => (
+          {variation.map((color, index) => (
             <div key={index}>
-              <ColorBox color={color.hsl} /> { }
+              <ColorBox color={color.hsl} />
               <Body hslColor={hslBodyColor}>{color.label}</Body>{" "}
-              { }
             </div>
           ))}
         </ColorRow>
-        <Button onClick={() => { setTheme(makeTheme(variations, hslBodyColor, hue, saturation, lightness)); }}>Pick this one</Button> { }
+        <Button onClick={() => { setTheme(makeTheme(variation, hslBodyColor, hue, saturation, lightness)); }}>Pick this one</Button>
       </Container>
     </Card>
   );
