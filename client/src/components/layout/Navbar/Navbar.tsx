@@ -72,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
         <ButtonsContainer>
           <SelectorContainer>
             <SelectorButton onClick={toggleThemeDropdown}>
-              <Label color="primary">Select Theme {isThemeOpen ? "▵" : "▿"}</Label>
+              <Label color="primary">Theme {isThemeOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
             <DropdownMenu isOpen={isThemeOpen} breakpoint={BurgerBreakpoint}>
               {Object.keys(themes).map((themeKey) => (
@@ -92,7 +92,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
 
           <SelectorContainer>
             <SelectorButton onClick={toggleSectionDropdown}>
-              <Label color="primary">Select Section {isSectionOpen ? "▵" : "▿"}</Label>
+              <Label color="primary">Menu {isSectionOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (

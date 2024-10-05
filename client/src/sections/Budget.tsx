@@ -66,7 +66,7 @@ const remainingBudget = totalBudget - totalSpent;
 const pieData = expenses.map((expense) => ({
     label: expense.category,
     value: expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)
-}));
+})).sort((a, b) => b.value - a.value);
 
 if (remainingBudget > 0)
     pieData.push({ value: remainingBudget, label: 'Remaining' });
