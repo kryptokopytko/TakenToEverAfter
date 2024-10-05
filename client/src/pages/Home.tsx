@@ -13,8 +13,10 @@ import { guests } from "../dummyData";
 const SectionsContainer = styled.div`
   width: 100%;
   margin: 0 -3rem;
-  position:relative;
+  margin-top: -3rem;
+  position: relative;
   overflow: hidden;
+  
   & > * {
     padding: 3rem;
     width: calc(100% - 6rem);

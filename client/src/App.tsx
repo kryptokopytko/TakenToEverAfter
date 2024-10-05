@@ -4,10 +4,10 @@ import styled, { ThemeProvider as StyledThemeProvider } from "styled-components"
 import { useTheme } from "./providers/ThemeContext";
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
-import GuestPage from "./pages/GuestPage";
+import GuestPage from "./pages/GuestPage/GuestPage";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { guests } from './dummyData'
+import { guests as initialGuests } from './dummyData';
 import { fontStyles } from "./styles/typography";
 import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";
@@ -16,6 +16,7 @@ import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/Choices";
 import PrintablesPage from "./pages/PrintablesPage";
 import ToDoPage from "./pages/ToDoPage";
+import { useState } from "react";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -48,21 +49,54 @@ const PageContainer = styled.div`
   width: 100%;
   position:relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+
   & > * {
-    padding: 0 3rem;
-    width: calc(100% - 6rem);
+    width: 100%;
   }
   margin-top: 5rem;
-`
+`;
 
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
+  const [guests, setGuests] = useState(initialGuests);
+
+
+  const addGuest = (guestName: string) => {
+    setGuests(prevGuests => [
+      ...prevGuests,
+      { name: guestName, tags: [], decision: 'maybe' }
+    ]);
+  };
+
+
+  const updateGuestTags = (guestName: string, updatedTags: string[]) => {
+    setGuests(prevGuests =>
+      prevGuests.map(guest =>
+        guest.name === guestName ? { ...guest, tags: updatedTags } : guest
+      )
+    );
+  };
+
+  const handleDecision = (guestName: string, decision: 'yes' | 'no') => {
+    console.log(guestName, decision, guests);
+  };
+
+  const removeGuest = (guestName: string) => {
+    setGuests(prevGuests => prevGuests.filter(guest => guest.name !== guestName));
+  };
 
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
         <GlobalStyles fontSize={fontSize} />
-        <Navbar isLogged={true} names={['Smurf', 'Smurfette']} sections={sections} weddingDate="26.04.2025" />
+        <Navbar
+          isLogged={true}
+          names={['Smurf', 'Smurfette']}
+          sections={sections}
+          weddingDate="26.04.2025"
+        />
         <PageContainer>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -73,7 +107,19 @@ const AppContent = () => {
             <Route path="/photo_album" element={<PhotosPage />} />
             <Route path="/choices" element={<ChoicesPage />} />
             <Route path="/printables" element={<PrintablesPage />} />
-            <Route path="/guest_list" element={<GuestPage guests={guests} updateGuestTags={() => { }} addGuest={() => { }} removeGuest={() => { }} />} />
+            <Route
+              path="/guest_list"
+              element={
+                <GuestPage
+                  guests={guests}
+                  updateGuestTags={updateGuestTags}
+                  addGuest={addGuest}
+                  removeGuest={removeGuest}
+                  handleDecision={handleDecision}
+                  handleInvite={(guestName) => { console.log('invited ', guestName) }}
+                />
+              }
+            />
             <Route path="/to_do" element={<ToDoPage />} />
           </Routes>
         </PageContainer>
@@ -81,7 +127,7 @@ const AppContent = () => {
       </AppContainer>
     </StyledThemeProvider>
   );
-}
+};
 
 const App = () => {
   return (

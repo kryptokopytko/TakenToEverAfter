@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useTheme } from "../../../providers/ThemeContext";
-import { Link } from "react-router-dom"; 
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
-import { DateContainer, LogoContainer, ButtonsContainer, SelectorContainer, SelectorButton, ContentContainer, RadioButton, DropdownMenu, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
-
+import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
+import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../../styles/Dropdown";
+import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 interface NavbarProps {
   names: [string, string];
   sections: string[];
   isLogged: boolean;
   weddingDate: string;
 }
+
 
 const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate }) => {
   const { setTheme, theme, themes } = useTheme();
@@ -56,12 +57,14 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
   return (
     <NavbarContainer>
       <ContentContainer>
-        <LogoContainer>
-          <img src={logo} alt="logo" style={{ height: "6rem", marginTop: "1.1rem" }} />
-          <NamesContainer>
-            <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
-          </NamesContainer>
-        </LogoContainer>
+        <StyledLink to={'/'}>
+          <LogoContainer>
+            <img src={logo} alt="logo" style={{ height: "6rem", marginTop: "1.1rem" }} />
+            <NamesContainer>
+              <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
+            </NamesContainer>
+          </LogoContainer>
+        </StyledLink>
         <DateContainer>
           <Label size='small'>{calculateDaysLeft()} days left</Label>
           <Label size='small'>{weddingDate} </Label>
@@ -71,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             <SelectorButton onClick={toggleThemeDropdown}>
               <Label color="primary">Select Theme {isThemeOpen ? "▵" : "▿"}</Label>
             </SelectorButton>
-            <DropdownMenu isOpen={isThemeOpen}>
+            <DropdownMenu isOpen={isThemeOpen} breakpoint={BurgerBreakpoint}>
               {Object.keys(themes).map((themeKey) => (
                 <RadioButton key={themeKey}>
                   <input
@@ -96,15 +99,15 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                 <RadioButton key={section}>
                   <input type="radio" name="section" value={section} />
                   <Label color="tertiary">
-                    <Link to={`/${section.toLowerCase().replace(" ", "_")}`}> 
+                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
                       {section.charAt(0).toUpperCase() + section.slice(1)}
-                    </Link>
+                    </StyledLink>
                   </Label>
                 </RadioButton>
               ))}
             </DropdownMenu>
           </SelectorContainer>
-          <Label color="primary" style={{ marginTop: "2.2rem" }}>{isLogged ? 'Wyloguj' : 'Zaloguj'}</Label>
+          <Label color="primary" style={{ marginTop: "2.2rem" }}>{isLogged ? 'Log out' : 'Log in'}</Label>
         </ButtonsContainer>
 
         <BurgerMenu onClick={toggleBurgerMenu}>
@@ -142,9 +145,9 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
                 <RadioButton key={section}>
                   <input type="radio" name="section" value={section} />
                   <Label color="tertiary">
-                    <Link to={`/${section.toLowerCase().replace(" ", "_")}`}>
+                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
                       {section.charAt(0).toUpperCase() + section.slice(1)}
-                    </Link>
+                    </StyledLink>
                   </Label>
                 </RadioButton>
               ))}

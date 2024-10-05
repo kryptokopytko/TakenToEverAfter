@@ -3,7 +3,8 @@ import { Body, Heading, Label } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { Card } from "../../styles/card";
-import { SubTaskList, CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox, Container } from "./ToDoStyles";
+import { SubTaskList, Container } from "./ToDoStyles";
+import { CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from '../../styles/Checkbox';
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 

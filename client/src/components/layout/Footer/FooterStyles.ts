@@ -73,6 +73,7 @@ export const ListContainer = styled.div`
 
     &:hover {
       border-radius: 1rem;
+      background-color: ${({ theme }) => theme.primary};
     }
   }
 `;

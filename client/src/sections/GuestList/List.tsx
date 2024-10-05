@@ -22,30 +22,44 @@ const DecisionButtons = styled.div`
   }
 `;
 
+const EmptyMessage = styled(Label)`
+  text-align: center;
+  margin: 1rem 0;
+`;
 
 interface ListProps {
   list: Guest[];
   isExpanded: boolean;
   isHomePage?: boolean;
+  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
+  handleInvite: (guestName: string) => void;
 }
 
-const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
+const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecision, handleInvite }) => {
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">
-      {list.map((guest, index) => (
-        <GuestItem key={index}>
-          <Body size="big">{guest.name}</Body>
-          <TagContainer>
-            {guest.tags.map((tag, idx) => tag && <Tag key={idx}>{tag}</Tag>)}
-          </TagContainer>
-          {guest.decision === 'maybe' && !isHomePage ?
-            <DecisionButtons>
-              <Button variant="transparent"> yes/ </Button>
-              <Button variant="transparent"> no </Button>
-            </DecisionButtons> :
-            <Label size="small">{guest.decision}</Label>}
-        </GuestItem>
-      ))}
+      {list.length === 0 ? (
+        <EmptyMessage>No such guests</EmptyMessage>
+      ) : (
+        list.map((guest, index) => (
+          <GuestItem key={index}>
+            <Body size="big">{guest.name}</Body>
+            <TagContainer>
+              {guest.tags.map((tag, idx) => tag && <Tag key={idx}>{tag}</Tag>)}
+            </TagContainer>
+            {guest.decision === 'maybe' && !isHomePage ? (
+              <DecisionButtons>
+                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'yes')}>yes/</Button>
+                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'no')}>no</Button>
+              </DecisionButtons>
+            ) : guest.decision === 'not invited' ? (
+              <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
+            ) : (
+              <Label size="small">{guest.decision}</Label>
+            )}
+          </GuestItem>
+        ))
+      )}
     </GridContainer>
   );
 };

@@ -14,15 +14,17 @@ const SummaryContainer = styled.div`
   margin-top: -2rem;
   margin-bottom: 1rem;
   justify-content: center;
-`
+`;
 
 interface GuestListProps {
   isHomePage?: boolean;
   guests: Guest[];
+  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
+  handleInvite: (guestName: string) => void;
+  children?: React.ReactNode;
 }
 
-const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests }) => {
-
+const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests, handleDecision, handleInvite, children }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
 
   const countDecisions = (decisionType: string) => {
@@ -34,13 +36,16 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests }) => {
   };
 
   return (
-    <div id='guest-list'>
+    <div id="guest-list">
       <SpaceBetweenContainer>
         <Heading level={1}>Guest List:</Heading>
-        {isHomePage ?
+        {isHomePage ? (
           <Button onClick={toggleList}>
-            {isExpanded ? 'Collapse List' : 'Expand List'}
-          </Button> : <></>}
+            {isExpanded ? "Collapse List" : "Expand List"}
+          </Button>
+        ) : (
+          children
+        )}
       </SpaceBetweenContainer>
       <SummaryContainer>
         {decisionTypes.map((decision) => (
@@ -49,12 +54,10 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests }) => {
           </Subtitle>
         ))}
       </SummaryContainer>
-      <List isHomePage={isHomePage} list={guests} isExpanded={isExpanded} />
+      <List isHomePage={isHomePage} list={guests} isExpanded={isExpanded} handleDecision={handleDecision} handleInvite={handleInvite} />
       <ButtonContainer>
-        {isHomePage ?
-          <Button>Manage Guests</Button> : <></>}
+        {isHomePage ? <Button>Manage Guests</Button> : <></>}
         <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
-
       </ButtonContainer>
     </div>
   );

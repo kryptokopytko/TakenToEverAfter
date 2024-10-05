@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Body } from "../styles/typography";
 
 export const InputContainer = styled.div`
   display: flex;
@@ -43,8 +42,6 @@ export interface InputProps {
 const Input: React.FC<InputProps> = ({ variant, size = 'medium', value, onChange, placeholder, disabled }) => {
     return (
         <InputContainer>
-            {placeholder && <Body size={'big'} color={variant ? 'primary' : 'body'}>{placeholder}</Body>}
-
             <StyledInput
                 variant={variant}
                 size={size}
