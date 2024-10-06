@@ -1,61 +1,29 @@
 import { Body, Heading } from "../styles/typography";
 import Button, { ButtonContainer } from "../components/Button";
 import { GridContainer, SpaceBetweenContainer } from "../styles/section";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "../styles/card";
+import { Choice } from "../types";
+import { handleChoicePick } from "../dummyDBApi";
+import styled from "styled-components";
 
-const choicesData = [
-    {
-        choice: 'Venue',
-        options: [
-            { option: 'Castle', amount: 700, isPicked: false },
-            { option: 'Beach', amount: 300, isPicked: false },
-            { option: 'Garden', amount: 400, isPicked: false },
-            { option: 'Hotel', amount: 500, isPicked: false },
-        ],
-    },
-    {
-        choice: 'Catering',
-        options: [
-            { option: 'Buffet', amount: 50, isPicked: false },
-            { option: 'Sit-down dinner', amount: 75, isPicked: false },
-            { option: 'Barbecue', amount: 60, isPicked: true },
-        ],
-    },
-    {
-        choice: 'Decor',
-        options: [
-            { option: 'Floral arrangements', amount: 200, isPicked: true },
-            { option: 'Balloon decorations', amount: 100, isPicked: false },
-            { option: 'Fairy lights', amount: 150, isPicked: true },
-        ],
-    },
-    {
-        choice: 'Entertainment',
-        options: [
-            { option: 'Live band', amount: 1000, isPicked: true },
-            { option: 'DJ', amount: 500, isPicked: false },
-            { option: 'Photo booth', amount: 300, isPicked: true },
-        ],
-    },
-    {
-        choice: 'Photography',
-        options: [
-            { option: 'Professional photographer', amount: 1200, isPicked: false },
-            { option: 'Videographer', amount: 1500, isPicked: false },
-            { option: 'Photo package', amount: 800, isPicked: false },
-        ],
-    },
-];
+const LimitedWidth = styled.span`
+    max-width: 60%;
+`
 
 interface ChoicesProps {
     isHomePage?: boolean;
+    initialChoices: Choice[];
 }
 
-const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
-
-    const [choices, setChoices] = useState(choicesData);
+const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
+    const [choices, setChoices] = useState(initialChoices);
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
+
+    useEffect(() => {
+        setChoices(initialChoices);
+    }, [initialChoices]);
+
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -65,21 +33,24 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
         const newChoices = [...choices];
         newChoices[choiceIndex].options[optionIndex].isPicked = true;
         setChoices(newChoices);
+        const { option } = newChoices[choiceIndex].options[optionIndex];
+        handleChoicePick(option, newChoices[choiceIndex].choice, true);
     };
 
     const handleUnpick = (choiceIndex: number, optionIndex: number) => {
         const newChoices = [...choices];
         newChoices[choiceIndex].options[optionIndex].isPicked = false;
         setChoices(newChoices);
+        const { option } = newChoices[choiceIndex].options[optionIndex];
+        handleChoicePick(option, newChoices[choiceIndex].choice, false);
     };
-
 
     const totalPicked = choices.flatMap(choice => choice.options).filter(option => option.isPicked);
     const totalCount = totalPicked.length;
     const totalAmount = totalPicked.reduce((sum, option) => sum + option.amount, 0);
 
     return (
-        <>
+        <div>
             <SpaceBetweenContainer>
                 <Heading level={1}>Choices:</Heading>
                 <Heading level={1}>{totalCount} selected</Heading>
@@ -104,17 +75,22 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
 
                             {choice.options.map((option, optionIndex) => (
                                 <SpaceBetweenContainer key={optionIndex} style={{ marginLeft: '1rem' }}>
-                                    <Body size='big'>{option.option}</Body>
-                                    <Body size='big'>${option.amount}</Body>
-                                    {option.isPicked ? (
-                                        <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
-                                            Unpick
-                                        </Button>
-                                    ) : (
-                                        <Button onClick={() => handlePick(choiceIndex, optionIndex)}>
-                                            Pick
-                                        </Button>
-                                    )}
+                                    <LimitedWidth>
+                                        <Body size='big'>{option.option}</Body>
+                                    </LimitedWidth>
+                                    <LimitedWidth>
+                                        <Body size='big'>${option.amount}</Body>
+                                    </LimitedWidth><LimitedWidth>
+                                        {option.isPicked ? (
+                                            <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
+                                                Unpick
+                                            </Button>
+                                        ) : (
+                                            <Button onClick={() => handlePick(choiceIndex, optionIndex)}>
+                                                Pick
+                                            </Button>
+                                        )}
+                                    </LimitedWidth>
                                 </SpaceBetweenContainer>
                             ))}
                         </Card>
@@ -130,7 +106,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
                     </Button>
                 </div>
             </ButtonContainer>
-        </>
+        </div>
     );
 };
 

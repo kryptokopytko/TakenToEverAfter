@@ -30,3 +30,14 @@ export interface Task {
   category: string;
   subTasks: SubTask[];
 }
+
+export type Option = {
+  option: string;
+  amount: number;
+  isPicked: boolean;
+};
+
+export type Choice = {
+  choice: string;
+  options: Option[];
+};

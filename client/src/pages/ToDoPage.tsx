@@ -131,7 +131,6 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             taskName.trim() !== '' &&
             taskDeadline.trim() !== '' &&
             !isNaN(Date.parse(taskDeadline)) && 
-            new Date(taskDeadline) > new Date() && 
             taskCategory.trim() !== ''
         );
     };

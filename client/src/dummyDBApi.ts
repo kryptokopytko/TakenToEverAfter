@@ -37,3 +37,23 @@ export const updateTask = (
 
 export const handleTaskCompletion = (taskName: string, category: string, completed: boolean) => {};
 
+
+export const addChoice = (category: string, choice: { name: string; amount: number }) => {
+  
+};
+
+export const removeChoice = (category: string, choiceName: string) => {
+  
+};
+
+export const updateChoice = (category: string, choiceName: string, updatedChoice: { amount: number }) => {
+  
+};
+
+
+export const handleChoicePick = (
+  choiceName: string,
+  category: string,
+  picked: boolean
+) => {};
+

@@ -11,7 +11,7 @@ export const Notification = styled.span`
 
 export const Container = styled.div<{ isBudget?: boolean }>`
   width: 100%;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
   @media (min-width: ${({ isBudget }) =>   isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
     position: relative;
     top: 1rem;
@@ -23,7 +23,7 @@ export const Container = styled.div<{ isBudget?: boolean }>`
   & > *:last-child {
     background-color: ${({ theme }) => theme.primary};
     padding: 3rem 3rem;
-    padding-top: 0;
+    padding-top: 1rem;
     height: fit-content;
     margin-top: 1rem;
     @media (min-width: ${({ isBudget }) =>    isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
@@ -34,7 +34,7 @@ export const Container = styled.div<{ isBudget?: boolean }>`
 `;
 
 export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
-  padding: 0 2rem;
+  padding: 1rem 2rem;
   padding-bottom: 2rem;
   background-color: ${({ theme, color }) =>
     color ? theme[color] : theme.primary};
