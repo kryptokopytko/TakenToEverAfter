@@ -19,3 +19,14 @@ export interface Expense {
 }
 
 export type Expenses = Expense[];
+
+export interface SubTask {
+  name: string;
+  completed: boolean;
+  deadline: string;
+}
+
+export interface Task {
+  category: string;
+  subTasks: SubTask[];
+}
