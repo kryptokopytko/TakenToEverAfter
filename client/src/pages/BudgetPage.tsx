@@ -1,136 +1,201 @@
 import { Heading, Subtitle } from "../styles/typography";
-import ToDo from "../sections/ToDo/ToDo";
+import Budget from "../sections/Budget/Budget";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/Input";
-import GuidedInput from "../components/GuidedInput"; 
-import Button, { ButtonContainer } from "../components/Button";
 import { useState, useEffect } from "react";
-import { initialTasks } from "../dummyData";
-import { addTask, removeTask, updateTask } from "../dummyDBApi";
+import { expenses as initialExpenses } from "../dummyData";
+import GuidedInput from "../components/GuidedInput";
+import Button, { ButtonContainer } from "../components/Button";
+import { SubExpense } from "../types";
+import { addExpense, removeExpense, updateExpense } from "../dummyDBApi";
 
-interface ToDoPageProps { }
+interface BudgetPageProps { }
 
-const ToDoPage: React.FC<ToDoPageProps> = () => {
-    const [taskName, setTaskName] = useState('');
-    const [taskDeadline, setTaskDeadline] = useState('');
-    const [taskCategory, setTaskCategory] = useState('');
-    const [tasks, setTasks] = useState(initialTasks);
-    const [existingTask, setExistingTask] = useState<any | null>(null);
+const BudgetPage: React.FC<BudgetPageProps> = () => {
+    const [inputExpenseName, setInputExpenseName] = useState('');
+    const [inputExpensePrice, setInputExpensePrice] = useState('');
+    const [inputCategory, setInputCategory] = useState('');
+    const [expenses, setExpenses] = useState(initialExpenses);
+    const [existingExpense, setExistingExpense] = useState<SubExpense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
 
+    const expenseNames = expenses.flatMap(expense =>
+        expense.subExpenses.map(subExpense => subExpense.subCategory.toLowerCase())
+    );
+
+    const categories = expenses.map(expense => expense.category.toLowerCase());
+
     useEffect(() => {
-        const normalizedTaskName = taskName.trim().toLowerCase();
-        const task = tasks.find(t => t.category.toLowerCase() === normalizedTaskName);
+        const normalizedCategory = inputCategory.trim().toLowerCase();
+        const normalizedExpenseName = inputExpenseName.trim().toLowerCase();
+        const category = expenses.find(expense => expense.category.toLowerCase() === normalizedCategory);
 
-        if (task) {
-            setExistingTask(task);
-            setTaskCategory(task.category);
+        if (category) {
+            const existingSubExpense = category.subExpenses.find(sub => sub.subCategory.toLowerCase() === normalizedExpenseName);
+            if (existingSubExpense) {
+                setExistingExpense(existingSubExpense);
+                setInputExpensePrice(existingSubExpense.amount.toString());
+            } else {
+                setExistingExpense(null);
+            }
         } else {
-            setExistingTask(null);
+            setExistingExpense(null);
         }
-    }, [taskName, tasks]);
+    }, [inputExpenseName, inputCategory, expenses]);
 
-    const handleAddTask = () => {
-        addTask(taskCategory, { name: taskName, deadline: taskDeadline, completed: false });
-        setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
+    const handleAddExpense = () => {
+        const expenseAmount = Number(inputExpensePrice);
+        const normalizedCategory = inputCategory.toLowerCase();
+        const normalizedExpenseName = inputExpenseName.toLowerCase();
+        const categoryExists = categories.includes(normalizedCategory);
+
+        if (categoryExists) {
+            setExpenses(prevExpenses => {
+                return prevExpenses.map(expense => {
+                    if (expense.category.toLowerCase() === normalizedCategory) {
+                        const existingSubExpense = expense.subExpenses.find(
+                            subExpense => subExpense.subCategory.toLowerCase() === normalizedExpenseName
+                        );
+
+                        if (existingSubExpense) {
+
+                            return {
+                                ...expense,
+                                subExpenses: expense.subExpenses.map(subExpense =>
+                                    subExpense.subCategory.toLowerCase() === normalizedExpenseName
+                                        ? { ...subExpense, amount: expenseAmount }
+                                        : subExpense
+                                )
+                            };
+                        } else {
+
+                            return {
+                                ...expense,
+                                subExpenses: [
+                                    ...expense.subExpenses,
+                                    { subCategory: inputExpenseName, amount: expenseAmount }
+                                ]
+                            };
+                        }
+                    }
+                    return expense;
+                });
+            });
+            setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
+            updateExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
+        } else {
+
+            setExpenses(prevExpenses => [
+                ...prevExpenses,
+                {
+                    category: inputCategory,
+                    subExpenses: [
+                        { subCategory: inputExpenseName, amount: expenseAmount }
+                    ]
+                }
+            ]);
+            setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
+            addExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
+        }
         setTimeout(() => setNotification(null), notificationTimeOut);
-        resetForm(); 
     };
 
-    const handleRemoveTask = () => {
-        setTasks(prevTasks =>
-            prevTasks.map(task => {
-                if (task.category.toLowerCase() === taskCategory.toLowerCase()) {
-                    const updatedSubTasks = task.subTasks.filter(subTask => subTask.name.toLowerCase() !== taskName.toLowerCase());
-                    return {
-                        ...task,
-                        subTasks: updatedSubTasks
-                    };
-                }
-                return task;
-            }).filter(task => task.subTasks.length > 0)
+    const handleRemoveExpense = () => {
+        const normalizedCategory = inputCategory.toLowerCase();
+
+        setExpenses(prevExpenses =>
+            prevExpenses
+                .map(expense => {
+                    if (expense.category.toLowerCase() === normalizedCategory) {
+                        const updatedSubExpenses = expense.subExpenses.filter(
+                            subExpense => subExpense.subCategory.toLowerCase() !== inputExpenseName.toLowerCase()
+                        );
+                        return {
+                            ...expense,
+                            subExpenses: updatedSubExpenses
+                        };
+                    }
+                    return expense;
+                })
+                .filter(expense => expense.subExpenses.length > 0)
         );
 
-        removeTask(taskCategory, taskName);
-
-        setNotification(`Task "${taskName}" removed from category "${taskCategory}"`);
-        resetForm();
-        setTimeout(() => setNotification(null), notificationTimeOut);
-    };
-
-    const handleUpdateTask = () => {
-        updateTask(taskCategory, taskName, { deadline: taskDeadline });
-        setNotification(`Task "${taskName}" updated in category "${taskCategory}"`);
+        setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
+        removeExpense(inputCategory, inputExpenseName);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
     const isInputValid = () => {
+        const expenseAmount = Number(inputExpensePrice);
         return (
-            taskName.trim() !== '' &&
-            taskDeadline.trim() !== '' &&
-            !isNaN(Date.parse(taskDeadline)) && 
-            new Date(taskDeadline) > new Date() && 
-            taskCategory.trim() !== ''
+            inputExpenseName.trim() !== '' &&
+            inputExpensePrice.trim() !== '' &&
+            !isNaN(expenseAmount) &&
+            expenseAmount > 0 &&
+            inputCategory.trim() !== ''
         );
     };
 
-    const resetForm = () => {
-        setTaskName('');
-        setTaskDeadline('');
-        setTaskCategory('');
-        setExistingTask(null);
-    };
-
     return (
-        <Container>
-            <MenuContainer>
-                <Heading level={1}>Manage To Do</Heading>
-
-                <Subtitle level={3}>Task Name</Subtitle>
+        <Container isBudget={true}>
+            <MenuContainer isBudget={true}>
+                <div style={{ marginBottom: '-2rem' }}>
+                    <Heading level={2}>Manage Expenses</Heading>
+                </div>
+                <Subtitle level={3}>Name</Subtitle>
                 <GuidedInput
-                    value={taskName}
-                    setInputValue={setTaskName}
-                    suggestions={tasks.flatMap(task => task.subTasks.map(subTask => subTask.name))}
-                    placeholder="Name of the task"
-                    onChange={(e) => setTaskName(e.target.value)}
+                    value={inputExpenseName}
+                    setInputValue={(name) => setInputExpenseName(name)}
+                    suggestions={expenseNames.map(name => name.charAt(0).toUpperCase() + name.slice(1))}
+                    placeholder="Name of the expense"
+                    onChange={(e) => setInputExpenseName(e.target.value)}
                 />
 
-                <Subtitle level={3}>Deadline</Subtitle>
+                <Subtitle level={3}>Price</Subtitle>
                 <Input
-                    value={taskDeadline}
-                    placeholder="Task deadline"
-                    type="date"
-                    onChange={(e) => setTaskDeadline(e.target.value)}
+                    value={inputExpensePrice}
+                    placeholder="Price of the expense"
+                    type='number'
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setInputExpensePrice(
+                            value.split('').filter(c => c >= '0' && c <= '9').join('')
+                        );
+                    }}
                 />
+
 
                 <Subtitle level={3}>Category</Subtitle>
                 <GuidedInput
-                    value={taskCategory}
-                    suggestions={tasks.map(task => task.category)}
-                    placeholder="Category"
-                    setInputValue={setTaskCategory}
-                    onChange={(e) => setTaskCategory(e.target.value)}
+                    value={inputCategory}
+                    suggestions={categories.map(cat => cat.charAt(0).toUpperCase() + cat.slice(1))}
+                    placeholder="Name of category"
+                    setInputValue={(name) => setInputCategory(name)}
+                    onChange={(e) => setInputCategory(e.target.value)}
                 />
-
                 {notification && <Notification>{notification}</Notification>}
 
                 <ButtonContainer>
-                    {existingTask ? (
+                    {existingExpense ? (
                         <>
-                            <Button onClick={handleUpdateTask}>Modify Task</Button>
-                            <Button onClick={handleRemoveTask}>Remove Task</Button>
+                            <Button onClick={handleAddExpense}>Modify Expense</Button>
+                            <Button onClick={handleRemoveExpense}>Remove Expense</Button>
                         </>
                     ) : isInputValid() ? (
-                        <Button onClick={handleAddTask}>Add Task</Button>
+                        <Button onClick={handleAddExpense}>
+                            {categories.includes(inputCategory.trim().toLowerCase()) ? 'Add Expense' : 'Add Expense and Category'}
+                        </Button>
                     ) : (
-                        <Button disabled>Add Task</Button>
+                        <Button disabled>
+                            {categories.includes(inputCategory.trim().toLowerCase()) ? 'Add Expense' : 'Add Expense and Category'}
+                        </Button>
                     )}
                 </ButtonContainer>
             </MenuContainer>
 
-            <ToDo initialTasks={tasks} />
+            <Budget expenses={expenses} />
         </Container>
     );
 };
 
-export default ToDoPage;
+export default BudgetPage;

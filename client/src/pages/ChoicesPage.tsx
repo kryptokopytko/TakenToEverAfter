@@ -138,7 +138,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <Heading level={1}>Manage Choices</Heading>
+                <Heading level={2}>Manage Choices</Heading>
 
                 <Subtitle level={3}>Choice Name</Subtitle>
                 <GuidedInput

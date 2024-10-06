@@ -14,7 +14,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({ }) => {
 
     return (
         <Container>
-            <Heading level={1}>Stroniwo</Heading>
+            <Heading level={2}>Stroniwo</Heading>
             <Printables />
         </Container>
     );

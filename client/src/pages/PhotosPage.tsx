@@ -14,7 +14,7 @@ const PhotosPage: React.FC<PhotosPageProps> = ({ }) => {
 
     return (
         <Container>
-            <Heading level={1}>Stroniwo</Heading>
+            <Heading level={2}>Stroniwo</Heading>
             <PhotoAlbum />
         </Container>
     );

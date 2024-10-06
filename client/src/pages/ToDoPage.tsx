@@ -2,7 +2,7 @@ import { Heading, Subtitle } from "../styles/typography";
 import ToDo from "../sections/ToDo/ToDo";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/Input";
-import GuidedInput from "../components/GuidedInput"; 
+import GuidedInput from "../components/GuidedInput";
 import Button, { ButtonContainer } from "../components/Button";
 import { useState, useEffect } from "react";
 import { initialTasks } from "../dummyData";
@@ -18,7 +18,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     const [existingTask, setExistingTask] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
 
-    
+
     useEffect(() => {
         const normalizedTaskName = taskName.trim().toLowerCase();
         const normalizedCategory = taskCategory.trim().toLowerCase();
@@ -36,7 +36,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     }, [taskName, taskCategory, tasks]);
 
     const handleAddTask = () => {
-        
+
         if (existingTask) {
             setNotification(`Task "${taskName}" already exists in category "${taskCategory}"`);
             setTimeout(() => setNotification(null), notificationTimeOut);
@@ -45,7 +45,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
 
         const newTask = { name: taskName, deadline: taskDeadline, completed: false };
 
-        
+
         setTasks(prevTasks => {
             const categoryIndex = prevTasks.findIndex(task => task.category.toLowerCase() === taskCategory.toLowerCase());
             if (categoryIndex !== -1) {
@@ -58,7 +58,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             }
         });
 
-        
+
         addTask(taskCategory, newTask);
         setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
@@ -75,10 +75,10 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                     };
                 }
                 return task;
-            }).filter(task => task.subTasks.length > 0) 
+            }).filter(task => task.subTasks.length > 0)
         );
 
-        
+
         removeTask(taskCategory, taskName);
 
         setNotification(`Task "${taskName}" removed from category "${taskCategory}"`);
@@ -102,7 +102,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             });
         });
 
-        
+
         updateTask(taskCategory, taskName, { deadline: taskDeadline });
         setNotification(`Task "${taskName}" updated in category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
@@ -130,7 +130,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
         return (
             taskName.trim() !== '' &&
             taskDeadline.trim() !== '' &&
-            !isNaN(Date.parse(taskDeadline)) && 
+            !isNaN(Date.parse(taskDeadline)) &&
             taskCategory.trim() !== ''
         );
     };
@@ -138,8 +138,8 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <div style={{marginBottom: "-2rem"}}>
-                <Heading level={1}>Manage To Do</Heading>
+                <div style={{ marginBottom: "-2rem" }}>
+                    <Heading level={2}>Manage To Do</Heading>
                 </div>
 
                 <Subtitle level={3}>Task Name</Subtitle>
@@ -173,9 +173,9 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                 <ButtonContainer>
                     {existingTask ? (
                         <>
-                        {isInputValid() ? 
-                                <Button onClick={handleUpdateTask}>Modify Task</Button> : 
-                                <Button disabled>Modify Task</Button> }
+                            {isInputValid() ?
+                                <Button onClick={handleUpdateTask}>Modify Task</Button> :
+                                <Button disabled>Modify Task</Button>}
                             <Button onClick={handleRemoveTask}>Remove Task</Button>
                         </>
                     ) : isInputValid() ? (
@@ -186,7 +186,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                 </ButtonContainer>
             </MenuContainer>
 
-            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange}/>
+            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} />
         </Container>
     );
 };
