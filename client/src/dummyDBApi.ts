@@ -1,3 +1,5 @@
+import { Image } from "./types";
+
 export const addGuest = (guestName: string) => {};
 
 export const updateGuestTags = (guestName: string, updatedTags: string[]) => {};
@@ -35,21 +37,24 @@ export const updateTask = (
   updatedTask: { deadline: string }
 ) => {};
 
-export const handleTaskCompletion = (taskName: string, category: string, completed: boolean) => {};
+export const handleTaskCompletion = (
+  taskName: string,
+  category: string,
+  completed: boolean
+) => {};
 
+export const addChoice = (
+  category: string,
+  choice: { name: string; amount: number }
+) => {};
 
-export const addChoice = (category: string, choice: { name: string; amount: number }) => {
-  
-};
+export const removeChoice = (category: string, choiceName: string) => {};
 
-export const removeChoice = (category: string, choiceName: string) => {
-  
-};
-
-export const updateChoice = (category: string, choiceName: string, updatedChoice: { amount: number }) => {
-  
-};
-
+export const updateChoice = (
+  category: string,
+  choiceName: string,
+  updatedChoice: { amount: number }
+) => {};
 
 export const handleChoicePick = (
   choiceName: string,
@@ -57,3 +62,14 @@ export const handleChoicePick = (
   picked: boolean
 ) => {};
 
+export const updateFavoriteStatus = async (
+  imageId: number,
+  isFavorite: boolean
+) => {};
+
+export const updateApprovedStatus = (
+  imageId: number,
+  isApproved: boolean
+) => {};
+
+export const addPhotoToApi = async (photo: Image) => {};

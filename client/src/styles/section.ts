@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+export const margin = "3rem";
+
 export const SpaceBetweenContainer = styled.div<{ border?: boolean }>`
   display: flex;
   justify-content: space-between;
@@ -15,7 +17,9 @@ export const GridContainer = styled.div<{
   isExpanded: boolean;
   minWidth?: string;
   minHeight?: string;
+  padding?: string;
 }>`
+  padding: ${({ padding }) => padding};
   position: relative;
   display: grid;
   grid-template-columns: repeat(
@@ -24,13 +28,20 @@ export const GridContainer = styled.div<{
   );
   gap: 3rem;
   margin: 2rem 0;
-  width: 100%;
+  width: ${({ padding }) => (padding ? `calc(100% - 2 * ${padding})` : "100%")};
+
   max-height: ${({ isExpanded, minHeight }) =>
     isExpanded ? "auto" : minHeight ? minHeight : "40vh"};
   overflow-y: auto;
-  transition: height 0.3s ease;
+  transition: max-height 0.3s ease;
   background: ${({ isExpanded }) =>
     isExpanded
       ? "transparent"
       : "linear-gradient(to bottom, transparent 90%, rgba(0, 0, 0, 0.1))"};
+
+  > * {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
 `;

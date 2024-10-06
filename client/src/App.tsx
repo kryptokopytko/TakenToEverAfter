@@ -7,7 +7,6 @@ import Footer from "./components/layout/Footer/Footer";
 import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { guests } from './dummyData';
 import { fontStyles } from "./styles/typography";
 import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";

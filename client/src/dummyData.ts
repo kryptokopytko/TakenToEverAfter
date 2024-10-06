@@ -1,4 +1,4 @@
-import { Guest, Task } from "./types";
+import { Guest, Image, Task } from "./types";
 export const guests: Guest[] = [
   { name: "Baby Smurf", decision: "yes", tags: ["family"] },
   { name: "Baker Smurf", decision: "yes", tags: ["grooms", "family"] },
@@ -92,37 +92,36 @@ export const expenses = [
 
 export const initialTasks: Task[] = [
   {
-    category: 'Planning',
+    category: "Planning",
     subTasks: [
-      { name: 'Create guest list', completed: false, deadline: '2024-10-05' },
-      { name: 'Select venue', completed: true, deadline: '2024-09-25' },
+      { name: "Create guest list", completed: false, deadline: "2024-10-05" },
+      { name: "Select venue", completed: true, deadline: "2024-09-25" },
     ],
   },
   {
-    category: 'Catering',
+    category: "Catering",
     subTasks: [
-      { name: 'Confirm menu', completed: false, deadline: '2024-10-10' },
-      { name: 'Hire caterer', completed: true, deadline: '2024-09-28' },
+      { name: "Confirm menu", completed: false, deadline: "2024-10-10" },
+      { name: "Hire caterer", completed: true, deadline: "2024-09-28" },
     ],
   },
   {
-    category: 'Decorations',
+    category: "Decorations",
     subTasks: [
-      { name: 'Choose flowers', completed: false, deadline: '2024-10-15' },
-      { name: 'Design table setup', completed: false, deadline: '2024-10-12' },
-      { name: 'Choose color theme', completed: false, deadline: '2024-10-20' },
-      { name: 'Choose kayaks', completed: true, deadline: '2024-09-29' },
+      { name: "Choose flowers", completed: false, deadline: "2024-10-15" },
+      { name: "Design table setup", completed: false, deadline: "2024-10-12" },
+      { name: "Choose color theme", completed: false, deadline: "2024-10-20" },
+      { name: "Choose kayaks", completed: true, deadline: "2024-09-29" },
     ],
   },
   {
-    category: 'Entertainment',
+    category: "Entertainment",
     subTasks: [
-      { name: 'Book DJ', completed: true, deadline: '2024-09-22' },
-      { name: 'Plan activities', completed: true, deadline: '2024-09-23' },
+      { name: "Book DJ", completed: true, deadline: "2024-09-22" },
+      { name: "Plan activities", completed: true, deadline: "2024-09-23" },
     ],
   },
 ];
-
 
 export const initialChoices = [
   {
@@ -165,5 +164,121 @@ export const initialChoices = [
       { option: "Videographer", amount: 1500, isPicked: false },
       { option: "Photo package", amount: 800, isPicked: false },
     ],
+  },
+];
+
+export const exampleImages: Image[] = [
+  {
+    id: 1,
+    name: "Sunset",
+    link: "https://plus.unsplash.com/premium_photo-1673448391005-d65e815bd026?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhvdG98ZW58MHx8MHx8fDA%3D",
+    isFavorite: false,
+    author: "John Doe",
+  },
+  {
+    id: 2,
+    name: "Mountains",
+    link: "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
+    isFavorite: false,
+    author: "Jane Smith",
+    isVertical: true,
+    isApproved: true,
+  },
+  {
+    id: 3,
+    name: "Beach",
+    link: "https://img.freepik.com/premium-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_1033124-10.jpg",
+    isFavorite: false,
+    author: "Alice Johnson",
+  },
+  {
+    id: 4,
+    name: "Forest",
+    link: "https://img.freepik.com/free-photo/photorealistic-view-tree-nature-with-branches-trunk_23-2151478039.jpg",
+    isFavorite: false,
+    author: "Michael Brown",
+    isVertical: true,
+  },
+  {
+    id: 5,
+    name: "City Skyline",
+    link: "https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg",
+    isFavorite: false,
+    author: "Emily Davis",
+    isApproved: true,
+  },
+  {
+    id: 6,
+    name: "River",
+    link: "https://st.depositphotos.com/2001755/3622/i/450/depositphotos_36220949-stock-photo-beautiful-landscape.jpg",
+    isFavorite: false,
+    author: "Robert Wilson",
+    isVertical: true,
+  },
+  {
+    id: 7,
+    name: "Desert",
+    link: "https://media.licdn.com/dms/image/D5612AQE8NiooxTxA3w/article-cover_image-shrink_720_1280/0/1695825196046?e=2147483647&v=beta&t=UIlR0tBOMVHcLHo2wSJkVycZM7MyUYThqdTFz-Zad8o",
+    isFavorite: false,
+    author: "Jessica Garcia",
+  },
+  {
+    id: 8,
+    name: "Waterfall",
+    link: "https://st2.depositphotos.com/2001755/5408/i/450/depositphotos_54081723-stock-photo-beautiful-nature-landscape.jpg",
+    isFavorite: false,
+    author: "Daniel Martinez",
+    isVertical: true,
+    isApproved: true,
+  },
+  {
+    id: 9,
+    name: "Starry Night",
+    link: "https://media.istockphoto.com/id/843408508/photo/photography-camera-lens-concept.jpg?s=612x612&w=0&k=20&c=-tm5TKrPDMakrT1vcOE-4Rlyj-iBVdzKuX4viFkd7Vo=",
+    isFavorite: false,
+    author: "Sophia Rodriguez",
+  },
+  {
+    id: 10,
+    name: "Autumn Leaves",
+    link: "https://www.shutterstock.com/image-photo/anonymous-female-traveler-casual-sweater-600nw-2258700909.jpg",
+    isFavorite: false,
+    author: "James Hernandez",
+    isApproved: true,
+  },
+  {
+    id: 11,
+    name: "Snowy Mountains",
+    link: "https://media.istockphoto.com/id/636379014/photo/hands-forming-a-heart-shape-with-sunset-silhouette.jpg?s=612x612&w=0&k=20&c=CgjWWGEasjgwia2VT7ufXa10azba2HXmUDe96wZG8F0=",
+    isFavorite: false,
+    author: "Olivia Lee",
+  },
+  {
+    id: 12,
+    name: "Lighthouse",
+    link: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBu0Qci4XpOynaH98Bt1q_n-5d2hJ3eOTa2Q&s",
+    isFavorite: false,
+    author: "William Walker",
+  },
+  {
+    id: 13,
+    name: "Dancing",
+    link: "http://localhost:5173/pictures/dancing1.png",
+    isFavorite: true,
+    author: "Emily Johnson",
+  },
+  {
+    id: 14,
+    name: "Flowers",
+    link: "http://localhost:5173/pictures/flowers.png",
+    isFavorite: true,
+    author: "Lucas Brown",
+  },
+  {
+    id: 15,
+    name: "Car",
+    link: "http://localhost:5173/pictures/car.png",
+    isFavorite: true,
+    author: "Ava Williams",
   },
 ];

@@ -9,7 +9,7 @@ export const Notification = styled.span`
   margin: 1rem 0;
 `;
 
-export const Container = styled.div<{ isBudget?: boolean }>`
+export const Container = styled.div<{ isBudget?: boolean, color?: string }>`
   width: 100%;
   margin-bottom: 2rem;
   @media (min-width: ${({ isBudget }) =>   isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
@@ -21,7 +21,7 @@ export const Container = styled.div<{ isBudget?: boolean }>`
 
   }
   & > *:last-child {
-    background-color: ${({ theme }) => theme.primary};
+    background-color: ${({ theme, color }) => color ? theme[color] : theme.primary};
     padding: 3rem 3rem;
     padding-top: 1rem;
     height: fit-content;

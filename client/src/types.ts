@@ -41,3 +41,13 @@ export type Choice = {
   choice: string;
   options: Option[];
 };
+
+export interface Image {
+  name?: string;
+  link: string;
+  isFavorite?: boolean;
+  author?: string;
+  isVertical?: boolean;
+  isApproved?: boolean;
+  id: number;
+}
