@@ -7,3 +7,15 @@ export interface Guest {
 }
 
 export const decisionTypes = ["yes", "maybe", "no", "not invited"];
+
+export interface SubExpense {
+  subCategory: string;
+  amount: number;
+}
+
+export interface Expense {
+  category: string;
+  subExpenses: SubExpense[];
+}
+
+export type Expenses = Expense[];

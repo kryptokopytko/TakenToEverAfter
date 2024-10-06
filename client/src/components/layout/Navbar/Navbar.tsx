@@ -5,6 +5,7 @@ import { Heading, Label } from "../../../styles/typography";
 import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../../styles/Dropdown";
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
+
 interface NavbarProps {
   names: [string, string];
   sections: string[];
@@ -61,7 +62,9 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
           <LogoContainer>
             <img src={logo} alt="logo" style={{ height: "6rem", marginTop: "1.1rem" }} />
             <NamesContainer>
-              <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
+              {isLogged ?
+                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
+                : <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
             </NamesContainer>
           </LogoContainer>
         </StyledLink>

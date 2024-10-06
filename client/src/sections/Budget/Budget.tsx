@@ -6,76 +6,25 @@ import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Card } from "../../styles/card";
+import { Expenses } from "../../types";
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.div<{ isHomePage: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 3rem;
-  @media (max-width: 1100px) {
+  @media (max-width: ${({ isHomePage }) => isHomePage ? '1100px' : '2000px'}) {
     grid-template-columns: 1fr;
   }
 `;
 
-const expenses = [
-    {
-        category: 'Venue',
-        subExpenses: [
-            { subCategory: 'Rental', amount: 700 },
-            { subCategory: 'Cleaning', amount: 300 },
-        ],
-    },
-
-    {
-        category: 'Photography',
-        subExpenses: [
-            { subCategory: 'Photographer', amount: 250 },
-            { subCategory: 'Album', amount: 50 },
-        ],
-    },
-
-    {
-        category: 'Entertainment',
-        subExpenses: [
-            { subCategory: 'DJ', amount: 80 },
-            { subCategory: 'Games', amount: 20 },
-        ],
-    },
-    {
-        category: 'Catering',
-        subExpenses: [
-            { subCategory: 'Dinner', amount: 300 },
-            { subCategory: 'Vodka', amount: 50 },
-            { subCategory: 'Vine', amount: 300 },
-            { subCategory: 'Supper', amount: 200 },
-            { subCategory: 'Ice Cream', amount: 100 },
-        ],
-    },
-    {
-        category: 'Decorations',
-        subExpenses: [
-            { subCategory: 'Flowers', amount: 100 },
-            { subCategory: 'Lighting', amount: 100 },
-        ],
-    },
-];
-const totalSpent = expenses.reduce((total, expense) => total +
-    expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0), 0);
-const totalBudget = 3000;
-const remainingBudget = totalBudget - totalSpent;
-const pieData = expenses.map((expense) => ({
-    label: expense.category,
-    value: expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)
-})).sort((a, b) => b.value - a.value);
-
-if (remainingBudget > 0)
-    pieData.push({ value: remainingBudget, label: 'Remaining' });
 
 interface BudgetProps {
     isHomePage?: boolean;
+    expenses: Expenses;
 }
 
-const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
+const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
 
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
 
@@ -83,9 +32,21 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
         setIsExpanded((prev) => !prev);
     };
 
+    const totalSpent = expenses.reduce((total, expense) => total +
+        expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0), 0);
+    const totalBudget = 3000;
+    const remainingBudget = totalBudget - totalSpent;
+    const pieData = expenses.map((expense) => ({
+        label: expense.category,
+        value: expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)
+    })).sort((a, b) => b.value - a.value);
+
+    if (remainingBudget > 0)
+        pieData.push({ value: remainingBudget, label: 'Remaining' });
+
     return (
         <div id='budget'>
-            <HeaderContainer>
+            <HeaderContainer isHomePage={isHomePage ? isHomePage : false}>
                 <div>
                     <SpaceBetweenContainer>
                         <Heading level={1}>Budget:</Heading>

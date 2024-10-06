@@ -17,7 +17,7 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
     }, 0);
   };
 
-  
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -32,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ sections }) => {
 
         <ListContainer>
           {sections
-            .filter(section => section !== 'Home') 
+            .filter(section => section !== 'Home')
             .sort().map((section) => (
               <Body key={section} onClick={() => scrollToSection(section.toLowerCase().replace(/\s+/g, '-'))}>
                 {section}

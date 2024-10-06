@@ -8,7 +8,7 @@ import TableChart from "../sections/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import { guests } from "../dummyData";
+import { guests, expenses } from "../dummyData";
 import { handleDecision, handleInvite } from "../dummyDBApi";
 
 const SectionsContainer = styled.div`
@@ -45,7 +45,7 @@ const Home = () => {
           isHomePage={true} />
       </div>
       <div id="budget">
-        <Budget isHomePage={true} />
+        <Budget isHomePage={true} expenses={expenses} />
       </div>
       <div id="to-do">
         <ToDo isHomePage={true} />

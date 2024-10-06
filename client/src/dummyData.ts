@@ -45,4 +45,47 @@ export const guests: Guest[] = [
   { name: "Tracker Smurf", decision: "yes", tags: ["brides", "family"] },
   { name: "Weepy Smurf", decision: "no", tags: ["grooms", "friends"] },
   { name: "Wild Smurf", decision: "yes", tags: ["brides", "family"] },
-].sort((a, b) => a.name.localeCompare(b.name)) as Guest[];
+];
+
+export const expenses = [
+  {
+    category: "Venue",
+    subExpenses: [
+      { subCategory: "Rental", amount: 700 },
+      { subCategory: "Cleaning", amount: 300 },
+    ],
+  },
+
+  {
+    category: "Photography",
+    subExpenses: [
+      { subCategory: "Photographer", amount: 250 },
+      { subCategory: "Album", amount: 50 },
+    ],
+  },
+
+  {
+    category: "Entertainment",
+    subExpenses: [
+      { subCategory: "DJ", amount: 80 },
+      { subCategory: "Games", amount: 20 },
+    ],
+  },
+  {
+    category: "Catering",
+    subExpenses: [
+      { subCategory: "Dinner", amount: 300 },
+      { subCategory: "Vodka", amount: 50 },
+      { subCategory: "Vine", amount: 300 },
+      { subCategory: "Supper", amount: 200 },
+      { subCategory: "Ice Cream", amount: 100 },
+    ],
+  },
+  {
+    category: "Decorations",
+    subExpenses: [
+      { subCategory: "Flowers", amount: 100 },
+      { subCategory: "Lighting", amount: 100 },
+    ],
+  },
+];

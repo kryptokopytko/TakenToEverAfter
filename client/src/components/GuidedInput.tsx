@@ -26,7 +26,7 @@ const SuggestionItem = styled.li<{ isSelected: boolean }>`
     background-color: ${({ theme }) => theme.light};
     color: ${({ theme }) => theme.body};
   }
-`;
+`; 
 
 interface GuidedInputProps extends InputProps {
     suggestions: string[];
@@ -65,8 +65,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
         setInputValueLocal(suggestion);
         setFilteredSuggestions([]);
         setShowSuggestions(false);
-
-
         if (setInputValue) {
             setInputValue(suggestion);
         }

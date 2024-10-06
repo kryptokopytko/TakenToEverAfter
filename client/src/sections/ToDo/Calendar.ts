@@ -63,8 +63,8 @@ export const StyledCalendar = styled(Calendar)`
     }
 
     &--now {
-      background: ${({ theme }) => theme.body};
-      color: ${({ theme }) => theme.primary};
+      background: ${({ theme }) => theme.dark};
+      color: ${({ theme }) => theme.primary} !important;
     }
 
     &--active {

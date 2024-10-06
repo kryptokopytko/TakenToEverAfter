@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   padding: 2rem 0rem;
+  position: relative;
+  z-index: 100;
   background-color: ${({ theme }) => theme.light};
   width: 100%;
   display: flex;

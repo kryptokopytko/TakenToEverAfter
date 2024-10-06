@@ -7,7 +7,10 @@ export const InputContainer = styled.div`
   width: 100%;
 `;
 
-const StyledInput = styled.input<{ variant?: 'tertiary' | 'secondary'; size?: 'small' | 'medium' | 'large'; }>`
+const StyledInput = styled.input<{
+    variant?: 'tertiary' | 'secondary';
+    size?: 'small' | 'medium' | 'large';
+}>`
   background-color: ${({ variant, theme }) =>
         variant === 'tertiary' ? theme.tertiary :
             variant === 'secondary' ? theme.secondary :
@@ -18,16 +21,16 @@ const StyledInput = styled.input<{ variant?: 'tertiary' | 'secondary'; size?: 's
   padding: ${({ size }) => (size === 'small' ? '0.5rem' : size === 'large' ? '1rem' : '0.75rem')};
   transition: border-color 0.3s ease;
   max-width: 100%;
+
   &:focus {
     border-color: ${({ variant, theme }) =>
         variant === 'tertiary' ? theme.primary :
             variant === 'secondary' ? theme.secondary :
                 theme.focusColor};
     outline: none;
-  border: 2px solid ${({ theme }) => theme.tertiary};
-
+    border: 2px solid ${({ theme }) => theme.tertiary};
   }
-`;
+`; 
 
 export interface InputProps {
     variant?: 'tertiary' | 'secondary';
@@ -37,9 +40,18 @@ export interface InputProps {
     placeholder?: string;
     disabled?: boolean;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    type?: 'text' | 'number'; 
 }
 
-const Input: React.FC<InputProps> = ({ variant, size = 'medium', value, onChange, placeholder, disabled }) => {
+const Input: React.FC<InputProps> = ({
+    variant,
+    size = 'medium',
+    value,
+    onChange,
+    placeholder,
+    disabled,
+    type = 'text', 
+}) => {
     return (
         <InputContainer>
             <StyledInput
@@ -49,6 +61,7 @@ const Input: React.FC<InputProps> = ({ variant, size = 'medium', value, onChange
                 onChange={onChange}
                 placeholder={placeholder}
                 disabled={disabled}
+                type={type} 
             />
         </InputContainer>
     );
