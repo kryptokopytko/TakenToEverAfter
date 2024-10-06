@@ -1,20 +1,38 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3rem;
-  padding: 3rem;
-  padding-top: 0;
+export const guestAndThemeBreakpoint = "660px";
+export const budgetBreakpoint = "1100px";
+
+export const Notification = styled.span`
+  color: ${({ theme }) => theme.body};
+  margin: 1rem 0;
+`;
+
+export const Container = styled.div<{ isBudget?: boolean }>`
+  width: 100%;
+  margin-bottom: 5rem;
+  @media (min-width: ${({ isBudget }) =>   isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
+    position: relative;
+    top: 1rem;
+    min-height: 200vh;
+    display: flex;
+    align-items: flex-start;
+
+  }
   & > *:last-child {
     background-color: ${({ theme }) => theme.primary};
-    padding: 0 3rem;
-    flex: 100;
+    padding: 3rem 3rem;
+    padding-top: 0;
     height: fit-content;
+    margin-top: 1rem;
+    @media (min-width: ${({ isBudget }) =>    isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
+      width: calc(100% - 30rem);
+      margin: 0 1rem;
+    }
   }
 `;
 
-export const MenuContainer = styled.div<{ color?: string }>`
+export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
   padding: 0 2rem;
   padding-bottom: 2rem;
   background-color: ${({ theme, color }) =>
@@ -22,8 +40,17 @@ export const MenuContainer = styled.div<{ color?: string }>`
   display: flex;
   flex-direction: column;
   text-align: center;
-  justify-content: center;
-  height: fit-content;
-  min-width: 22rem;
-  flex: 1 1 auto;
+  justify-content: flex-start;
+  width: calc(100% - 4rem);
+
+  @media (min-width: ${({ isBudget }) => isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
+    width: 20rem;
+    margin: 0 0.5rem;
+    position: sticky;
+    top: 6rem;
+    left: 1rem;
+    z-index: 10;
+    max-height: calc(100vh - 9rem);
+    overflow: auto;
+  }
 `;

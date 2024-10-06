@@ -6,24 +6,16 @@ import { Decision, Guest } from "../types";
 import GuidedInput from "../components/GuidedInput";
 import { Tag, TagContainer } from "../styles/tag";
 import Input from "../components/Input";
-import { Container, MenuContainer } from "../styles/page";
+import { Container, MenuContainer, Notification } from "../styles/page";
 import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../styles/Dropdown";
 import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../styles/Checkbox";
 import { SpaceBetweenContainer } from "../styles/section";
-import styled from "styled-components";
 import { removeGuest, addGuest, updateGuestTags, handleDecision, handleInvite } from "../dummyDBApi";
+import { guests as initialGuests } from "../dummyData";
 
-export const Notification = styled.span`
-  color: ${({ theme }) => theme.body};
-  margin: 1rem 0;
-`;
 
-interface GuestListProps {
-  guests: Guest[];
-}
 
-const GuestPage: React.FC<GuestListProps> = ({
-  guests: initialGuests,
+const GuestPage: React.FC = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [newTag, setNewTag] = useState('');
@@ -173,7 +165,10 @@ const GuestPage: React.FC<GuestListProps> = ({
   return (
     <Container>
       <MenuContainer >
-        <Heading level={2}>Manage guests</Heading>
+        <div style={{ marginBottom: '-3rem' }}>
+          <Heading level={2}>Manage guests</Heading>
+        </div>
+
         <SpaceBetweenContainer>
           <Subtitle level={3}>Name:</Subtitle>
           <div style={{ width: '12rem' }}>

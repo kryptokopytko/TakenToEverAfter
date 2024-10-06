@@ -13,7 +13,7 @@ import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";
 import ThemeConstructorPage from "./pages/ThemeConstructorPage";
 import PhotosPage from "./pages/PhotosPage";
-import ChoicesPage from "./pages/Choices";
+import ChoicesPage from "./pages/ChoicesPage";
 import PrintablesPage from "./pages/PrintablesPage";
 import ToDoPage from "./pages/ToDoPage";
 
@@ -44,17 +44,16 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
 
 const sections = ['Home', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Constructor', 'Printables'];
 
-const PageContainer = styled.div`
+export const PageContainer = styled.div`
   width: 100%;
-  position:relative;
-  overflow: hidden;
+  position: relative; 
   display: flex;
   justify-content: center;
+  margin-top: 5rem;
 
   & > * {
     width: 100%;
   }
-  margin-top: 5rem;
 `;
 
 const AppContent = () => {
@@ -79,7 +78,7 @@ const AppContent = () => {
             <Route path="/photo_album" element={<PhotosPage />} />
             <Route path="/choices" element={<ChoicesPage />} />
             <Route path="/printables" element={<PrintablesPage />} />
-            <Route path="/guest_list" element={<GuestPage guests={guests} />} />
+            <Route path="/guest_list" element={<GuestPage />} />
             <Route path="/to_do" element={<ToDoPage />} />
           </Routes>
         </PageContainer>
