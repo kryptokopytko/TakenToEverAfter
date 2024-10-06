@@ -1,4 +1,4 @@
-import { Guest } from "./types";
+import { Guest, Task } from "./types";
 export const guests: Guest[] = [
   { name: "Baby Smurf", decision: "yes", tags: ["family"] },
   { name: "Baker Smurf", decision: "yes", tags: ["grooms", "family"] },
@@ -89,3 +89,37 @@ export const expenses = [
     ],
   },
 ];
+
+export const initialTasks: Task[] = [
+  {
+    category: 'Planning',
+    subTasks: [
+      { name: 'Create guest list', completed: false, deadline: '2024-10-05' },
+      { name: 'Select venue', completed: true, deadline: '2024-09-25' },
+    ],
+  },
+  {
+    category: 'Catering',
+    subTasks: [
+      { name: 'Confirm menu', completed: false, deadline: '2024-10-10' },
+      { name: 'Hire caterer', completed: true, deadline: '2024-09-28' },
+    ],
+  },
+  {
+    category: 'Decorations',
+    subTasks: [
+      { name: 'Choose flowers', completed: false, deadline: '2024-10-15' },
+      { name: 'Design table setup', completed: false, deadline: '2024-10-12' },
+      { name: 'Choose color theme', completed: false, deadline: '2024-10-20' },
+      { name: 'Choose kayaks', completed: true, deadline: '2024-09-29' },
+    ],
+  },
+  {
+    category: 'Entertainment',
+    subTasks: [
+      { name: 'Book DJ', completed: true, deadline: '2024-09-22' },
+      { name: 'Plan activities', completed: true, deadline: '2024-09-23' },
+    ],
+  },
+];
+

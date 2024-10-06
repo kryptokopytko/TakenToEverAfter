@@ -7,6 +7,7 @@ import { expenses as initialExpenses } from "../dummyData";
 import GuidedInput from "../components/GuidedInput";
 import Button, { ButtonContainer } from "../components/Button";
 import { SubExpense } from "../types";
+import { addExpense, removeExpense, updateExpense } from "../dummyDBApi";
 
 interface BudgetPageProps { }
 
@@ -81,6 +82,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 });
             });
             setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
+            updateExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
         } else {
             
             setExpenses(prevExpenses => [
@@ -93,6 +95,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 }
             ]);
             setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
+            addExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
         }
         setTimeout(() => setNotification(null), 10000);
     };
@@ -118,14 +121,9 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         );
 
         setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
-        setInputExpenseName('');
-        setInputExpensePrice('');
-
+        removeExpense(inputCategory, inputExpenseName);
         setTimeout(() => setNotification(null), 3000); 
     };
-
-
-
 
     const isInputValid = () => {
         const expenseAmount = Number(inputExpensePrice);

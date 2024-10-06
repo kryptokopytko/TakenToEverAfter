@@ -10,6 +10,7 @@ import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
 import { guests, expenses } from "../dummyData";
 import { handleDecision, handleInvite } from "../dummyDBApi";
+import { initialTasks } from "../dummyData";
 
 const SectionsContainer = styled.div`
   width: 100%;
@@ -48,7 +49,7 @@ const Home = () => {
         <Budget isHomePage={true} expenses={expenses} />
       </div>
       <div id="to-do">
-        <ToDo isHomePage={true} />
+        <ToDo isHomePage={true} initialTasks={initialTasks}/>
       </div>
       <div id="choices">
         <Choices isHomePage={true} />

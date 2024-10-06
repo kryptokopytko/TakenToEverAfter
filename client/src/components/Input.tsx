@@ -40,7 +40,7 @@ export interface InputProps {
     placeholder?: string;
     disabled?: boolean;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-    type?: 'text' | 'number'; 
+    type?: 'text' | 'number' | 'date'; 
 }
 
 const Input: React.FC<InputProps> = ({
