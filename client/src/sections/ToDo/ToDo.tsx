@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Body, Heading, Label } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
@@ -8,13 +8,15 @@ import { CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheck
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
+import { handleTaskCompletion } from "../../dummyDBApi";
 
 interface ToDoProps {
   isHomePage?: boolean;
   initialTasks: Task[];
+  onTaskChange?: (taskName: string, category: string) => void;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks }) => {
+const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -24,6 +26,12 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks }) => {
     (completed, task) => completed + task.subTasks.filter((subTask) => subTask.completed).length,
     0
   );
+
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
+
+  
   const getTasksForDate = (date: Date) => {
     return tasks
       .flatMap((task) => task.subTasks)
@@ -48,7 +56,12 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks }) => {
       return (
         <Body size='small' color='primary'>
           {tasksForDate.map((task, index) => (
-            <span key={index}>{task}</span>
+            <div key={index}>
+              {task}
+              {index < tasksForDate.length - 1 && (
+                <div style={{ height: '1px', backgroundColor: 'white', margin: '0.5rem 0' }} />
+              )}
+            </div>
           ))}
         </Body>
       );
@@ -56,7 +69,13 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks }) => {
     return null;
   };
 
+
   const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
+    const task = tasks[categoryIndex];
+    const subTask = task.subTasks[subTaskIndex];
+
+    { onTaskChange ? onTaskChange(subTask.name, task.category) : {}};
+    handleTaskCompletion(subTask.name, task.category, !subTask.completed);
     const updatedTasks = tasks.map((task, index) => {
       if (index === categoryIndex) {
         const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {
@@ -76,8 +95,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks }) => {
   const toggleList = () => {
     setIsExpanded((prev) => !prev);
   };
-
-
+  
   return (
     <Container id="todo-list">
       <SpaceBetweenContainer>

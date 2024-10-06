@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+export const notificationTimeOut = 10000;
 export const guestAndThemeBreakpoint = "660px";
 export const budgetBreakpoint = "1100px";
 

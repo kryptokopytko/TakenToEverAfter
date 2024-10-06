@@ -22,3 +22,18 @@ export const updateExpense = (
   newAmount: number
 ) => {};
 
+export const addTask = (
+  category: string,
+  task: { name: string; deadline: string; completed: boolean }
+) => {};
+
+export const removeTask = (category: string, taskName: string) => {};
+
+export const updateTask = (
+  category: string,
+  taskName: string,
+  updatedTask: { deadline: string }
+) => {};
+
+export const handleTaskCompletion = (taskName: string, category: string, completed: boolean) => {};
+
