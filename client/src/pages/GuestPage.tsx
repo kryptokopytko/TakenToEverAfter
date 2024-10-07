@@ -13,11 +13,10 @@ import { SpaceBetweenContainer } from "../styles/section";
 import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
 
-
-
 const GuestPage: React.FC = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
+  const [emailValue, setEmailValue] = useState('');
   const [newTag, setNewTag] = useState('');
   const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
@@ -33,6 +32,7 @@ const GuestPage: React.FC = ({
   const [filterByTag, setFilterByTag] = useState<string[]>([]);
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
+  const [emailError, setEmailError] = useState<string>(''); 
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -40,11 +40,14 @@ const GuestPage: React.FC = ({
     if (guest) {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
+      setEmailValue(guest.email || ''); 
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
+      setEmailValue(''); 
     }
   }, [inputValue, guests]);
+
 
   useEffect(() => {
     setAllTags(getAllTags());
@@ -95,7 +98,7 @@ const GuestPage: React.FC = ({
     const updatedTags = [...selectedGuestTags, tag];
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
-      updateGuestTags(currentGuest.name, updatedTags);
+      updateGuestTags(currentGuest.name, emailValue, updatedTags);
       updateTags(tag, weight);
     }
   };
@@ -104,7 +107,7 @@ const GuestPage: React.FC = ({
     const updatedTags = selectedGuestTags.filter(existingTag => existingTag !== tag);
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
-      updateGuestTags(currentGuest.name, updatedTags);
+      updateGuestTags(currentGuest.name, emailValue, updatedTags);
     }
   };
 
@@ -113,18 +116,26 @@ const GuestPage: React.FC = ({
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
 
+      if (!isValidEmail(emailValue)) { 
+        setEmailError("Please enter a valid email address."); 
+        return; 
+      } else {
+        setEmailError(''); 
+      }
+
+
       if (existingGuest && currentDecision) {
         setGuests((prevGuests) =>
           prevGuests.map(guest =>
-            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision } : guest
+            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, email: emailValue } : guest 
           )
         );
-        updateGuestTags(trimmedName, selectedGuestTags);
+        updateGuestTags(trimmedName, emailValue, selectedGuestTags);
         setNotification(`Modified: ${trimmedName}`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited' };
+        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', email: emailValue }; 
         setGuests(prevGuests => [...prevGuests, newGuest]);
-        addGuest(trimmedName);
+        addGuest(trimmedName, emailValue);
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -164,6 +175,12 @@ const GuestPage: React.FC = ({
     }
   });
 
+  const isValidEmail = (email: string): boolean => {
+    
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
   const filteredGuests = sortedGuests.filter(guest => {
     const tagMatch = filterByTag.length === 0 || filterByTag.every(tag => guest.tags.includes(tag));
     const decisionMatch = filterByDecision === 'all' || guest.decision === filterByDecision;
@@ -173,9 +190,7 @@ const GuestPage: React.FC = ({
   return (
     <Container>
       <MenuContainer >
-        <div style={{ marginBottom: '-3rem' }}>
-          <Heading level={2}>Manage guests</Heading>
-        </div>
+        <Heading level={2}>Manage guests</Heading>
 
         <SpaceBetweenContainer>
           <Subtitle level={3}>Name:</Subtitle>
@@ -210,7 +225,17 @@ const GuestPage: React.FC = ({
           setInputValue={setInputValue}
           placeholder="Name"
         />
-
+        <div style={{ textAlign: 'left' }}>
+          <Subtitle level={3}>Email:</Subtitle>
+        </div>
+        <Input
+          size="medium"
+          value={emailValue}
+          onChange={(e) => setEmailValue(e.target.value)}
+          type="email"
+          placeholder="Enter email..."
+        />
+        {emailError && <Notification>{emailError}</Notification>}
         <ButtonContainer>
           <Button onClick={handleAddOrModifyGuest}>
             {currentGuest ? "Modify" : "Add"}
@@ -220,9 +245,7 @@ const GuestPage: React.FC = ({
 
         {notification && <Notification>{notification}</Notification>}
 
-        <span style={{ margin: '-1rem 0' }}>
-          <Subtitle level={2}>Current Tags:</Subtitle>
-        </span>
+        <Subtitle level={2}>Current Tags:</Subtitle>
         {selectedGuestTags.length > 0 && (
           <TagContainer>
             {selectedGuestTags.map((tag, index) => (
@@ -235,9 +258,7 @@ const GuestPage: React.FC = ({
 
         {possibleTags.length > 0 && (
           <>
-            <span style={{ margin: '-1rem 0' }}>
-              <Subtitle level={2}>Add Tags:</Subtitle>
-            </span>
+            <Subtitle level={2}>Add Tags:</Subtitle>
             <TagContainer>
               {possibleTags.map((tag, index) => (
                 <Tag key={index} onClick={() => handleAddTag(tag)}>

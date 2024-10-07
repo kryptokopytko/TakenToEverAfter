@@ -1,8 +1,12 @@
 import { Image } from "./types";
 
-export const addGuest = (guestName: string) => {};
+export const addGuest = (guestName: string, email: string) => {};
 
-export const updateGuestTags = (guestName: string, updatedTags: string[]) => {};
+export const updateGuestTags = (
+  guestName: string,
+  email: string,
+  updatedTags: string[]
+) => {};
 
 export const updateTags = (tag: string, weight: number) => {};
 
@@ -83,7 +87,6 @@ export const loginUser = (email: string, password: string) => {
   return false;
 };
 
-
 export const registerUser = async (
   email: string,
   password: string,
@@ -91,10 +94,10 @@ export const registerUser = async (
   firstName1: string,
   firstName2: string
 ): Promise<boolean> => {
-  
   if (email && password && firstName1 && firstName2) {
-    
     return true;
   }
   return false;
 };
+
+export const sendResponse = (guestName: string, response: "yes" | "no") => {};

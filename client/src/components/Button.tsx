@@ -9,7 +9,7 @@ export const ButtonContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string }>`
+const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string, minWidth?: string }>`
   background-color: ${({ variant, theme, hslColor }) =>
     variant === 'primary' ? theme.primary :
       variant === 'secondary' ? theme.secondary :
@@ -24,6 +24,7 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transp
   transition: background-color 0.3s ease;
   padding: 0 1.5rem;
   max-height: 5rem;
+  min-width: ${({ minWidth }) => minWidth ? minWidth : 'auto'};
   &:hover {
     opacity: ${({ variant }) => variant === 'transparent' ? 0.5 : 0.9};
   }
@@ -41,11 +42,12 @@ interface ButtonProps {
   disabled?: boolean;
   hslColor?: string;
   children: React.ReactNode;
+  minWidth?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ variant, size = 'medium', onClick, disabled, hslColor, children }) => {
+const Button: React.FC<ButtonProps> = ({ variant, size = 'medium', onClick, disabled, hslColor, minWidth, children }) => {
   return (
-    <StyledButton variant={variant} size={size} onClick={onClick} hslColor={hslColor} disabled={disabled}>
+    <StyledButton variant={variant} size={size} onClick={onClick} hslColor={hslColor} disabled={disabled} minWidth={minWidth}>
       <Label size={'small'} color={variant ? 'body' : 'primary'}>
         {children}
       </Label>

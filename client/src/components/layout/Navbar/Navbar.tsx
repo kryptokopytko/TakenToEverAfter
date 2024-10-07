@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
       <ContentContainer>
         <StyledLink to={'/'}>
           <LogoContainer>
-            <img src={logo} alt="logo" style={{ height: "6rem"}} />
+            <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
               {isLogged ?
                 <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
@@ -70,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
         </StyledLink>
         <DateContainer>
           {calculateDaysLeft() > 0 ?
-          <Label size='small'>{calculateDaysLeft()} days left</Label> : <></>}
+            <Label size='small'>{calculateDaysLeft()} days left</Label> : <></>}
           <Label size='small'>{weddingDate} </Label>
         </DateContainer>
         <ButtonsContainer>
@@ -111,7 +111,7 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
               ))}
             </DropdownMenu>
           </SelectorContainer>
-          <Label color="primary" style={{ marginTop: "2.2rem" }}>{isLogged ? 'Log out' : 'Log in'}</Label>
+          <Label color="primary" style={{ marginTop: "1.4rem" }}>{isLogged ? 'Log out' : 'Log in'}</Label>
         </ButtonsContainer>
 
         <BurgerMenu onClick={toggleBurgerMenu}>

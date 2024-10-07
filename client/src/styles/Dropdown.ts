@@ -33,7 +33,6 @@ export const RadioButton = styled.label`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  margin: -2.1rem 0;
   input {
     appearance: none;
     width: 20px;

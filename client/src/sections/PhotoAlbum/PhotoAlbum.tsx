@@ -10,6 +10,7 @@ interface PhotoAlbumProps {
     isExpanded: boolean;
     handleApproveChange: (id: number, isApproved: boolean) => void;
     handleDeletePhoto: (id: number) => void;
+    isGuest?: boolean;
 }
 
 const PhotoCard = styled.div`
@@ -19,6 +20,13 @@ const PhotoCard = styled.div`
     position: relative;
     transition: transform 0.3s;
     cursor: pointer;
+      max-width: 40rem;
+  max-height: 40rem;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+
     box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
     &:hover {
         transform: scale(1.05);
@@ -79,7 +87,7 @@ const FullScreenImage = styled.img`
     cursor: pointer;
 `;
 
-const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleApproveChange, handleDeletePhoto }) => {
+const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleApproveChange, handleDeletePhoto, isGuest }) => {
     const [localImages, setLocalImages] = useState<Image[]>(images.map((image) => ({ ...image })));
     const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
 
@@ -107,7 +115,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
     const deletePhoto = (id: number) => {
         const updatedImages = localImages.filter(image => image.id !== id);
         setLocalImages(updatedImages);
-        handleDeletePhoto(id); 
+        handleDeletePhoto(id);
     };
 
     const openFullScreen = (link: string) => {
@@ -132,22 +140,24 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
                             <Body>{image.name}</Body>
                             <Body size="small">by {image.author}</Body>
                         </PhotoInfo>
-                        <Indicator
-                            isChecked={image.isApproved}
-                            isLeft={true}
-                            onClick={() => toggleApproved(index)}
-                        >
-                            {!image.isApproved ? '✔' : '✖'}
-                        </Indicator>
-                        <Indicator
-                            isChecked={image.isFavorite}
-                            onClick={() => { if (image.isApproved) toggleFavorite(index); else deletePhoto(image.id) }}
-                        >
-                            {image.isApproved ?
-                                image.isFavorite ? '⭐' : '☆' :
-                                '🗑️'}
+                        {isGuest ? <></> : <>
+                            <Indicator
+                                isChecked={image.isApproved}
+                                isLeft={true}
+                                onClick={() => toggleApproved(index)}
+                            >
+                                {!image.isApproved ? '✔' : '✖'}
+                            </Indicator>
+                            <Indicator
+                                isChecked={image.isFavorite}
+                                onClick={() => { if (image.isApproved) toggleFavorite(index); else deletePhoto(image.id) }}
+                            >
+                                {image.isApproved ?
+                                    image.isFavorite ? '⭐' : '☆' :
+                                    '🗑️'}
 
-                        </Indicator>
+                            </Indicator>
+                        </>}
                     </PhotoCard>
                 ))}
             </GridContainer>
