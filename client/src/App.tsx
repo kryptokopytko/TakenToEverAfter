@@ -15,6 +15,8 @@ import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/ChoicesPage";
 import PrintablesPage from "./pages/PrintablesPage";
 import ToDoPage from "./pages/ToDoPage";
+import LoginPage from "./pages/Login";
+import RegistrationPage from "./pages/RegistrationPage";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -79,6 +81,9 @@ const AppContent = () => {
             <Route path="/printables" element={<PrintablesPage />} />
             <Route path="/guest_list" element={<GuestPage />} />
             <Route path="/to_do" element={<ToDoPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+
           </Routes>
         </PageContainer>
         <Footer sections={sections} />

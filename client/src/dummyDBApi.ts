@@ -4,6 +4,8 @@ export const addGuest = (guestName: string) => {};
 
 export const updateGuestTags = (guestName: string, updatedTags: string[]) => {};
 
+export const updateTags = (tag: string, weight: number) => {};
+
 export const handleDecision = (guestName: string, decision: "yes" | "no") => {};
 
 export const removeGuest = (guestName: string) => {};
@@ -73,3 +75,26 @@ export const updateApprovedStatus = (
 ) => {};
 
 export const addPhotoToApi = async (photo: Image) => {};
+
+export const loginUser = (email: string, password: string) => {
+  if (email === "test@example.com" && password === "password123") {
+    return true;
+  }
+  return false;
+};
+
+
+export const registerUser = async (
+  email: string,
+  password: string,
+  weddingDate: string,
+  firstName1: string,
+  firstName2: string
+): Promise<boolean> => {
+  
+  if (email && password && firstName1 && firstName2) {
+    
+    return true;
+  }
+  return false;
+};

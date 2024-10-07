@@ -10,7 +10,7 @@ import { Container, MenuContainer, Notification } from "../styles/page";
 import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../styles/Dropdown";
 import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../styles/Checkbox";
 import { SpaceBetweenContainer } from "../styles/section";
-import { removeGuest, addGuest, updateGuestTags, handleDecision, handleInvite } from "../dummyDBApi";
+import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
 
 
@@ -32,6 +32,7 @@ const GuestPage: React.FC = ({
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
   const [filterByTag, setFilterByTag] = useState<string[]>([]);
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
+  const [newTagWeight, setNewTagWeight] = useState('');
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -64,6 +65,11 @@ const GuestPage: React.FC = ({
   const allDecisions = guests.map((guest) => guest.decision);
   const decisions = [...new Set(allDecisions)];
 
+  const handleNewTagWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNewTagWeight(value.split('').filter(c => c >= '0' && c <= '9').join(''));
+  };
+
   const handleDecisionChange = (guestName: string, decision: 'yes' | 'no') => {
     setGuests((prevGuests) =>
       prevGuests.map((guest) =>
@@ -85,10 +91,12 @@ const GuestPage: React.FC = ({
   const possibleTags = allTags.filter(tag => !selectedGuestTags.includes(tag));
 
   const handleAddTag = (tag: string) => {
+    const weight = Number(newTagWeight);
     const updatedTags = [...selectedGuestTags, tag];
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
       updateGuestTags(currentGuest.name, updatedTags);
+      updateTags(tag, weight);
     }
   };
 
@@ -239,12 +247,24 @@ const GuestPage: React.FC = ({
             </TagContainer>
           </>
         )}
+        <div style={{ margin: '0.5rem' }}>
+          New tag name
+          <Input
+            value={newTag}
+            onChange={handleNewTagChange}
+            placeholder="Add a New Tag"
+          />
+        </div>
+        <div style={{ margin: '0.5rem' }}>
+          New tag weight
+          <Input
+            value={newTagWeight}
+            onChange={handleNewTagWeightChange}
+            placeholder="Add Tag Weight"
+            type="number"
+          />
+        </div>
 
-        <Input
-          value={newTag}
-          onChange={handleNewTagChange}
-          placeholder="Add a New Tag"
-        />
         <ButtonContainer>
           <Button onClick={handleAddNewTag}>Add Tag</Button>
         </ButtonContainer>

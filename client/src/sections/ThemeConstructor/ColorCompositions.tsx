@@ -40,10 +40,10 @@ const generateLightnessVariations = (hue: number, saturation: number, lightnessA
 const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
     const { hue, saturation, lightness } = color;
 
-    const lightVariations = generateLightnessVariations(hue, saturation, [20, 38, 70, 89, 98]);
+    const lightVariations = generateLightnessVariations(hue, saturation, [30, 48, 70, 89, 98]);
     const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
-    const darkVariations = generateLightnessVariations(hue, saturation, [10, 34, 60, 85, 95]);
-    const contrastVariations = generateLightnessVariations(hue, saturation, [10, 24, 50, 85, 95]);
+    const darkVariations = generateLightnessVariations(hue, saturation, [20, 44, 60, 85, 95]);
+    const contrastVariations = generateLightnessVariations(hue, saturation, [24, 34, 50, 85, 95]);
 
     const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal, index) => (
         { hue: hueVal, saturation: saturation, lightness: [40, 50, 60, 90, 98][index] }
