@@ -39,6 +39,8 @@ export const StyledLink = styled(Link)`
 
 export const NamesContainer = styled.div`
   text-decoration: none important!;
+  display: flex;
+  align-items: center;
   @media (max-width: 520px) {
     display: none;
   }
@@ -104,7 +106,4 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
 export const LogoContainer = styled.div`
   display: flex;
   gap: 1rem;
-  @media (max-width: 520px) {
-    margin-top: -1.1rem;
-  }
 `;

@@ -1,47 +1,44 @@
+import React, { useState } from "react";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
-import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
-import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../dummyData";
-import { useState } from "react";
 import Button, { ButtonContainer } from "../components/Button";
-import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/Input";
-import { addPhotoToApi } from "../dummyDBApi";
+import { SpaceBetweenContainer } from "../styles/section";
+import { addPhotoToApi } from "../dummyDBApi"; 
+import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import {
     CustomCheckboxLabel,
     CustomCheckboxWrapper,
     StyledCheckbox,
     HiddenCheckbox
 } from './../styles/Checkbox';
+import { exampleImages } from "../dummyData"; 
 
-interface PhotosPageProps { }
-
-const PhotosPage: React.FC<PhotosPageProps> = () => {
-    const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
-    const [arePendingExpanded, setArePendingExpanded] = useState(true);
+const GuestPhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState('');
-    const [photoAuthor, setPhotoAuthor] = useState('');
     const [photoLink, setPhotoLink] = useState('');
     const [isVertical, setIsVertical] = useState(false);
     const [photos, setPhotos] = useState(exampleImages);
+    const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
+    const [areYourExpanded, setareYourExpanded] = useState(true);
+    const guestName = new URLSearchParams(location.search).get('guest');
 
     const handleAddPhoto = () => {
-        const newImage = {
+        const newPhoto = {
+            id: Math.round(Math.random() * 10000000),
             name: photoName,
-            author: photoAuthor,
+            author: guestName || '',
             link: photoLink,
             isApproved: false,
             isFavorite: false,
             isVertical: isVertical,
-            id: Math.round(Math.random() * 10000000)
         };
-        setPhotos((prevPhotos) => [...prevPhotos, newImage]);
-        addPhotoToApi(newImage);
+        setPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
+        addPhotoToApi(newPhoto); 
         setPhotoName('');
-        setPhotoAuthor('');
         setPhotoLink('');
         setIsVertical(false);
+        console.log(newPhoto)
     };
 
     const handleApproveChange = (id: number, isApproved: boolean) => {
@@ -56,25 +53,22 @@ const PhotosPage: React.FC<PhotosPageProps> = () => {
         setPhotos((prevPhotos) => prevPhotos.filter(photo => photo.id !== id));
     };
 
-    const approvedImages = photos.filter(image => image.isApproved);
-    const pendingImages = photos.filter(image => !image.isApproved);
+    const approvedPhotos = photos.filter(photo => photo.isApproved);
+    const yourPhotos = photos.filter(photo => photo.author === guestName);
 
     return (
         <Container color='light'>
             <MenuContainer>
-                <Heading level={2}>Photo</Heading>
+                <Heading level={2}>Upload Photos</Heading>
+
                 <Subtitle level={3}>Photo Name</Subtitle>
                 <Input
                     value={photoName}
                     onChange={(e) => setPhotoName(e.target.value)}
                     placeholder="Enter photo name"
                 />
-                <Subtitle level={3}>Author (optional)</Subtitle>
-                <Input
-                    value={photoAuthor}
-                    onChange={(e) => setPhotoAuthor(e.target.value)}
-                    placeholder="Enter author name"
-                />
+
+
                 <Subtitle level={3}>Photo Link</Subtitle>
                 <div style={{ marginBottom: '1.5rem' }}>
                     <Input
@@ -83,6 +77,7 @@ const PhotosPage: React.FC<PhotosPageProps> = () => {
                         placeholder="Enter photo URL"
                     />
                 </div>
+
                 <CustomCheckboxWrapper>
                     <CustomCheckboxLabel>
                         <HiddenCheckbox
@@ -98,36 +93,47 @@ const PhotosPage: React.FC<PhotosPageProps> = () => {
                         Is the photo vertical?
                     </CustomCheckboxLabel>
                 </CustomCheckboxWrapper>
+
                 <ButtonContainer>
                     <Button onClick={handleAddPhoto}>Add Photo</Button>
                 </ButtonContainer>
             </MenuContainer>
 
             <div>
-                <FavouritePhotos />
                 <SpaceBetweenContainer>
-                    <Subtitle level={1}>Approved Photos</Subtitle>
-                    <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}> {areApprovedExpanded ? "Collapse List" : "Expand List"}</Button>
+                    <Subtitle level={1}>Your Photos</Subtitle>
+                    <Button onClick={() => setareYourExpanded(!areYourExpanded)}>
+                        {areYourExpanded ? "Collapse List" : "Expand List"}
+                    </Button>
                 </SpaceBetweenContainer>
                 <PhotoAlbum
-                    images={approvedImages}
+                    isGuest={true}
+
+                    images={yourPhotos}
+                    isExpanded={areYourExpanded}
+                    handleApproveChange={handleApproveChange}
+                    handleDeletePhoto={handleDeletePhoto}
+                />
+                
+                <SpaceBetweenContainer>
+                    <Subtitle level={1}>Approved Photos</Subtitle>
+                    <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>
+                        {areApprovedExpanded ? "Collapse List" : "Expand List"}
+                    </Button>
+                </SpaceBetweenContainer>
+                <PhotoAlbum
+                    isGuest={true}
+                    images={approvedPhotos}
                     isExpanded={areApprovedExpanded}
                     handleApproveChange={handleApproveChange}
                     handleDeletePhoto={handleDeletePhoto}
                 />
-                <SpaceBetweenContainer>
-                    <Subtitle level={1}>Pending Photos</Subtitle>
-                    <Button onClick={() => setArePendingExpanded(!arePendingExpanded)}> {arePendingExpanded ? "Collapse List" : "Expand List"}</Button>
-                </SpaceBetweenContainer>
-                <PhotoAlbum
-                    images={pendingImages}
-                    isExpanded={arePendingExpanded}
-                    handleApproveChange={handleApproveChange}
-                    handleDeletePhoto={handleDeletePhoto}
-                />
+
+                
+
             </div>
-        </Container >
+        </Container>
     );
 };
 
-export default PhotosPage;
+export default GuestPhotosPage;

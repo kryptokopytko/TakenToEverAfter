@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding-bottom: 2rem;
+  padding-top: 5rem;
 `;
 
 export const LinkList = styled.ul`
@@ -9,7 +9,7 @@ export const LinkList = styled.ul`
     margin: 0;
     padding: 0.5rem;
     &:hover {
-      color: ${({ theme }) => theme.tertiary};
+      color: ${({ theme }) => theme.dark};
     }
   }
 `;

@@ -1,6 +1,6 @@
 import { Heading, Subtitle } from "../styles/typography";
 import Budget from "../sections/Budget/Budget";
-import { Container, MenuContainer, Notification } from "../styles/page";
+import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/Input";
 import { useState, useEffect } from "react";
 import { expenses as initialExpenses } from "../dummyData";
@@ -58,7 +58,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                         );
 
                         if (existingSubExpense) {
-                            
+
                             return {
                                 ...expense,
                                 subExpenses: expense.subExpenses.map(subExpense =>
@@ -68,7 +68,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                                 )
                             };
                         } else {
-                            
+
                             return {
                                 ...expense,
                                 subExpenses: [
@@ -84,7 +84,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
             setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
             updateExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
         } else {
-            
+
             setExpenses(prevExpenses => [
                 ...prevExpenses,
                 {
@@ -97,7 +97,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
             setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
             addExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
         }
-        setTimeout(() => setNotification(null), 10000);
+        setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
     const handleRemoveExpense = () => {
@@ -117,12 +117,12 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                     }
                     return expense;
                 })
-                .filter(expense => expense.subExpenses.length > 0) 
+                .filter(expense => expense.subExpenses.length > 0)
         );
 
         setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
         removeExpense(inputCategory, inputExpenseName);
-        setTimeout(() => setNotification(null), 3000); 
+        setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
     const isInputValid = () => {
@@ -139,8 +139,8 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     return (
         <Container isBudget={true}>
             <MenuContainer isBudget={true}>
-                <div style={{marginBottom: '-2rem'}}>
-                <Heading level={2}>Manage Expenses</Heading>
+                <div style={{ marginBottom: '-2rem' }}>
+                    <Heading level={2}>Manage Expenses</Heading>
                 </div>
                 <Subtitle level={3}>Name</Subtitle>
                 <GuidedInput

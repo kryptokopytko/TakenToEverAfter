@@ -14,7 +14,7 @@ const TableChartPage: React.FC<TableChartPageProps> = ({ }) => {
 
     return (
         <Container>
-            <Heading level={1}>Stroniwo</Heading>
+            <Heading level={2}>Stroniwo</Heading>
             <TableChart />
         </Container>
     );

@@ -62,15 +62,15 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
         });
     };
     const handleDelete = (themeKey: string) => {
-        
+
         const newThemesCopy = { ...themes };
 
-        
+
         if (newThemesCopy[themeKey]) {
-            
+
             delete newThemesCopy[themeKey];
 
-            
+
             setThemes(newThemesCopy);
         } else {
             alert("Theme not found.");
@@ -81,7 +81,7 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <Heading level={1}>Manage Themes</Heading>
+                <Heading level={2}>Manage Themes</Heading>
                 <ThemeContainer>
                     <ThemeDisplay
                         themes={themes}

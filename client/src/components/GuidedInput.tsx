@@ -95,6 +95,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
                 value={inputValue}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
+                type={'text'}
                 placeholder={placeholder}
             />
             {showSuggestions && (

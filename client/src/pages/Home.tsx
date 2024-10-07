@@ -3,14 +3,13 @@ import GuestList from "../sections/GuestList/GuestList";
 import Budget from "../sections/Budget/Budget";
 import ToDo from "../sections/ToDo/ToDo";
 import Hero from "../sections/Hero/Hero";
-import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
+import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import TableChart from "../sections/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import { guests, expenses } from "../dummyData";
+import { guests, expenses, initialTasks, initialChoices } from "../dummyData";
 import { handleDecision, handleInvite } from "../dummyDBApi";
-import { initialTasks } from "../dummyData";
 
 const SectionsContainer = styled.div`
   width: 100%;
@@ -49,13 +48,13 @@ const Home = () => {
         <Budget isHomePage={true} expenses={expenses} />
       </div>
       <div id="to-do">
-        <ToDo isHomePage={true} initialTasks={initialTasks}/>
+        <ToDo isHomePage={true} initialTasks={initialTasks} />
       </div>
       <div id="choices">
-        <Choices isHomePage={true} />
+        <Choices isHomePage={true} initialChoices={initialChoices} />
       </div>
       <div id="photo-album">
-        <PhotoAlbum isHomePage={true} />
+        <FavouritePhotos isHomePage={true} />
       </div>
       <div id="table-chart">
         <TableChart isHomePage={true} />

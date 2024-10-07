@@ -30,7 +30,7 @@ const StyledInput = styled.input<{
     outline: none;
     border: 2px solid ${({ theme }) => theme.tertiary};
   }
-`; 
+`;
 
 export interface InputProps {
     variant?: 'tertiary' | 'secondary';
@@ -40,7 +40,7 @@ export interface InputProps {
     placeholder?: string;
     disabled?: boolean;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-    type?: 'text' | 'number' | 'date'; 
+    type?: 'text' | 'number' | 'date' | 'email' | 'password';
 }
 
 const Input: React.FC<InputProps> = ({
@@ -50,7 +50,7 @@ const Input: React.FC<InputProps> = ({
     onChange,
     placeholder,
     disabled,
-    type = 'text', 
+    type = 'text',
 }) => {
     return (
         <InputContainer>
@@ -61,7 +61,7 @@ const Input: React.FC<InputProps> = ({
                 onChange={onChange}
                 placeholder={placeholder}
                 disabled={disabled}
-                type={type} 
+                type={type}
             />
         </InputContainer>
     );

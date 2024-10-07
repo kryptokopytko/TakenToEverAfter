@@ -7,7 +7,6 @@ import Footer from "./components/layout/Footer/Footer";
 import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { guests } from './dummyData';
 import { fontStyles } from "./styles/typography";
 import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";
@@ -16,6 +15,10 @@ import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/ChoicesPage";
 import PrintablesPage from "./pages/PrintablesPage";
 import ToDoPage from "./pages/ToDoPage";
+import LoginPage from "./pages/Login";
+import RegistrationPage from "./pages/RegistrationPage";
+import GuestResponsePage from "./pages/GuestResponsePage";
+import GuestPhotosPage from "./pages/GuestPhotosPage";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -56,6 +59,9 @@ export const PageContainer = styled.div`
   }
 `;
 
+const names = ['Smurf', 'Smurfette'];
+const weddingDate = "06.12.2024";
+
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   return (
@@ -64,9 +70,9 @@ const AppContent = () => {
         <GlobalStyles fontSize={fontSize} />
         <Navbar
           isLogged={true}
-          names={['Smurf', 'Smurfette']}
+          names={names as [string, string]}
           sections={sections}
-          weddingDate="06.12.2024"
+          weddingDate={weddingDate}
         />
         <PageContainer>
           <Routes>
@@ -80,6 +86,12 @@ const AppContent = () => {
             <Route path="/printables" element={<PrintablesPage />} />
             <Route path="/guest_list" element={<GuestPage />} />
             <Route path="/to_do" element={<ToDoPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/guest_response" element={<GuestResponsePage weddingDate={weddingDate} names={names as [string, string]} />} />
+            <Route path="/guest_photos" element={<GuestPhotosPage />} />
+
+
           </Routes>
         </PageContainer>
         <Footer sections={sections} />

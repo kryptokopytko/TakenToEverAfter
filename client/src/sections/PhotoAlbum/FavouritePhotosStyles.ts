@@ -3,13 +3,17 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  margin: 0 -3rem;
+  width: calc(100% + 6rem);
 `;
 
 export const PhotosContainer = styled.div`
   display: flex;
   gap: 3rem;
   overflow: auto;
-  width: calc(100vw - 6rem);
+  width: calc(100%);
   position: absolute;
   left: 0;
   padding: 0 3rem;

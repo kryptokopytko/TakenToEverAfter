@@ -29,6 +29,7 @@ export const fontStyles = {
 
 const Heading = styled.h1<HeadingProps>`
   font-family: ${fontStyles.headingFont};
+  margin: 1rem;
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
   ${({ level }) =>
@@ -59,6 +60,7 @@ const Heading = styled.h1<HeadingProps>`
 
 const Subtitle = styled.h2<SubtitleProps>`
   font-family: ${fontStyles.headingFont};
+  margin: 1rem;
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
   ${({ level }) =>
@@ -118,7 +120,7 @@ const Label = styled.p<LabelProps>`
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
   font-size: 2rem;
-
+  margin: 1rem 0;
   ${({ size }) =>
     size === "big" &&
     css`
