@@ -16,7 +16,7 @@ export const Container = styled.div<{ isBudget?: boolean; color?: string }>`
       isBudget ? `${budgetBreakpoint}` : `${guestAndThemeBreakpoint}`}) {
     position: relative;
     top: 1rem;
-    min-height: 200vh;
+    min-height: 10vh;
     display: flex;
     align-items: flex-start;
   }
@@ -57,5 +57,4 @@ export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
     max-height: calc(100vh - 9rem);
     overflow: auto;
   }
-
 `;

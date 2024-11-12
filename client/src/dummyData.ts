@@ -507,3 +507,12 @@ export const exampleImages: Image[] = [
     author: "Ava Williams",
   },
 ];
+
+export const location = ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"];
+
+export const weddingTime = "15:00";
+
+export const surnames = ["Elderberry", "Tumblesworth"];
+
+export const names = ["Smurfette", "Smurf"];
+export const weddingDate = "06.12.2024";
