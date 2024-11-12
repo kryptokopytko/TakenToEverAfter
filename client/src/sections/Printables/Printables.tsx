@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Heading } from "../../styles/typography";
-import Button, { ButtonContainer } from "../../components/Button";
-import { exportToPDF } from "./exportToPdf";
+import Button from "../../components/Button";
 import { SpaceBetweenContainer } from "../../styles/section";
 import { Link } from "react-router-dom";
 import Invitation from "./Invitation";

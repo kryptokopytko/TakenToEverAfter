@@ -6,8 +6,7 @@ import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
-import { useUser } from "../providers/UserContext";
-
+import { listOfListsOfGuests } from "../dummyData";
 interface PrintablesPageProps {
 
 }
@@ -17,19 +16,14 @@ const InputWrapper = styled.div`
 `;
 
 const Invites = styled.div`
-    background-color: ${({ theme }) => theme.tertiary} !important;
     display: flex;
     flex-direction: column;
-    padding: 0rem !important;
-    & > * {
-        background-color:  ${({ theme }) => theme.primary};
-    }
 `;
+
+
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
 }) => {
-    const { guestList } = useUser();
-
     const [mainText, setMainText] = useState("Request the pleasure of your company at the celebration of their marriage");
     const [additionalText, setAdditionalText] = useState("Come 15 minutes before the start of the ceremony");
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
@@ -37,7 +31,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
     // Funkcja do eksportowania zaproszeń do PDF
     const handleExportPDF = () => {
-        const inviteIds = guestList.map((_, index) => `invite-${index}`);
+        const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
 
@@ -83,15 +77,15 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                 {showAllInvites ?
                     <Button onClick={handleExportPDF}>Export to PDF</Button> : <></>}
             </MenuContainer>
-
             {showAllInvites ? (
                 <Invites>
-                    {guestList.map((_, index) => (
+                    {listOfListsOfGuests.map((guests, index) => (
                         <div id={`invite-${index}`} key={index}>
                             <Invitation
                                 mainText={mainText}
                                 additionalText={additionalText}
                                 guestText={guestText}
+                                propsGuestList={guests}
                             />
                         </div>
                     ))}

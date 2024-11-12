@@ -7,6 +7,7 @@ interface InvitationProps {
     additionalText?: string;
     mainText?: string;
     guestText?: string;
+    propsGuestList?: string[];
 }
 
 
@@ -24,11 +25,12 @@ const Container = styled.div`
 const Border = styled.div`
     background-color:  ${({ theme }) => theme.tertiary};
     padding: 0.5rem;
+    margin-top: 2rem;
 `;
 
-const Invitation: React.FC<InvitationProps> = ({ mainText, guestText, additionalText }) => {
+const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText }) => {
     const { bridesName, groomsName, bridesSurname, groomsSurname, weddingDate, weddingTime, location, guestList } = useUser();
-
+    const newGuestList = propsGuestList ? propsGuestList : guestList;
     return (
         <Border>
             <Container>
@@ -41,7 +43,7 @@ const Invitation: React.FC<InvitationProps> = ({ mainText, guestText, additional
                 <Body size='big'>{location.join(', ')}</Body>
                 <Subtitle level={2}>  {guestText ? guestText : "It would be our honor to celebrate this day with:"}</Subtitle>
 
-                {guestList.map((guest, index) => (
+                {newGuestList.map((guest, index) => (
                     <span key={index}><Body size='big'>{guest}</Body></span>
                 ))}
                 {
