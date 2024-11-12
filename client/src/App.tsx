@@ -19,7 +19,7 @@ import LoginPage from "./pages/Login";
 import RegistrationPage from "./pages/RegistrationPage";
 import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
-import { location, names, surnames, weddingDate, weddingTime } from "./dummyData";
+import { guestList, location, names, surnames, weddingDate, weddingTime } from "./dummyData";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -82,7 +82,7 @@ const AppContent = () => {
             <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
             <Route path="/photo_album" element={<PhotosPage />} />
             <Route path="/choices" element={<ChoicesPage />} />
-            <Route path="/printables" element={<PrintablesPage bridesName={names[0]} groomsName={names[1]} bridesSurname={surnames[0]} groomsSurname={surnames[1]} time={weddingTime} date={weddingDate} location={location} />} />
+            <Route path="/printables" element={<PrintablesPage bridesName={names[0]} groomsName={names[1]} bridesSurname={surnames[0]} groomsSurname={surnames[1]} time={weddingTime} date={weddingDate} location={location} listOfGuests={guestList} />} />
             <Route path="/guest_list" element={<GuestPage />} />
             <Route path="/to_do" element={<ToDoPage />} />
             <Route path="/login" element={<LoginPage />} />

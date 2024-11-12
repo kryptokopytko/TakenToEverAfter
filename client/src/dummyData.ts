@@ -516,3 +516,9 @@ export const surnames = ["Elderberry", "Tumblesworth"];
 
 export const names = ["Smurfette", "Smurf"];
 export const weddingDate = "06.12.2024";
+
+export const guestList = [
+  ["Baby Smurf", "Baker Smurf"],
+  ["Brainy Smurf", "Chef Smurf", "Clumsy Smurf"],
+  ["Dizzy Smurf"],
+];

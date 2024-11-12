@@ -1,5 +1,5 @@
 import React from 'react';
-import { Body, Heading, Label, Subtitle } from "../styles/typography";
+import { Body, Heading, Subtitle } from "../styles/typography";
 import styled from 'styled-components';
 
 interface InvitationProps {
@@ -16,15 +16,6 @@ interface InvitationProps {
     guestText?: string;
 }
 
-const GuestsList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin-top: -1rem;
-`;
-
-const GuestItem = styled.li`
-`;
-
 
 const Container = styled.div`
     display: flex;
@@ -32,6 +23,8 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 1rem;
+    margin: 1rem;
 `;
 
 const Invitation: React.FC<InvitationProps> = ({ mainText, guestText, bridesSurname, groomsSurname, bridesName, groomsName, guests, date, time, location, additionalText }) => {
@@ -45,12 +38,10 @@ const Invitation: React.FC<InvitationProps> = ({ mainText, guestText, bridesSurn
             <Subtitle level={2}>{date} {time}</Subtitle>
             <Body size='big'>{location.join(', ')}</Body>
             <Subtitle level={2}>  {guestText ? guestText : "It would be our honor to celebrate this day with:"}</Subtitle>
-            <GuestsList>
-                {guests.map((guest, index) => (
-                    <GuestItem key={index}><Body size='big'>{guest}</Body></GuestItem>
-                ))}
-            </GuestsList>
 
+            {guests.map((guest, index) => (
+                <span key={index}><Body size='big'>{guest}</Body></span>
+            ))}
             {
                 additionalText && (
                     <Body size="bold">{additionalText}</Body>
