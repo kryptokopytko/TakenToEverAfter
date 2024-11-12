@@ -13,13 +13,13 @@ import BudgetPage from "./pages/BudgetPage";
 import ThemeConstructorPage from "./pages/ThemeConstructorPage";
 import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/ChoicesPage";
-import PrintablesPage from "./pages/PrintablesPage";
+import PrintablesPage from "./pages/InvitationsPage";
 import ToDoPage from "./pages/ToDoPage";
 import LoginPage from "./pages/Login";
 import RegistrationPage from "./pages/RegistrationPage";
 import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
-import { guestList, location, names, surnames, weddingDate, weddingTime } from "./dummyData";
+import { UserProvider } from "./providers/UserContext";  // Importujemy nasz nowy kontekst
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -46,7 +46,6 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
   }
 `;
 
-const sections = ['Home', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Constructor', 'Printables'];
 
 export const PageContainer = styled.div`
   width: 100%;
@@ -60,19 +59,13 @@ export const PageContainer = styled.div`
   }
 `;
 
-
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
         <GlobalStyles fontSize={fontSize} />
-        <Navbar
-          isLogged={true}
-          names={names as [string, string]}
-          sections={sections}
-          weddingDate={weddingDate}
-        />
+        <Navbar />
         <PageContainer>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -82,18 +75,16 @@ const AppContent = () => {
             <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
             <Route path="/photo_album" element={<PhotosPage />} />
             <Route path="/choices" element={<ChoicesPage />} />
-            <Route path="/printables" element={<PrintablesPage bridesName={names[0]} groomsName={names[1]} bridesSurname={surnames[0]} groomsSurname={surnames[1]} time={weddingTime} date={weddingDate} location={location} listOfGuests={guestList} />} />
+            <Route path="/printables" element={<PrintablesPage />} />
             <Route path="/guest_list" element={<GuestPage />} />
             <Route path="/to_do" element={<ToDoPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/guest_response" element={<GuestResponsePage weddingDate={weddingDate} names={names as [string, string]} />} />
+            <Route path="/guest_response" element={<GuestResponsePage />} />
             <Route path="/guest_photos" element={<GuestPhotosPage />} />
-
-
           </Routes>
         </PageContainer>
-        <Footer sections={sections} />
+        <Footer />
       </AppContainer>
     </StyledThemeProvider>
   );
@@ -102,9 +93,11 @@ const AppContent = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <UserProvider>  {/* Dodajemy UserProvider */}
+        <Router>
+          <AppContent />
+        </Router>
+      </UserProvider>
     </ThemeProvider>
   );
 };

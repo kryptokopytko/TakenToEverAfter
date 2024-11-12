@@ -2,20 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
-import Invitation from "../sections/Invitation";
+import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
+import { useUser } from "../providers/UserContext";
 
 interface PrintablesPageProps {
-    bridesName: string;
-    groomsName: string;
-    bridesSurname: string;
-    groomsSurname: string;
-    date: string;
-    time: string;
-    location: string[];
-    listOfGuests: string[][];
+
 }
 
 const InputWrapper = styled.div`
@@ -26,23 +20,16 @@ const Invites = styled.div`
     background-color: ${({ theme }) => theme.tertiary} !important;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1rem !important;
+    padding: 0rem !important;
     & > * {
         background-color:  ${({ theme }) => theme.primary};
     }
 `;
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
-    bridesName,
-    groomsName,
-    bridesSurname,
-    groomsSurname,
-    date,
-    time,
-    location,
-    listOfGuests
 }) => {
+    const { guestList } = useUser();
+
     const [mainText, setMainText] = useState("Request the pleasure of your company at the celebration of their marriage");
     const [additionalText, setAdditionalText] = useState("Come 15 minutes before the start of the ceremony");
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
@@ -50,11 +37,12 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
     // Funkcja do eksportowania zaproszeń do PDF
     const handleExportPDF = () => {
-        const inviteIds = listOfGuests.map((_, index) => `invite-${index}`);
+        const inviteIds = guestList.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
 
     return (
+
         <Container>
             <MenuContainer>
                 <Heading level={2}>Customize Invitation Text</Heading>
@@ -98,17 +86,9 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
             {showAllInvites ? (
                 <Invites>
-                    {listOfGuests.map((guests, index) => (
+                    {guestList.map((_, index) => (
                         <div id={`invite-${index}`} key={index}>
                             <Invitation
-                                bridesName={bridesName}
-                                groomsName={groomsName}
-                                bridesSurname={bridesSurname}
-                                groomsSurname={groomsSurname}
-                                guests={guests}
-                                date={date}
-                                time={time}
-                                location={location}
                                 mainText={mainText}
                                 additionalText={additionalText}
                                 guestText={guestText}
@@ -119,14 +99,6 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             ) : (
                 <div id="invite-single">
                     <Invitation
-                        bridesName={bridesName}
-                        groomsName={groomsName}
-                        bridesSurname={bridesSurname}
-                        groomsSurname={groomsSurname}
-                        guests={["Papa Smurf", "Vanity Smurf", "Brainy Smurf"]}
-                        date={date}
-                        time={time}
-                        location={location}
                         mainText={mainText}
                         additionalText={additionalText}
                         guestText={guestText}

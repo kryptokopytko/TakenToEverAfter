@@ -5,17 +5,15 @@ import { Heading, Label } from "../../../styles/typography";
 import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
 import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../Dropdown/DropdownStyles";
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
+import { useUser } from "../../../providers/UserContext";
+import { sections } from "../sections";
 
-interface NavbarProps {
-  names: [string, string];
-  sections: string[];
-  isLogged: boolean;
-  weddingDate: string;
-}
+const Navbar: React.FC = () => {
+  // Pobieranie danych z kontekstu
+  const { names, isLogged, weddingDate } = useUser();
 
-
-const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate }) => {
   const { setTheme, theme, themes } = useTheme();
+
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
@@ -63,8 +61,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
               {isLogged ?
-                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
-                : <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
+                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading> :
+                <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
             </NamesContainer>
           </LogoContainer>
         </StyledLink>

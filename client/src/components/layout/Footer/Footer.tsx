@@ -2,12 +2,11 @@ import React from 'react';
 import { Body, Heading } from "../../../styles/typography";
 import { Slider, HidingSection, Container, Section, ListContainer } from "./FooterStyles";
 import { useTheme } from "../../../providers/ThemeContext";
-
+import { sections } from '../sections';
 interface FooterProps {
-  sections: string[];
 }
 
-const Footer: React.FC<FooterProps> = ({ sections }) => {
+const Footer: React.FC<FooterProps> = ({ }) => {
   const { fontSize, setFontSize } = useTheme();
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
