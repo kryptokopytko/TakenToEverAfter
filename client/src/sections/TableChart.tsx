@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Heading } from "../styles/typography";
 import tables from '/pictures/tables.png';
 import Button from "../components/Button";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display:flex;
@@ -47,7 +48,9 @@ const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
         <StyledImage src={tables} alt='table chart image' />
       </PhotoContainer>
       {isHomePage ?
-        <Button>Manage Table Chart</Button> : <></>}
+        <Link to="/table_chart">
+          <Button>Manage Table Chart</Button> </Link> : <></>
+      }
     </Container>
   );
 };

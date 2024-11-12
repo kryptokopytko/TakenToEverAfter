@@ -6,6 +6,7 @@ import { useState } from "react";
 import { SpaceBetweenContainer } from "../../styles/section";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Guest, decisionTypes } from "../../types";
+import { Link } from "react-router-dom";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -56,7 +57,10 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests, handleDecisio
       </SummaryContainer>
       <List isHomePage={isHomePage} list={guests} isExpanded={isExpanded} handleDecision={handleDecision} handleInvite={handleInvite} />
       <ButtonContainer>
-        {isHomePage ? <Button>Manage Guests</Button> : <></>}
+        {isHomePage ?
+          <Link to="guest_list">
+            <Button>Manage Guests</Button> </Link>
+          : <></>}
         <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
       </ButtonContainer>
     </div>

@@ -4,6 +4,7 @@ import tables from '/pictures/tables.png';
 import Button, { ButtonContainer } from "../../components/Button";
 import { exportToPDF } from "./exportToPdf";
 import { SpaceBetweenContainer } from "../../styles/section";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
     text-align: center;
@@ -42,7 +43,8 @@ const Printables: React.FC<PrintablesProps> = ({ isHomePage }) => {
       <SpaceBetweenContainer>
         <Heading level={2}>Prints</Heading>
         {isHomePage ?
-          <Button>Manage Prints</Button> : <></>}
+          <Link to="printables">
+            <Button>Manage Prints</Button></Link> : <></>}
       </SpaceBetweenContainer>
       <Container>
         <PhotoContainer>

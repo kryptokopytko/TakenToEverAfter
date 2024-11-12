@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "../../providers/ThemeContext";
 import Button from "../../components/Button";
 import { Card } from "../../styles/card";
+import { Link } from "react-router-dom";
 
 const ContentContainer = styled.div`
   text-align: center;
@@ -52,7 +53,8 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
                 <ColorCompositions color={color} />
             </GridContainer>
             {isHomePage ?
-                <Button>Manage Theme</Button>
+                <Link to="theme_constructor">
+                    <Button>Manage Theme</Button></Link>
                 : <></>}
         </ContentContainer>
     );

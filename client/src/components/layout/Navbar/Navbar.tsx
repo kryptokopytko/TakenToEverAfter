@@ -3,7 +3,7 @@ import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
 import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
-import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../../styles/Dropdown";
+import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../Dropdown/DropdownStyles";
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 
 interface NavbarProps {

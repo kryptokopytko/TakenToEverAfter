@@ -6,6 +6,7 @@ import { Card } from "../styles/card";
 import { Choice } from "../types";
 import { handleChoicePick } from "../dummyDBApi";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const LimitedWidth = styled.span`
     max-width: 60%;
@@ -99,7 +100,10 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
             </GridContainer>
             <ButtonContainer>
                 {isHomePage ?
-                    <Button>Manage Choices</Button> : <></>}
+                    <Link to="/choices">
+                        <Button>Manage Choices</Button>
+                    </Link>
+                    : <></>}
                 <div style={{ display: isHomePage ? 'block' : 'none' }}>
                     <Button onClick={toggleList} >
                         {isExpanded ? 'Collapse List' : 'Expand List'}

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Card } from "../../styles/card";
 import { Expenses } from "../../types";
+import { Link } from "react-router-dom";
 
 const HeaderContainer = styled.div<{ isHomePage: boolean }>`
   display: grid;
@@ -83,7 +84,8 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
             </GridContainer>
             <ButtonContainer>
                 {isHomePage ? <>
-                    <Button>Manage budget</Button>
+                    <Link to="budget">
+                        <Button>Manage Budget</Button></Link>
                     <Button onClick={toggleList}>
                         {isExpanded ? 'Collapse List' : 'Expand List'}
                     </Button>
