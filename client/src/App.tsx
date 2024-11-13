@@ -19,7 +19,7 @@ import LoginPage from "./pages/Login";
 import RegistrationPage from "./pages/RegistrationPage";
 import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
-import { UserProvider } from "./providers/UserContext";  
+import { UserProvider, useUser } from "./providers/UserContext";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -64,11 +64,15 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  useEffect(() => {
-    
-    window.scrollTo(0, 0);
-  }, [location]); 
+  const { setViewLocation } = useUser();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  useEffect(() => {
+    setViewLocation(location.pathname);  // Ustawiamy isHomePage na true, jeśli jesteśmy na stronie głównej
+  }, [location]);
 
   return (
     <StyledThemeProvider theme={theme}>
@@ -102,7 +106,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <UserProvider>  
+      <UserProvider>
         <Router>
           <AppContent />
         </Router>

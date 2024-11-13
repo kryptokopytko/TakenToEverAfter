@@ -9,7 +9,7 @@ import { useUser } from "../../../providers/UserContext";
 import { sections } from "../sections";
 
 const Navbar: React.FC = () => {
-  
+
   const { names, isLogged, weddingDate } = useUser();
 
   const { setTheme, theme, themes } = useTheme();
@@ -98,11 +98,11 @@ const Navbar: React.FC = () => {
             </SelectorButton>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
-                <RadioButton key={section}>
-                  <input type="radio" name="section" value={section} />
+                <RadioButton key={section.name}>
+                  <input type="radio" name="section" value={section.name} />
                   <Label color="tertiary">
-                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
+                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
                     </StyledLink>
                   </Label>
                 </RadioButton>
@@ -144,11 +144,11 @@ const Navbar: React.FC = () => {
             <Label color="dark">Select Section</Label>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
-                <RadioButton key={section}>
-                  <input type="radio" name="section" value={section} />
+                <RadioButton key={section.name}>
+                  <input type="radio" name="section" value={section.name} />
                   <Label color="tertiary">
-                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
+                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
                     </StyledLink>
                   </Label>
                 </RadioButton>

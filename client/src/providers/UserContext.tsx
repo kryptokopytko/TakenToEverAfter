@@ -16,6 +16,8 @@ interface UserContextType {
     surnames: string[];
     setNames: (names: string[]) => void;
     setSurnames: (surnames: string[]) => void;
+    viewLocation: string;
+    setViewLocation: (viewLocation: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [isLogged, setIsLogged] = useState(true);
     const [weddingLocation, setWeddingLocation] = useState(location);
     const [guestList, setGuestList] = useState(weddingGuestList);
+    const [viewLocation, setViewLocation] = useState("Home");
 
     return (
         <UserContext.Provider
@@ -40,12 +43,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setSurnames,
                 setWeddingDate,
                 setWeddingTime,
-                setWeddingLocation, 
+                setWeddingLocation,
                 setGuestList,
                 isLogged,
                 setIsLogged,
                 names,
                 surnames,
+                viewLocation,
+                setViewLocation
             }}
         >
             {children}
