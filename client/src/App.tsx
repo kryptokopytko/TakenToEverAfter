@@ -19,7 +19,9 @@ import LoginPage from "./pages/Login";
 import RegistrationPage from "./pages/RegistrationPage";
 import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
-import { UserProvider } from "./providers/UserContext";  // Importujemy nasz nowy kontekst
+import { UserProvider } from "./providers/UserContext";  
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -61,6 +63,13 @@ export const PageContainer = styled.div`
 
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
+  const location = useLocation();
+  useEffect(() => {
+    
+    window.scrollTo(0, 0);
+  }, [location]); 
+
+
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
@@ -93,7 +102,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <UserProvider>  {/* Dodajemy UserProvider */}
+      <UserProvider>  
         <Router>
           <AppContent />
         </Router>

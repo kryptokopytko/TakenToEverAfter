@@ -29,7 +29,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
     const [showAllInvites, setShowAllInvites] = useState(false);
 
-    // Funkcja do eksportowania zaproszeń do PDF
+    
     const handleExportPDF = () => {
         const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);

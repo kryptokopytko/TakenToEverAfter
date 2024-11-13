@@ -9,7 +9,7 @@ interface Option {
 
 interface DropdownSelectorProps {
     options: Option[];
-    onOptionSelect?: (option: string | string[]) => void; // przekazuje tylko wartości
+    onOptionSelect?: (option: string | string[]) => void; 
     title: string;
     initialSelectedOption?: string | string[];
     multiSelect?: boolean;

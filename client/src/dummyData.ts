@@ -512,9 +512,9 @@ export const location = ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"];
 
 export const time = "15:00";
 
-export const surnames = ["Elderberry", "Tumblesworth"];
+export const pairSurnames = ["Elderberry", "Tumblesworth"];
 
-export const names = ["Smurfette", "Smurf"];
+export const pairNames = ["Smurfette", "Smurf"];
 export const date = "06.12.2024";
 
 export const weddingGuestList = ["Baby Smurf", "Baker Smurf"];

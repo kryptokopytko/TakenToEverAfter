@@ -9,7 +9,7 @@ import { useUser } from "../../../providers/UserContext";
 import { sections } from "../sections";
 
 const Navbar: React.FC = () => {
-  // Pobieranie danych z kontekstu
+  
   const { names, isLogged, weddingDate } = useUser();
 
   const { setTheme, theme, themes } = useTheme();

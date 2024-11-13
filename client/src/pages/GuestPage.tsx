@@ -308,12 +308,12 @@ const GuestPage: React.FC = ({
             ]}
             onOptionSelect={(selectedOption) => {
               if (Array.isArray(selectedOption)) {
-                setFilterByDecision(selectedOption); // multiSelect zwraca tablicę stringów
+                setFilterByDecision(selectedOption); 
               } else {
-                setFilterByDecision(selectedOption); // singleSelect zwraca jeden string
+                setFilterByDecision(selectedOption); 
               }
             }}
-            multiSelect={true} // ustawienie multiSelect na true lub false
+            multiSelect={true} 
           />
         </SelectorContainer>
         <SelectorContainer>

@@ -1,69 +1,58 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { weddingGuestList, location, names, surnames, date, time } from '../dummyData';
+import { weddingGuestList, location, pairNames, pairSurnames, date, time } from '../dummyData';
 
 interface UserContextType {
-    bridesName: string;
-    groomsName: string;
-    bridesSurname: string;
-    groomsSurname: string;
     weddingDate: string;
     weddingTime: string;
     isLogged: boolean;
-    location: string[];
-    guestList: string[][];
-    setBridesName: (name: string) => void;
-    setGroomsName: (name: string) => void;
-    setBridesSurname: (surname: string) => void;
-    setGroomsSurname: (surname: string) => void;
+    guestList: string[];
+    weddingLocation: string[];
+    setIsLogged: (logged: boolean) => void;
     setWeddingDate: (date: string) => void;
     setWeddingTime: (time: string) => void;
     setWeddingLocation: (location: string[]) => void;
-    setGuestList: (guests: string[][]) => void;
+    setGuestList: (guests: string[]) => void;
     names: string[];
+    surnames: string[];
+    setNames: (names: string[]) => void;
+    setSurnames: (surnames: string[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [bridesName, setBridesName] = useState(names[0]);
-    const [groomsName, setGroomsName] = useState(names[1]);
-    const [bridesSurname, setBridesSurname] = useState(surnames[0]);
-    const [groomsSurname, setGroomsSurname] = useState(surnames[1]);
+    const [names, setNames] = useState(pairNames);
+    const [surnames, setSurnames] = useState(pairSurnames);
     const [weddingDate, setWeddingDate] = useState(date);
     const [weddingTime, setWeddingTime] = useState(time);
     const [isLogged, setIsLogged] = useState(true);
-    const [weddinglocation, setWeddingLocation] = useState(location);
-    const [guestList, setGuestList] = useState(
-        weddingGuestList,
-    );
+    const [weddingLocation, setWeddingLocation] = useState(location);
+    const [guestList, setGuestList] = useState(weddingGuestList);
 
     return (
         <UserContext.Provider
             value={{
-                bridesName,
-                groomsName,
-                bridesSurname,
-                groomsSurname,
                 weddingDate,
                 weddingTime,
-                location,
+                weddingLocation,
                 guestList,
-                setBridesName,
-                setGroomsName,
-                setBridesSurname,
-                setGroomsSurname,
+                setNames,
+                setSurnames,
                 setWeddingDate,
                 setWeddingTime,
-                setWeddingLocation,
+                setWeddingLocation, 
                 setGuestList,
                 isLogged,
+                setIsLogged,
                 names,
+                surnames,
             }}
         >
             {children}
         </UserContext.Provider>
     );
 };
+
 
 export const useUser = () => {
     const context = useContext(UserContext);
