@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  padding-top: 6rem;
+  padding-top: 5rem !important;
 `;
 
 export const LinkList = styled.ul`
