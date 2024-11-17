@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { weddingGuestList, location, pairNames, pairSurnames, date, time } from '../dummyData';
+import { RoundTable, RectangularTable } from '../types'; 
 
 interface UserContextType {
     weddingDate: string;
@@ -7,6 +8,14 @@ interface UserContextType {
     isLogged: boolean;
     guestList: string[];
     weddingLocation: string[];
+    roomWidth: string;
+    roomLength: string;
+    roundTables: RoundTable[];
+    rectangularTables: RectangularTable[];
+    setRoomWidth: (width: string) => void;
+    setRoomLength: (length: string) => void;
+    addRoundTable: (table: RoundTable) => void;
+    addRectangularTable: (table: RectangularTable) => void;
     setIsLogged: (logged: boolean) => void;
     setWeddingDate: (date: string) => void;
     setWeddingTime: (time: string) => void;
@@ -32,6 +41,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [guestList, setGuestList] = useState(weddingGuestList);
     const [viewLocation, setViewLocation] = useState("Home");
 
+    
+    const [roomWidth, setRoomWidth] = useState("");
+    const [roomLength, setRoomLength] = useState("");
+    const [roundTables, setRoundTables] = useState<RoundTable[]>([]);
+    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([]);
+
+    const addRoundTable = (table: RoundTable) => {
+        setRoundTables((prev) => [...prev, table]);
+    };
+
+    const addRectangularTable = (table: RectangularTable) => {
+        setRectangularTables((prev) => [...prev, table]);
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -50,14 +73,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 names,
                 surnames,
                 viewLocation,
-                setViewLocation
+                setViewLocation,
+                roomWidth,
+                roomLength,
+                roundTables,
+                rectangularTables,
+                setRoomWidth,
+                setRoomLength,
+                addRoundTable,
+                addRectangularTable,
             }}
         >
             {children}
         </UserContext.Provider>
     );
 };
-
 
 export const useUser = () => {
     const context = useContext(UserContext);

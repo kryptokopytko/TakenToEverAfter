@@ -1,59 +1,59 @@
-import styled from "styled-components";
+import React from "react";
 import { Heading } from "../styles/typography";
-import tables from '/pictures/tables.png';
-import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { useUser } from "../providers/UserContext";
+import Shape from "../components/Shape";
 
-const Container = styled.div`
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-`;
+const TableChart: React.FC = () => {
+  const { roomWidth, roomLength, roundTables, rectangularTables } = useUser();
+  const numericRoomWidth = Number(roomWidth);
+  const numericRoomLength = Number(roomLength);
 
-const PhotoContainer = styled.div`
-  width: 70vw;
-  max-width: 40rem;
-  background-color: ${({ theme }) => theme.primary};
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  transition: transform 0.2s; 
-  border-radius: 0.5rem;
-  background-color: #fff;
 
-  &:hover {
-    z-index: 1;
-    transform: scale(1.05); 
-  }
-`;
-
-const StyledImage = styled.img`
-  width: 60vw; 
-  height: auto; 
-  margin: 1rem 0; 
-  max-width: 90%;
-
-`;
-interface TableChartProps {
-  isHomePage?: boolean;
-}
-
-const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
+  
+  const containerStyle = {
+    width: '100%',
+    aspectRatio: `${numericRoomWidth} / ${numericRoomLength}`,
+  };
 
   return (
-    <Container>
-      <Heading level={2}>Table Chart</Heading>
-      <PhotoContainer>
-        <StyledImage src={tables} alt='table chart image' />
-      </PhotoContainer>
-      {isHomePage ?
-        <Link to="/table_chart">
-          <Button>Manage Table Chart</Button> </Link> : <></>
-      }
-    </Container>
+    <div>
+      <Heading level={3}>Room Dimensions</Heading>
+      <p>
+        Width: {numericRoomWidth || "Not specified"}, Length:{" "}
+        {numericRoomLength || "Not specified"}
+      </p>
+
+      <Heading level={3}>Round Tables</Heading>
+      <ul>
+        {roundTables.map((table) => (
+          <li key={table.id}>
+            Name/ID: {table.id}, Seats: {table.seats}
+          </li>
+        ))}
+      </ul>
+
+      <Heading level={3}>Rectangular Tables</Heading>
+      <ul>
+        {rectangularTables.map((table) => (
+          <li key={table.id}>
+            <p>
+              Name/ID: {table.id}, Width: {table.width}, Length: {table.length}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <Heading level={3}>Room Shape</Heading>
+      Sala:
+      <div style={containerStyle}>
+        <Shape color="dark" />
+      </div>
+
+      <Heading level={3}>Example Table</Heading>
+      Przykładowy stół:
+      <Shape width="20rem" height="10rem" oval={true} />
+    </div>
   );
 };
-
 
 export default TableChart;

@@ -54,7 +54,7 @@ export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
     top: 6rem;
     left: 1rem;
     z-index: 10;
-    max-height: calc(100vh - 9rem);
+    max-height: calc(100vh - 10rem);
     overflow: auto;
   }
 `;

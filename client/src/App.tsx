@@ -71,7 +71,7 @@ const AppContent = () => {
   }, [location]);
 
   useEffect(() => {
-    setViewLocation(location.pathname);  // Ustawiamy isHomePage na true, jeśli jesteśmy na stronie głównej
+    setViewLocation(location.pathname);  
   }, [location]);
 
   return (

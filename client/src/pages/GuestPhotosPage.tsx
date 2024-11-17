@@ -4,15 +4,10 @@ import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/Button";
 import Input from "../components/Input";
 import { SpaceBetweenContainer } from "../styles/section";
-import { addPhotoToApi } from "../dummyDBApi"; 
+import { addPhotoToApi } from "../dummyDBApi";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import {
-    CustomCheckboxLabel,
-    CustomCheckboxWrapper,
-    StyledCheckbox,
-    HiddenCheckbox
-} from './../styles/Checkbox';
-import { exampleImages } from "../dummyData"; 
+import { exampleImages } from "../dummyData";
+import Checkbox from "../components/Checkbox";
 
 const GuestPhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState('');
@@ -34,7 +29,7 @@ const GuestPhotosPage: React.FC = () => {
             isVertical: isVertical,
         };
         setPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
-        addPhotoToApi(newPhoto); 
+        addPhotoToApi(newPhoto);
         setPhotoName('');
         setPhotoLink('');
         setIsVertical(false);
@@ -77,23 +72,13 @@ const GuestPhotosPage: React.FC = () => {
                         placeholder="Enter photo URL"
                     />
                 </div>
-
-                <CustomCheckboxWrapper>
-                    <CustomCheckboxLabel>
-                        <HiddenCheckbox
-                            type="checkbox"
-                            checked={isVertical}
-                            onChange={(e) => setIsVertical(e.target.checked)}
-                        />
-                        <StyledCheckbox checked={isVertical}>
-                            <svg viewBox="8 4 10 14" width="18" height="18">
-                                <polyline points="4 6 10 17 22 3 11 12" />
-                            </svg>
-                        </StyledCheckbox>
-                        Is the photo vertical?
-                    </CustomCheckboxLabel>
-                </CustomCheckboxWrapper>
-
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Checkbox
+                        checked={isVertical}
+                        onChange={() => setIsVertical(!isVertical)}
+                    />
+                    Is vertical?
+                </div>
                 <ButtonContainer>
                     <Button onClick={handleAddPhoto}>Add Photo</Button>
                 </ButtonContainer>
@@ -114,7 +99,7 @@ const GuestPhotosPage: React.FC = () => {
                     handleApproveChange={handleApproveChange}
                     handleDeletePhoto={handleDeletePhoto}
                 />
-                
+
                 <SpaceBetweenContainer>
                     <Subtitle level={1}>Approved Photos</Subtitle>
                     <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>
@@ -129,7 +114,7 @@ const GuestPhotosPage: React.FC = () => {
                     handleDeletePhoto={handleDeletePhoto}
                 />
 
-                
+
 
             </div>
         </Container>

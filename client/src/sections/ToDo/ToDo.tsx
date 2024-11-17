@@ -4,12 +4,12 @@ import Button, { ButtonContainer } from "../../components/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
-import { CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from '../../styles/Checkbox';
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
 import { handleTaskCompletion } from "../../dummyDBApi";
 import { Link } from "react-router-dom";
+import Checkbox from "../../components/Checkbox";
 
 interface ToDoProps {
   isHomePage?: boolean;
@@ -128,19 +128,11 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
               <SubTaskList>
                 {task.subTasks.map((subTask, subTaskIndex) => (
                   <SpaceBetweenContainer key={subTaskIndex}>
-                    <CustomCheckboxWrapper>
-                      <CustomCheckboxLabel>
-                        <HiddenCheckbox
-                          checked={subTask.completed}
-                          onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
-                        />
-                        <StyledCheckbox checked={subTask.completed}>
-                          <svg viewBox="8 4 10 14" width="18" height="18">
-                            <polyline points="4 6 10 17 22 3 11 12" />
-                          </svg>
-                        </StyledCheckbox>
-                      </CustomCheckboxLabel>
-                    </CustomCheckboxWrapper>
+                    <Checkbox
+                      checked={subTask.completed}
+                      onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                    />
+
                     <Body size="big" style={{ marginLeft: '0.5rem' }}>
                       {subTask.name}
                     </Body>
