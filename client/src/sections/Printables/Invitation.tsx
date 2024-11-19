@@ -2,12 +2,13 @@ import React from 'react';
 import { Body, Heading, Subtitle } from "../../styles/typography";
 import styled from 'styled-components';
 import { useUser } from '../../providers/UserContext';
+import { Guest } from '../../types';
 
 interface InvitationProps {
     additionalText?: string;
     mainText?: string;
     guestText?: string;
-    propsGuestList?: string[];
+    propsGuestList?: Guest[];
 }
 
 
@@ -30,7 +31,7 @@ const Border = styled.div`
 
 const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText }) => {
     const { names, surnames, weddingDate, weddingTime, weddingLocation, guestList } = useUser();
-    const newGuestList = propsGuestList ? propsGuestList : guestList;
+    const newGuestList = propsGuestList ? propsGuestList : guestList.slice(0, 3);;
     return (
         <Border>
             <Container>
@@ -44,7 +45,7 @@ const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guest
                 <Subtitle level={2}>  {guestText ? guestText : "It would be our honor to celebrate this day with:"}</Subtitle>
 
                 {newGuestList.map((guest, index) => (
-                    <span key={index}><Body size='big'>{guest}</Body></span>
+                    <span key={index}><Body size='big'>{guest.name}</Body></span>
                 ))}
                 {
                     additionalText && (

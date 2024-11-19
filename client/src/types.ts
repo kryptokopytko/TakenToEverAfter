@@ -13,6 +13,7 @@ export interface Table {
   id: string;
   x: number;
   y: number;
+  guests: string[];
 }
 
 export interface RoundTable extends Table {

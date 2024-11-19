@@ -4,7 +4,6 @@ import { Heading } from "../../styles/typography";
 import Button from "../../components/ui/Button";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { SpaceBetweenContainer } from "../../styles/section";
-import TablesDisplay from "./TablesDisplay";
 
 const TableChart: React.FC = () => {
   return (
@@ -18,7 +17,6 @@ const TableChart: React.FC = () => {
         </div>
       </SpaceBetweenContainer>
       <RoomDisplay />
-      <TablesDisplay />
     </div>
   );
 };

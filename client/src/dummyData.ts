@@ -520,7 +520,50 @@ export const date = "06.12.2024";
 export const weddingGuestList = ["Baby Smurf", "Baker Smurf"];
 
 export const listOfListsOfGuests = [
-  ["Baby Smurf", "Baker Smurf"],
-  ["Brainy Smurf", "Chef Smurf", "Clumsy Smurf"],
-  ["Dizzy Smurf"],
+  [
+    {
+      name: "Baby Smurf",
+      decision: "yes",
+      tags: ["family"],
+      email: "baby.smurf@smurfvillage.com",
+    },
+    {
+      name: "Baker Smurf",
+      decision: "yes",
+      tags: ["grooms", "family"],
+      email: "baker.smurf@smurfvillage.com",
+    },
+    {
+      name: "Brainy Smurf",
+      decision: "maybe",
+      tags: ["brides", "friends"],
+      email: "brainy.smurf@smurfvillage.com",
+    },
+  ],
+  [
+    {
+      name: "Timid Smurf",
+      decision: "maybe",
+      tags: ["grooms", "friends"],
+      email: "timid.smurf@smurfvillage.com",
+    },
+    {
+      name: "Tracker Smurf",
+      decision: "yes",
+      tags: ["brides", "family"],
+      email: "tracker.smurf@smurfvillage.com",
+    },
+    {
+      name: "Weepy Smurf",
+      decision: "no",
+      tags: ["grooms", "friends"],
+      email: "weepy.smurf@smurfvillage.com",
+    },
+    {
+      name: "Wild Smurf",
+      decision: "yes",
+      tags: ["brides", "family"],
+      email: "wild.smurf@smurfvillage.com",
+    },
+  ],
 ];

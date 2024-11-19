@@ -8,13 +8,18 @@ import HorizontalLine from "../components/ui/HorizontalLine";
 import TableChart from "../sections/TableChart/TableChart";
 import { RoundTable, RectangularTable } from "../types";
 import { useTable } from "../providers/TableContext";
+import GuidedInput from "../components/ui/GuidedInput";
+import { useUser } from "../providers/UserContext";
+import { SpaceBetweenContainer } from "../styles/section";
 interface TableChartPageProps { }
 
 const TableChartPage: React.FC<TableChartPageProps> = () => {
     const {
-        updateRoomDimensions, roomDimensions,
+        updateRoomDimensions, roomDimensions, setRoundTables, setRectangularTables,
         addRoundTable, addRectangularTable, roundTables, rectangularTables
     } = useTable();
+
+    const { guestList } = useUser();
 
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");
@@ -24,6 +29,10 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     const [notification, setNotification] = useState<string | null>(null);
     const [roomWidth, setRoomWidth] = useState("");
     const [roomLength, setRoomLength] = useState("");
+    const [tableToRemove, setTableToRemove] = useState("");
+    const allTableNames = [...roundTables.map((t) => t.id), ...rectangularTables.map((t) => t.id)];
+    const [selectedGuests, setSelectedGuests] = useState<string[]>([]);
+    const [inputValue, setInputValue] = useState("");
 
     const placeNewTable = (
         newTable: RoundTable | RectangularTable,
@@ -88,8 +97,29 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         throw new Error("Unknown table type");
     };
 
+    const handleRemoveTable = () => {
+        const updatedRoundTables = roundTables.filter((table) => table.id !== tableToRemove);
+        const updatedRectangularTables = rectangularTables.filter((table) => table.id !== tableToRemove);
+
+        if (updatedRoundTables.length === roundTables.length && updatedRectangularTables.length === rectangularTables.length) {
+            setNotification(`Table "${tableToRemove}" not found.`);
+        } else {
+            setRoundTables(updatedRoundTables);
+            setRectangularTables(updatedRectangularTables);
+            setNotification(`Table "${tableToRemove}" has been removed.`);
+        }
+
+        setTableToRemove("");
+        setTimeout(() => setNotification(null), notificationTimeOut);
+    };
 
     const handleAddTable = () => {
+        if (allTableNames.includes(tableName.trim())) {
+            setNotification("Table name must be unique.");
+            setTimeout(() => setNotification(null), notificationTimeOut);
+            return;
+        }
+
         const generateTableId = (prefix: string, existingTables: any[]) =>
             tableName.trim() || `${prefix}-${existingTables.length + 1}`;
         if (isRound) {
@@ -100,7 +130,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     x: 0,
                     y: 0,
                     seats,
-
+                    guests: []
                 };
                 const { x, y } = placeNewTable(newTable, roomDimensions as [number, number], roundTables, rectangularTables);
                 newTable.x = x;
@@ -121,7 +151,8 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     width,
                     length,
                     x: 0,
-                    y: 0
+                    y: 0,
+                    guests: [],
                 };
                 const { x, y } = placeNewTable(newTable, roomDimensions as [number, number], roundTables, rectangularTables);
                 newTable.x = x;
@@ -211,6 +242,60 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 <ButtonContainer>
                     <Button onClick={handleAddTable}>Add Table</Button>
                 </ButtonContainer>
+                <HorizontalLine />
+
+
+                <Heading level={3}>Remove Table</Heading>
+                <GuidedInput
+                    suggestions={allTableNames}
+                    value={tableToRemove}
+                    setInputValue={setTableToRemove}
+                    placeholder="Select table name"
+                    onChange={(e) => setTableToRemove(e.target.value)}
+                />
+                <ButtonContainer>
+                    <Button onClick={handleRemoveTable} disabled={!tableToRemove}>
+                        Remove Table
+                    </Button>
+                </ButtonContainer>
+                <HorizontalLine />
+                <Heading level={3}>Assign Guests to Table</Heading>
+                <GuidedInput
+                    suggestions={guestList.map(guest => guest.name)}
+                    value={inputValue}
+                    setInputValue={setInputValue}
+                    placeholder="Search guest name"
+                    onChange={(e) => setInputValue(e.target.value)}
+                />
+                <ButtonContainer>
+                    <Button
+                        onClick={() => {
+                            if (selectedGuests.includes(inputValue)) {
+                                setSelectedGuests(selectedGuests.filter(guest => guest !== inputValue));
+                            } else {
+                                setSelectedGuests([...selectedGuests, inputValue]);
+                            }
+                        }}
+                    >
+                        {selectedGuests.includes(inputValue) ? "Remove" : "Add"}
+                    </Button>
+                </ButtonContainer>
+                <HorizontalLine />
+
+                <Subtitle level={3}>Main Table Guests:</Subtitle>
+                {selectedGuests.map((guest, index) => (
+                    <div key={index}>
+                        <SpaceBetweenContainer>
+                            <div style={{ marginTop: '2rem' }}>
+                                {guest}</div>
+                            <Button
+                                onClick={() => setSelectedGuests(selectedGuests.filter(item => item !== guest))}
+                            >
+                                Remove
+                            </Button>
+                        </SpaceBetweenContainer>
+                    </div>
+                ))}
 
             </MenuContainer>
 

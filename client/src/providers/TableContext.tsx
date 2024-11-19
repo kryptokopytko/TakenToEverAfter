@@ -18,8 +18,32 @@ const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
     const [roomDimensions, setRoomDimensions] = useState([12, 12]);
-    const [roundTables, setRoundTables] = useState<RoundTable[]>([{ id: "children", x: 600, y: 600, seats: 12 }]);
-    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([{ id: "main", x: 50, y: 50, width: 3, length: 12 }]);
+    const [roundTables, setRoundTables] = useState<RoundTable[]>([{
+        id: "children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
+            'Bernadeta Nowak',
+            'Celina Wiśniewska',
+            'Derek Jankowski',
+            'Eugenia Zawisza',
+            'Felicja Grabowska',
+            'Genowefa Zielińska',
+            'Hiacynta Kaczmarek',
+            'Irenka Lewandowska',
+            'Józefina Szymańska',
+            'Kornela Kamińska']
+    }]);
+    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([{
+        id: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
+            'Bernadeta Nowak',
+            'Celina Wiśniewska',
+            'Derek Jankowski',
+            'Eugenia Zawisza',
+            'Felicja Grabowska',
+            'Genowefa Zielińska',
+            'Hiacynta Kaczmarek',
+            'Irenka Lewandowska',
+            'Józefina Szymańska',
+            'Kornela Kamińska']
+    }]);
 
     const addRoundTable = (table: RoundTable) => {
         setRoundTables((prev) => [...prev, table]);

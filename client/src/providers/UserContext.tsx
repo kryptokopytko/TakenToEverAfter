@@ -1,11 +1,12 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { weddingGuestList, location, pairNames, pairSurnames, date, time } from '../dummyData';
+import { guests, location, pairNames, pairSurnames, date, time } from '../dummyData';
+import { Guest } from "../types";
 
 interface UserContextType {
     weddingDate: string;
     weddingTime: string;
     isLogged: boolean;
-    guestList: string[];
+    guestList: Guest[];
     weddingLocation: string[];
     names: string[];
     surnames: string[];
@@ -13,7 +14,7 @@ interface UserContextType {
     setWeddingDate: (date: string) => void;
     setWeddingTime: (time: string) => void;
     setWeddingLocation: (location: string[]) => void;
-    setGuestList: (guests: string[]) => void;
+    setGuestList: (guests: Guest[]) => void;
     setNames: (names: string[]) => void;
     setSurnames: (surnames: string[]) => void;
     viewLocation: string;
@@ -29,7 +30,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [weddingTime, setWeddingTime] = useState(time);
     const [isLogged, setIsLogged] = useState(true);
     const [weddingLocation, setWeddingLocation] = useState(location);
-    const [guestList, setGuestList] = useState(weddingGuestList);
+    const [guestList, setGuestList] = useState(guests);
     const [viewLocation, setViewLocation] = useState("Home");
 
     return (

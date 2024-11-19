@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
 import { RoundTable, RectangularTable } from "../../types";
+import Button from "../../components/ui/Button";
 
 export const Board = styled.div`
   width: 100%;
@@ -11,7 +12,6 @@ export const Board = styled.div`
   justify-content: center;
   align-items: center;
   border: 2px solid ${({ theme }) => theme.dark};
-  
 `;
 
 const RoomDisplay: React.FC = () => {
@@ -20,9 +20,9 @@ const RoomDisplay: React.FC = () => {
     const boardRef = useRef<HTMLDivElement>(null);
     const [boardWidth, setBoardWidth] = useState(0);
     const [boardHeight, setBoardHeight] = useState(0);
+    const [showNames, setShowNames] = useState(false);
 
     const diameter = (seats: number) => (seats * 2) / Math.PI;
-
 
     useLayoutEffect(() => {
         const handleResize = () => {
@@ -34,12 +34,9 @@ const RoomDisplay: React.FC = () => {
             }
         };
 
-
         handleResize();
 
-
         window.addEventListener("resize", handleResize);
-
 
         return () => {
             window.removeEventListener("resize", handleResize);
@@ -64,39 +61,49 @@ const RoomDisplay: React.FC = () => {
     };
 
     return (
-        <Board ref={boardRef} style={{ height: `${boardHeight}px` }}>
+        <>
 
-            {roundTables.map((table) => (
-                <TableShape
-                    key={table.id}
-                    id={table.id}
-                    x={(table.x / 1000) * boardWidth}
-                    y={(table.y / 1000) * boardHeight}
-                    updatePosition={updateTableShapePosition}
-                    height={diameter(table.seats) / 4 / roomDimensions[1] * boardHeight}
-                    width={diameter(table.seats) / 4 / roomDimensions[0] * boardWidth}
-                    isOval={true}
-                >
-                    {table.id}
-                </TableShape>
-            ))}
+            <Board ref={boardRef} style={{ height: `${boardHeight}px` }}>
 
 
-            {rectangularTables.map((table) => (
-                <TableShape
-                    key={table.id}
-                    id={table.id}
-                    x={(table.x / 1000) * boardWidth}
-                    y={(table.y / 1000) * boardHeight}
-                    updatePosition={updateTableShapePosition}
-                    height={table.length / 2 / roomDimensions[1] * boardHeight}
-                    width={table.width / 2 / roomDimensions[0] * boardWidth}
-                    isOval={false}
-                >
-                    {table.id}
-                </TableShape>
-            ))}
-        </Board>
+                {roundTables.map((table) => (
+                    <TableShape
+                        key={table.id}
+                        id={table.id}
+                        x={(table.x / 1000) * boardWidth}
+                        y={(table.y / 1000) * boardHeight}
+                        updatePosition={updateTableShapePosition}
+                        height={diameter(table.seats) / 4 / roomDimensions[1] * boardHeight}
+                        width={diameter(table.seats) / 4 / roomDimensions[0] * boardWidth}
+                        isOval={true}
+                        guests={showNames ? table.guests : []}
+                    >
+                        {table.id}
+                    </TableShape>
+                ))}
+
+
+                {rectangularTables.map((table) => (
+                    <TableShape
+                        key={table.id}
+                        id={table.id}
+                        x={(table.x / 1000) * boardWidth}
+                        y={(table.y / 1000) * boardHeight}
+                        updatePosition={updateTableShapePosition}
+                        height={table.length / 2 / roomDimensions[1] * boardHeight}
+                        width={table.width / 2 / roomDimensions[0] * boardWidth}
+                        isOval={false}
+                        guests={showNames ? table.guests : []}
+                    >
+                        {table.id}
+                    </TableShape>
+                ))}
+            </Board>
+            <Button onClick={() => setShowNames((prev) => !prev)}>
+                {showNames ? "Hide Names" : "Show Names"}
+            </Button>
+        </>
+
     );
 };
 
