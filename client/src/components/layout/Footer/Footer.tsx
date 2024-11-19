@@ -1,9 +1,10 @@
 import React from 'react';
 import { Body, Heading } from "../../../styles/typography";
-import { Slider, HidingSection, Container, Section, ListContainer } from "./FooterStyles";
+import { HidingSection, Container, Section, ListContainer } from "./FooterStyles";
 import { useTheme } from "../../../providers/ThemeContext";
 import { sectionLinks, sections } from '../sections';
 import { useUser } from '../../../providers/UserContext';
+import { Slider } from '../../../Slider';
 
 interface FooterProps { }
 

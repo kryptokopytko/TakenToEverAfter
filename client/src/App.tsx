@@ -22,6 +22,9 @@ import GuestPhotosPage from "./pages/GuestPhotosPage";
 import { UserProvider, useUser } from "./providers/UserContext";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -71,33 +74,37 @@ const AppContent = () => {
   }, [location]);
 
   useEffect(() => {
-    setViewLocation(location.pathname);  
+    setViewLocation(location.pathname);
   }, [location]);
 
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
         <GlobalStyles fontSize={fontSize} />
-        <Navbar />
-        <PageContainer>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/table_chart" element={<TableChartPage />} />
-            <Route path="/budget" element={<BudgetPage />} />
-            <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
-            <Route path="/photo_album" element={<PhotosPage />} />
-            <Route path="/choices" element={<ChoicesPage />} />
-            <Route path="/printables" element={<PrintablesPage />} />
-            <Route path="/guest_list" element={<GuestPage />} />
-            <Route path="/to_do" element={<ToDoPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/guest_response" element={<GuestResponsePage />} />
-            <Route path="/guest_photos" element={<GuestPhotosPage />} />
-          </Routes>
-        </PageContainer>
-        <Footer />
+        <DndProvider backend={HTML5Backend}>
+          <Navbar />
+          <PageContainer>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/table_chart" element={<TableChartPage />} />
+              <Route path="/budget" element={<BudgetPage />} />
+              <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
+              <Route path="/photo_album" element={<PhotosPage />} />
+              <Route path="/choices" element={<ChoicesPage />} />
+              <Route path="/printables" element={<PrintablesPage />} />
+              <Route path="/guest_list" element={<GuestPage />} />
+              <Route path="/to_do" element={<ToDoPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/registration" element={<RegistrationPage />} />
+              <Route path="/guest_response" element={<GuestResponsePage />} />
+              <Route path="/guest_photos" element={<GuestPhotosPage />} />
+              <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
+
+            </Routes>
+          </PageContainer>
+          <Footer />
+        </DndProvider>
       </AppContainer>
     </StyledThemeProvider>
   );

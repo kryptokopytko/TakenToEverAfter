@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { weddingGuestList, location, pairNames, pairSurnames, date, time } from '../dummyData';
-import { RoundTable, RectangularTable } from '../types'; 
+import { RoundTable, RectangularTable } from '../types';
 
 interface UserContextType {
     weddingDate: string;
@@ -8,12 +8,10 @@ interface UserContextType {
     isLogged: boolean;
     guestList: string[];
     weddingLocation: string[];
-    roomWidth: string;
-    roomLength: string;
+    roomDimensions: number[];
     roundTables: RoundTable[];
     rectangularTables: RectangularTable[];
-    setRoomWidth: (width: string) => void;
-    setRoomLength: (length: string) => void;
+    updateRoomDimensions: (x: string, y: string) => void;
     addRoundTable: (table: RoundTable) => void;
     addRectangularTable: (table: RectangularTable) => void;
     setIsLogged: (logged: boolean) => void;
@@ -27,6 +25,10 @@ interface UserContextType {
     setSurnames: (surnames: string[]) => void;
     viewLocation: string;
     setViewLocation: (viewLocation: string) => void;
+    updateTablePosition: (id: string, x: number, y: number) => void;
+    handleUpdateTablePosition: (id: string, x: number, y: number) => void;
+    setRoundTables: (tables: RoundTable[]) => void;
+    setRectangularTables: (tables: RectangularTable[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -41,11 +43,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [guestList, setGuestList] = useState(weddingGuestList);
     const [viewLocation, setViewLocation] = useState("Home");
 
-    
-    const [roomWidth, setRoomWidth] = useState("");
-    const [roomLength, setRoomLength] = useState("");
+
+    const [roomDimensions, setRoomDimensions] = useState([12, 12]);
     const [roundTables, setRoundTables] = useState<RoundTable[]>([]);
     const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([]);
+
+
 
     const addRoundTable = (table: RoundTable) => {
         setRoundTables((prev) => [...prev, table]);
@@ -53,6 +56,27 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const addRectangularTable = (table: RectangularTable) => {
         setRectangularTables((prev) => [...prev, table]);
+    };
+
+    const updateTablePosition = (id: string, x: number, y: number) => {
+        setRoundTables((prev) =>
+            prev.map((table) => (table.id === id ? { ...table, x, y } : table))
+        );
+        setRectangularTables((prev) =>
+            prev.map((table) => (table.id === id ? { ...table, x, y } : table))
+        );
+    };
+
+    const updateRoomDimensions = (width: string, length: string) => {
+        const numWidth = Number(width);
+        const numLength = Number(length);
+        if (!isNaN(numWidth) && !isNaN(numLength)) {
+            setRoomDimensions([numWidth, numLength]);
+        }
+    };
+
+    const handleUpdateTablePosition = (id: string, x: number, y: number) => {
+        updateTablePosition(id, x, y); 
     };
 
     return (
@@ -74,14 +98,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 surnames,
                 viewLocation,
                 setViewLocation,
-                roomWidth,
-                roomLength,
+                roomDimensions,
                 roundTables,
                 rectangularTables,
-                setRoomWidth,
-                setRoomLength,
+                updateRoomDimensions,
                 addRoundTable,
                 addRectangularTable,
+                updateTablePosition,
+                handleUpdateTablePosition,
+                setRoundTables,
+                setRectangularTables,
+
             }}
         >
             {children}

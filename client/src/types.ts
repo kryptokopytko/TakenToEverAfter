@@ -11,6 +11,8 @@ export const decisionTypes = ["yes", "maybe", "no", "not invited"];
 
 export interface Table {
   id: string;
+  x?: number;
+  y?: number;
 }
 
 export interface RoundTable extends Table {
