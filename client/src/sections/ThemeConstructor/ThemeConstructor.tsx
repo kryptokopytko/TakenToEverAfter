@@ -5,7 +5,7 @@ import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import ColorCompositions from "./ColorCompositions";
 import { useState, useEffect } from "react";
 import { useTheme } from "../../providers/ThemeContext";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { Card } from "../../styles/card";
 import { Link } from "react-router-dom";
 

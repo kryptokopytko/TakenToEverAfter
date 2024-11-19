@@ -1,6 +1,6 @@
 import React from "react";
 import { Heading } from "../../styles/typography";
-import { useUser } from "../../providers/UserContext";
+import { useTable } from "../../providers/TableContext";
 
 interface TablesDisplayProps {
 }
@@ -10,16 +10,16 @@ const TablesDisplay: React.FC<TablesDisplayProps> = ({
     const {
         roomDimensions,
         roundTables, rectangularTables
-    } = useUser();
+    } = useTable();
     return (
         <div>
             <Heading level={3}>Round Tables</Heading>
             <ul>
                 {roundTables.map((table) => {
                     const circumference =
-                        typeof table.seats === 'number' ? table.seats * 0.5 : 1; 
+                        typeof table.seats === 'number' ? table.seats * 0.5 : 1;
 
-                    const diameter = (circumference / Math.PI).toFixed(2); 
+                    const diameter = (circumference / Math.PI).toFixed(2);
                     const scaledDiameter = Number(diameter) / roomDimensions[0] * 100;
 
                     return (

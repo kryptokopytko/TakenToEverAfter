@@ -1,6 +1,6 @@
 import React from "react";
-import Button, { ButtonContainer } from "../../components/Button";
-import Input from "../../components/Input";
+import Button, { ButtonContainer } from "../../components/ui/Button";
+import Input from "../../components/ui/Input";
 import { Subtitle } from "../../styles/typography";
 import { ColorBox, ColorRow } from "./ColorBox";
 import { Card } from "../../styles/card";

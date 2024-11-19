@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Input from "../components/Input"; 
-import Button, { ButtonContainer } from "../components/Button"; 
+import Input from "../components/ui/Input";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
-import { Notification } from "../styles/page"; 
-import { loginUser } from "../dummyDBApi"; 
+import { Notification } from "../styles/page";
+import { loginUser } from "../dummyDBApi";
 import { Container, Form } from "../styles/form";
 
 const LoginPage: React.FC = () => {
@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
         }
 
         try {
-            const success = await loginUser(email, password); 
+            const success = await loginUser(email, password);
             if (success) {
                 setIsLoggedIn(true);
                 setErrorMessage(null);

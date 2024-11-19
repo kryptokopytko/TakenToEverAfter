@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckboxLabel, CheckboxWrapper, StyledCheckbox, HiddenCheckbox } from '../styles/checkbox';
+import { CheckboxLabel, CheckboxWrapper, StyledCheckbox, HiddenCheckbox } from '../../styles/checkbox';
 
 interface CheckboxProps {
     checked: boolean;

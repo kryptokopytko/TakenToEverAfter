@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Heading, Subtitle } from "../../styles/typography";
 import List from "./List";
-import Button, { ButtonContainer } from "../../components/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import { useState } from "react";
 import { SpaceBetweenContainer } from "../../styles/section";
 import { exportToPDF } from "../Printables/exportToPdf";

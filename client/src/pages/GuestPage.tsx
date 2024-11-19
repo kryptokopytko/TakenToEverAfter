@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import GuestList from "../sections/GuestList/GuestList";
-import Button, { ButtonContainer } from "../components/Button";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Subtitle } from "../styles/typography";
 import { Decision, Guest } from "../types";
-import GuidedInput from "../components/GuidedInput";
+import GuidedInput from "../components/ui/GuidedInput";
 import { Tag, TagContainer } from "../styles/tag";
-import Input from "../components/Input";
+import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
-import { SelectorContainer } from "../components/Dropdown/DropdownStyles";
+import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
 import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
-import DropdownSelector from "../components/Dropdown/Dropdown";
+import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 
 const GuestPage: React.FC = ({
 }) => {
@@ -308,12 +308,12 @@ const GuestPage: React.FC = ({
             ]}
             onOptionSelect={(selectedOption) => {
               if (Array.isArray(selectedOption)) {
-                setFilterByDecision(selectedOption); 
+                setFilterByDecision(selectedOption);
               } else {
-                setFilterByDecision(selectedOption); 
+                setFilterByDecision(selectedOption);
               }
             }}
-            multiSelect={true} 
+            multiSelect={true}
           />
         </SelectorContainer>
         <SelectorContainer>

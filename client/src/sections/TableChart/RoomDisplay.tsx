@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Shape from "../../components/Shape";
-import { useUser } from "../../providers/UserContext";
+import Shape from "../../components/ui/Shape";
 import { Slider } from "../../Slider";
+import { useTable } from "../../providers/TableContext";
 
 interface RoomDisplayProps { }
 
 const RoomDisplay: React.FC<RoomDisplayProps> = () => {
-    const { roomDimensions, roundTables, rectangularTables } = useUser();
+    const { roomDimensions, roundTables, rectangularTables } = useTable();
     const [containerWidthPercent, setContainerWidthPercent] = useState(100);
 
     const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {

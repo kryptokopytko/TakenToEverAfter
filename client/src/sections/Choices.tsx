@@ -1,5 +1,5 @@
 import { Body, Heading } from "../styles/typography";
-import Button, { ButtonContainer } from "../components/Button";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useEffect, useState } from "react";
 import { Card } from "../styles/card";

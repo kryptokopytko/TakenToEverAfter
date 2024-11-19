@@ -1,7 +1,7 @@
 import React from "react";
 import RoomDisplay from "./RoomDisplay";
 import { Heading } from "../../styles/typography";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { SpaceBetweenContainer } from "../../styles/section";
 import TablesDisplay from "./TablesDisplay";

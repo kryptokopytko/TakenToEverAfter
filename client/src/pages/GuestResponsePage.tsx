@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button, { ButtonContainer } from "../components/Button";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { Body, Heading, Subtitle } from "../styles/typography";
 import { Container, Form } from "../styles/form";
 import { sendResponse } from "../dummyDBApi";

@@ -1,9 +1,9 @@
 import { Heading, Subtitle } from "../styles/typography";
 import Choices from "../sections/Choices";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
-import Input from "../components/Input";
-import GuidedInput from "../components/GuidedInput";
-import Button, { ButtonContainer } from "../components/Button";
+import Input from "../components/ui/Input";
+import GuidedInput from "../components/ui/GuidedInput";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
 import { initialChoices } from "../dummyData";
 import { addChoice, removeChoice, updateChoice } from "../dummyDBApi";

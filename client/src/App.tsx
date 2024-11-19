@@ -25,6 +25,7 @@ import { useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
+import { TableProvider } from "./providers/TableContext";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -114,9 +115,11 @@ const App = () => {
   return (
     <ThemeProvider>
       <UserProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <TableProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </TableProvider>
       </UserProvider>
     </ThemeProvider>
   );

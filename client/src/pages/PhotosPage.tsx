@@ -4,11 +4,11 @@ import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import { exampleImages } from "../dummyData";
 import { useState } from "react";
-import Button, { ButtonContainer } from "../components/Button";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
-import Input from "../components/Input";
+import Input from "../components/ui/Input";
 import { addPhotoToApi } from "../dummyDBApi";
-import Checkbox from "../components/Checkbox";
+import Checkbox from "../components/ui/Checkbox";
 
 
 interface PhotosPageProps { }

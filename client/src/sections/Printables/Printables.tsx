@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Heading } from "../../styles/typography";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { SpaceBetweenContainer } from "../../styles/section";
 import { Link } from "react-router-dom";
 import Invitation from "./Invitation";

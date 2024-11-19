@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { DropdownMenu } from "../../Dropdown/DropdownStyles";
+import { DropdownMenu } from "../../ui/Dropdown/DropdownStyles";
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 
 export const NavbarContainer = styled.nav`

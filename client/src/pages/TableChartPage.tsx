@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import { Heading, Subtitle } from "../styles/typography";
-import Input from "../components/Input";
-import Button, { ButtonContainer } from "../components/Button";
-import Checkbox from "../components/Checkbox";
-import { useUser } from "../providers/UserContext";
-import HorizontalLine from "../components/HorizontalLine";
+import Input from "../components/ui/Input";
+import Button, { ButtonContainer } from "../components/ui/Button";
+import Checkbox from "../components/ui/Checkbox";
+import HorizontalLine from "../components/ui/HorizontalLine";
 import TableChart from "../sections/TableChart/TableChart";
 import { RoundTable, RectangularTable } from "../types";
+import { useTable } from "../providers/TableContext";
 interface TableChartPageProps { }
 
 const TableChartPage: React.FC<TableChartPageProps> = () => {
     const {
         updateRoomDimensions, roomDimensions,
         addRoundTable, addRectangularTable, roundTables, rectangularTables
-    } = useUser();
+    } = useTable();
 
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");

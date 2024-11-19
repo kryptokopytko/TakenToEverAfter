@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Body, Heading } from "../../../styles/typography";
-import Button from "../../../components/Button";
+import Button from "../../../components/ui/Button";
 import { Slider, Container } from "./HslColorPickerStyles";
-import Input from "../../../components/Input";
+import Input from "../../../components/ui/Input";
 
 
 const hexToHSL = (hex: string) => {

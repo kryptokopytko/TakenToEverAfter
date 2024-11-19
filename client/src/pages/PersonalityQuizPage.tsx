@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toxicPersonalities, questions, Answer, Result } from "../sections/PersonalityTest/personalities";
-import Button from "../components/Button";
+import Button from "../components/ui/Button";
 import { Body, Subtitle } from "../styles/typography";
 import styled from "styled-components";
 
@@ -22,7 +22,7 @@ const PersonalityQuizPage: React.FC = () => {
     const [isCompleted, setIsCompleted] = useState(false);
 
     const handleAnswerClick = (answers: Answer[]) => {
-        
+
         const updatedResults = [...results];
         answers.forEach(({ personality, weight }) => {
             const resultIndex = updatedResults.findIndex(
@@ -36,7 +36,7 @@ const PersonalityQuizPage: React.FC = () => {
         });
         setResults(updatedResults);
 
-        
+
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {

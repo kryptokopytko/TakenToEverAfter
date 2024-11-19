@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Body, Heading, Label } from "../../styles/typography";
-import Button, { ButtonContainer } from "../../components/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
@@ -9,7 +9,7 @@ import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
 import { handleTaskCompletion } from "../../dummyDBApi";
 import { Link } from "react-router-dom";
-import Checkbox from "../../components/Checkbox";
+import Checkbox from "../../components/ui/Checkbox";
 
 interface ToDoProps {
   isHomePage?: boolean;

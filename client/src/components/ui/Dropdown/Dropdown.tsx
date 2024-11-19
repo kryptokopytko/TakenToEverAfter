@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SelectorContainer, DropdownMenu, RadioButton, SelectorButton } from "./DropdownStyles";
-import { Subtitle } from "../../styles/typography";
+import { Subtitle } from "../../../styles/typography";
 
 interface Option {
     label: string;
@@ -9,7 +9,7 @@ interface Option {
 
 interface DropdownSelectorProps {
     options: Option[];
-    onOptionSelect?: (option: string | string[]) => void; 
+    onOptionSelect?: (option: string | string[]) => void;
     title: string;
     initialSelectedOption?: string | string[];
     multiSelect?: boolean;

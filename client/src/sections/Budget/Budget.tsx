@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Body, Heading } from "../../styles/typography";
-import Button, { ButtonContainer } from "../../components/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import PieChart from "./PieChart";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import Invitation from "../sections/Printables/Invitation";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
 import { listOfListsOfGuests } from "../dummyData";
 interface PrintablesPageProps {
@@ -29,7 +29,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
     const [showAllInvites, setShowAllInvites] = useState(false);
 
-    
+
     const handleExportPDF = () => {
         const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
