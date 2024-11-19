@@ -10,16 +10,16 @@ interface TableContextType {
     addRectangularTable: (table: RectangularTable) => void;
     updateTablePosition: (id: string, x: number, y: number) => void;
     handleUpdateTablePosition: (id: string, x: number, y: number) => void;
-    setRoundTables: (tables: RoundTable[]) => void;
-    setRectangularTables: (tables: RectangularTable[]) => void;
+    setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
+    setRectangularTables: React.Dispatch<React.SetStateAction<RectangularTable[]>>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
     const [roomDimensions, setRoomDimensions] = useState([12, 12]);
-    const [roundTables, setRoundTables] = useState<RoundTable[]>([]);
-    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([]);
+    const [roundTables, setRoundTables] = useState<RoundTable[]>([{ id: "children", x: 600, y: 600, seats: 12 }]);
+    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([{ id: "main", x: 50, y: 50, width: 3, length: 12 }]);
 
     const addRoundTable = (table: RoundTable) => {
         setRoundTables((prev) => [...prev, table]);
@@ -41,7 +41,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
     const updateRoomDimensions = (width: string, length: string) => {
         const numWidth = Number(width);
         const numLength = Number(length);
-        if (!isNaN(numWidth) && !isNaN(numLength)) {
+        if (!isNaN(numWidth) && Number(numWidth) != 0 && !isNaN(numLength) && Number(numLength) != 0) {
             setRoomDimensions([numWidth, numLength]);
         }
     };

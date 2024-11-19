@@ -1,78 +1,102 @@
-import React, { useState } from "react";
-import Shape from "../../components/ui/Shape";
-import { Slider } from "../../Slider";
+import React, { useState, useRef, useLayoutEffect } from "react";
+import styled from "styled-components";
+import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
+import { RoundTable, RectangularTable } from "../../types";
 
-interface RoomDisplayProps { }
+export const Board = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid ${({ theme }) => theme.dark};
+  
+`;
 
-const RoomDisplay: React.FC<RoomDisplayProps> = () => {
-    const { roomDimensions, roundTables, rectangularTables } = useTable();
-    const [containerWidthPercent, setContainerWidthPercent] = useState(100);
+const RoomDisplay: React.FC = () => {
+    const { roomDimensions, roundTables, setRoundTables, rectangularTables, setRectangularTables } = useTable();
 
-    const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setContainerWidthPercent(Number(event.target.value));
-    };
+    const boardRef = useRef<HTMLDivElement>(null);
+    const [boardWidth, setBoardWidth] = useState(0);
+    const [boardHeight, setBoardHeight] = useState(0);
 
-    const containerStyle: React.CSSProperties = {
-        width: `${containerWidthPercent}%`,
-        aspectRatio: `${roomDimensions[0]} / ${roomDimensions[1]}`,
-        position: "relative",
-        border: "2px solid black",
-        marginTop: "1rem",
+    const diameter = (seats: number) => (seats * 2) / Math.PI;
+
+
+    useLayoutEffect(() => {
+        const handleResize = () => {
+            if (boardRef.current) {
+                const containerWidth = boardRef.current.offsetWidth;
+                const containerHeight = (containerWidth * roomDimensions[1]) / roomDimensions[0];
+                setBoardWidth(containerWidth);
+                setBoardHeight(containerHeight);
+            }
+        };
+
+
+        handleResize();
+
+
+        window.addEventListener("resize", handleResize);
+
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [roomDimensions]);
+
+    const updateTableShapePosition = (id: string, x: number, y: number) => {
+        const newX = Math.min(Math.max(x * 1000 / boardWidth, 0), 1000);
+        const newY = Math.min(Math.max(y * 1000 / boardHeight, 0), 1000);
+
+        setRoundTables((prevRoundTables: RoundTable[]) =>
+            prevRoundTables.map((table) =>
+                table.id === id ? { ...table, x: newX, y: newY } : table
+            )
+        );
+
+        setRectangularTables((prevRectangularTables: RectangularTable[]) =>
+            prevRectangularTables.map((table) =>
+                table.id === id ? { ...table, x: newX, y: newY } : table
+            )
+        );
     };
 
     return (
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <div>
-                    <label htmlFor="sizeSlider">Adjust Room Size:</label>
-                    <Slider
-                        type="range"
-                        id="sizeSlider"
-                        min="20"
-                        max="100"
-                        value={containerWidthPercent}
-                        onChange={handleSliderChange}
-                    />
-                    <span>{containerWidthPercent}%</span>
-                </div>
-                <div style={containerStyle}>
-                    {rectangularTables.map((table) => {
-                        const scaledWidth = (table.width / roomDimensions[0]) * 100;
-                        const scaledHeight = (table.length / roomDimensions[1]) * 100;
+        <Board ref={boardRef} style={{ height: `${boardHeight}px` }}>
 
-                        return (
-                            <Shape
-                                key={table.id}
-                                x={`${table.x}%`}
-                                y={`${table.y}%`}
-                                width={`${scaledWidth}%`}
-                                height={`${scaledHeight}%`}
-                                label={table.id.toString()}
-                            />
-                        );
-                    })}
+            {roundTables.map((table) => (
+                <TableShape
+                    key={table.id}
+                    id={table.id}
+                    x={(table.x / 1000) * boardWidth}
+                    y={(table.y / 1000) * boardHeight}
+                    updatePosition={updateTableShapePosition}
+                    height={diameter(table.seats) / 4 / roomDimensions[1] * boardHeight}
+                    width={diameter(table.seats) / 4 / roomDimensions[0] * boardWidth}
+                    isOval={true}
+                >
+                    {table.id}
+                </TableShape>
+            ))}
 
-                    {roundTables.map((table) => {
-                        const diameter = (table.seats * 0.5) / Math.PI;
-                        const scaledDiameter = (diameter / roomDimensions[0]) * 100;
 
-                        return (
-                            <Shape
-                                key={table.id}
-                                x={`${table.x}%`}
-                                y={`${table.y}%`}
-                                width={`${scaledDiameter}%`}
-                                height={`${scaledDiameter}%`}
-                                oval
-                                label={table.id.toString()}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
-
+            {rectangularTables.map((table) => (
+                <TableShape
+                    key={table.id}
+                    id={table.id}
+                    x={(table.x / 1000) * boardWidth}
+                    y={(table.y / 1000) * boardHeight}
+                    updatePosition={updateTableShapePosition}
+                    height={table.length / 2 / roomDimensions[1] * boardHeight}
+                    width={table.width / 2 / roomDimensions[0] * boardWidth}
+                    isOval={false}
+                >
+                    {table.id}
+                </TableShape>
+            ))}
+        </Board>
     );
 };
 
