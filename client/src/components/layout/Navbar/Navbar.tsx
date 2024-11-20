@@ -7,10 +7,11 @@ import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "..
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 import { useUser } from "../../../providers/UserContext";
 import { sections } from "../sections";
+import Button from "../../ui/Button";
 
 const Navbar: React.FC = () => {
 
-  const { names, isLogged, weddingDate } = useUser();
+  const { setIsLogged, names, isLogged, weddingDate, language, setLanguage } = useUser();
 
   const { setTheme, theme, themes } = useTheme();
 
@@ -26,6 +27,13 @@ const Navbar: React.FC = () => {
       setIsThemeOpen(false);
     }
   };
+  const handleLanguageChange = () => {
+    setLanguage(language === "english" ? "polish" : "english");
+  };
+
+  const handleLoginChange = () => {
+    setIsLogged(!isLogged);
+  }
 
   const toggleThemeDropdown = () => {
     setIsThemeOpen(prev => !prev);
@@ -109,7 +117,14 @@ const Navbar: React.FC = () => {
               ))}
             </DropdownMenu>
           </SelectorContainer>
-          <Label color="primary" style={{ marginTop: "1.4rem" }}>{isLogged ? 'Log out' : 'Log in'}</Label>
+          <div style={{ marginTop: '-1.5rem' }}>
+            <Button onClick={handleLanguageChange} variant="transparent">
+              <Label color="primary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
+            </Button>
+            <Button onClick={handleLoginChange} variant="transparent">
+              <Label color="primary">{isLogged ? 'Log out' : 'Log in'}</Label>
+            </Button>
+          </div>
         </ButtonsContainer>
 
         <BurgerMenu onClick={toggleBurgerMenu}>
@@ -120,24 +135,33 @@ const Navbar: React.FC = () => {
 
         <MobileMenu isOpen={isBurgerOpen}>
           <span>
-            <Label color="dark">{isLogged ? 'Log out' : 'Log in'}</Label>
-            <SelectorContainer>
-              <Label color="dark">Select Theme</Label>
-              <DropdownMenu isOpen={isThemeOpen}>
-                {Object.keys(themes).map((themeKey) => (
-                  <RadioButton key={themeKey}>
-                    <input
-                      type="radio"
-                      value={themeKey}
-                      name="theme"
-                      checked={theme === themes[themeKey as keyof typeof themes]}
-                      onChange={handleThemeChange}
-                    />
-                    <Label color="tertiary">{themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}</Label>
-                  </RadioButton>
-                ))}
-              </DropdownMenu>
-            </SelectorContainer>
+            <div>
+              <Button onClick={handleLoginChange} variant="transparent">
+                <Label color="tertiary">{isLogged ? 'Log out' : 'Log in'}</Label>
+              </Button>
+            </div>
+            <Button onClick={handleLanguageChange} variant="transparent">
+              <Label color="tertiary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
+            </Button>
+            <div style={{ marginLeft: '1.5rem', marginTop: '4rem' }}>
+              <SelectorContainer>
+                <Label color="dark">Select Theme</Label>
+                <DropdownMenu isOpen={isThemeOpen}>
+                  {Object.keys(themes).map((themeKey) => (
+                    <RadioButton key={themeKey}>
+                      <input
+                        type="radio"
+                        value={themeKey}
+                        name="theme"
+                        checked={theme === themes[themeKey as keyof typeof themes]}
+                        onChange={handleThemeChange}
+                      />
+                      <Label color="tertiary">{themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}</Label>
+                    </RadioButton>
+                  ))}
+                </DropdownMenu>
+              </SelectorContainer>
+            </div>
           </span>
 
           <SelectorContainer>
