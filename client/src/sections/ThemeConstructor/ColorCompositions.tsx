@@ -42,7 +42,7 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
 
     const lightVariations = generateLightnessVariations(hue, saturation, [30, 48, 70, 89, 98]);
     const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
-    const darkVariations = generateLightnessVariations(hue, saturation, [20, 44, 60, 85, 95]);
+    const darkVariations = generateLightnessVariations(hue, saturation, [20, 60, 44, 85, 95]);
     const contrastVariations = generateLightnessVariations(hue, saturation, [24, 34, 50, 85, 95]);
 
     const baseColorsForHueVariation = generateArithmeticProgression(hue - 30, 5, 15).map((hueVal, index) => (

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import Button, { ButtonContainer } from "../components/Button"; 
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { Body, Heading, Subtitle } from "../styles/typography";
 import { Container, Form } from "../styles/form";
 import { sendResponse } from "../dummyDBApi";
+import { useUser } from "../providers/UserContext";
 
 interface GuestResponseProps {
-    names: [string, string];
-    weddingDate: string;
+
 }
 
-const GuestResponsePage: React.FC<GuestResponseProps> = ({ names, weddingDate }) => {
+const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
+    const { names, weddingDate } = useUser();
+
     const guestName = new URLSearchParams(location.search).get('guest');
-    const [response, setResponse] = useState<"yes" | "no" | null>(null); 
+    const [response, setResponse] = useState<"yes" | "no" | null>(null);
     const [bride, groom] = names;
     const handleResponse = (decision: "yes" | "no") => {
         setResponse(decision);

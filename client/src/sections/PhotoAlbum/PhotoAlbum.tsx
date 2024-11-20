@@ -21,11 +21,11 @@ const PhotoCard = styled.div`
     transition: transform 0.3s;
     cursor: pointer;
       max-width: 40rem;
-  max-height: 40rem;
-  width: auto;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+    max-height: 50rem;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 
     box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
     &:hover {

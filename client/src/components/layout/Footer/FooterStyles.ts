@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Container = styled.div`
   padding: 2rem 0rem;
   position: relative;
-  z-index: 100;
+
+  z-index: 1;
   background-color: ${({ theme }) => theme.light};
   width: 100%;
   display: flex;
@@ -14,27 +15,6 @@ export const Container = styled.div`
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: center;
-  }
-`;
-
-export const Slider = styled.input.attrs({ type: "range" })`
-  margin-left: 1rem;
-  appearance: none;
-  width: 200px;
-  height: 6px;
-  background: linear-gradient(
-    to right,
-    ${({ theme }) => theme.body},
-    ${({ theme }) => theme.secondary}
-  );
-  border-radius: 1rem;
-
-  &::-webkit-slider-thumb {
-    appearance: none;
-  }
-
-  &::-moz-range-thumb {
-    appearance: none;
   }
 `;
 

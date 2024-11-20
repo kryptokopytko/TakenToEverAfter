@@ -9,6 +9,21 @@ export interface Guest {
 
 export const decisionTypes = ["yes", "maybe", "no", "not invited"];
 
+export interface Table {
+  id: string;
+  x: number;
+  y: number;
+  guests: string[];
+}
+
+export interface RoundTable extends Table {
+  seats: number;
+}
+export interface RectangularTable extends Table {
+  width: number;
+  length: number;
+}
+
 export interface SubExpense {
   subCategory: string;
   amount: number;

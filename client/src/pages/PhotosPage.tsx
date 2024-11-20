@@ -4,16 +4,12 @@ import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import { exampleImages } from "../dummyData";
 import { useState } from "react";
-import Button, { ButtonContainer } from "../components/Button";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
-import Input from "../components/Input";
+import Input from "../components/ui/Input";
 import { addPhotoToApi } from "../dummyDBApi";
-import {
-    CustomCheckboxLabel,
-    CustomCheckboxWrapper,
-    StyledCheckbox,
-    HiddenCheckbox
-} from './../styles/Checkbox';
+import Checkbox from "../components/ui/Checkbox";
+
 
 interface PhotosPageProps { }
 
@@ -83,21 +79,13 @@ const PhotosPage: React.FC<PhotosPageProps> = () => {
                         placeholder="Enter photo URL"
                     />
                 </div>
-                <CustomCheckboxWrapper>
-                    <CustomCheckboxLabel>
-                        <HiddenCheckbox
-                            type="checkbox"
-                            checked={isVertical}
-                            onChange={(e) => setIsVertical(e.target.checked)}
-                        />
-                        <StyledCheckbox checked={isVertical}>
-                            <svg viewBox="8 4 10 14" width="18" height="18">
-                                <polyline points="4 6 10 17 22 3 11 12" />
-                            </svg>
-                        </StyledCheckbox>
-                        Is the photo vertical?
-                    </CustomCheckboxLabel>
-                </CustomCheckboxWrapper>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Checkbox
+                        checked={isVertical}
+                        onChange={() => setIsVertical(!isVertical)}
+                    />
+                    Is vertical?
+                </div>
                 <ButtonContainer>
                     <Button onClick={handleAddPhoto}>Add Photo</Button>
                 </ButtonContainer>
