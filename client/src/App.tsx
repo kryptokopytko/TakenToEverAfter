@@ -13,12 +13,19 @@ import BudgetPage from "./pages/BudgetPage";
 import ThemeConstructorPage from "./pages/ThemeConstructorPage";
 import PhotosPage from "./pages/PhotosPage";
 import ChoicesPage from "./pages/ChoicesPage";
-import PrintablesPage from "./pages/PrintablesPage";
+import PrintablesPage from "./pages/InvitationsPage";
 import ToDoPage from "./pages/ToDoPage";
 import LoginPage from "./pages/Login";
 import RegistrationPage from "./pages/RegistrationPage";
 import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
+import { UserProvider, useUser } from "./providers/UserContext";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import PersonalityQuizPage from "./pages/PersonalityQuizPage";
+import { TableProvider } from "./providers/TableContext";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -45,7 +52,6 @@ const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
   }
 `;
 
-const sections = ['Home', 'Guest List', 'Budget', 'To Do', 'Choices', 'Photo Album', 'Table Chart', 'Theme Constructor', 'Printables'];
 
 export const PageContainer = styled.div`
   width: 100%;
@@ -59,42 +65,47 @@ export const PageContainer = styled.div`
   }
 `;
 
-const names = ['Smurf', 'Smurfette'];
-const weddingDate = "06.12.2024";
-
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
+  const location = useLocation();
+  const { setViewLocation } = useUser();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  useEffect(() => {
+    setViewLocation(location.pathname);
+  }, [location]);
+
   return (
     <StyledThemeProvider theme={theme}>
       <AppContainer>
         <GlobalStyles fontSize={fontSize} />
-        <Navbar
-          isLogged={true}
-          names={names as [string, string]}
-          sections={sections}
-          weddingDate={weddingDate}
-        />
-        <PageContainer>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/table_chart" element={<TableChartPage />} />
-            <Route path="/budget" element={<BudgetPage />} />
-            <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
-            <Route path="/photo_album" element={<PhotosPage />} />
-            <Route path="/choices" element={<ChoicesPage />} />
-            <Route path="/printables" element={<PrintablesPage />} />
-            <Route path="/guest_list" element={<GuestPage />} />
-            <Route path="/to_do" element={<ToDoPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/registration" element={<RegistrationPage />} />
-            <Route path="/guest_response" element={<GuestResponsePage weddingDate={weddingDate} names={names as [string, string]} />} />
-            <Route path="/guest_photos" element={<GuestPhotosPage />} />
+        <DndProvider backend={HTML5Backend}>
+          <Navbar />
+          <PageContainer>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/table_chart" element={<TableChartPage />} />
+              <Route path="/budget" element={<BudgetPage />} />
+              <Route path="/theme_constructor" element={<ThemeConstructorPage />} />
+              <Route path="/photo_album" element={<PhotosPage />} />
+              <Route path="/choices" element={<ChoicesPage />} />
+              <Route path="/printables" element={<PrintablesPage />} />
+              <Route path="/guest_list" element={<GuestPage />} />
+              <Route path="/to_do" element={<ToDoPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/registration" element={<RegistrationPage />} />
+              <Route path="/guest_response" element={<GuestResponsePage />} />
+              <Route path="/guest_photos" element={<GuestPhotosPage />} />
+              <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
 
-
-          </Routes>
-        </PageContainer>
-        <Footer sections={sections} />
+            </Routes>
+          </PageContainer>
+          <Footer />
+        </DndProvider>
       </AppContainer>
     </StyledThemeProvider>
   );
@@ -103,9 +114,13 @@ const AppContent = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <UserProvider>
+        <TableProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </TableProvider>
+      </UserProvider>
     </ThemeProvider>
   );
 };

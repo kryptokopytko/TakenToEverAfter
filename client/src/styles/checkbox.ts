@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const CustomCheckboxWrapper = styled.div`
+export const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-export const CustomCheckboxLabel = styled.label`
+export const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
   cursor: pointer;

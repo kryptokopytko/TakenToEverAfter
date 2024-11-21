@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Body, Heading } from "../../styles/typography";
 import { Card } from "../../styles/card";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { useTheme } from "../../providers/ThemeContext";
 import { ColorBox, ColorRow } from "./ColorBox";
 

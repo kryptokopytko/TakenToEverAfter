@@ -3,19 +3,17 @@ import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
 import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
-import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../../styles/Dropdown";
+import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../ui/Dropdown/DropdownStyles";
 import { BurgerBreakpoint } from "../../../styles/Breakpoints";
+import { useUser } from "../../../providers/UserContext";
+import { sections } from "../sections";
 
-interface NavbarProps {
-  names: [string, string];
-  sections: string[];
-  isLogged: boolean;
-  weddingDate: string;
-}
+const Navbar: React.FC = () => {
 
+  const { names, isLogged, weddingDate } = useUser();
 
-const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate }) => {
   const { setTheme, theme, themes } = useTheme();
+
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
@@ -63,8 +61,8 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
               {isLogged ?
-                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading>
-                : <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
+                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading> :
+                <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
             </NamesContainer>
           </LogoContainer>
         </StyledLink>
@@ -100,11 +98,11 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             </SelectorButton>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
-                <RadioButton key={section}>
-                  <input type="radio" name="section" value={section} />
+                <RadioButton key={section.name}>
+                  <input type="radio" name="section" value={section.name} />
                   <Label color="tertiary">
-                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
+                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
                     </StyledLink>
                   </Label>
                 </RadioButton>
@@ -146,11 +144,11 @@ const Navbar: React.FC<NavbarProps> = ({ names, sections, isLogged, weddingDate 
             <Label color="dark">Select Section</Label>
             <DropdownMenu isOpen={isSectionOpen}>
               {sections.map((section) => (
-                <RadioButton key={section}>
-                  <input type="radio" name="section" value={section} />
+                <RadioButton key={section.name}>
+                  <input type="radio" name="section" value={section.name} />
                   <Label color="tertiary">
-                    <StyledLink to={`/${section.toLowerCase().replace(" ", "_")}`}>
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
+                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
                     </StyledLink>
                   </Label>
                 </RadioButton>

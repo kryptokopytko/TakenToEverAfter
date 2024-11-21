@@ -4,7 +4,7 @@ import Budget from "../sections/Budget/Budget";
 import ToDo from "../sections/ToDo/ToDo";
 import Hero from "../sections/Hero/Hero";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
-import TableChart from "../sections/TableChart";
+import TableChart from "../sections/TableChart/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";

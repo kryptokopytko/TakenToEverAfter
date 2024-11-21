@@ -1,8 +1,9 @@
 import { Heading } from "../../styles/typography";
-import Button, { ButtonContainer } from "../../components/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import { Container, PhotosContainer, StyledImage } from './FavouritePhotosStyles';
 import { exampleImages } from "../../dummyData";
 import React from 'react';
+import { Link } from "react-router-dom";
 
 interface FavouritePhotosProps {
   isHomePage?: boolean;
@@ -24,7 +25,8 @@ const FavouritePhotos: React.FC<FavouritePhotosProps> = ({ isHomePage }) => {
       </div>
       {isHomePage ?
         <ButtonContainer>
-          <Button>Manage Photos</Button>
+          <Link to="photo_album">
+            <Button>Manage Photos</Button></Link>
         </ButtonContainer>
         : <></>}
     </Container>

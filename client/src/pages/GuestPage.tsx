@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import GuestList from "../sections/GuestList/GuestList";
-import Button, { ButtonContainer } from "../components/Button";
-import { Heading, Label, Subtitle } from "../styles/typography";
+import Button, { ButtonContainer } from "../components/ui/Button";
+import { Heading, Subtitle } from "../styles/typography";
 import { Decision, Guest } from "../types";
-import GuidedInput from "../components/GuidedInput";
+import GuidedInput from "../components/ui/GuidedInput";
 import { Tag, TagContainer } from "../styles/tag";
-import Input from "../components/Input";
+import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
-import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../styles/Dropdown";
-import { CustomCheckboxLabel, CustomCheckboxWrapper, HiddenCheckbox, StyledCheckbox } from "../styles/Checkbox";
+import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
 import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
+import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 
 const GuestPage: React.FC = ({
 }) => {
@@ -24,15 +24,11 @@ const GuestPage: React.FC = ({
   const [notification, setNotification] = useState<string>('');
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
   const [allTags, setAllTags] = useState<string[]>([]);
-  const [isSortDropdowsOpen, setIsSortDropdowsOpen] = useState(false);
-  const [isDecisionDropdowsOpen, setIsDecisionDropdowsOpen] = useState(false);
-  const [isFilterTagDropdowsOpen, setIsFilterTagDropdowsOpen] = useState(false);
-  const [isFilterDecisionDropdowsOpen, setIsFilterDecisionDropdowsOpen] = useState(false);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
   const [filterByTag, setFilterByTag] = useState<string[]>([]);
-  const [filterByDecision, setFilterByDecision] = useState<string>('all');
+  const [filterByDecision, setFilterByDecision] = useState<string | string[]>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
-  const [emailError, setEmailError] = useState<string>(''); 
+  const [emailError, setEmailError] = useState<string>('');
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -40,11 +36,11 @@ const GuestPage: React.FC = ({
     if (guest) {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
-      setEmailValue(guest.email || ''); 
+      setEmailValue(guest.email || '');
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
-      setEmailValue(''); 
+      setEmailValue('');
     }
   }, [inputValue, guests]);
 
@@ -116,24 +112,24 @@ const GuestPage: React.FC = ({
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
 
-      if (!isValidEmail(emailValue)) { 
-        setEmailError("Please enter a valid email address."); 
-        return; 
+      if (!isValidEmail(emailValue)) {
+        setEmailError("Please enter a valid email address.");
+        return;
       } else {
-        setEmailError(''); 
+        setEmailError('');
       }
 
 
       if (existingGuest && currentDecision) {
         setGuests((prevGuests) =>
           prevGuests.map(guest =>
-            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, email: emailValue } : guest 
+            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, email: emailValue } : guest
           )
         );
         updateGuestTags(trimmedName, emailValue, selectedGuestTags);
         setNotification(`Modified: ${trimmedName}`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', email: emailValue }; 
+        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', email: emailValue };
         setGuests(prevGuests => [...prevGuests, newGuest]);
         addGuest(trimmedName, emailValue);
         setNotification(`Added: ${trimmedName}`);
@@ -176,7 +172,7 @@ const GuestPage: React.FC = ({
   });
 
   const isValidEmail = (email: string): boolean => {
-    
+
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
@@ -194,28 +190,19 @@ const GuestPage: React.FC = ({
 
         <SpaceBetweenContainer>
           <Subtitle level={3}>Name:</Subtitle>
-          <div style={{ width: '12rem' }}>
-            {currentGuest && (
-              <SelectorContainer>
-                <SelectorButton onClick={() => setIsDecisionDropdowsOpen(!isDecisionDropdowsOpen)}>
-                  <Subtitle level={3}>Decision {isDecisionDropdowsOpen ? "▵" : "▿"}</Subtitle>
-                </SelectorButton>
-                <DropdownMenu isOpen={isDecisionDropdowsOpen}>
-                  {decisions.map((decision) => (
-                    <RadioButton key={decision}>
-                      <input
-                        type="radio"
-                        value={decision}
-                        name="decision"
-                        checked={currentDecision === decision}
-                        onChange={() => setCurrentDecision(decision)}
-                      />
-                      <Label color="tertiary">{decision.charAt(0).toUpperCase() + decision.slice(1)}</Label>
-                    </RadioButton>
-                  ))}
-                </DropdownMenu>
-              </SelectorContainer>
-            )}</div>
+          {currentGuest && (
+            <SelectorContainer>
+              <DropdownSelector
+                title="Decision"
+                initialSelectedOption={currentGuest.decision}
+                options={decisions.map((decision) => ({
+                  label: decision.charAt(0).toUpperCase() + decision.slice(1),
+                  value: decision,
+                }))}
+                onOptionSelect={(selectedOption) => setCurrentDecision(selectedOption as Decision)}
+              />
+            </SelectorContainer>
+          )}
         </SpaceBetweenContainer>
         <GuidedInput
           size="medium"
@@ -292,72 +279,53 @@ const GuestPage: React.FC = ({
       </MenuContainer>
 
       <GuestList isHomePage={false} guests={filteredGuests} handleDecision={handleDecisionChange} handleInvite={handleInviteChange}>
-        <SelectorContainer onClick={() => { setIsFilterTagDropdowsOpen(!isFilterTagDropdowsOpen) }}>
-          <Label color="dark">Filter By Tag {isFilterTagDropdowsOpen ? "▵" : "▿"}</Label>
-          <DropdownMenu isOpen={isFilterTagDropdowsOpen}>
-            {allTags.map((option) => (
-              <div key={option} style={{ height: '4rem', alignItems: 'center' }}>
-                <CustomCheckboxWrapper>
-                  <CustomCheckboxLabel>
-                    <HiddenCheckbox
-                      type="checkbox"
-                      value={option}
-                      checked={filterByTag.includes(option)}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          setFilterByTag(prev => [...prev, option]);
-                        } else {
-                          setFilterByTag(prev => prev.filter(tag => tag !== option));
-                        }
-                      }}
-                    />
-                    <StyledCheckbox checked={filterByTag.includes(option)}>
-                      <svg viewBox="8 4 10 14" width="18" height="18">
-                        <polyline points="4 6 10 17 22 3 11 12" />
-                      </svg>
-                    </StyledCheckbox>
-                  </CustomCheckboxLabel>
-                  <Label color="tertiary">{option}</Label>
-                </CustomCheckboxWrapper>
-              </div>
-            ))}
-          </DropdownMenu>
+
+        <SelectorContainer>
+          <DropdownSelector
+            title="Filter by Tag"
+            initialSelectedOption={filterByTag.join(", ") || "All"}
+            options={allTags.map(tag => ({ label: tag, value: tag }))}
+            onOptionSelect={(selectedOption) => {
+              setFilterByTag((prev) => {
+                return prev.includes(selectedOption)
+                  ? prev.filter(tag => tag !== selectedOption)
+                  : [...prev, selectedOption];
+              });
+            }}
+          />
         </SelectorContainer>
 
-        <SelectorContainer onClick={() => { setIsFilterDecisionDropdowsOpen(!isFilterDecisionDropdowsOpen) }}>
-          <Label color="dark">Filter By Decision {isFilterDecisionDropdowsOpen ? "▵" : "▿"}</Label>
-          <DropdownMenu isOpen={isFilterDecisionDropdowsOpen}>
-            {['all', ...decisions].map((decision) => (
-              <RadioButton key={decision}>
-                <input
-                  type="radio"
-                  value={decision}
-                  name="decision"
-                  checked={filterByDecision === decision}
-                  onChange={(event) => { setFilterByDecision(event.target.value) }}
-                />
-                <Label color="tertiary">{decision}</Label>
-              </RadioButton>
-            ))}
-          </DropdownMenu>
+        <SelectorContainer>
+          <DropdownSelector
+            title="Filter by Decision"
+            initialSelectedOption={filterByDecision}
+            options={[
+              { label: "All", value: "all" },
+              ...decisions.map(decision => ({
+                label: decision.charAt(0).toUpperCase() + decision.slice(1),
+                value: decision,
+              }))
+            ]}
+            onOptionSelect={(selectedOption) => {
+              if (Array.isArray(selectedOption)) {
+                setFilterByDecision(selectedOption);
+              } else {
+                setFilterByDecision(selectedOption);
+              }
+            }}
+            multiSelect={true}
+          />
         </SelectorContainer>
-
-        <SelectorContainer onClick={() => { setIsSortDropdowsOpen(!isSortDropdowsOpen) }}>
-          <Label color="dark">Sort {isSortDropdowsOpen ? "▵" : "▿"}</Label>
-          <DropdownMenu isOpen={isSortDropdowsOpen}>
-            {['asc', 'desc'].map((option) => (
-              <RadioButton key={option}>
-                <input
-                  type="radio"
-                  value={option}
-                  name="theme"
-                  checked={sortBy === option}
-                  onChange={(event) => { setSortBy(event.target.value as 'asc' | 'desc') }}
-                />
-                <Label color="tertiary">{option}</Label>
-              </RadioButton>
-            ))}
-          </DropdownMenu>
+        <SelectorContainer>
+          <DropdownSelector
+            title="Sort"
+            initialSelectedOption={sortBy}
+            options={[
+              { label: "Ascending", value: "asc" },
+              { label: "Descending", value: "desc" }
+            ]}
+            onOptionSelect={(selectedOption) => setSortBy(selectedOption as 'asc' | 'desc')}
+          />
         </SelectorContainer>
       </GuestList>
     </Container >

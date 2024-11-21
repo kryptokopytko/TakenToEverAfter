@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Input from "../components/Input"; 
-import Button, { ButtonContainer } from "../components/Button"; 
+import Input from "../components/ui/Input";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
-import { Notification } from "../styles/page"; 
-import { registerUser } from "../dummyDBApi"; 
+import { Notification } from "../styles/page";
+import { registerUser } from "../dummyDBApi";
 import { Container, Form } from "../styles/form";
 
 const RegistrationPage: React.FC = () => {
@@ -22,10 +22,10 @@ const RegistrationPage: React.FC = () => {
     const handleWeddingDateChange = (e: React.ChangeEvent<HTMLInputElement>) => setWeddingDate(e.target.value);
     const handleFirstName1Change = (e: React.ChangeEvent<HTMLInputElement>) => setFirstName1(e.target.value);
     const handleFirstName2Change = (e: React.ChangeEvent<HTMLInputElement>) => setFirstName2(e.target.value);
-    
+
     const validateForm = (email: string, password: string, confirmPassword: string, firstName1: string, firstName2: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/; 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
         if (firstName1.length < 3 || firstName2.length < 3) {
             return "First names must each be at least 3 characters long.";
@@ -43,7 +43,7 @@ const RegistrationPage: React.FC = () => {
             return "Passwords do not match.";
         }
 
-        return null; 
+        return null;
     };
 
     const handleRegister = async () => {

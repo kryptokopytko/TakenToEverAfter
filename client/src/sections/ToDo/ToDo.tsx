@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Body, Heading, Label } from "../../styles/typography";
-import Button, { ButtonContainer } from "../../components/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
-import { CustomCheckboxLabel, CustomCheckboxWrapper, StyledCheckbox, HiddenCheckbox } from '../../styles/Checkbox';
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
 import { handleTaskCompletion } from "../../dummyDBApi";
+import { Link } from "react-router-dom";
+import Checkbox from "../../components/ui/Checkbox";
 
 interface ToDoProps {
   isHomePage?: boolean;
@@ -31,7 +32,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
     setTasks(initialTasks);
   }, [initialTasks]);
 
-  
+
   const getTasksForDate = (date: Date) => {
     return tasks
       .flatMap((task) => task.subTasks)
@@ -74,7 +75,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
     const task = tasks[categoryIndex];
     const subTask = task.subTasks[subTaskIndex];
 
-    { onTaskChange ? onTaskChange(subTask.name, task.category) : {}};
+    { onTaskChange ? onTaskChange(subTask.name, task.category) : {} };
     handleTaskCompletion(subTask.name, task.category, !subTask.completed);
     const updatedTasks = tasks.map((task, index) => {
       if (index === categoryIndex) {
@@ -95,7 +96,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
   const toggleList = () => {
     setIsExpanded((prev) => !prev);
   };
-  
+
   return (
     <Container id="todo-list">
       <SpaceBetweenContainer>
@@ -127,19 +128,11 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
               <SubTaskList>
                 {task.subTasks.map((subTask, subTaskIndex) => (
                   <SpaceBetweenContainer key={subTaskIndex}>
-                    <CustomCheckboxWrapper>
-                      <CustomCheckboxLabel>
-                        <HiddenCheckbox
-                          checked={subTask.completed}
-                          onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
-                        />
-                        <StyledCheckbox checked={subTask.completed}>
-                          <svg viewBox="8 4 10 14" width="18" height="18">
-                            <polyline points="4 6 10 17 22 3 11 12" />
-                          </svg>
-                        </StyledCheckbox>
-                      </CustomCheckboxLabel>
-                    </CustomCheckboxWrapper>
+                    <Checkbox
+                      checked={subTask.completed}
+                      onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                    />
+
                     <Body size="big" style={{ marginLeft: '0.5rem' }}>
                       {subTask.name}
                     </Body>
@@ -157,7 +150,8 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
         {isHomePage ? <>
-          <Button>Manage To Do</Button>
+          <Link to="to_do">
+            <Button>Manage To Do</Button></Link>
           <Button onClick={toggleList}>
             {isExpanded ? "Collapse List" : "Expand List"}
           </Button> </> : <></>}

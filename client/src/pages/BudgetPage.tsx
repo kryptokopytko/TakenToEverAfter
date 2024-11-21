@@ -1,11 +1,11 @@
 import { Heading, Subtitle } from "../styles/typography";
 import Budget from "../sections/Budget/Budget";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
-import Input from "../components/Input";
+import Input from "../components/ui/Input";
 import { useState, useEffect } from "react";
 import { expenses as initialExpenses } from "../dummyData";
-import GuidedInput from "../components/GuidedInput";
-import Button, { ButtonContainer } from "../components/Button";
+import GuidedInput from "../components/ui/GuidedInput";
+import Button, { ButtonContainer } from "../components/ui/Button";
 import { SubExpense } from "../types";
 import { addExpense, removeExpense, updateExpense } from "../dummyDBApi";
 

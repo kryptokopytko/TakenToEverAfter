@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Label } from "../styles/typography";
+import { Label } from "../../styles/typography";
 
 export const ButtonContainer = styled.div`
   display: flex;

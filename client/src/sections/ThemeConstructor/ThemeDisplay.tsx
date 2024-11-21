@@ -1,6 +1,6 @@
 import React from "react";
-import Button, { ButtonContainer } from "../../components/Button";
-import Input from "../../components/Input";
+import Button, { ButtonContainer } from "../../components/ui/Button";
+import Input from "../../components/ui/Input";
 import { Subtitle } from "../../styles/typography";
 import { ColorBox, ColorRow } from "./ColorBox";
 import { Card } from "../../styles/card";
@@ -17,16 +17,28 @@ interface ThemeDisplayProps {
     handleDelete: (themeKey: string) => void;
 }
 
+
 const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, inputValue, onChange, isSaved, handleSave, handleDelete }) => {
     const { setTheme } = useTheme();
+
+    const handleCopyTheme = (theme: Record<string, any>) => {
+        const hslColors = Object.values(theme)
+            .map(color => typeof color === 'string' ? color : "")
+            .filter(Boolean)
+            .join(", ");
+
+        navigator.clipboard.writeText(hslColors)
+            .then(() => alert("Theme colors copied to clipboard in HSL format!"))
+            .catch(err => console.error("Failed to copy colors to clipboard: ", err));
+    };
+
     return (
         <div>
             <Subtitle level={2}>{title}</Subtitle>
             <div style={{ display: 'grid', gap: '2rem' }}>
-
                 {themeKeys.map((themeKey) => (
-                    <Card color='light'>
-                        <div key={themeKey} style={{ display: 'grid', gap: '1rem' }}>
+                    <Card color='light' key={themeKey}>
+                        <div style={{ display: 'grid', gap: '1rem' }}>
                             {isSaved ?
                                 <Subtitle level={2}>
                                     {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}
@@ -51,24 +63,22 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
                                     })}
                             </ColorRow>
                             {!isSaved ? (
-                                <div>
-
-                                    <ButtonContainer>
-                                        <Button onClick={() => setTheme(themes[themeKey])}>Pick</Button>
-                                        <Button onClick={() => handleSave(themeKey)}>Save</Button>
-                                    </ButtonContainer>
-                                </div>
+                                <ButtonContainer>
+                                    <Button onClick={() => setTheme(themes[themeKey])}>Pick</Button>
+                                    <Button onClick={() => handleSave(themeKey)}>Save</Button>
+                                </ButtonContainer>
                             ) : (
                                 <ButtonContainer>
                                     <Button onClick={() => setTheme(themes[themeKey])}>Pick</Button>
-                                    <Button onClick={() => handleDelete(themes[themeKey])}>Delete</Button>
+                                    <Button onClick={() => handleDelete(themeKey)}>Delete</Button>
+                                    <Button onClick={() => handleCopyTheme(themes[themeKey])}>Copy Theme</Button>
                                 </ButtonContainer>
                             )}
                         </div>
                     </Card>
                 ))}
             </div>
-        </div >
+        </div>
     );
 };
 

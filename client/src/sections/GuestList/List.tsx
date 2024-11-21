@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Body, Label } from "../../styles/typography";
 import { GridContainer } from "../../styles/section";
 import { Guest } from "../../types";
-import Button from "../../components/Button";
+import Button from "../../components/ui/Button";
 import { Tag, TagContainer } from "../../styles/tag";
 
 const GuestItem = styled.div`
