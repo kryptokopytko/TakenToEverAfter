@@ -10,7 +10,7 @@ class ToDoListCategorySerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'account', 'category', 'name', 'description', 'deadline')
+        fields = ('id', 'account', 'category', 'name', 'description', 'deadline', 'completed')
 
 
 class TaskAssigneeSerializer(serializers.ModelSerializer):

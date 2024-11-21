@@ -11,6 +11,7 @@ class Task(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     deadline = models.DateField(null=True)
+    completed = models.BooleanField(default=False)
 
 class TaskAssignee(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 
