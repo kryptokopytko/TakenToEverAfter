@@ -26,7 +26,7 @@ const SuggestionItem = styled.li<{ isSelected: boolean }>`
     background-color: ${({ theme }) => theme.light};
     color: ${({ theme }) => theme.body};
   }
-`; 
+`;
 
 interface GuidedInputProps extends InputProps {
     suggestions: string[];
@@ -39,7 +39,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
     const [inputValue, setInputValueLocal] = useState<string>(inputProps.value || '');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const userInput = e.target.value;
         setInputValueLocal(userInput);
 
@@ -51,7 +51,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
         setActiveSuggestionIndex(-1);
         setShowSuggestions(!!userInput && filtered.length > 0);
 
-
         if (setInputValue) {
             setInputValue(userInput);
         }
@@ -60,6 +59,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
             inputProps.onChange(e);
         }
     };
+
 
     const handleClick = (suggestion: string) => {
         setInputValueLocal(suggestion);
@@ -70,7 +70,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
         }
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (e.key === "ArrowDown") {
             if (activeSuggestionIndex < filteredSuggestions.length - 1) {
                 setActiveSuggestionIndex(prevIndex => prevIndex + 1);
@@ -87,6 +87,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
             setShowSuggestions(false);
         }
     };
+
 
     return (
         <InputContainer>

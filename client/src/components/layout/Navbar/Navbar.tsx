@@ -3,30 +3,28 @@ import { useTheme } from "../../../providers/ThemeContext";
 import logo from '/icons/logo.svg';
 import { Heading, Label } from "../../../styles/typography";
 import { StyledLink, DateContainer, LogoContainer, ButtonsContainer, ContentContainer, BurgerMenu, MobileMenu, NavbarContainer, NamesContainer } from "./NavbarStyles";
-import { DropdownMenu, RadioButton, SelectorButton, SelectorContainer } from "../../ui/Dropdown/DropdownStyles";
-import { BurgerBreakpoint } from "../../../styles/Breakpoints";
 import { useUser } from "../../../providers/UserContext";
-import { sections } from "../sections";
+import { sectionLinks, sections } from "../sections";
 import Button from "../../ui/Button";
+import DropdownSelector from "../../ui/Dropdown/Dropdown";
 
 const Navbar: React.FC = () => {
 
-  const { setIsLogged, names, isLogged, weddingDate, language, setLanguage } = useUser();
+  const { setIsLogged, names, isLogged, weddingDate, language, setLanguage, viewLocation } = useUser();
 
   const { setTheme, theme, themes } = useTheme();
 
-  const [isThemeOpen, setIsThemeOpen] = useState(false);
-  const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
-  const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedThemeKey = event.target.value;
-    const selectedTheme = themes[selectedThemeKey as keyof typeof themes];
+  const handleThemeChange = (selected: string | string[]) => {
+    const selectedKey = Array.isArray(selected) ? selected[0] : selected; 
+    const selectedTheme = themes[selectedKey as keyof typeof themes];
     if (selectedTheme) {
       setTheme(selectedTheme);
-      setIsThemeOpen(false);
     }
   };
+
+
   const handleLanguageChange = () => {
     setLanguage(language === "english" ? "polish" : "english");
   };
@@ -35,15 +33,7 @@ const Navbar: React.FC = () => {
     setIsLogged(!isLogged);
   }
 
-  const toggleThemeDropdown = () => {
-    setIsThemeOpen(prev => !prev);
-    setIsSectionOpen(false);
-  };
 
-  const toggleSectionDropdown = () => {
-    setIsSectionOpen(prev => !prev);
-    setIsThemeOpen(false);
-  };
 
   const toggleBurgerMenu = () => {
     setIsBurgerOpen(prev => !prev);
@@ -80,43 +70,35 @@ const Navbar: React.FC = () => {
           <Label size='small'>{weddingDate} </Label>
         </DateContainer>
         <ButtonsContainer>
-          <SelectorContainer>
-            <SelectorButton onClick={toggleThemeDropdown}>
-              <Label color="primary">Theme {isThemeOpen ? "▵" : "▿"}</Label>
-            </SelectorButton>
-            <DropdownMenu isOpen={isThemeOpen} breakpoint={BurgerBreakpoint}>
-              {Object.keys(themes).map((themeKey) => (
-                <RadioButton key={themeKey}>
-                  <input
-                    type="radio"
-                    value={themeKey}
-                    name="theme"
-                    checked={theme === themes[themeKey as keyof typeof themes]}
-                    onChange={handleThemeChange}
-                  />
-                  <Label color="tertiary">{themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}</Label>
-                </RadioButton>
-              ))}
-            </DropdownMenu>
-          </SelectorContainer>
 
-          <SelectorContainer>
-            <SelectorButton onClick={toggleSectionDropdown}>
-              <Label color="primary">Menu {isSectionOpen ? "▵" : "▿"}</Label>
-            </SelectorButton>
-            <DropdownMenu isOpen={isSectionOpen}>
-              {sections.map((section) => (
-                <RadioButton key={section.name}>
-                  <input type="radio" name="section" value={section.name} />
-                  <Label color="tertiary">
-                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
-                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
-                    </StyledLink>
-                  </Label>
-                </RadioButton>
-              ))}
-            </DropdownMenu>
-          </SelectorContainer>
+          <DropdownSelector
+            title="Theme"
+            options={Object.keys(themes).map(themeKey => ({
+              label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
+              value: themeKey,
+            }))}
+            initialSelectedOption={Object.keys(themes).find(key => themes[key] === theme)}
+            onOptionSelect={handleThemeChange}
+          />
+
+
+
+          <DropdownSelector
+            title="Menu"
+            options={sections.map(section => ({
+              label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
+              value: section.name,
+            }))}
+            onOptionSelect={(selected) => {
+              const section = sections.find(sec => sec.name === selected);
+              if (section) {
+                window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
+              }
+            }}
+            initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
+
+          />
+
           <div style={{ marginTop: '-1.5rem' }}>
             <Button onClick={handleLanguageChange} variant="transparent">
               <Label color="primary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
@@ -143,42 +125,32 @@ const Navbar: React.FC = () => {
             <Button onClick={handleLanguageChange} variant="transparent">
               <Label color="tertiary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
             </Button>
-            <div style={{ marginLeft: '1.5rem', marginTop: '4rem' }}>
-              <SelectorContainer>
-                <Label color="dark">Select Theme</Label>
-                <DropdownMenu isOpen={isThemeOpen}>
-                  {Object.keys(themes).map((themeKey) => (
-                    <RadioButton key={themeKey}>
-                      <input
-                        type="radio"
-                        value={themeKey}
-                        name="theme"
-                        checked={theme === themes[themeKey as keyof typeof themes]}
-                        onChange={handleThemeChange}
-                      />
-                      <Label color="tertiary">{themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}</Label>
-                    </RadioButton>
-                  ))}
-                </DropdownMenu>
-              </SelectorContainer>
-            </div>
-          </span>
 
-          <SelectorContainer>
-            <Label color="dark">Select Section</Label>
-            <DropdownMenu isOpen={isSectionOpen}>
-              {sections.map((section) => (
-                <RadioButton key={section.name}>
-                  <input type="radio" name="section" value={section.name} />
-                  <Label color="tertiary">
-                    <StyledLink to={`/${section.name.toLowerCase().replace(" ", "_")}`}>
-                      {section.name.charAt(0).toUpperCase() + section.name.slice(1)}
-                    </StyledLink>
-                  </Label>
-                </RadioButton>
-              ))}
-            </DropdownMenu>
-          </SelectorContainer>
+            <DropdownSelector
+              title="Theme"
+              options={Object.keys(themes).map(themeKey => ({
+                label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
+                value: themeKey,
+              }))}
+              initialSelectedOption={Object.keys(themes).find(key => themes[key] === theme)}
+              onOptionSelect={(selected) => handleThemeChange(selected as string)}
+            />
+          </span>
+          <DropdownSelector
+            title="Menu"
+            options={sections.map(section => ({
+              label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
+              value: section.name,
+            }))}
+            onOptionSelect={(selected) => {
+              const section = sections.find(sec => sec.name === selected);
+              if (section) {
+                window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
+              }
+            }}
+            initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
+
+          />
         </MobileMenu>
       </ContentContainer>
     </NavbarContainer>

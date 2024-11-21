@@ -1,12 +1,8 @@
 import { Image } from "./types";
 
-export const addGuest = (guestName: string, email: string) => {};
+export const addGuest = (guestName: string) => {};
 
-export const updateGuestTags = (
-  guestName: string,
-  email: string,
-  updatedTags: string[]
-) => {};
+export const updateGuestTags = (guestName: string, updatedTags: string[]) => {};
 
 export const updateTags = (tag: string, weight: number) => {};
 

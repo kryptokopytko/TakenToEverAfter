@@ -35,6 +35,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [guestList, setGuestList] = useState(guests);
     const [viewLocation, setViewLocation] = useState("Home");
     const [language, setLanguage] = useState("english");
+
     return (
         <UserContext.Provider
             value={{

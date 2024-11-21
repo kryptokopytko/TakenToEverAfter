@@ -11,13 +11,19 @@ import Printables from "../sections/Printables/Printables";
 import { guests, expenses, initialTasks, initialChoices } from "../dummyData";
 import { handleDecision, handleInvite } from "../dummyDBApi";
 
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.primary};
+`
 const SectionsContainer = styled.div`
   width: 100%;
   margin: 0 -3rem;
   margin-top: -3rem;
   position: relative;
   overflow: hidden;
-  
+  max-width: 1500px;
   & > * {
     padding: 3rem;
     width: calc(100% - 6rem);
@@ -35,37 +41,39 @@ const SectionsContainer = styled.div`
 const Home = () => {
 
   return (
-    <SectionsContainer>
-      <Hero />
-      <div id="guest-list">
-        <GuestList
-          guests={guests}
-          handleInvite={handleInvite}
-          handleDecision={handleDecision}
-          isHomePage={true} />
-      </div>
-      <div id="budget">
-        <Budget isHomePage={true} expenses={expenses} />
-      </div>
-      <div id="to-do">
-        <ToDo isHomePage={true} initialTasks={initialTasks} />
-      </div>
-      <div id="choices">
-        <Choices isHomePage={true} initialChoices={initialChoices} />
-      </div>
-      <div id="photo-album">
-        <FavouritePhotos isHomePage={true} />
-      </div>
-      <div id="table-chart">
-        <TableChart isHomePage={true} />
-      </div>
-      <div id="theme-constructor">
-        <ThemeConstructor isHomePage={true} />
-      </div>
-      <div id="printables">
-        <Printables isHomePage={true} />
-      </div>
-    </SectionsContainer>
+    <Container>
+      <SectionsContainer>
+        <Hero />
+        <div id="guest-list">
+          <GuestList
+            guests={guests}
+            handleInvite={handleInvite}
+            handleDecision={handleDecision}
+            isHomePage={true} />
+        </div>
+        <div id="budget">
+          <Budget isHomePage={true} expenses={expenses} />
+        </div>
+        <div id="to-do">
+          <ToDo isHomePage={true} initialTasks={initialTasks} />
+        </div>
+        <div id="choices">
+          <Choices isHomePage={true} initialChoices={initialChoices} />
+        </div>
+        <div id="photo-album">
+          <FavouritePhotos isHomePage={true} />
+        </div>
+        <div id="table-chart">
+          <TableChart />
+        </div>
+        <div id="theme-constructor">
+          <ThemeConstructor isHomePage={true} />
+        </div>
+        <div id="printables">
+          <Printables isHomePage={true} />
+        </div>
+      </SectionsContainer>
+    </Container>
   );
 };
 
