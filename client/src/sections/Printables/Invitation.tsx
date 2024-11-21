@@ -9,6 +9,7 @@ interface InvitationProps {
     mainText?: string;
     guestText?: string;
     propsGuestList?: Guest[];
+    children?: React.ReactNode;
 }
 
 
@@ -26,10 +27,13 @@ const Container = styled.div`
 const Border = styled.div`
     background-color:  ${({ theme }) => theme.tertiary};
     padding: 0.5rem;
-    margin-top: 2rem;
+    margin: 2rem;
+    @media (max-width: 400px) {
+    margin: 0rem;
+  }
 `;
 
-const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText }) => {
+const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
     const { names, surnames, weddingDate, weddingTime, weddingLocation, guestList } = useUser();
     const newGuestList = propsGuestList ? propsGuestList : guestList.slice(0, 3);;
     return (
@@ -52,6 +56,9 @@ const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guest
                         <Body size="bold">{additionalText}</Body>
                     )
                 }
+                {children && ( // Renderowanie children, jeśli istnieje
+                    <div>{children}</div>
+                )}
             </Container >
         </Border>
     );

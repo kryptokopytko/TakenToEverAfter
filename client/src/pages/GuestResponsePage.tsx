@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
-import { Body, Heading, Subtitle } from "../styles/typography";
-import { Container, Form } from "../styles/form";
+import { Subtitle } from "../styles/typography";
+import { Container } from "../styles/form";
 import { sendResponse } from "../dummyDBApi";
-import { useUser } from "../providers/UserContext";
 import Input from "../components/ui/Input";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
+import Invitation from "../sections/Printables/Invitation";
 
 interface GuestResponseProps { }
 
 const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
-    const { names, weddingDate } = useUser();
 
     const guestName = new URLSearchParams(location.search).get('guest');
     const [response, setResponse] = useState<"yes" | "no" | null>(null);
     const [dietaryPreference, setDietaryPreference] = useState<string | null>(null);
     const [otherPreference, setOtherPreference] = useState<string>("");
 
-    const [bride, groom] = names;
 
     const handleResponse = (decision: "yes" | "no") => {
         setResponse(decision);
@@ -38,12 +36,8 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
 
     return (
         <Container>
-            <Form>
+            <Invitation>
                 <div style={{ textAlign: 'center' }}>
-                    <Heading level={2}>Welcome {guestName}!</Heading>
-                    <Body size='big'>We are excited to invite you to our wedding!</Body>
-                    <Subtitle level={3}>{bride} & {groom}</Subtitle>
-                    <Body size='big'>Date: {weddingDate}</Body>
                     {response === null && (
                         <>
                             <Subtitle level={2}>Will you be joining us?</Subtitle>
@@ -54,7 +48,7 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                             </ButtonContainer> </>)}
 
                     {response && response === "yes" && (
-                        <div style={{ marginTop: '2rem' }}>
+                        <div style={{ marginTop: '2rem', marginLeft: '2.5rem' }}>
                             <DropdownSelector
                                 options={dietaryOptions}
                                 title="Do you have any dietary preferences?"
@@ -76,7 +70,9 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
 
                     {response && (
                         <div style={{ marginTop: '2rem' }}>
-                            Thank you for your response, {guestName}! You have selected:{" "}
+                            Thank you for your response, {guestName}!
+                            <br />
+                            You have selected:{" "}
                             {response === "yes" ? "Yes, I will attend!" : "No, I cannot attend."}
                         </div>
                     )}
@@ -88,7 +84,8 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                         </div>
                     )}
                 </div>
-            </Form>
+            </Invitation >
+
         </Container>
     );
 };
