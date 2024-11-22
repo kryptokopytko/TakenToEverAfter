@@ -1,0 +1,7 @@
+frontend/node_modules
+client/node_modules
+node_modules/*
+*/migrations/*
+*/__init__.py
+backend/db.sqlite3
+__pycache__/
