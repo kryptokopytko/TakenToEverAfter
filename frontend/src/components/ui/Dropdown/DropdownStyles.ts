@@ -31,7 +31,10 @@ export const DropdownMenu = styled.div<{
 export const RadioButton = styled.label`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+  margin-top: 0.7rem;
+
   cursor: pointer;
   input {
     appearance: none;

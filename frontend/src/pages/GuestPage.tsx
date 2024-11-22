@@ -16,7 +16,6 @@ import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 const GuestPage: React.FC = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
   const [newTag, setNewTag] = useState('');
   const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
@@ -28,7 +27,6 @@ const GuestPage: React.FC = ({
   const [filterByTag, setFilterByTag] = useState<string[]>([]);
   const [filterByDecision, setFilterByDecision] = useState<string | string[]>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
-  const [emailError, setEmailError] = useState<string>('');
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -36,11 +34,9 @@ const GuestPage: React.FC = ({
     if (guest) {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
-      setEmailValue(guest.email || '');
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
-      setEmailValue('');
     }
   }, [inputValue, guests]);
 
@@ -64,10 +60,11 @@ const GuestPage: React.FC = ({
   const allDecisions = guests.map((guest) => guest.decision);
   const decisions = [...new Set(allDecisions)];
 
-  const handleNewTagWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewTagWeightChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
-    setNewTagWeight(value.split('').filter(c => c >= '0' && c <= '9').join(''));
+    setNewTagWeight(value.replace(/\D/g, ''));
   };
+
 
   const handleDecisionChange = (guestName: string, decision: 'yes' | 'no') => {
     setGuests((prevGuests) =>
@@ -94,7 +91,7 @@ const GuestPage: React.FC = ({
     const updatedTags = [...selectedGuestTags, tag];
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
-      updateGuestTags(currentGuest.name, emailValue, updatedTags);
+      updateGuestTags(currentGuest.name, updatedTags);
       updateTags(tag, weight);
     }
   };
@@ -103,7 +100,7 @@ const GuestPage: React.FC = ({
     const updatedTags = selectedGuestTags.filter(existingTag => existingTag !== tag);
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
-      updateGuestTags(currentGuest.name, emailValue, updatedTags);
+      updateGuestTags(currentGuest.name, updatedTags);
     }
   };
 
@@ -112,26 +109,20 @@ const GuestPage: React.FC = ({
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
 
-      if (!isValidEmail(emailValue)) {
-        setEmailError("Please enter a valid email address.");
-        return;
-      } else {
-        setEmailError('');
-      }
 
 
       if (existingGuest && currentDecision) {
         setGuests((prevGuests) =>
           prevGuests.map(guest =>
-            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, email: emailValue } : guest
+            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision } : guest
           )
         );
-        updateGuestTags(trimmedName, emailValue, selectedGuestTags);
+        updateGuestTags(trimmedName, selectedGuestTags);
         setNotification(`Modified: ${trimmedName}`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', email: emailValue };
+        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited' };
         setGuests(prevGuests => [...prevGuests, newGuest]);
-        addGuest(trimmedName, emailValue);
+        addGuest(trimmedName);
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -149,9 +140,10 @@ const GuestPage: React.FC = ({
     }
   };
 
-  const handleNewTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewTagChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setNewTag(e.target.value);
   };
+
 
   const handleAddNewTag = () => {
     const trimmedTag = newTag.trim();
@@ -171,11 +163,7 @@ const GuestPage: React.FC = ({
     }
   });
 
-  const isValidEmail = (email: string): boolean => {
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
 
   const filteredGuests = sortedGuests.filter(guest => {
     const tagMatch = filterByTag.length === 0 || filterByTag.every(tag => guest.tags.includes(tag));
@@ -189,7 +177,8 @@ const GuestPage: React.FC = ({
         <Heading level={2}>Manage guests</Heading>
 
         <SpaceBetweenContainer>
-          <Subtitle level={3}>Name:</Subtitle>
+          {!currentGuest &&
+            <Subtitle level={3}>Name:</Subtitle>}
           {currentGuest && (
             <SelectorContainer>
               <DropdownSelector
@@ -212,17 +201,7 @@ const GuestPage: React.FC = ({
           setInputValue={setInputValue}
           placeholder="Name"
         />
-        <div style={{ textAlign: 'left' }}>
-          <Subtitle level={3}>Email:</Subtitle>
-        </div>
-        <Input
-          size="medium"
-          value={emailValue}
-          onChange={(e) => setEmailValue(e.target.value)}
-          type="email"
-          placeholder="Enter email..."
-        />
-        {emailError && <Notification>{emailError}</Notification>}
+
         <ButtonContainer>
           <Button onClick={handleAddOrModifyGuest}>
             {currentGuest ? "Modify" : "Add"}
@@ -286,12 +265,18 @@ const GuestPage: React.FC = ({
             initialSelectedOption={filterByTag.join(", ") || "All"}
             options={allTags.map(tag => ({ label: tag, value: tag }))}
             onOptionSelect={(selectedOption) => {
-              setFilterByTag((prev) => {
-                return prev.includes(selectedOption)
-                  ? prev.filter(tag => tag !== selectedOption)
-                  : [...prev, selectedOption];
-              });
+              if (typeof selectedOption === 'string') {
+                setFilterByTag((prev: string[]) => {
+                  if (prev.includes(selectedOption)) {
+                    return prev.filter((tag) => tag !== selectedOption);
+                  }
+                  return [...prev, selectedOption];
+                });
+              } else {
+                console.warn("Unexpected type for selectedOption", selectedOption);
+              }
             }}
+
           />
         </SelectorContainer>
 
@@ -308,11 +293,13 @@ const GuestPage: React.FC = ({
             ]}
             onOptionSelect={(selectedOption) => {
               if (Array.isArray(selectedOption)) {
-                setFilterByDecision(selectedOption);
+                setFilterByDecision(selectedOption.join(", "));
               } else {
                 setFilterByDecision(selectedOption);
               }
             }}
+
+
             multiSelect={true}
           />
         </SelectorContainer>

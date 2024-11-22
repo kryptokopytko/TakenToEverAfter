@@ -4,7 +4,6 @@ export interface Guest {
   name: string;
   decision: Decision;
   tags: string[];
-  email?: string;
 }
 
 export const decisionTypes = ["yes", "maybe", "no", "not invited"];
