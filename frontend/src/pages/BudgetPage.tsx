@@ -100,7 +100,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         }
         setTimeout(() => setNotification(null), notificationTimeOut);
 
-        // Reset fields
+        
         setInputExpenseName('');
         setInputExpensePrice('');
         setInputCategory('');

@@ -7,7 +7,7 @@ import { Choice } from "../types";
 import { handleChoicePick } from "../dummyDBApi";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Description } from "../styles/Description";
+import { Description, DescriptionContainer } from "../styles/Description";
 
 const LimitedWidth = styled.span`
     max-width: 50%;
@@ -94,7 +94,9 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
                                             </Button>
                                         )}
                                     </LimitedWidth>
-                                    <Description>{option.description}</Description>
+                                    <DescriptionContainer rmove={-8}>
+                                        <Description>{option.description}</Description>
+                                    </DescriptionContainer>
 
                                 </SpaceBetweenContainer>
                             ))}

@@ -77,7 +77,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         setNotification(`Choice "${choiceName}" added to category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
-        // Reset fields
+        
         setChoiceName('');
         setChoiceAmount('');
         setChoiceCategory('');

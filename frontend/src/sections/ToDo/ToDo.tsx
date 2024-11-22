@@ -11,15 +11,16 @@ import { handleTaskCompletion } from "../../dummyDBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
-import { Description } from "../../styles/Description";
+import { Description, DescriptionContainer } from "../../styles/Description";
 
 interface ToDoProps {
+  onDeadlineChange?: (deadline: Date) => void;
   isHomePage?: boolean;
   initialTasks: Task[];
   onTaskChange?: (taskName: string, category: string) => void;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) => {
+const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks, onTaskChange }) => {
   const { weddingDate } = useUser();
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
@@ -122,10 +123,16 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
 
       <StyledCalendar
         value={selectedDate}
-        onClickDay={(date) => setSelectedDate(date)}
+        onClickDay={(date) => {
+          setSelectedDate(date);
+          if (onDeadlineChange) {
+            onDeadlineChange(date);
+          }
+        }}
         tileClassName={tileClassName}
         tileContent={tileContent}
       />
+
 
       <div>
         <GridContainer isExpanded={isExpanded} minWidth="28rem">
@@ -154,8 +161,9 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
                       <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
                         {subTask.deadline}
                       </Label>
-
-                      <Description>{subTask.description}</Description>
+                      <DescriptionContainer move={-5}>
+                        <Description>{subTask.description}</Description>
+                      </DescriptionContainer>
                     </SpaceBetweenContainer>
                   </div>
                 ))}

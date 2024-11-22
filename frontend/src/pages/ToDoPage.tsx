@@ -65,7 +65,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
         setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
-        // Reset fields
+
         setTaskName('');
         setTaskDeadline('');
         setTaskCategory('');
@@ -133,6 +133,14 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             });
         });
     };
+
+    const handleDeadlineChange = (deadline: Date) => {
+        const formattedDate = new Date(deadline.getTime() - deadline.getTimezoneOffset() * 60000)
+            .toISOString()
+            .split('T')[0]; 
+        setTaskDeadline(formattedDate); 
+    };
+
 
     const isInputValid = () => {
         return (
@@ -202,7 +210,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                 </ButtonContainer>
             </MenuContainer>
 
-            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} />
+            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} onDeadlineChange={handleDeadlineChange} />
         </Container>
     );
 };
