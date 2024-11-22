@@ -1,4 +1,8 @@
 import { Guest, Image, Task } from "./types";
+
+const description =
+  "How does a bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten Spot in the Caribbean by providence, impoverished, in squalor Grow up to be a hero and a scholar?";
+
 export const guests: Guest[] = [
   {
     name: "Baby Smurf",
@@ -231,41 +235,41 @@ export const expenses = [
   {
     category: "Venue",
     subExpenses: [
-      { subCategory: "Rental", amount: 700 },
-      { subCategory: "Cleaning", amount: 300 },
+      { subCategory: "Rental", amount: 700, description: description },
+      { subCategory: "Cleaning", amount: 300, description: description },
     ],
   },
 
   {
     category: "Photography",
     subExpenses: [
-      { subCategory: "Photographer", amount: 250 },
-      { subCategory: "Album", amount: 50 },
+      { subCategory: "Photographer", amount: 250, description: description },
+      { subCategory: "Album", amount: 50, description: description },
     ],
   },
 
   {
     category: "Entertainment",
     subExpenses: [
-      { subCategory: "DJ", amount: 80 },
-      { subCategory: "Games", amount: 20 },
+      { subCategory: "DJ", amount: 80, description: description },
+      { subCategory: "Games", amount: 20, description: description },
     ],
   },
   {
     category: "Catering",
     subExpenses: [
-      { subCategory: "Dinner", amount: 300 },
-      { subCategory: "Vodka", amount: 50 },
-      { subCategory: "Vine", amount: 300 },
-      { subCategory: "Supper", amount: 200 },
-      { subCategory: "Ice Cream", amount: 100 },
+      { subCategory: "Dinner", amount: 300, description: description },
+      { subCategory: "Vodka", amount: 50, description: description },
+      { subCategory: "Vine", amount: 300, description: description },
+      { subCategory: "Supper", amount: 200, description: description },
+      { subCategory: "Ice Cream", amount: 100, description: description },
     ],
   },
   {
     category: "Decorations",
     subExpenses: [
-      { subCategory: "Flowers", amount: 100 },
-      { subCategory: "Lighting", amount: 100 },
+      { subCategory: "Flowers", amount: 100, description: description },
+      { subCategory: "Lighting", amount: 100, description: description },
     ],
   },
 ];
@@ -274,31 +278,81 @@ export const initialTasks: Task[] = [
   {
     category: "Planning",
     subTasks: [
-      { name: "Create guest list", completed: false, deadline: "2024-10-05" },
-      { name: "Select venue", completed: true, deadline: "2024-09-25" },
+      {
+        name: "Create guest list",
+        description: description,
+        completed: false,
+        deadline: "2024-10-05",
+      },
+      {
+        name: "Select venue",
+        description: description,
+        completed: true,
+        deadline: "2024-09-25",
+      },
     ],
   },
   {
     category: "Catering",
     subTasks: [
-      { name: "Confirm menu", completed: false, deadline: "2024-10-10" },
-      { name: "Hire caterer", completed: true, deadline: "2024-09-28" },
+      {
+        name: "Confirm menu",
+        description: description,
+        completed: false,
+        deadline: "2024-10-10",
+      },
+      {
+        name: "Hire caterer",
+        description: description,
+        completed: true,
+        deadline: "2024-09-28",
+      },
     ],
   },
   {
     category: "Decorations",
     subTasks: [
-      { name: "Choose flowers", completed: false, deadline: "2024-10-15" },
-      { name: "Design table setup", completed: false, deadline: "2024-10-12" },
-      { name: "Choose color theme", completed: false, deadline: "2024-10-20" },
-      { name: "Choose kayaks", completed: true, deadline: "2024-09-29" },
+      {
+        name: "Choose flowers",
+        description: description,
+        completed: false,
+        deadline: "2024-10-15",
+      },
+      {
+        name: "Design table setup",
+        description: description,
+        completed: false,
+        deadline: "2024-10-12",
+      },
+      {
+        name: "Choose color theme",
+        description: description,
+        completed: false,
+        deadline: "2024-10-20",
+      },
+      {
+        name: "Choose kayaks",
+        description: description,
+        completed: true,
+        deadline: "2024-09-29",
+      },
     ],
   },
   {
     category: "Entertainment",
     subTasks: [
-      { name: "Book DJ", completed: true, deadline: "2024-09-22" },
-      { name: "Plan activities", completed: true, deadline: "2024-09-23" },
+      {
+        name: "Book DJ",
+        description: description,
+        completed: true,
+        deadline: "2024-09-22",
+      },
+      {
+        name: "Plan activities",
+        description: description,
+        completed: true,
+        deadline: "2024-09-23",
+      },
     ],
   },
 ];

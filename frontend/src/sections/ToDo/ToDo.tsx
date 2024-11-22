@@ -11,6 +11,7 @@ import { handleTaskCompletion } from "../../dummyDBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
+import { Description } from "../../styles/Description";
 
 interface ToDoProps {
   isHomePage?: boolean;
@@ -19,7 +20,7 @@ interface ToDoProps {
 }
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) => {
-  const { weddingDate } = useUser(); 
+  const { weddingDate } = useUser();
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -34,7 +35,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
     setTasks(initialTasks);
   }, [initialTasks]);
 
-  
+
   const getTasksForDate = (date: Date) => {
     return tasks
       .flatMap((task) => task.subTasks)
@@ -42,21 +43,21 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
       .map((subTask) => subTask.name);
   };
 
-  
+
   const isDateDeadline = (date: Date) => {
     return getTasksForDate(date).length > 0;
   };
 
-  
+
   const isWeddingDate = (date: Date) => {
     const weddingDateFormatted = new Date(weddingDate.split(".").reverse().join("-"));
     return weddingDateFormatted.toDateString() === date.toDateString();
   };
 
-  
+
   const tileClassName = ({ date }: { date: Date }) => {
     if (isWeddingDate(date)) {
-      return "wedding-date"; 
+      return "wedding-date";
     }
     if (isDateDeadline(date)) {
       return "highlight";
@@ -64,7 +65,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
     return null;
   };
 
-  
+
   const tileContent = ({ date }: { date: Date }) => {
     const tasksForDate = getTasksForDate(date);
     if (tasksForDate.length > 0) {
@@ -140,21 +141,26 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
 
               <SubTaskList>
                 {task.subTasks.map((subTask, subTaskIndex) => (
-                  <SpaceBetweenContainer key={subTaskIndex}>
-                    <Checkbox
-                      checked={subTask.completed}
-                      onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
-                    />
+                  <div style={{ position: 'relative' }}>
+                    <SpaceBetweenContainer key={subTaskIndex} className="subtask-container">
+                      <Checkbox
+                        checked={subTask.completed}
+                        onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                      />
 
-                    <Body size="big" style={{ marginLeft: "0.5rem" }}>
-                      {subTask.name}
-                    </Body>
-                    <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
-                      {subTask.deadline}
-                    </Label>
-                  </SpaceBetweenContainer>
+                      <Body size="big" style={{ marginLeft: "0.5rem" }}>
+                        {subTask.name}
+                      </Body>
+                      <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
+                        {subTask.deadline}
+                      </Label>
+
+                      <Description className="description">{subTask.description}</Description>
+                    </SpaceBetweenContainer>
+                  </div>
                 ))}
               </SubTaskList>
+
             </Card>
           ))}
         </GridContainer>
