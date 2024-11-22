@@ -8,6 +8,7 @@ import { exportToPDF } from "../Printables/exportToPdf";
 import { Card } from "../../styles/card";
 import { Expenses } from "../../types";
 import { Link } from "react-router-dom";
+import { Description } from "../../styles/Description";
 
 const HeaderContainer = styled.div<{ isHomePage: boolean }>`
   display: grid;
@@ -74,10 +75,13 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
                         </SpaceBetweenContainer>
 
                         {expense.subExpenses.map((subExpense, subIndex) => (
-                            <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
-                                <Body size='big'>{subExpense.subCategory}</Body>
-                                <Body size='big'>${subExpense.amount}</Body>
-                            </SpaceBetweenContainer>
+                            <div style={{ position: 'relative' }}>
+                                <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
+                                    <Body size='big'>{subExpense.subCategory}</Body>
+                                    <Body size='big'>${subExpense.amount}</Body>
+                                </SpaceBetweenContainer>
+                                <Description>{subExpense.description}</Description>
+                            </div>
                         ))}
                     </Card>
                 ))}

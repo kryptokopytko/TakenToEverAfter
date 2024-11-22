@@ -155,7 +155,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
                         {subTask.deadline}
                       </Label>
 
-                      <Description className="description">{subTask.description}</Description>
+                      <Description>{subTask.description}</Description>
                     </SpaceBetweenContainer>
                   </div>
                 ))}
