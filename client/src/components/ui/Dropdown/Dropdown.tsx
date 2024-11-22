@@ -13,9 +13,10 @@ interface DropdownSelectorProps {
     title: string;
     initialSelectedOption?: string | string[];
     multiSelect?: boolean;
+    color?: string;
 }
 
-const DropdownSelector: React.FC<DropdownSelectorProps> = ({ options, onOptionSelect, title, initialSelectedOption, multiSelect = false }) => {
+const DropdownSelector: React.FC<DropdownSelectorProps> = ({ options, onOptionSelect, title, initialSelectedOption, color, multiSelect = false }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -54,7 +55,7 @@ const DropdownSelector: React.FC<DropdownSelectorProps> = ({ options, onOptionSe
     return (
         <SelectorContainer>
             <SelectorButton onClick={toggleDropdown}>
-                <Subtitle level={3}>{title} {isOpen ? "▵" : "▿"}</Subtitle>
+                <Subtitle color={color} level={3}>{title} {isOpen ? "▵" : "▿"}</Subtitle>
             </SelectorButton>
             <DropdownMenu isOpen={isOpen}>
                 {options.map((option) => (

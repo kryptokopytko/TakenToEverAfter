@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
 
   const handleThemeChange = (selected: string | string[]) => {
-    const selectedKey = Array.isArray(selected) ? selected[0] : selected; 
+    const selectedKey = Array.isArray(selected) ? selected[0] : selected;
     const selectedTheme = themes[selectedKey as keyof typeof themes];
     if (selectedTheme) {
       setTheme(selectedTheme);
@@ -66,12 +66,13 @@ const Navbar: React.FC = () => {
         </StyledLink>
         <DateContainer>
           {calculateDaysLeft() > 0 ?
-            <Label size='small'>{calculateDaysLeft()} days left</Label> : <></>}
-          <Label size='small'>{weddingDate} </Label>
+            <Label size='small' color='primary'>{calculateDaysLeft()} days left</Label> : <></>}
+          <Label size='small' color='primary'>{weddingDate} </Label>
         </DateContainer>
         <ButtonsContainer>
 
           <DropdownSelector
+            color='primary'
             title="Theme"
             options={Object.keys(themes).map(themeKey => ({
               label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
@@ -85,6 +86,8 @@ const Navbar: React.FC = () => {
 
           <DropdownSelector
             title="Menu"
+            color='primary'
+
             options={sections.map(section => ({
               label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
               value: section.name,

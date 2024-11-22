@@ -422,7 +422,7 @@ export const exampleImages: Image[] = [
     id: 10,
     name: "Autumn Leaves",
     link: "https://www.shutterstock.com/image-photo/anonymous-female-traveler-casual-sweater-600nw-2258700909.jpg",
-    isFavorite: false,
+    isFavorite: true,
     author: "James Hernandez",
     isApproved: true,
   },
@@ -430,8 +430,9 @@ export const exampleImages: Image[] = [
     id: 11,
     name: "Snowy Mountains",
     link: "https://media.istockphoto.com/id/636379014/photo/hands-forming-a-heart-shape-with-sunset-silhouette.jpg?s=612x612&w=0&k=20&c=CgjWWGEasjgwia2VT7ufXa10azba2HXmUDe96wZG8F0=",
-    isFavorite: false,
+    isFavorite: true,
     author: "Olivia Lee",
+    isApproved: true,
   },
   {
     id: 12,
@@ -440,6 +441,16 @@ export const exampleImages: Image[] = [
     isFavorite: false,
     author: "William Walker",
   },
+  {
+    id: 13,
+    name: "The Duck That Rules THEM ALL",
+    link: "https://homeinthefingerlakes.com/wp-content/uploads/2020/04/Ducks-0025-718x1024.jpg",
+    isFavorite: true,
+    author: "Marcinos",
+    isApproved: true,
+  },
+];
+export const oldPhotos = [
   {
     id: 13,
     name: "Dancing",

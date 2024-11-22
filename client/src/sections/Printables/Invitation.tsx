@@ -56,7 +56,7 @@ const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guest
                         <Body size="bold">{additionalText}</Body>
                     )
                 }
-                {children && ( // Renderowanie children, jeśli istnieje
+                {children && ( 
                     <div>{children}</div>
                 )}
             </Container >

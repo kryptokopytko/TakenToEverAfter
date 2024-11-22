@@ -20,9 +20,7 @@ export const PhotosContainer = styled.div`
 `;
 
 export const StyledImage = styled.img`
-  max-width: 60vw;
-  max-height: 60vh;
-  height: auto;
+  max-height: 50vh;
   margin: 1rem 0;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
