@@ -360,43 +360,119 @@ export const initialTasks: Task[] = [
 export const initialChoices = [
   {
     choice: "Venue",
+
     options: [
-      { option: "Castle", amount: 700, isPicked: false },
-      { option: "Beach", amount: 300, isPicked: false },
-      { option: "Garden", amount: 400, isPicked: false },
-      { option: "Hotel", amount: 500, isPicked: false },
+      {
+        option: "Castle",
+        description: description,
+        amount: 700,
+        isPicked: false,
+      },
+      {
+        option: "Beach",
+        description: description,
+        amount: 300,
+        isPicked: false,
+      },
+      {
+        option: "Garden",
+        description: description,
+        amount: 400,
+        isPicked: false,
+      },
+      {
+        option: "Hotel",
+        description: description,
+        amount: 500,
+        isPicked: false,
+      },
     ],
   },
   {
     choice: "Catering",
     options: [
-      { option: "Buffet", amount: 50, isPicked: false },
-      { option: "Sit-down dinner", amount: 75, isPicked: false },
-      { option: "Barbecue", amount: 60, isPicked: true },
+      {
+        option: "Buffet",
+        description: description,
+        amount: 50,
+        isPicked: false,
+      },
+      {
+        option: "Sit-down dinner",
+        description: description,
+        amount: 75,
+        isPicked: false,
+      },
+      {
+        option: "Barbecue",
+        description: description,
+        amount: 60,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Decor",
     options: [
-      { option: "Floral arrangements", amount: 200, isPicked: true },
-      { option: "Balloon decorations", amount: 100, isPicked: false },
-      { option: "Fairy lights", amount: 150, isPicked: true },
+      {
+        option: "Floral arrangements",
+        description: description,
+        amount: 200,
+        isPicked: true,
+      },
+      {
+        option: "Balloon decorations",
+        description: description,
+        amount: 100,
+        isPicked: false,
+      },
+      {
+        option: "Fairy lights",
+        description: description,
+        amount: 150,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Entertainment",
     options: [
-      { option: "Live band", amount: 1000, isPicked: true },
-      { option: "DJ", amount: 500, isPicked: false },
-      { option: "Photo booth", amount: 300, isPicked: true },
+      {
+        option: "Live band",
+        description: description,
+        amount: 1000,
+        isPicked: true,
+      },
+      { option: "DJ", amount: 500, description: description, isPicked: false },
+      {
+        option: "Photo booth",
+        description: description,
+        amount: 300,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Photography",
     options: [
-      { option: "Professional photographer", amount: 1200, isPicked: false },
-      { option: "Videographer", amount: 1500, isPicked: false },
-      { option: "Photo package", amount: 800, isPicked: false },
+      {
+        option: "Professional photographer",
+        description: description,
+        amount: 1200,
+        isPicked: false,
+      },
+      {
+        option: "Videographer",
+        description: description,
+        amount: 1500,
+        isPicked: false,
+      },
+      {
+        option: "Photo package",
+        description: description,
+        amount: 800,
+        isPicked: false,
+      },
     ],
   },
 ];

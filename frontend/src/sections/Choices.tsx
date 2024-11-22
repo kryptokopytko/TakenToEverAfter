@@ -7,9 +7,10 @@ import { Choice } from "../types";
 import { handleChoicePick } from "../dummyDBApi";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Description } from "../styles/Description";
 
 const LimitedWidth = styled.span`
-    max-width: 60%;
+    max-width: 50%;
 `
 
 interface ChoicesProps {
@@ -75,13 +76,14 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
                             </SpaceBetweenContainer>
 
                             {choice.options.map((option, optionIndex) => (
-                                <SpaceBetweenContainer key={optionIndex} style={{ marginLeft: '1rem' }}>
+                                <SpaceBetweenContainer key={optionIndex} style={{ marginLeft: '1rem', position: 'relative' }}>
                                     <LimitedWidth>
                                         <Body size='big'>{option.option}</Body>
                                     </LimitedWidth>
                                     <LimitedWidth>
                                         <Body size='big'>${option.amount}</Body>
-                                    </LimitedWidth><LimitedWidth>
+                                    </LimitedWidth>
+                                    <LimitedWidth>
                                         {option.isPicked ? (
                                             <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
                                                 Unpick
@@ -92,6 +94,8 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
                                             </Button>
                                         )}
                                     </LimitedWidth>
+                                    <Description>{option.description}</Description>
+
                                 </SpaceBetweenContainer>
                             ))}
                         </Card>
