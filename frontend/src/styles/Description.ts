@@ -10,6 +10,9 @@ export const Description = styled.div`
   top: 0;
   opacity: 0;
   z-index: 10;
+  left: -1rem;
+  width: calc(100% - 1rem);
+  min-height: 4rem;
   &:hover {
     opacity: 100%;
   }
