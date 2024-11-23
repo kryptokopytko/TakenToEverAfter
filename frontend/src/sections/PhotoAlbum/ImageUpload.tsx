@@ -90,17 +90,35 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
             alert("Please upload a valid image file.");
             return;
         }
+
         const reader = new FileReader();
         reader.onload = () => {
             if (reader.result && typeof reader.result === "string") {
-                setImage(reader.result);
-                onImageUpload(reader.result); 
+                convertImageToTargetFormat(reader.result, file.type);
             }
         };
         reader.onerror = () => {
             alert("Failed to load image. Please try again.");
         };
         reader.readAsDataURL(file);
+    };
+
+    const convertImageToTargetFormat = (dataUrl: string, fileType: string) => {
+        const image = new Image();
+        image.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+                ctx.drawImage(image, 0, 0);
+                const targetType = fileType === "image/png" ? "image/png" : "image/jpeg";
+                const convertedDataUrl = canvas.toDataURL(targetType, 0.9); 
+                setImage(convertedDataUrl);
+                onImageUpload(convertedDataUrl);
+            }
+        };
+        image.src = dataUrl;
     };
 
     useEffect(() => {

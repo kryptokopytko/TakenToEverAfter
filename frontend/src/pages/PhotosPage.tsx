@@ -9,54 +9,28 @@ import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
 import { addPhotoToApi } from "../dummyDBApi";
 import Checkbox from "../components/ui/Checkbox";
-import ImageUpload from "../sections/PhotoAlbum/ImageUpload";
+import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
 
 const PhotosPage: React.FC = () => {
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
     const [arePendingExpanded, setArePendingExpanded] = useState(true);
     const [photoName, setPhotoName] = useState("");
     const [photoAuthor, setPhotoAuthor] = useState("");
-    const [photoLink, setPhotoLink] = useState("");
     const [isVertical, setIsVertical] = useState(false);
     const [photos, setPhotos] = useState(exampleImages);
-
-    const uploadImageToImgur = async (image: string) => {
-        const clientId = "e0b5453b9ed3b6f";
-        const url = "https://api.imgur.com/3/image";
-
-        const formData = new FormData();
-        formData.append("image", image);
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                Authorization: `Client-ID ${clientId}`,
-            },
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            return data.data.link;
-        } else {
-            throw new Error(data.data?.error || "Failed to upload image to Imgur");
-        }
-    };
+    const [imageUrl, setImageUrl] = useState<string | null>(null); // Store the image URL
 
     const handleAddPhoto = async () => {
         try {
-            if (!photoName.trim() || !photoLink) {
+            if (!photoName.trim() || !imageUrl) {
                 alert("Please provide a photo name and upload an image.");
                 return;
             }
 
-            const imgurLink = await uploadImageToImgur(photoLink);
-
             const newImage = {
                 name: photoName,
                 author: photoAuthor,
-                link: imgurLink,
+                link: imageUrl,
                 isApproved: false,
                 isFavorite: false,
                 isVertical: isVertical,
@@ -68,10 +42,10 @@ const PhotosPage: React.FC = () => {
 
             setPhotoName("");
             setPhotoAuthor("");
-            setPhotoLink("");
             setIsVertical(false);
+            setImageUrl(null);
 
-            alert(`Photo uploaded successfully! You can view it here: ${imgurLink}`);
+            alert(`Photo uploaded successfully! You can view it here: ${imageUrl}`);
         } catch (error) {
             alert("Failed to upload image: " + error);
         }
@@ -85,10 +59,6 @@ const PhotosPage: React.FC = () => {
         );
     };
 
-    const handleImageUpload = (imageUrl: string) => {
-        setPhotoLink(imageUrl);
-    };
-
     const handleDeletePhoto = (id: number) => {
         setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.id !== id));
     };
@@ -100,7 +70,7 @@ const PhotosPage: React.FC = () => {
         <Container color="light">
             <MenuContainer>
                 <Heading level={2}>Photos</Heading>
-                <ImageUpload onImageUpload={handleImageUpload} />
+                <ImgurUploader onImageUpload={setImageUrl} /> {/* Pass function to handle image URL */}
 
                 <Subtitle level={3}>Photo Name</Subtitle>
                 <Input
@@ -143,7 +113,6 @@ const PhotosPage: React.FC = () => {
                         handleDeletePhoto={handleDeletePhoto}
                         isGuest={false}
                     />
-
                 )}
 
                 <SpaceBetweenContainer>
@@ -160,7 +129,6 @@ const PhotosPage: React.FC = () => {
                         handleDeletePhoto={handleDeletePhoto}
                         isGuest={false}
                     />
-
                 )}
             </div>
         </Container>
