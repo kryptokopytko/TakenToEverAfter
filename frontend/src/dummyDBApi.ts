@@ -235,7 +235,6 @@ export const removeGuest2 = async (id: Number) => {
 
 export const updateGuestTags = async (
   guestName: string,
-  email: string,
   updatedTags: string[]
 ) => {};
 
