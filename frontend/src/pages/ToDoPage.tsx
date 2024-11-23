@@ -17,7 +17,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     const [tasks, setTasks] = useState(initialTasks);
     const [existingTask, setExistingTask] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
-
+    const [taskDescription, setTaskDescription] = useState('');
 
     useEffect(() => {
         const normalizedTaskName = taskName.trim().toLowerCase();
@@ -36,15 +36,18 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     }, [taskName, taskCategory, tasks]);
 
     const handleAddTask = () => {
-
         if (existingTask) {
             setNotification(`Task "${taskName}" already exists in category "${taskCategory}"`);
             setTimeout(() => setNotification(null), notificationTimeOut);
             return;
         }
 
-        const newTask = { name: taskName, deadline: taskDeadline, completed: false };
-
+        const newTask = {
+            name: taskName,
+            deadline: taskDeadline,
+            description: taskDescription,
+            completed: false
+        };
 
         setTasks(prevTasks => {
             const categoryIndex = prevTasks.findIndex(task => task.category.toLowerCase() === taskCategory.toLowerCase());
@@ -58,11 +61,17 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             }
         });
 
-
         addTask(taskCategory, newTask);
         setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
+
+
+        setTaskName('');
+        setTaskDeadline('');
+        setTaskCategory('');
+        setTaskDescription('');
     };
+
 
     const handleRemoveTask = () => {
         setTasks(prevTasks =>
@@ -93,7 +102,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                         ...task,
                         subTasks: task.subTasks.map(subTask =>
                             subTask.name.toLowerCase() === taskName.toLowerCase()
-                                ? { ...subTask, deadline: taskDeadline }
+                                ? { ...subTask, deadline: taskDeadline, description: taskDescription }
                                 : subTask
                         )
                     };
@@ -102,8 +111,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             });
         });
 
-
-        updateTask(taskCategory, taskName, { deadline: taskDeadline });
+        updateTask(taskCategory, taskName, { deadline: taskDeadline, description: taskDescription });
         setNotification(`Task "${taskName}" updated in category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
@@ -126,6 +134,14 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
         });
     };
 
+    const handleDeadlineChange = (deadline: Date) => {
+        const formattedDate = new Date(deadline.getTime() - deadline.getTimezoneOffset() * 60000)
+            .toISOString()
+            .split('T')[0]; 
+        setTaskDeadline(formattedDate); 
+    };
+
+
     const isInputValid = () => {
         return (
             taskName.trim() !== '' &&
@@ -134,6 +150,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             taskCategory.trim() !== ''
         );
     };
+
 
     return (
         <Container>
@@ -167,6 +184,13 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                     setInputValue={setTaskCategory}
                     onChange={(e) => setTaskCategory(e.target.value)}
                 />
+                <Subtitle level={3}>Description</Subtitle>
+                <Input
+                    value={taskDescription}
+                    placeholder="Description of the task"
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                />
+
 
                 {notification && <Notification>{notification}</Notification>}
 
@@ -186,7 +210,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                 </ButtonContainer>
             </MenuContainer>
 
-            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} />
+            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} onDeadlineChange={handleDeadlineChange} />
         </Container>
     );
 };

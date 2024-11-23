@@ -17,6 +17,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [choices, setChoices] = useState(initialChoices);
     const [existingChoice, setExistingChoice] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
+    const [choiceDescription, setChoiceDescription] = useState('');
 
     useEffect(() => {
         const normalizedChoiceName = choiceName.trim().toLowerCase();
@@ -38,10 +39,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const handleAddChoice = () => {
         const parsedAmount = parseFloat(choiceAmount);
 
-
         const categoryIndex = choices.findIndex(choice => choice.choice.toLowerCase() === choiceCategory.toLowerCase());
-
-
         const choiceExists = categoryIndex !== -1 && choices[categoryIndex].options.some(option => option.option.toLowerCase() === choiceName.toLowerCase());
 
         if (choiceExists) {
@@ -51,16 +49,14 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         }
 
         if (categoryIndex === -1) {
-
             setChoices(prevChoices => [
                 ...prevChoices,
                 {
                     choice: choiceCategory,
-                    options: [{ option: choiceName, amount: parsedAmount, isPicked: false }]
+                    options: [{ option: choiceName, amount: parsedAmount, description: choiceDescription, isPicked: false }]
                 }
             ]);
         } else {
-
             setChoices(prevChoices =>
                 prevChoices.map((choice, index) => {
                     if (index === categoryIndex) {
@@ -68,7 +64,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                             ...choice,
                             options: [
                                 ...choice.options,
-                                { option: choiceName, amount: parsedAmount, isPicked: false }
+                                { option: choiceName, amount: parsedAmount, description: choiceDescription, isPicked: false }
                             ]
                         };
                     }
@@ -77,10 +73,17 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             );
         }
 
-        addChoice(choiceCategory, { name: choiceName, amount: parsedAmount });
+        addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
         setNotification(`Choice "${choiceName}" added to category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
+
+        
+        setChoiceName('');
+        setChoiceAmount('');
+        setChoiceCategory('');
+        setChoiceDescription('');
     };
+
 
     const handleRemoveChoice = () => {
         setChoices(prevChoices =>
@@ -103,6 +106,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
 
     const handleUpdateChoice = () => {
         const parsedAmount = parseFloat(choiceAmount);
+
         setChoices(prevChoices =>
             prevChoices.map(choice => {
                 if (choice.choice.toLowerCase() === choiceCategory.toLowerCase()) {
@@ -110,7 +114,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                         ...choice,
                         options: choice.options.map(option =>
                             option.option.toLowerCase() === choiceName.toLowerCase()
-                                ? { ...option, amount: parsedAmount }
+                                ? { ...option, amount: parsedAmount, description: choiceDescription }
                                 : option
                         )
                     };
@@ -119,10 +123,11 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             })
         );
 
-        updateChoice(choiceCategory, choiceName, { amount: parsedAmount });
+        updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
         setNotification(`Choice "${choiceName}" updated in category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
+
 
 
     const isInputValid = () => {
@@ -168,6 +173,13 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                     setInputValue={setChoiceCategory}
                     onChange={(e) => setChoiceCategory(e.target.value)}
                 />
+                <Subtitle level={3}>Description</Subtitle>
+                <Input
+                    value={choiceDescription}
+                    placeholder="Description of the choice"
+                    onChange={(e) => setChoiceDescription(e.target.value)}
+                />
+
 
                 {notification && <Notification>{notification}</Notification>}
 

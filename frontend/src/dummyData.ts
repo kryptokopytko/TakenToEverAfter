@@ -1,4 +1,8 @@
 import { Guest, Image, Task } from "./types";
+
+const description =
+  "How does a bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten Spot in the Caribbean by providence, impoverished, in squalor Grow up to be a hero and a scholar?";
+
 export const guests: Guest[] = [
   {
     name: "Baby Smurf",
@@ -231,41 +235,41 @@ export const expenses = [
   {
     category: "Venue",
     subExpenses: [
-      { subCategory: "Rental", amount: 700 },
-      { subCategory: "Cleaning", amount: 300 },
+      { subCategory: "Rental", amount: 700, description: description },
+      { subCategory: "Cleaning", amount: 300, description: description },
     ],
   },
 
   {
     category: "Photography",
     subExpenses: [
-      { subCategory: "Photographer", amount: 250 },
-      { subCategory: "Album", amount: 50 },
+      { subCategory: "Photographer", amount: 250, description: description },
+      { subCategory: "Album", amount: 50, description: description },
     ],
   },
 
   {
     category: "Entertainment",
     subExpenses: [
-      { subCategory: "DJ", amount: 80 },
-      { subCategory: "Games", amount: 20 },
+      { subCategory: "DJ", amount: 80, description: description },
+      { subCategory: "Games", amount: 20, description: description },
     ],
   },
   {
     category: "Catering",
     subExpenses: [
-      { subCategory: "Dinner", amount: 300 },
-      { subCategory: "Vodka", amount: 50 },
-      { subCategory: "Vine", amount: 300 },
-      { subCategory: "Supper", amount: 200 },
-      { subCategory: "Ice Cream", amount: 100 },
+      { subCategory: "Dinner", amount: 300, description: description },
+      { subCategory: "Vodka", amount: 50, description: description },
+      { subCategory: "Vine", amount: 300, description: description },
+      { subCategory: "Supper", amount: 200, description: description },
+      { subCategory: "Ice Cream", amount: 100, description: description },
     ],
   },
   {
     category: "Decorations",
     subExpenses: [
-      { subCategory: "Flowers", amount: 100 },
-      { subCategory: "Lighting", amount: 100 },
+      { subCategory: "Flowers", amount: 100, description: description },
+      { subCategory: "Lighting", amount: 100, description: description },
     ],
   },
 ];
@@ -274,31 +278,81 @@ export const initialTasks: Task[] = [
   {
     category: "Planning",
     subTasks: [
-      { name: "Create guest list", completed: false, deadline: "2024-10-05" },
-      { name: "Select venue", completed: true, deadline: "2024-09-25" },
+      {
+        name: "Create guest list",
+        description: description,
+        completed: false,
+        deadline: "2024-10-05",
+      },
+      {
+        name: "Select venue",
+        description: description,
+        completed: true,
+        deadline: "2024-09-25",
+      },
     ],
   },
   {
     category: "Catering",
     subTasks: [
-      { name: "Confirm menu", completed: false, deadline: "2024-10-10" },
-      { name: "Hire caterer", completed: true, deadline: "2024-09-28" },
+      {
+        name: "Confirm menu",
+        description: description,
+        completed: false,
+        deadline: "2024-10-10",
+      },
+      {
+        name: "Hire caterer",
+        description: description,
+        completed: true,
+        deadline: "2024-09-28",
+      },
     ],
   },
   {
     category: "Decorations",
     subTasks: [
-      { name: "Choose flowers", completed: false, deadline: "2024-10-15" },
-      { name: "Design table setup", completed: false, deadline: "2024-10-12" },
-      { name: "Choose color theme", completed: false, deadline: "2024-10-20" },
-      { name: "Choose kayaks", completed: true, deadline: "2024-09-29" },
+      {
+        name: "Choose flowers",
+        description: description,
+        completed: false,
+        deadline: "2024-10-15",
+      },
+      {
+        name: "Design table setup",
+        description: description,
+        completed: false,
+        deadline: "2024-10-12",
+      },
+      {
+        name: "Choose color theme",
+        description: description,
+        completed: false,
+        deadline: "2024-10-20",
+      },
+      {
+        name: "Choose kayaks",
+        description: description,
+        completed: true,
+        deadline: "2024-09-29",
+      },
     ],
   },
   {
     category: "Entertainment",
     subTasks: [
-      { name: "Book DJ", completed: true, deadline: "2024-09-22" },
-      { name: "Plan activities", completed: true, deadline: "2024-09-23" },
+      {
+        name: "Book DJ",
+        description: description,
+        completed: true,
+        deadline: "2024-09-22",
+      },
+      {
+        name: "Plan activities",
+        description: description,
+        completed: true,
+        deadline: "2024-09-23",
+      },
     ],
   },
 ];
@@ -306,43 +360,119 @@ export const initialTasks: Task[] = [
 export const initialChoices = [
   {
     choice: "Venue",
+
     options: [
-      { option: "Castle", amount: 700, isPicked: false },
-      { option: "Beach", amount: 300, isPicked: false },
-      { option: "Garden", amount: 400, isPicked: false },
-      { option: "Hotel", amount: 500, isPicked: false },
+      {
+        option: "Castle",
+        description: description,
+        amount: 700,
+        isPicked: false,
+      },
+      {
+        option: "Beach",
+        description: description,
+        amount: 300,
+        isPicked: false,
+      },
+      {
+        option: "Garden",
+        description: description,
+        amount: 400,
+        isPicked: false,
+      },
+      {
+        option: "Hotel",
+        description: description,
+        amount: 500,
+        isPicked: false,
+      },
     ],
   },
   {
     choice: "Catering",
     options: [
-      { option: "Buffet", amount: 50, isPicked: false },
-      { option: "Sit-down dinner", amount: 75, isPicked: false },
-      { option: "Barbecue", amount: 60, isPicked: true },
+      {
+        option: "Buffet",
+        description: description,
+        amount: 50,
+        isPicked: false,
+      },
+      {
+        option: "Sit-down dinner",
+        description: description,
+        amount: 75,
+        isPicked: false,
+      },
+      {
+        option: "Barbecue",
+        description: description,
+        amount: 60,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Decor",
     options: [
-      { option: "Floral arrangements", amount: 200, isPicked: true },
-      { option: "Balloon decorations", amount: 100, isPicked: false },
-      { option: "Fairy lights", amount: 150, isPicked: true },
+      {
+        option: "Floral arrangements",
+        description: description,
+        amount: 200,
+        isPicked: true,
+      },
+      {
+        option: "Balloon decorations",
+        description: description,
+        amount: 100,
+        isPicked: false,
+      },
+      {
+        option: "Fairy lights",
+        description: description,
+        amount: 150,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Entertainment",
     options: [
-      { option: "Live band", amount: 1000, isPicked: true },
-      { option: "DJ", amount: 500, isPicked: false },
-      { option: "Photo booth", amount: 300, isPicked: true },
+      {
+        option: "Live band",
+        description: description,
+        amount: 1000,
+        isPicked: true,
+      },
+      { option: "DJ", amount: 500, description: description, isPicked: false },
+      {
+        option: "Photo booth",
+        description: description,
+        amount: 300,
+        isPicked: true,
+      },
     ],
   },
   {
     choice: "Photography",
     options: [
-      { option: "Professional photographer", amount: 1200, isPicked: false },
-      { option: "Videographer", amount: 1500, isPicked: false },
-      { option: "Photo package", amount: 800, isPicked: false },
+      {
+        option: "Professional photographer",
+        description: description,
+        amount: 1200,
+        isPicked: false,
+      },
+      {
+        option: "Videographer",
+        description: description,
+        amount: 1500,
+        isPicked: false,
+      },
+      {
+        option: "Photo package",
+        description: description,
+        amount: 800,
+        isPicked: false,
+      },
     ],
   },
 ];

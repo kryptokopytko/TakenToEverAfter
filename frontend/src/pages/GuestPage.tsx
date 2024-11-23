@@ -13,8 +13,7 @@ import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, han
 import { guests as initialGuests } from "../dummyData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 
-const GuestPage: React.FC = ({
-}) => {
+const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [newTag, setNewTag] = useState('');
   const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
@@ -24,8 +23,8 @@ const GuestPage: React.FC = ({
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
-  const [filterByTag, setFilterByTag] = useState<string[]>([]);
-  const [filterByDecision, setFilterByDecision] = useState<string | string[]>('all');
+  const [filterByTag, setFilterByTag] = useState<string>(''); // Updated: single tag
+  const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
 
   useEffect(() => {
@@ -39,7 +38,6 @@ const GuestPage: React.FC = ({
       setCurrentDecision(undefined);
     }
   }, [inputValue, guests]);
-
 
   useEffect(() => {
     setAllTags(getAllTags());
@@ -57,14 +55,13 @@ const GuestPage: React.FC = ({
     return allTags;
   };
 
-  const allDecisions = guests.map((guest) => guest.decision);
-  const decisions = [...new Set(allDecisions)];
+  const allDecisions = guests.map((guest) => guest.decision || 'not invited');
+  const decisions = Array.from(new Set(allDecisions));
 
   const handleNewTagWeightChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
     setNewTagWeight(value.replace(/\D/g, ''));
   };
-
 
   const handleDecisionChange = (guestName: string, decision: 'yes' | 'no') => {
     setGuests((prevGuests) =>
@@ -82,7 +79,7 @@ const GuestPage: React.FC = ({
       )
     );
     handleInvite(guestName);
-  }
+  };
 
   const possibleTags = allTags.filter(tag => !selectedGuestTags.includes(tag));
 
@@ -108,9 +105,6 @@ const GuestPage: React.FC = ({
     const trimmedName = inputValue.trim();
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
-
-
-
       if (existingGuest && currentDecision) {
         setGuests((prevGuests) =>
           prevGuests.map(guest =>
@@ -144,7 +138,6 @@ const GuestPage: React.FC = ({
     setNewTag(e.target.value);
   };
 
-
   const handleAddNewTag = () => {
     const trimmedTag = newTag.trim();
     if (trimmedTag && !allTags.includes(trimmedTag)) {
@@ -163,22 +156,19 @@ const GuestPage: React.FC = ({
     }
   });
 
-
-
   const filteredGuests = sortedGuests.filter(guest => {
-    const tagMatch = filterByTag.length === 0 || filterByTag.every(tag => guest.tags.includes(tag));
-    const decisionMatch = filterByDecision === 'all' || guest.decision === filterByDecision;
+    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag); // Updated: filter by single tag
+    const decisionMatch = filterByDecision === 'all' || guest.decision.toLowerCase() === filterByDecision.toLowerCase();
     return tagMatch && decisionMatch;
   });
 
   return (
     <Container>
-      <MenuContainer >
+      <MenuContainer>
         <Heading level={2}>Manage guests</Heading>
 
         <SpaceBetweenContainer>
-          {!currentGuest &&
-            <Subtitle level={3}>Name:</Subtitle>}
+          {!currentGuest && <Subtitle level={3}>Name:</Subtitle>}
           {currentGuest && (
             <SelectorContainer>
               <DropdownSelector
@@ -262,21 +252,13 @@ const GuestPage: React.FC = ({
         <SelectorContainer>
           <DropdownSelector
             title="Filter by Tag"
-            initialSelectedOption={filterByTag.join(", ") || "All"}
+            initialSelectedOption={filterByTag || "All"}
             options={allTags.map(tag => ({ label: tag, value: tag }))}
             onOptionSelect={(selectedOption) => {
               if (typeof selectedOption === 'string') {
-                setFilterByTag((prev: string[]) => {
-                  if (prev.includes(selectedOption)) {
-                    return prev.filter((tag) => tag !== selectedOption);
-                  }
-                  return [...prev, selectedOption];
-                });
-              } else {
-                console.warn("Unexpected type for selectedOption", selectedOption);
+                setFilterByTag(selectedOption); // Updated: set single tag
               }
             }}
-
           />
         </SelectorContainer>
 
@@ -292,17 +274,13 @@ const GuestPage: React.FC = ({
               }))
             ]}
             onOptionSelect={(selectedOption) => {
-              if (Array.isArray(selectedOption)) {
-                setFilterByDecision(selectedOption.join(", "));
-              } else {
+              if (typeof selectedOption === 'string') {
                 setFilterByDecision(selectedOption);
               }
             }}
-
-
-            multiSelect={true}
           />
         </SelectorContainer>
+
         <SelectorContainer>
           <DropdownSelector
             title="Sort"
@@ -315,7 +293,7 @@ const GuestPage: React.FC = ({
           />
         </SelectorContainer>
       </GuestList>
-    </Container >
+    </Container>
   );
 };
 

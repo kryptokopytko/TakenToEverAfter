@@ -18,6 +18,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [expenses, setExpenses] = useState(initialExpenses);
     const [existingExpense, setExistingExpense] = useState<SubExpense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
+    const [inputExpenseDescription, setInputExpenseDescription] = useState('');
 
     const expenseNames = expenses.flatMap(expense =>
         expense.subExpenses.map(subExpense => subExpense.subCategory.toLowerCase())
@@ -63,7 +64,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                                 ...expense,
                                 subExpenses: expense.subExpenses.map(subExpense =>
                                     subExpense.subCategory.toLowerCase() === normalizedExpenseName
-                                        ? { ...subExpense, amount: expenseAmount }
+                                        ? { ...subExpense, amount: expenseAmount, description: inputExpenseDescription }
                                         : subExpense
                                 )
                             };
@@ -73,7 +74,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                                 ...expense,
                                 subExpenses: [
                                     ...expense.subExpenses,
-                                    { subCategory: inputExpenseName, amount: expenseAmount }
+                                    { subCategory: inputExpenseName, amount: expenseAmount, description: inputExpenseDescription }
                                 ]
                             };
                         }
@@ -82,7 +83,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 });
             });
             setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
-            updateExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
+            updateExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
         } else {
 
             setExpenses(prevExpenses => [
@@ -90,15 +91,22 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 {
                     category: inputCategory,
                     subExpenses: [
-                        { subCategory: inputExpenseName, amount: expenseAmount }
+                        { subCategory: inputExpenseName, amount: expenseAmount, description: inputExpenseDescription }
                     ]
                 }
             ]);
             setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
-            addExpense(inputCategory, inputExpenseName, Number(inputExpensePrice))
+            addExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
         }
         setTimeout(() => setNotification(null), notificationTimeOut);
+
+        
+        setInputExpenseName('');
+        setInputExpensePrice('');
+        setInputCategory('');
+        setInputExpenseDescription('');
     };
+
 
     const handleRemoveExpense = () => {
         const normalizedCategory = inputCategory.toLowerCase();
@@ -173,6 +181,13 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                     setInputValue={(name) => setInputCategory(name)}
                     onChange={(e) => setInputCategory(e.target.value)}
                 />
+                <Subtitle level={3}>Description</Subtitle>
+                <Input
+                    value={inputExpenseDescription}
+                    placeholder="Description of the expense"
+                    onChange={(e) => setInputExpenseDescription(e.target.value)}
+                />
+
                 {notification && <Notification>{notification}</Notification>}
 
                 <ButtonContainer>

@@ -26,6 +26,7 @@ export interface RectangularTable extends Table {
 export interface SubExpense {
   subCategory: string;
   amount: number;
+  description: string;
 }
 
 export interface Expense {
@@ -39,6 +40,7 @@ export interface SubTask {
   name: string;
   completed: boolean;
   deadline: string;
+  description: string;
 }
 
 export interface Task {
@@ -50,6 +52,7 @@ export type Option = {
   option: string;
   amount: number;
   isPicked: boolean;
+  description: string;
 };
 
 export type Choice = {

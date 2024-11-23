@@ -1,5 +1,5 @@
 import { Image } from "./types";
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8000/api", // "/api",
@@ -9,7 +9,6 @@ const api = axios.create({
 });
 
 const account_id = 2;
-
 
 /*********************************************ACCOUNTS**********************************************/
 
@@ -33,19 +32,24 @@ export const registerUser = async (
   return false;
 };
 
-export const registerAccount = async (groomName: string, brideName: string, email: string, weddingDate: string) => {
+export const registerAccount = async (
+  groomName: string,
+  brideName: string,
+  email: string,
+  weddingDate: string
+) => {
   try {
-    const accountResponse = await api.post('/accounts/', {
+    const accountResponse = await api.post("/accounts/", {
       groom_name: groomName,
       bride_name: brideName,
       email: email,
-      mail_frequency: "normal", 
+      mail_frequency: "normal",
     });
-    
-    const accountId = accountResponse.data.id; 
+
+    const accountId = accountResponse.data.id;
     console.log("Account created:", accountResponse.data);
 
-    const detailsResponse = await api.post('/account-details/', {
+    const detailsResponse = await api.post("/account-details/", {
       account: accountId,
       wedding_date: weddingDate,
       newlyweds_table_id: null,
@@ -60,17 +64,17 @@ export const registerAccount = async (groomName: string, brideName: string, emai
     };
   } catch (error) {
     console.error("Error during account registration:", error);
-    throw error; 
+    throw error;
   }
 };
-
 
 /*********************************************EXPENSES**********************************************/
 
 export const addExpense = (
   category: string,
   subCategory: string,
-  amount: number
+  amount: number,
+  description: string
 ) => {};
 
 export const addExpense2 = async (
@@ -87,7 +91,7 @@ export const addExpense2 = async (
       notes,
     };
 
-    const response = await api.post('/expenses/', newExpense);
+    const response = await api.post("/expenses/", newExpense);
     console.log("Expense created:", response.data);
     return response.data;
   } catch (error) {
@@ -101,7 +105,7 @@ export const removeExpense2 = async (id: number) => {
   try {
     const response = await api.delete(`/expenses/${id}/`);
     console.log(`Expense with ID ${id} removed successfully.`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error(`Error removing expense with ID ${id}:`, error);
     throw error;
@@ -111,7 +115,8 @@ export const removeExpense2 = async (id: number) => {
 export const updateExpense = (
   category: string,
   subCategory: string,
-  newAmount: number
+  newAmount: number,
+  description: string
 ) => {};
 
 export const updateExpense2 = async (
@@ -141,7 +146,7 @@ export const removeChoice = (category: string, choiceName: string) => {};
 export const updateChoice = (
   category: string,
   choiceName: string,
-  updatedChoice: { amount: number }
+  updatedChoice: { amount: number; description: string }
 ) => {};
 
 export const handleChoicePick = (
@@ -152,9 +157,8 @@ export const handleChoicePick = (
 
 export const addChoice = (
   category: string,
-  choice: { name: string; amount: number }
+  choice: { name: string; amount: number; description: string }
 ) => {};
-
 
 export const transferPotentialExpenseToExpense = async (
   potentialExpenseId: number,
@@ -162,12 +166,14 @@ export const transferPotentialExpenseToExpense = async (
   expenseCardId: number
 ) => {
   try {
-    const potentialExpenseResponse = await api.get(`/potential-expenses/${potentialExpenseId}/`);
+    const potentialExpenseResponse = await api.get(
+      `/potential-expenses/${potentialExpenseId}/`
+    );
     const potentialExpense = potentialExpenseResponse.data;
 
     const newExpense = {
       account: potentialExpense.account,
-      expense_card: expenseCardId, 
+      expense_card: expenseCardId,
       price: price,
       notes: potentialExpense.notes,
     };
@@ -176,7 +182,10 @@ export const transferPotentialExpenseToExpense = async (
     console.log("Potential expense transferred to expense:", response.data);
     return response.data;
   } catch (error) {
-    console.error(`Error transferring potential expense with ID ${potentialExpenseId}:`, error);
+    console.error(
+      `Error transferring potential expense with ID ${potentialExpenseId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -184,33 +193,33 @@ export const transferPotentialExpenseToExpense = async (
 
 export const getGuests = async () => {
   try {
-    const response = await api.get('/guests/');
+    const response = await api.get("/guests/");
     console.log("List of guests downloaded successfully.");
-    return response.data;  
+    return response.data;
   } catch (error) {
     console.error("There was an error fetching the guests:", error);
   }
 };
 
 // email ignorowany
-export const addGuest = async (guestName: string, email: string) => {
+export const addGuest = async (guestName: string) => {
   const newGuest = {
     account: account_id,
     name: guestName,
     group_numbers: [],
-    invitation: null,  
+    invitation: null,
     confirmation: "unknown",
     plus_one: false,
   };
 
-  api.post('/guests/', newGuest)
-    .then(response => {
+  api
+    .post("/guests/", newGuest)
+    .then((response) => {
       console.log("New guest created:", response.data);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("There was an error creating the guest:", error);
     });
-  
 };
 
 export const removeGuest = (guestName: string) => {};
@@ -218,7 +227,7 @@ export const removeGuest2 = async (id: Number) => {
   try {
     const response = await api.delete(`/guests/${id}/`);
     console.log(`Guest with ID ${id} has been removed.`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("There was an error removing the guest:", error);
   }
@@ -226,10 +235,8 @@ export const removeGuest2 = async (id: Number) => {
 
 export const updateGuestTags = async (
   guestName: string,
-  email: string,
   updatedTags: string[]
-) => {
-};
+) => {};
 
 export const updateGuestGroups = async (
   guestId: number,
@@ -240,31 +247,31 @@ export const updateGuestGroups = async (
     const guest = guestResponse.data;
 
     const updatedGuestData = {
-      ...guest,              
-      group_numbers: updatedGroupsId, 
+      ...guest,
+      group_numbers: updatedGroupsId,
     };
 
     const response = await api.patch(`/guests/${guestId}/`, updatedGuestData);
     console.log("Guest updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(`Error updating guest groups for guest ID ${guestId}:`, error);
+    console.error(
+      `Error updating guest groups for guest ID ${guestId}:`,
+      error
+    );
     throw error;
   }
 };
 
 export const updateTags = (tag: string, weight: number) => {};
-export const updateGroupRank = async (
-  groupId: number,
-  newRank: number
-) => {
+export const updateGroupRank = async (groupId: number, newRank: number) => {
   try {
     const groupResponse = await api.get(`/groups/${groupId}/`);
     const group = groupResponse.data;
 
     const updatedGroupData = {
-      ...group,     
-      rank: newRank, 
+      ...group,
+      rank: newRank,
     };
 
     const response = await api.patch(`/groups/${groupId}/`, updatedGroupData);
@@ -285,14 +292,17 @@ export const updateGuestConfirmation = async (
     const guest = guestResponse.data;
 
     const updatedGuestData = {
-      ...guest,                  
-      confirmation: confirmation ? 'yes' : 'no', 
+      ...guest,
+      confirmation: confirmation ? "yes" : "no",
     };
     const response = await api.patch(`/guests/${guestId}/`, updatedGuestData);
     console.log("Guest confirmation updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(`Error updating confirmation for guest ID ${guestId}:`, error);
+    console.error(
+      `Error updating confirmation for guest ID ${guestId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -304,11 +314,14 @@ export const handOutInvitation = async (invitationId: number) => {
     const invitation = invitationResponse.data;
 
     const updatedInvitationData = {
-      ...invitation,         
-      handed_out: true,      
+      ...invitation,
+      handed_out: true,
     };
 
-    const response = await api.patch(`/invitations/${invitationId}/`, updatedInvitationData);
+    const response = await api.patch(
+      `/invitations/${invitationId}/`,
+      updatedInvitationData
+    );
     console.log("Invitation handed out:", response.data);
     return response.data;
   } catch (error) {
@@ -342,7 +355,7 @@ export const addPhoto = async (
       account: accountId,
       link,
       description,
-      uploader
+      uploader,
     };
 
     const response = await api.post("/to_accept_photos/", newPhoto);
@@ -358,10 +371,10 @@ export const removePhoto = async (photoId: number) => {
   try {
     const response = await api.delete(`/accepted_photos/${photoId}/`);
     console.log(`Photo with ID ${photoId} has been deleted.`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error removing photo:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -369,10 +382,10 @@ export const discardPhoto = async (photoId: number) => {
   try {
     const response = await api.delete(`/to_accept_photos/${photoId}/`);
     console.log(`Photo with ID ${photoId} has been discarded.`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error discarding photo:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -390,26 +403,38 @@ export const acceptPhoto = async (photoId: number) => {
       uploader: photoData.uploader,
     };
 
-    const acceptedPhotoResponse = await api.post("/accepted_photos/", acceptedPhotoData);
-    console.log("Photo has been accepted and moved to the Accepted collection:", acceptedPhotoResponse.data);
-    return acceptedPhotoResponse.data; 
+    const acceptedPhotoResponse = await api.post(
+      "/accepted_photos/",
+      acceptedPhotoData
+    );
+    console.log(
+      "Photo has been accepted and moved to the Accepted collection:",
+      acceptedPhotoResponse.data
+    );
+    return acceptedPhotoResponse.data;
   } catch (error) {
     console.error("Error accepting photo:", error);
     throw error;
   }
 };
 
-export const updateFavourite = async (photoId: number, isFavourite: boolean) => {
+export const updateFavourite = async (
+  photoId: number,
+  isFavourite: boolean
+) => {
   try {
     const photoResponse = await api.get(`/accepted_photos/${photoId}/`);
     const photo = photoResponse.data;
 
     const updatedPhotoData = {
-      ...photo,               
-      favourite: isFavourite, 
+      ...photo,
+      favourite: isFavourite,
     };
 
-    const response = await api.patch(`/accepted_photos/${photoId}/`, updatedPhotoData);
+    const response = await api.patch(
+      `/accepted_photos/${photoId}/`,
+      updatedPhotoData
+    );
     console.log("Updated photo favourite status:", response.data);
     return response.data;
   } catch (error) {
@@ -428,20 +453,24 @@ export const sendResponse = (guestName: string, response: "yes" | "no") => {};
 
 export const addTask = (
   category: string,
-  task: { name: string; deadline: string; completed: boolean }
+  task: {
+    name: string;
+    deadline: string;
+    completed: boolean;
+    description: string;
+  }
 ) => {};
 export const removeTask = (category: string, taskName: string) => {};
 export const updateTask = (
   category: string,
   taskName: string,
-  updatedTask: { deadline: string }
+  updatedTask: { deadline: string; description: string }
 ) => {};
 export const handleTaskCompletion = (
   taskName: string,
   category: string,
   completed: boolean
 ) => {};
-
 
 export const addCategory = async (accountId: number, categoryName: string) => {
   try {
@@ -474,7 +503,7 @@ export const addTask2 = async (
       deadline,
     };
 
-    const response = await api.post('/tasks/', newTask);
+    const response = await api.post("/tasks/", newTask);
     console.log("Task created:", response.data);
     return response.data;
   } catch (error) {
@@ -488,24 +517,27 @@ export const removeTask2 = async (id: number) => {
     const response = await api.delete(`/tasks/${id}/`);
 
     console.log(`Task with ID ${id} removed successfully.`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error(`Error removing task with ID ${id}:`, error);
     throw error;
   }
 };
 
-export const updateTaskCompletion = async (taskId: number, isCompleted: boolean) => {
+export const updateTaskCompletion = async (
+  taskId: number,
+  isCompleted: boolean
+) => {
   try {
     const updatedTaskData = {
-      completed: isCompleted
+      completed: isCompleted,
     };
     const response = await api.put(`/tasks/${taskId}/`, updatedTaskData);
     console.log("Task completion status updated:", response.data);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error updating task completion status:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -524,12 +556,16 @@ export const addAssignee = async (accountId: number, assigneeName: string) => {
   }
 };
 
-export const assignTask = async (taskId: number, assigneeId: number, accountId: number) => {
+export const assignTask = async (
+  taskId: number,
+  assigneeId: number,
+  accountId: number
+) => {
   try {
     const newAssignment = {
-      account: accountId,   
-      assignee: assigneeId,  
-      task: taskId,          
+      account: accountId,
+      assignee: assigneeId,
+      task: taskId,
     };
     const response = await api.post("/task_assignments/", newAssignment);
     console.log("Task assigned:", response.data);

@@ -10,14 +10,18 @@ import { Task } from "../../types";
 import { handleTaskCompletion } from "../../dummyDBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
+import { useUser } from "../../providers/UserContext";
+import { Description, DescriptionContainer } from "../../styles/Description";
 
 interface ToDoProps {
+  onDeadlineChange?: (deadline: Date) => void;
   isHomePage?: boolean;
   initialTasks: Task[];
   onTaskChange?: (taskName: string, category: string) => void;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) => {
+const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks, onTaskChange }) => {
+  const { weddingDate } = useUser();
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -40,27 +44,39 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
       .map((subTask) => subTask.name);
   };
 
+
   const isDateDeadline = (date: Date) => {
     return getTasksForDate(date).length > 0;
   };
 
+
+  const isWeddingDate = (date: Date) => {
+    const weddingDateFormatted = new Date(weddingDate.split(".").reverse().join("-"));
+    return weddingDateFormatted.toDateString() === date.toDateString();
+  };
+
+
   const tileClassName = ({ date }: { date: Date }) => {
+    if (isWeddingDate(date)) {
+      return "wedding-date";
+    }
     if (isDateDeadline(date)) {
-      return 'highlight';
+      return "highlight";
     }
     return null;
   };
+
 
   const tileContent = ({ date }: { date: Date }) => {
     const tasksForDate = getTasksForDate(date);
     if (tasksForDate.length > 0) {
       return (
-        <Body size='small' color='primary'>
+        <Body size="small" color="primary">
           {tasksForDate.map((task, index) => (
             <div key={index}>
               {task}
               {index < tasksForDate.length - 1 && (
-                <div style={{ height: '1px', backgroundColor: 'white', margin: '0.5rem 0' }} />
+                <div style={{ height: "1px", backgroundColor: "white", margin: "0.5rem 0" }} />
               )}
             </div>
           ))}
@@ -69,7 +85,6 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
     }
     return null;
   };
-
 
   const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
     const task = tasks[categoryIndex];
@@ -108,10 +123,16 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
 
       <StyledCalendar
         value={selectedDate}
-        onClickDay={(date) => setSelectedDate(date)}
+        onClickDay={(date) => {
+          setSelectedDate(date);
+          if (onDeadlineChange) {
+            onDeadlineChange(date);
+          }
+        }}
         tileClassName={tileClassName}
         tileContent={tileContent}
       />
+
 
       <div>
         <GridContainer isExpanded={isExpanded} minWidth="28rem">
@@ -127,21 +148,27 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
 
               <SubTaskList>
                 {task.subTasks.map((subTask, subTaskIndex) => (
-                  <SpaceBetweenContainer key={subTaskIndex}>
-                    <Checkbox
-                      checked={subTask.completed}
-                      onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
-                    />
+                  <div style={{ position: 'relative' }}>
+                    <SpaceBetweenContainer key={subTaskIndex} className="subtask-container">
+                      <Checkbox
+                        checked={subTask.completed}
+                        onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                      />
 
-                    <Body size="big" style={{ marginLeft: '0.5rem' }}>
-                      {subTask.name}
-                    </Body>
-                    <Label size="extraSmall" style={{ marginRight: '0.5rem' }}>
-                      {subTask.deadline}
-                    </Label>
-                  </SpaceBetweenContainer>
+                      <Body size="big" style={{ marginLeft: "0.5rem" }}>
+                        {subTask.name}
+                      </Body>
+                      <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
+                        {subTask.deadline}
+                      </Label>
+                      <DescriptionContainer move={-5}>
+                        <Description>{subTask.description}</Description>
+                      </DescriptionContainer>
+                    </SpaceBetweenContainer>
+                  </div>
                 ))}
               </SubTaskList>
+
             </Card>
           ))}
         </GridContainer>
@@ -149,12 +176,18 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, initialTasks, onTaskChange }) =
 
       <ButtonContainer>
         <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
-        {isHomePage ? <>
-          <Link to="to_do">
-            <Button>Manage To Do</Button></Link>
-          <Button onClick={toggleList}>
-            {isExpanded ? "Collapse List" : "Expand List"}
-          </Button> </> : <></>}
+        {isHomePage ? (
+          <>
+            <Link to="to_do">
+              <Button>Manage To Do</Button>
+            </Link>
+            <Button onClick={toggleList}>
+              {isExpanded ? "Collapse List" : "Expand List"}
+            </Button>
+          </>
+        ) : (
+          <></>
+        )}
       </ButtonContainer>
     </Container>
   );

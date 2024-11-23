@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Image } from '../../types';
 import { GridContainer } from '../../styles/section';
 import { Body } from '../../styles/typography';
 import { updateApprovedStatus, updateFavoriteStatus } from '../../dummyDBApi';
+import { Container, Indicator, PhotoCard, PhotoImage, PhotoInfo } from './PhotoAlbumStyles';
+import FullScreenModal from './FullScreenModal';
 
 interface PhotoAlbumProps {
     images: Image[];
@@ -13,83 +14,9 @@ interface PhotoAlbumProps {
     isGuest?: boolean;
 }
 
-const PhotoCard = styled.div`
-    background-color: ${({ theme }) => theme.primary};
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.3s;
-    cursor: pointer;
-      max-width: 40rem;
-    max-height: 50rem;
-    width: auto;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-
-    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    &:hover {
-        transform: scale(1.05);
-    }
-`;
-
-const PhotoImage = styled.img`
-    width: 100%;
-    object-fit: cover;
-`;
-
-const PhotoInfo = styled.div`
-    text-align: center;
-`;
-
-const Container = styled.div`
-    margin: 0 -3rem;
-`;
-
-const Indicator = styled.span<{ isChecked?: boolean, isLeft?: boolean }>`
-    position: absolute;
-    padding: 0.5rem;
-    top: 8px;
-    right: 8px;
-    left: ${(props) => (props.isLeft ? '8px' : 'none')};
-    height: 1.5rem;
-    width: 1.5rem;
-    text-align: center;
-    color: ${({ theme, isChecked }) => (isChecked ? theme.tertiary : 'grey')};
-    cursor: pointer;
-    background-color: white;
-    border-radius: 6rem;
-    transition: transform 0.3s;
-    &:hover {
-         transform: scale(1.15);
-    }
-`;
-
-
-
-const FullScreenModal = styled.div<{ visible: boolean }>`
-    display: ${(props) => (props.visible ? 'flex' : 'none')};
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-`;
-
-const FullScreenImage = styled.img`
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    cursor: pointer;
-`;
-
 const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleApproveChange, handleDeletePhoto, isGuest }) => {
     const [localImages, setLocalImages] = useState<Image[]>(images.map((image) => ({ ...image })));
-    const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
 
     useEffect(() => {
         setLocalImages(images);
@@ -118,12 +45,26 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         handleDeletePhoto(id);
     };
 
-    const openFullScreen = (link: string) => {
-        setFullScreenImage(link);
+    const openFullScreen = (index: number) => {
+        setCurrentImageIndex(index);
     };
 
     const closeFullScreen = () => {
-        setFullScreenImage(null);
+        setCurrentImageIndex(null);
+    };
+
+    const showNextImage = () => {
+        if (currentImageIndex !== null) {
+            const nextIndex = (currentImageIndex + 1) % localImages.length;
+            setCurrentImageIndex(nextIndex);
+        }
+    };
+
+    const showPrevImage = () => {
+        if (currentImageIndex !== null) {
+            const prevIndex = (currentImageIndex - 1 + localImages.length) % localImages.length;
+            setCurrentImageIndex(prevIndex);
+        }
     };
 
     return (
@@ -134,7 +75,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
                         <PhotoImage
                             src={image.link}
                             alt={image.name}
-                            onClick={() => openFullScreen(image.link)}
+                            onClick={() => openFullScreen(index)}
                         />
                         <PhotoInfo>
                             <Body>{image.name}</Body>
@@ -161,9 +102,15 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
                     </PhotoCard>
                 ))}
             </GridContainer>
-            <FullScreenModal visible={!!fullScreenImage} onClick={closeFullScreen}>
-                <FullScreenImage src={fullScreenImage || ''} onClick={closeFullScreen} />
-            </FullScreenModal>
+            {currentImageIndex !== null && (
+                <FullScreenModal
+                    visible={currentImageIndex !== null}
+                    imageSrc={localImages[currentImageIndex].link}
+                    onClose={closeFullScreen}
+                    onNext={showNextImage}
+                    onPrev={showPrevImage}
+                />
+            )}
         </Container>
     );
 };

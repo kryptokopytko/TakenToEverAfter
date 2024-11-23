@@ -61,6 +61,11 @@ export const StyledCalendar = styled(Calendar)`
       color: ${({ theme }) => theme.primary};
       font-weight: bold;
     }
+    &.wedding-date {
+      background-color: ${({ theme }) => theme.dark};
+      color: ${({ theme }) => theme.primary};
+      font-weight: bold;
+    }
 
     &--now {
       background: ${({ theme }) => theme.dark};
