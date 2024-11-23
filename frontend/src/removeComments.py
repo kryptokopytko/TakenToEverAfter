@@ -29,7 +29,7 @@ def list_files_in_directory(directory):
             dirs.remove('node_modules')
         
         for file in files:
-            if file.endswith(('.tsx', '.ts')) and not file.endswith(('dummyDBApi.ts')) and not file.endswith(('dummyData.ts'))and not  file.endswith(('PhotosPage.tsx')):
+            if file.endswith(('.tsx', '.ts')) and not file.endswith(('dummyDBApi.ts')) and not file.endswith(('dummyData.ts'))and not  file.endswith(('PhotosPage.tsx')) and not  file.endswith(('ImgurUploader.tsx')) :
                 remove_comments_from_file(os.path.join(root, file))
 
 current_directory = os.getcwd() 

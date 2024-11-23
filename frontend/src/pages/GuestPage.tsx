@@ -23,7 +23,7 @@ const GuestPage: React.FC = () => {
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
-  const [filterByTag, setFilterByTag] = useState<string>(''); // Updated: single tag
+  const [filterByTag, setFilterByTag] = useState<string>(''); 
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
 
@@ -157,7 +157,7 @@ const GuestPage: React.FC = () => {
   });
 
   const filteredGuests = sortedGuests.filter(guest => {
-    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag); // Updated: filter by single tag
+    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag); 
     const decisionMatch = filterByDecision === 'all' || guest.decision.toLowerCase() === filterByDecision.toLowerCase();
     return tagMatch && decisionMatch;
   });
@@ -256,7 +256,7 @@ const GuestPage: React.FC = () => {
             options={allTags.map(tag => ({ label: tag, value: tag }))}
             onOptionSelect={(selectedOption) => {
               if (typeof selectedOption === 'string') {
-                setFilterByTag(selectedOption); // Updated: set single tag
+                setFilterByTag(selectedOption); 
               }
             }}
           />
