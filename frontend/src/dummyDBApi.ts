@@ -19,37 +19,50 @@ export const loginUser = (email: string, password: string) => {
   return false;
 };
 
-export const registerUser = async (
-  email: string,
-  password: string,
-  weddingDate: string,
-  firstName1: string,
-  firstName2: string
-): Promise<boolean> => {
-  if (email && password && firstName1 && firstName2) {
-    return true;
+export const isRegistrated = async (email: string ) => {
+  try {
+    const responseData = await api.get("/accounts/check-user-exists/", {params: { email }});
+    return responseData.data.exists;
+  } catch (error) {
+    console.error("Error during user check:", error);
+    throw error;
   }
-  return false;
 };
 
-export const registerAccount = async (
+export const handleGoogleLoginSuccess = async (response: { credential: string }) => {
+  try {
+    const token = response.credential;
+    const responseData = await api.post("/api/google-login/", { token });
+
+    console.log("Google login successful", responseData.data);
+    return responseData.data;
+  } catch (error) {
+    console.error("Error during Google login:", error);
+    throw error;
+  }
+};
+
+export const registerUser = async (
   groomName: string,
   brideName: string,
   email: string,
   weddingDate: string
 ) => {
+  
+  var accountId = undefined;
+
   try {
-    const accountResponse = await api.post("/accounts/", {
+    const accountResponse = await api.post("/accounts/accounts/", {
       groom_name: groomName,
       bride_name: brideName,
       email: email,
       mail_frequency: "normal",
     });
 
-    const accountId = accountResponse.data.id;
+    accountId = accountResponse.data.id;
     console.log("Account created:", accountResponse.data);
 
-    const detailsResponse = await api.post("/account-details/", {
+    const detailsResponse = await api.post("/accounts/account-details/", {
       account: accountId,
       wedding_date: weddingDate,
       newlyweds_table_id: null,
@@ -63,7 +76,11 @@ export const registerAccount = async (
       details: detailsResponse.data,
     };
   } catch (error) {
-    console.error("Error during account registration:", error);
+    if (accountId) {
+      await api.delete(`/accounts/accounts/${accountId}/`);
+      console.log("Account deleted (rollback).");
+    }
+    console.error("Error during registration:", error);
     throw error;
   }
 };

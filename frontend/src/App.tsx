@@ -26,6 +26,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -113,15 +114,17 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <UserProvider>
-        <TableProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </TableProvider>
-      </UserProvider>
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId="106599807053-1b18mgl3ck79v53reuuti0a2gb0o9ssk.apps.googleusercontent.com">
+      <ThemeProvider>
+        <UserProvider>
+          <TableProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </TableProvider>
+        </UserProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 };
 

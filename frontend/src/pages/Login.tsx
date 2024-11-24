@@ -5,12 +5,17 @@ import { Heading, Label } from "../styles/typography";
 import { Notification } from "../styles/page";
 import { loginUser } from "../dummyDBApi";
 import { Container, Form } from "../styles/form";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+import { isRegistrated } from "../dummyDBApi";
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
@@ -37,6 +42,26 @@ const LoginPage: React.FC = () => {
         } catch (error) {
             setErrorMessage("An error occurred during login. Please try again.");
         }
+    };
+
+    const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
+        const email = jwtDecode(response.credential!).email;
+        console.log("decoded: ", email);
+
+        try {
+          const isUserRegistered = await isRegistrated(email);
+          if (isUserRegistered) {
+            // await loginUser(email);
+          } else {
+            navigate('/registration?mail=' + email );
+          }
+        } catch (error) {
+          console.error("Error during Google login process:", error);
+        }
+    };
+
+    const handleGoogleLoginError = () => {
+        setErrorMessage("Google login failed. Please try again.");
     };
 
     if (isLoggedIn) {
@@ -84,6 +109,11 @@ const LoginPage: React.FC = () => {
                 <ButtonContainer>
                     <Button onClick={handleLogin}>Login</Button>
                 </ButtonContainer>
+                
+                <GoogleLogin
+                    onSuccess={handleGoogleLoginSuccess}
+                    onError={handleGoogleLoginError}
+                />
             </Form>
         </Container>
     );

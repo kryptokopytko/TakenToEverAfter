@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from 'react-router-dom';
 import Input from "../components/ui/Input";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
@@ -7,27 +8,37 @@ import { registerUser } from "../dummyDBApi";
 import { Container, Form } from "../styles/form";
 
 const RegistrationPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const userEmail = searchParams.get('mail');
+    
+    const [email, setEmail] = useState(userEmail? userEmail : '');
     const [weddingDate, setWeddingDate] = useState('');
-    const [firstName1, setFirstName1] = useState('');
-    const [firstName2, setFirstName2] = useState('');
+    const [groomName, setGroomName] = useState('');
+    const [brideName, setBrideName] = useState('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isRegistered, setIsRegistered] = useState(false);
 
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
-    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value);
-    const handleWeddingDateChange = (e: React.ChangeEvent<HTMLInputElement>) => setWeddingDate(e.target.value);
-    const handleFirstName1Change = (e: React.ChangeEvent<HTMLInputElement>) => setFirstName1(e.target.value);
-    const handleFirstName2Change = (e: React.ChangeEvent<HTMLInputElement>) => setFirstName2(e.target.value);
-
-    const validateForm = (email: string, password: string, confirmPassword: string, firstName1: string, firstName2: string) => {
+    const handleEmailChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => setEmail(e.target.value);
+      
+      const handleWeddingDateChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => setWeddingDate(e.target.value);
+      
+      const handleGroomNameChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => setGroomName(e.target.value);
+      
+      const handleBrideNameChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => setBrideName(e.target.value);
+      
+    const validateForm = (email: string, groomName: string, brideName: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-        if (firstName1.length < 3 || firstName2.length < 3) {
+        if (groomName.length < 3 || brideName.length < 3) {
             return "First names must each be at least 3 characters long.";
         }
 
@@ -35,19 +46,11 @@ const RegistrationPage: React.FC = () => {
             return "Invalid email address format.";
         }
 
-        if (!passwordRegex.test(password)) {
-            return "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.";
-        }
-
-        if (password !== confirmPassword) {
-            return "Passwords do not match.";
-        }
-
         return null;
     };
 
     const handleRegister = async () => {
-        const validationError = validateForm(email, password, confirmPassword, firstName1, firstName2);
+        const validationError = validateForm(email, groomName, brideName);
 
         if (validationError) {
             setErrorMessage(validationError);
@@ -55,7 +58,7 @@ const RegistrationPage: React.FC = () => {
         }
 
         try {
-            const success = await registerUser(email, password, weddingDate, firstName1, firstName2);
+            const success = await registerUser(groomName, brideName, email, weddingDate, );
             if (success) {
                 setIsRegistered(true);
                 setErrorMessage(null);
@@ -72,8 +75,8 @@ const RegistrationPage: React.FC = () => {
             <Container>
                 <Form>
                     <div style={{ textAlign: 'center' }}>
-                        <Heading level={2}>Welcome,<br /> {firstName1} & {firstName2}</Heading>
-                        <p>Registration Successful!
+                        <Heading level={2}>Welcome,<br /> {groomName} & {brideName}</Heading>
+                        <p>Registration Successful! 
                             {weddingDate ? 'Your wedding date is set for ' + weddingDate : <></>}</p>
                     </div>
                 </Form>
@@ -93,23 +96,7 @@ const RegistrationPage: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
-                    placeholder="Enter your email"
-                />
-
-                <Label>Password</Label>
-                <Input
-                    type="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    placeholder="Enter your password"
-                />
-
-                <Label>Confirm Password</Label>
-                <Input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={handleConfirmPasswordChange}
-                    placeholder="Confirm your password"
+                    placeholder={userEmail? userEmail : "Enter your email"}
                 />
 
                 <Label>Wedding Date</Label>
@@ -120,20 +107,20 @@ const RegistrationPage: React.FC = () => {
                     placeholder="Select wedding date"
                 />
 
-                <Label>First Name (Person 1)</Label>
+                <Label>First Name (Groom)</Label>
                 <Input
                     type="text"
-                    value={firstName1}
-                    onChange={handleFirstName1Change}
-                    placeholder="Enter first name of person 1"
+                    value={groomName}
+                    onChange={handleGroomNameChange}
+                    placeholder="Enter first name of groom"
                 />
 
-                <Label>First Name (Person 2)</Label>
+                <Label>First Name (Bride)</Label>
                 <Input
                     type="text"
-                    value={firstName2}
-                    onChange={handleFirstName2Change}
-                    placeholder="Enter first name of person 2"
+                    value={brideName}
+                    onChange={handleBrideNameChange}
+                    placeholder="Enter first name of bride"
                 />
 
                 {errorMessage && (
