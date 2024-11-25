@@ -7,6 +7,7 @@ export const ButtonContainer = styled.div`
   justify-content: space-around;
   width: 100%;
   flex-wrap: wrap;
+  gap: 1rem;
 `;
 
 const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string, minWidth?: string }>`
