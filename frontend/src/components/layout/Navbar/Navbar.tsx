@@ -119,41 +119,44 @@ const Navbar: React.FC = () => {
         </BurgerMenu>
 
         <MobileMenu isOpen={isBurgerOpen}>
-          <span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', paddingTop: '10vh' }}>
             <div>
-              <Button onClick={handleLoginChange} variant="transparent">
-                <Label color="tertiary">{isLogged ? 'Log out' : 'Log in'}</Label>
-              </Button>
+              <div style={{ marginLeft: '-1.6rem' }}>
+                <div>
+                  <Button onClick={handleLoginChange} variant="transparent">
+                    <Label color="tertiary">{isLogged ? 'Log out' : 'Log in'}</Label>
+                  </Button>
+                </div>
+                <Button onClick={handleLanguageChange} variant="transparent">
+                  <Label color="tertiary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
+                </Button>
+              </div>
+              <DropdownSelector
+                title="Theme"
+                options={Object.keys(themes).map(themeKey => ({
+                  label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
+                  value: themeKey,
+                }))}
+                initialSelectedOption={Object.keys(themes).find(key => themes[key] === theme)}
+                onOptionSelect={(selected) => handleThemeChange(selected as string)}
+              />
             </div>
-            <Button onClick={handleLanguageChange} variant="transparent">
-              <Label color="tertiary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
-            </Button>
-
             <DropdownSelector
-              title="Theme"
-              options={Object.keys(themes).map(themeKey => ({
-                label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
-                value: themeKey,
+              title="Menu"
+              options={sections.map(section => ({
+                label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
+                value: section.name,
               }))}
-              initialSelectedOption={Object.keys(themes).find(key => themes[key] === theme)}
-              onOptionSelect={(selected) => handleThemeChange(selected as string)}
-            />
-          </span>
-          <DropdownSelector
-            title="Menu"
-            options={sections.map(section => ({
-              label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
-              value: section.name,
-            }))}
-            onOptionSelect={(selected) => {
-              const section = sections.find(sec => sec.name === selected);
-              if (section) {
-                window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
-              }
-            }}
-            initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
+              onOptionSelect={(selected) => {
+                const section = sections.find(sec => sec.name === selected);
+                if (section) {
+                  window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
+                }
+              }}
+              initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
 
-          />
+            />
+          </div>
         </MobileMenu>
       </ContentContainer>
     </NavbarContainer>

@@ -101,7 +101,6 @@ const AppContent = () => {
               <Route path="/guest_response" element={<GuestResponsePage />} />
               <Route path="/guest_photos" element={<GuestPhotosPage />} />
               <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
-
             </Routes>
           </PageContainer>
           <Footer />
