@@ -8,15 +8,16 @@ const api = axios.create({
   },
 });
 
-const account_id = 2;
-
 /*********************************************ACCOUNTS**********************************************/
 
-export const loginUser = (email: string, password: string) => {
-  if (email === "test@example.com" && password === "password123") {
-    return true;
+export const getUserByEmail = async (email: string) => {
+  try {
+    const responseData = await api.get("/accounts/get-user-by-email/", { params: { email } });
+    return responseData.data;
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    throw error;
   }
-  return false;
 };
 
 export const isRegistrated = async (email: string ) => {
@@ -48,7 +49,6 @@ export const registerUser = async (
   email: string,
   weddingDate: string
 ) => {
-  
   var accountId = undefined;
 
   try {
