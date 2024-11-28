@@ -27,6 +27,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { checkSession } from "./DBApi";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -69,13 +70,23 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  const { setViewLocation } = useUser();
+  const { setViewLocation, setAccount, setIsLogged, setAccountDetails } = useUser();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const sessionData = await checkSession();
+      if (sessionData.isAuthenticated) {
+        setIsLogged(true);
+        setAccount(sessionData.account);
+        setAccountDetails(sessionData.accountDetails);
+      }
+  };
+
+    fetchSession();
+  }, [setAccount]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location]);
-
-  useEffect(() => {
     setViewLocation(location.pathname);
   }, [location]);
 
@@ -102,7 +113,6 @@ const AppContent = () => {
               <Route path="/guest_response" element={<GuestResponsePage />} />
               <Route path="/guest_photos" element={<GuestPhotosPage />} />
               <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
-
             </Routes>
           </PageContainer>
           <Footer />

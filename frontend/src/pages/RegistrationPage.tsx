@@ -4,7 +4,7 @@ import Input from "../components/ui/Input";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
 import { Notification } from "../styles/page";
-import { registerUser } from "../dummyDBApi";
+import { registerUser } from "../DBApi";
 import { Container, Form } from "../styles/form";
 
 const RegistrationPage: React.FC = () => {

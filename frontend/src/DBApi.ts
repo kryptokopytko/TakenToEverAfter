@@ -20,25 +20,12 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const isRegistrated = async (email: string ) => {
+export const isRegistrated = async (email: string) => {
   try {
     const responseData = await api.get("/accounts/check-user-exists/", {params: { email }});
     return responseData.data.exists;
   } catch (error) {
     console.error("Error during user check:", error);
-    throw error;
-  }
-};
-
-export const handleGoogleLoginSuccess = async (response: { credential: string }) => {
-  try {
-    const token = response.credential;
-    const responseData = await api.post("/api/google-login/", { token });
-
-    console.log("Google login successful", responseData.data);
-    return responseData.data;
-  } catch (error) {
-    console.error("Error during Google login:", error);
     throw error;
   }
 };
@@ -84,6 +71,44 @@ export const registerUser = async (
     throw error;
   }
 };
+
+export const login = async (mail: string) => {
+  try {
+      const response = await api.post('/login/', 
+          { mail: mail }, 
+          { withCredentials: true } 
+      );
+      return response.data;
+  } catch (error) {
+      console.error("Error during login:", error);
+      throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    await api.get('/logout/', 
+      // await api.post('/logout/', 
+      { withCredentials: true } 
+    );
+  } catch (error) {
+    console.error("Error during logout:", error);
+    throw error;
+  }
+};
+
+export const checkSession = async () => {
+  try {
+    const response = await api.get('/check-session/', 
+      { withCredentials: true } 
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during checking session:", error);
+    throw error;
+  }
+};
+
 
 /*********************************************EXPENSES**********************************************/
 

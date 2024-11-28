@@ -9,8 +9,8 @@ import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
-import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
-import { guests as initialGuests } from "../dummyData";
+import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../DBApi";
+import { guests as initialGuests } from "../exampleData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 
 const GuestPage: React.FC = () => {

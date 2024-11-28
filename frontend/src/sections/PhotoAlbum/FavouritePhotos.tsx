@@ -1,7 +1,7 @@
 import { Heading } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/ui/Button";
 import { Container, PhotosContainer, StyledImage } from './FavouritePhotosStyles';
-import { exampleImages } from "../../dummyData";
+import { exampleImages } from "../../exampleData";
 import React from 'react';
 import { Link } from "react-router-dom";
 

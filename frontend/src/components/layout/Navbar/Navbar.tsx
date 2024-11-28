@@ -7,10 +7,13 @@ import { useUser } from "../../../providers/UserContext";
 import { sectionLinks, sections } from "../sections";
 import Button from "../../ui/Button";
 import DropdownSelector from "../../ui/Dropdown/Dropdown";
+import { groomName, brideName } from "../../../exampleData";
+import { logout } from "../../../DBApi";
+import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
 
-  const { setIsLogged, names, isLogged, weddingDate, language, setLanguage, viewLocation } = useUser();
+  const { setIsLogged, account, isLogged, weddingDate, language, setLanguage, viewLocation } = useUser();
 
   const { setTheme, theme, themes } = useTheme();
 
@@ -29,8 +32,16 @@ const Navbar: React.FC = () => {
     setLanguage(language === "english" ? "polish" : "english");
   };
 
-  const handleLoginChange = () => {
-    setIsLogged(!isLogged);
+  const navigate = useNavigate();
+  const handleLoginChange = async () => {
+    if (isLogged) {
+      try {
+        await logout();
+        setIsLogged(false);
+      } catch (e) {}
+    } else {
+      navigate('/login');
+    }
   }
 
 
@@ -59,8 +70,8 @@ const Navbar: React.FC = () => {
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
               {isLogged ?
-                <Heading level={3} color="primary">{`${names[0]} & ${names[1]}`}</Heading> :
-                <Heading level={3} color='primary'>Smurf & Smurfette</Heading>}
+                <Heading level={3} color="primary">{`${account?.groom_name} & ${account?.bride_name}`}</Heading> :
+                <Heading level={3} color='primary'>{groomName} & {brideName} </Heading>}
             </NamesContainer>
           </LogoContainer>
         </StyledLink>

@@ -2,12 +2,12 @@ import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../dummyData";
+import { exampleImages } from "../exampleData";
 import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
-import { addPhotoToApi } from "../dummyDBApi";
+import { addPhotoToApi } from "../DBApi";
 import Checkbox from "../components/ui/Checkbox";
 import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
 

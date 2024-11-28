@@ -34,15 +34,15 @@ const Border = styled.div`
 `;
 
 const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
-    const { names, surnames, weddingDate, weddingTime, weddingLocation, guestList } = useUser();
+    const { account, surnames, weddingDate, weddingTime, weddingLocation, guestList } = useUser();
     const newGuestList = propsGuestList ? propsGuestList : guestList.slice(0, 3);;
     return (
         <Border>
             <Container>
                 <Heading level={1}></Heading>
-                <Heading level={1}>{names[0]} {surnames[0]}</Heading>
+                <Heading level={1}>{account?.groom_name} {account?.bride_name}</Heading>
                 <Subtitle level={1}> ------ and ------ </Subtitle>
-                <Heading level={1}>{names[1]} {surnames[1]}</Heading>
+                <Heading level={1}>{account?.groom_name} {account?.bride_name}</Heading>
                 <Body size='big'>{mainText ? mainText : "Request the pleasure of your company at the celebration of their marriage"}</Body>
                 <Subtitle level={2}>{weddingDate} {weddingTime}</Subtitle>
                 <Body size='big'>{weddingLocation.join(', ')}</Body>

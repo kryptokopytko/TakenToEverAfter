@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { ButtonContainer } from "../components/ui/Button";
 import { Heading } from "../styles/typography";
 import { Notification } from "../styles/page";
-import { getUserByEmail } from "../dummyDBApi";
+import { getUserByEmail, login } from "../DBApi";
 import { Container, Form } from "../styles/form";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { isRegistrated } from "../dummyDBApi";
+import { isRegistrated } from "../DBApi";
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from "../providers/UserContext";
@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const { isLogged, setIsLogged, setNames } = useUser();
+    const { isLogged, setIsLogged, setAccount } = useUser();
 
     const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
         const email = jwtDecode(response.credential!).email;
@@ -23,9 +23,9 @@ const LoginPage: React.FC = () => {
           const isUserRegistered = await isRegistrated(email);
           if (isUserRegistered) {
             const response = await getUserByEmail(email);
-            console.log("LOGIN: ", response);
+            await login(email);
             setIsLogged(true);
-            setNames([response.groom_name, response.bride_name])
+            setAccount(response);
             setErrorMessage(null);
           } else {
             navigate('/registration?mail=' + email );

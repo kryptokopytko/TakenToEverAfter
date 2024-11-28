@@ -8,8 +8,8 @@ import TableChart from "../sections/TableChart/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import { guests, expenses, initialTasks, initialChoices } from "../dummyData";
-import { handleDecision, handleInvite } from "../dummyDBApi";
+import { guests, expenses, initialTasks, initialChoices } from "../exampleData";
+import { handleDecision, handleInvite } from "../DBApi";
 
 
 const Container = styled.div`

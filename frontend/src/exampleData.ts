@@ -610,7 +610,9 @@ export const time = "15:00";
 
 export const pairSurnames = ["Elderberry", "Tumblesworth"];
 
-export const pairNames = ["Smurfette", "Smurf"];
+export const groomName = "Smurf";
+export const brideName = "Smurfette";
+
 export const date = "06.12.2024";
 
 export const weddingGuestList = ["Baby Smurf", "Baker Smurf"];

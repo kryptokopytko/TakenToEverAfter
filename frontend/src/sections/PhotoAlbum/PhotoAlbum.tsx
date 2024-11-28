@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image } from '../../types';
 import { GridContainer } from '../../styles/section';
 import { Body } from '../../styles/typography';
-import { updateApprovedStatus, updateFavoriteStatus } from '../../dummyDBApi';
+import { updateApprovedStatus, updateFavoriteStatus } from '../../DBApi';
 import { Container, Indicator, PhotoCard, PhotoImage, PhotoInfo } from './PhotoAlbumStyles';
 import FullScreenModal from './FullScreenModal';
 

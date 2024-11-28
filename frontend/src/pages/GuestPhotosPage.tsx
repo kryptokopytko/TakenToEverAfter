@@ -4,9 +4,9 @@ import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { SpaceBetweenContainer } from "../styles/section";
-import { addPhotoToApi } from "../dummyDBApi";
+import { addPhotoToApi } from "../DBApi";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../dummyData";
+import { exampleImages } from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 
 const GuestPhotosPage: React.FC = () => {

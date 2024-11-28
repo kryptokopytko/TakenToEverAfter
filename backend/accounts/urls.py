@@ -10,5 +10,5 @@ router.register(r'account-details', AccountDetailsView)
 urlpatterns = [
     path('', include(router.urls)),
     path('check-user-exists/', check_user_exists, name='check_user_exists'), 
-     path('get-user-by-email/', get_user_by_email, name='get_user_by_email'),
+    path('get-user-by-email/', get_user_by_email, name='get_user_by_email'),
 ]
