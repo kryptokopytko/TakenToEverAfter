@@ -263,7 +263,16 @@ export const updateGuestGroups = async (
   }
 };
 
-export const updateTags = (tag: string, weight: number) => {};
+export const updateTags = (
+  tag: string,
+  weight: number,
+  oneInvite: boolean
+) => {};
+
+export const getAllSharedInviteNames = () => {
+  return ["family"];
+};
+
 export const updateGroupRank = async (groupId: number, newRank: number) => {
   try {
     const groupResponse = await api.get(`/groups/${groupId}/`);

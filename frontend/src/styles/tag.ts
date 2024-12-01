@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { Body } from "./typography";
 
-export const Tag = styled(Body)`
-  background-color: ${({ theme }) => theme.dark};
+export const Tag = styled(Body)<{
+  isOneInvite: boolean;
+}>`
+  background-color: ${({ theme, isOneInvite }) =>
+    isOneInvite ? theme.body : theme.dark};
   color: ${({ theme }) => theme.primary};
   padding: 0.5rem;
   border-radius: 0.5rem;

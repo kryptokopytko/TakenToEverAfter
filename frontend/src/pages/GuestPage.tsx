@@ -9,7 +9,7 @@ import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
-import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
+import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite, getAllSharedInviteNames } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
@@ -31,6 +31,8 @@ const GuestPage: React.FC = () => {
   const [hasPlusOne, setHasPlusOne] = useState(false);
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
   const [arePair, setArePair] = useState(false);
+  const [oneInvite, setOneInvite] = useState(false);
+  const sharedInviteNames: string[] = getAllSharedInviteNames();
 
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
@@ -113,7 +115,7 @@ const GuestPage: React.FC = () => {
     setSelectedGuestTags(updatedTags);
     if (currentGuest) {
       updateGuestTags(currentGuest.name, updatedTags);
-      updateTags(tag, weight);
+      updateTags(tag, weight, oneInvite);
     }
   };
 
@@ -167,6 +169,7 @@ const GuestPage: React.FC = () => {
     if (trimmedTag && !allTags.includes(trimmedTag)) {
       setAllTags(prevTags => [...prevTags, trimmedTag]);
       setNewTag('');
+      setOneInvite(false);
     } else {
       alert("Tag is empty or already exists!");
     }
@@ -206,8 +209,6 @@ const GuestPage: React.FC = () => {
     );
   };
 
-
-
   const handleAddOrRemovePartner = () => {
     if (currentGuest && pairValue) {
       if (pairExists(currentGuest.name, pairValue)) {
@@ -221,7 +222,6 @@ const GuestPage: React.FC = () => {
       alert("Please select a guest and a partner!");
     }
   };
-
 
   const pairExists = (guestName: string, partnerName: string): boolean => {
     return pairs.some(pair => pair.guest === guestName && pair.partner === partnerName);
@@ -292,7 +292,7 @@ const GuestPage: React.FC = () => {
         {selectedGuestTags.length > 0 && (
           <TagContainer>
             {selectedGuestTags.map((tag, index) => (
-              <Tag key={index} onClick={() => handleRemoveTag(tag)}>
+              <Tag isOneInvite={sharedInviteNames.includes(tag)} key={index} onClick={() => handleRemoveTag(tag)}>
                 {tag}
               </Tag>
             ))}
@@ -304,7 +304,7 @@ const GuestPage: React.FC = () => {
             <Subtitle level={2}>Add Tags:</Subtitle>
             <TagContainer>
               {possibleTags.map((tag, index) => (
-                <Tag key={index} onClick={() => handleAddTag(tag)}>
+                <Tag isOneInvite={sharedInviteNames.includes(tag)} key={index} onClick={() => handleAddTag(tag)}>
                   {tag}
                 </Tag>
               ))}
@@ -327,6 +327,13 @@ const GuestPage: React.FC = () => {
             placeholder="Add Tag Weight"
             type="number"
           />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '1rem' }}>
+          <Checkbox
+            checked={oneInvite}
+            onChange={() => setOneInvite(!oneInvite)}
+          />
+          Should people with this tag receive one invite?
         </div>
 
         <ButtonContainer>
