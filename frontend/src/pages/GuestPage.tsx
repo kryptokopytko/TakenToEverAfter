@@ -32,6 +32,12 @@ const GuestPage: React.FC = () => {
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
   const [arePair, setArePair] = useState(false);
 
+  const getPartner = (guestName: string): string | null => {
+    const pair = pairs.find((pair) => pair.guest === guestName);
+    return pair ? pair.partner : null;
+  };
+
+
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
     setCurrentGuest(guest);
@@ -39,6 +45,10 @@ const GuestPage: React.FC = () => {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
       setHasPlusOne(guest.hasPlusOne);
+      const pair = getPartner(guest.name);
+      if (pair)
+        setPairValue(pair);
+
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
@@ -177,14 +187,26 @@ const GuestPage: React.FC = () => {
   });
 
   const addPair = (guestName: string, partnerName: string) => {
-    setPairs((prevPairs) => [...prevPairs, { guest: guestName, partner: partnerName }]);
+    setPairs((prevPairs) => [
+      ...prevPairs,
+      { guest: guestName, partner: partnerName },
+      { guest: partnerName, partner: guestName },
+    ]);
   };
 
   const removePair = (guestName: string, partnerName: string) => {
     setPairs((prevPairs) =>
-      prevPairs.filter(pair => !(pair.guest === guestName && pair.partner === partnerName))
+      prevPairs.filter(
+        (pair) =>
+          !(
+            (pair.guest === guestName && pair.partner === partnerName) ||
+            (pair.guest === partnerName && pair.partner === guestName)
+          )
+      )
     );
   };
+
+
 
   const handleAddOrRemovePartner = () => {
     if (currentGuest && pairValue) {
