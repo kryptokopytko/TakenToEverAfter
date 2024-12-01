@@ -12,9 +12,11 @@ import { SpaceBetweenContainer } from "../styles/section";
 import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite } from "../dummyDBApi";
 import { guests as initialGuests } from "../dummyData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
+import Checkbox from "../components/ui/Checkbox";
 
 const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
+  const [pairValue, setPairValue] = useState('');
   const [newTag, setNewTag] = useState('');
   const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
@@ -26,6 +28,9 @@ const GuestPage: React.FC = () => {
   const [filterByTag, setFilterByTag] = useState<string>(''); // Updated: single tag
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
+  const [hasPlusOne, setHasPlusOne] = useState(false);
+  const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
+  const [arePair, setArePair] = useState(false);
 
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
@@ -33,11 +38,20 @@ const GuestPage: React.FC = () => {
     if (guest) {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
+      setHasPlusOne(guest.hasPlusOne);
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
     }
+
   }, [inputValue, guests]);
+
+  useEffect(() => {
+    if (currentGuest && pairExists(currentGuest?.name, pairValue))
+      setArePair(true);
+    else
+      setArePair(false);
+  }, [pairValue, pairs])
 
   useEffect(() => {
     setAllTags(getAllTags());
@@ -108,13 +122,13 @@ const GuestPage: React.FC = () => {
       if (existingGuest && currentDecision) {
         setGuests((prevGuests) =>
           prevGuests.map(guest =>
-            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision } : guest
+            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, hasPlusOne } : guest
           )
         );
         updateGuestTags(trimmedName, selectedGuestTags);
         setNotification(`Modified: ${trimmedName}`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited' };
+        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', hasPlusOne };
         setGuests(prevGuests => [...prevGuests, newGuest]);
         addGuest(trimmedName);
         setNotification(`Added: ${trimmedName}`);
@@ -162,12 +176,41 @@ const GuestPage: React.FC = () => {
     return tagMatch && decisionMatch;
   });
 
+  const addPair = (guestName: string, partnerName: string) => {
+    setPairs((prevPairs) => [...prevPairs, { guest: guestName, partner: partnerName }]);
+  };
+
+  const removePair = (guestName: string, partnerName: string) => {
+    setPairs((prevPairs) =>
+      prevPairs.filter(pair => !(pair.guest === guestName && pair.partner === partnerName))
+    );
+  };
+
+  const handleAddOrRemovePartner = () => {
+    if (currentGuest && pairValue) {
+      if (pairExists(currentGuest.name, pairValue)) {
+        removePair(currentGuest.name, pairValue);
+        setNotification(`Removed partner: ${pairValue}`);
+      } else {
+        addPair(currentGuest.name, pairValue);
+        setNotification(`Added partner: ${pairValue}`);
+      }
+    } else {
+      alert("Please select a guest and a partner!");
+    }
+  };
+
+
+  const pairExists = (guestName: string, partnerName: string): boolean => {
+    return pairs.some(pair => pair.guest === guestName && pair.partner === partnerName);
+  };
+
+
   return (
     <Container>
-      <MenuContainer>
+      <MenuContainer >
         <Heading level={2}>Manage guests</Heading>
-
-        <SpaceBetweenContainer>
+        <SpaceBetweenContainer style={{ margin: 0, padding: 0 }}>
           {!currentGuest && <Subtitle level={3}>Name:</Subtitle>}
           {currentGuest && (
             <SelectorContainer>
@@ -181,6 +224,7 @@ const GuestPage: React.FC = () => {
                 onOptionSelect={(selectedOption) => setCurrentDecision(selectedOption as Decision)}
               />
             </SelectorContainer>
+
           )}
         </SpaceBetweenContainer>
         <GuidedInput
@@ -191,7 +235,13 @@ const GuestPage: React.FC = () => {
           setInputValue={setInputValue}
           placeholder="Name"
         />
-
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
+          <Checkbox
+            checked={hasPlusOne}
+            onChange={() => setHasPlusOne(!hasPlusOne)}
+          />
+          Has Plus One?
+        </div>
         <ButtonContainer>
           <Button onClick={handleAddOrModifyGuest}>
             {currentGuest ? "Modify" : "Add"}
@@ -200,7 +250,22 @@ const GuestPage: React.FC = () => {
         </ButtonContainer>
 
         {notification && <Notification>{notification}</Notification>}
-
+        {currentGuest && (
+          <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+            <Subtitle level={3}>Named Partner:</Subtitle>
+            <GuidedInput
+              size="medium"
+              value={pairValue}
+              onChange={(e) => setPairValue(e.target.value)}
+              suggestions={guests.map((guest) => guest.name)}
+              setInputValue={setPairValue}
+              placeholder="Name"
+            />
+            <Button onClick={handleAddOrRemovePartner}>
+              {arePair ? 'Remove Partner' : 'Add Partner'}
+            </Button>
+          </div>
+        )}
         <Subtitle level={2}>Current Tags:</Subtitle>
         {selectedGuestTags.length > 0 && (
           <TagContainer>
