@@ -4,7 +4,7 @@ import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useEffect, useState } from "react";
 import { Card } from "../styles/card";
 import { Choice } from "../types";
-import { handleChoicePick } from "../dummyDBApi";
+import { handleChoicePick } from "../DBApi";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";

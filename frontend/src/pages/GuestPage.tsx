@@ -9,8 +9,8 @@ import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
-import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite, getAllSharedInviteNames } from "../dummyDBApi";
-import { guests as initialGuests } from "../dummyData";
+import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite, getAllSharedInviteNames } from "../DBApi";
+import { guests as initialGuests } from "../exampleData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
 
@@ -25,7 +25,7 @@ const GuestPage: React.FC = () => {
   const [guests, setGuests] = useState<Guest[]>(initialGuests);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
-  const [filterByTag, setFilterByTag] = useState<string>(''); // Updated: single tag
+  const [filterByTag, setFilterByTag] = useState<string>('');
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [newTagWeight, setNewTagWeight] = useState('');
   const [hasPlusOne, setHasPlusOne] = useState(false);
@@ -142,7 +142,7 @@ const GuestPage: React.FC = () => {
       } else {
         const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', hasPlusOne };
         setGuests(prevGuests => [...prevGuests, newGuest]);
-        addGuest(trimmedName);
+        addGuest(trimmedName, 42);
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -184,7 +184,7 @@ const GuestPage: React.FC = () => {
   });
 
   const filteredGuests = sortedGuests.filter(guest => {
-    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag); // Updated: filter by single tag
+    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag);
     const decisionMatch = filterByDecision === 'all' || guest.decision.toLowerCase() === filterByDecision.toLowerCase();
     return tagMatch && decisionMatch;
   });
@@ -350,7 +350,7 @@ const GuestPage: React.FC = () => {
             options={allTags.map(tag => ({ label: tag, value: tag }))}
             onOptionSelect={(selectedOption) => {
               if (typeof selectedOption === 'string') {
-                setFilterByTag(selectedOption); // Updated: set single tag
+                setFilterByTag(selectedOption);
               }
             }}
           />

@@ -1,5 +1,21 @@
 export type Decision = "yes" | "maybe" | "no" | "not invited";
 
+export interface Account {
+  id: number; 
+  groom_name: string;
+  bride_name: string;
+  email: string;
+  mail_frequency: 'high' | 'normal' | 'none';
+}
+
+export interface AccountDetails {
+  id: number; 
+  account: Account;
+  wedding_date: string | null; 
+  newlyweds_table_id: number | null;
+  budget_limit: number | null; 
+}
+
 export interface Guest {
   name: string;
   decision: Decision;

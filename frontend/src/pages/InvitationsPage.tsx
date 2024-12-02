@@ -6,7 +6,7 @@ import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
-import { listOfListsOfGuests } from "../dummyData";
+import { listOfListsOfGuests } from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 interface PrintablesPageProps {
 

@@ -5,8 +5,8 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
-import { initialChoices } from "../dummyData";
-import { addChoice, removeChoice, updateChoice } from "../dummyDBApi";
+import { initialChoices } from "../exampleData";
+import { addChoice, removeChoice, updateChoice } from "../DBApi";
 
 interface ChoicesPageProps { }
 

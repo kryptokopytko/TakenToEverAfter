@@ -7,7 +7,7 @@ import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
-import { handleTaskCompletion } from "../../dummyDBApi";
+import { handleTaskCompletion } from "../../DBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";

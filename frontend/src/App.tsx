@@ -26,6 +26,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { checkSession } from "./DBApi";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -68,13 +70,23 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  const { setViewLocation } = useUser();
+  const { setViewLocation, setAccount, setIsLogged, setAccountDetails } = useUser();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const sessionData = await checkSession();
+      if (sessionData.isAuthenticated) {
+        setIsLogged(true);
+        setAccount(sessionData.account);
+        setAccountDetails(sessionData.accountDetails);
+      }
+  };
+
+    fetchSession();
+  }, [setAccount]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location]);
-
-  useEffect(() => {
     setViewLocation(location.pathname);
   }, [location]);
 
@@ -112,15 +124,17 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <UserProvider>
-        <TableProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </TableProvider>
-      </UserProvider>
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId="106599807053-1b18mgl3ck79v53reuuti0a2gb0o9ssk.apps.googleusercontent.com">
+      <ThemeProvider>
+        <UserProvider>
+          <TableProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </TableProvider>
+        </UserProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 };
 

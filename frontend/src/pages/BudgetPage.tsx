@@ -3,11 +3,11 @@ import Budget from "../sections/Budget/Budget";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/ui/Input";
 import { useState, useEffect } from "react";
-import { expenses as initialExpenses } from "../dummyData";
+import { expenses as initialExpenses } from "../exampleData";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SubExpense } from "../types";
-import { addExpense, removeExpense, updateExpense } from "../dummyDBApi";
+import { addExpense, removeExpense, updateExpense } from "../DBApi";
 
 interface BudgetPageProps { }
 

@@ -5,8 +5,8 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useState, useEffect } from "react";
-import { initialTasks } from "../dummyData";
-import { addTask, removeTask, updateTask } from "../dummyDBApi";
+import { initialTasks } from "../exampleData";
+import { addTask, removeTask, updateTask } from "../DBApi";
 
 interface ToDoPageProps { }
 

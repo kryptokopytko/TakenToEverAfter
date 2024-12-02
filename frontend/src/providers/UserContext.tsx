@@ -1,36 +1,40 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { guests, location, pairNames, pairSurnames, date, time } from '../dummyData';
-import { Guest } from "../types";
+import { guests, location, pairSurnames, date, time } from '../exampleData';
+import { Guest, Account, AccountDetails } from "../types";
 
 interface UserContextType {
     weddingDate: string;
     weddingTime: string;
+    weddingLocation: string[];
+    viewLocation: string;
+    language: string;
     isLogged: boolean;
     guestList: Guest[];
-    weddingLocation: string[];
-    names: string[];
     surnames: string[];
+    account: Account | null;
+    accountDetails: AccountDetails | null;
+    setAccount: (account: Account) => void;
+    setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
     setWeddingDate: (date: string) => void;
     setWeddingTime: (time: string) => void;
     setWeddingLocation: (location: string[]) => void;
     setGuestList: (guests: Guest[]) => void;
-    setNames: (names: string[]) => void;
     setSurnames: (surnames: string[]) => void;
-    viewLocation: string;
     setViewLocation: (viewLocation: string) => void;
-    language: string;
     setLanguage: (language: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [names, setNames] = useState(pairNames);
+    const [account, setAccount] = useState<Account | null>(null);
+    const [accountDetails, setAccountDetails] = useState<AccountDetails | null>(null);
+    const [isLogged, setIsLogged] = useState(false);
+
     const [surnames, setSurnames] = useState(pairSurnames);
     const [weddingDate, setWeddingDate] = useState(date);
     const [weddingTime, setWeddingTime] = useState(time);
-    const [isLogged, setIsLogged] = useState(true);
     const [weddingLocation, setWeddingLocation] = useState(location);
     const [guestList, setGuestList] = useState(guests);
     const [viewLocation, setViewLocation] = useState("Home");
@@ -43,7 +47,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 weddingTime,
                 weddingLocation,
                 guestList,
-                setNames,
+                setAccount,
+                setAccountDetails,
                 setSurnames,
                 setWeddingDate,
                 setWeddingTime,
@@ -51,7 +56,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setGuestList,
                 isLogged,
                 setIsLogged,
-                names,
+                account,
+                accountDetails,
                 surnames,
                 viewLocation,
                 setViewLocation,

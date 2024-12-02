@@ -4,7 +4,7 @@ export type ToxicPersonality = {
 };
 
 export type Result = {
-  personality: string;
+  personality: number;
   points: number;
 };
 
@@ -21,7 +21,7 @@ export type Question = {
   }[];
 };
 
-export const toxicPersonalities: ToxicPersonality[] = [
+export const toxicPersonalitiesPol: ToxicPersonality[] = [
   {
     name: "Nitrogliceryna",
     description:
@@ -99,7 +99,7 @@ export const toxicPersonalities: ToxicPersonality[] = [
   },
 ];
 
-export const questions: Question[] = [
+export const questionsPol: Question[] = [
   {
     question: "Jak reagujesz na trudne sytuacje?",
     answers: [
@@ -445,6 +445,435 @@ export const questions: Question[] = [
       {
         text: "Neutralizuję konflikty i dbam o równowagę.",
         points: [{ personality: "Chlor", weight: 2 * 4.833 }],
+      },
+    ],
+  },
+];
+
+export const toxicPersonalitiesEng: ToxicPersonality[] = [
+  {
+    name: "Nitroglycerin",
+    description:
+      "Unpredictable and explosive – you never know when you'll lose control. You can be useful, but it's better not to mess with you.",
+  },
+  {
+    name: "Sulfuric Acid",
+    description:
+      "Slowly but effectively, you destroy everything in your path. Your strength lies in patience and persistence – your words and actions leave lasting marks.",
+  },
+  {
+    name: "Black Smoke",
+    description:
+      "You're quiet but impossible to ignore. You enter unnoticed, and then everyone feels your presence. Perfect for subtle power plays.",
+  },
+  {
+    name: "Liquid Nitrogen",
+    description:
+      "Cold as ice, you act with precision and speed. You keep emotions in check, but your reactions can be extreme if provoked.",
+  },
+  {
+    name: "Mercury",
+    description:
+      "Fascinating but dangerous. Your personality is fluid and unpredictable – you can be admired, but it's better to keep your distance.",
+  },
+  {
+    name: "Ammonia",
+    description:
+      "Intense and hard to endure, especially when you stay in one place too long. Your personality evokes extreme emotions – from admiration to irritation.",
+  },
+  {
+    name: "Radioactive Uranium",
+    description:
+      "You leave a mark for years, even when you're gone. Your presence is powerful, but it sometimes requires caution and distance.",
+  },
+  {
+    name: "Mustard Gas",
+    description:
+      "You're subtle and effective – you appear where no one expects you, and the effects of your actions are felt long afterward.",
+  },
+  {
+    name: "Chlorine",
+    description:
+      "At first glance, you're useful and helpful, but if someone overdoses on your personality, things can get really unpleasant.",
+  },
+  {
+    name: "White Phosphorus",
+    description:
+      "Your passion and energy can light up any room, but uncontrolled emotions can quickly burn everything down.",
+  },
+  {
+    name: "Gunpowder",
+    description:
+      "A classic explosive mix – you may lack modern touches, but you always get the job done at the right moment.",
+  },
+  {
+    name: "Asphalt",
+    description:
+      "You act slowly and steadily, but your stickiness and weight leave indelible marks. No one escapes your charm once you've caught them.",
+  },
+  {
+    name: "Freon",
+    description:
+      "Your cool approach can calm the atmosphere, but everyone knows your presence can have long-term consequences.",
+  },
+  {
+    name: "Nitric Acid",
+    description:
+      "You're focused and penetrating – you can break down anything in your path. However, your sharpness can be overwhelming at times.",
+  },
+  {
+    name: "Laughing Gas",
+    description:
+      "You always bring a smile to everyone's face, but your joy can sometimes be... too intense. You need balance!",
+  },
+];
+
+export const questionsEng: Question[] = [
+  {
+    question: "How do you react to difficult situations?",
+    answers: [
+      {
+        text: "I explode instantly like a volcano.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I simmer slowly until I finally explode.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I avoid conflicts but quietly poison the atmosphere.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I neutralize tensions but sometimes ignite unpredictably.",
+        points: [{ personality: "White Phosphorus", weight: 2 * 3.222 }],
+      },
+    ],
+  },
+  {
+    question: "How would your friends describe you?",
+    answers: [
+      {
+        text: "Intense and unpredictable.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "Slow but effective.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "Subtle but leaves a lasting impression.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "Fast and unstoppable.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "What do you do when someone ignores you?",
+    answers: [
+      {
+        text: "I make myself known loud and clear.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I slowly plan revenge.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I disappear but return with twice the force.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I try to neutralize them peacefully.",
+        points: [{ personality: "Chlorine", weight: 4.833 }],
+      },
+    ],
+  },
+  {
+    question: "Which place best describes your character?",
+    answers: [
+      {
+        text: "A chemical lab full of explosive substances.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "A swamp where subtle things happen slowly.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "A gas factory – invisible but noticeable.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "A waste dump – there’s always something going on.",
+        points: [{ personality: "Radioactive Uranium", weight: 2 * 7.25 }],
+      },
+    ],
+  },
+  {
+    question: "What’s your favorite time of day?",
+    answers: [
+      {
+        text: "Sunrise – time for intense action.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "Midnight – when everything is calm but something lurks in the dark.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "Noon – when the atmosphere is at maximum tension.",
+        points: [{ personality: "Nitric Acid", weight: 2 * 14.5 }],
+      },
+      {
+        text: "Evening – slowly building to a climax.",
+        points: [{ personality: "White Phosphorus", weight: 2 * 3.222 }],
+      },
+    ],
+  },
+  {
+    question: "How do you handle teamwork?",
+    answers: [
+      {
+        text: "I dominate and impose my vision.",
+        points: [{ personality: "Radioactive Uranium", weight: 2 * 7.25 }],
+      },
+      {
+        text: "I work in the shadows, subtly controlling the situation.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I calm tensions and try to neutralize conflicts.",
+        points: [{ personality: "Chlorine", weight: 2 * 4.833 }],
+      },
+      {
+        text: "I keep my distance but act effectively when needed.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "What motivates you to act?",
+    answers: [
+      {
+        text: "Adrenaline and intense emotions.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "Patiently working toward a goal.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "Subtly manipulating the environment.",
+        points: [{ personality: "Mustard Gas", weight: 2 * 7.25 }],
+      },
+      {
+        text: "Cool and logical reasoning.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "How do you handle stress?",
+    answers: [
+      {
+        text: "I explode right away and release the tension.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I keep everything inside until it burns me out.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I mask the stress and keep moving forward.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I freeze my emotions to act rationally.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "How do you react when someone crosses your boundaries?",
+    answers: [
+      {
+        text: "I immediately create a scene – no forgiveness!",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I quietly retreat but never forget.",
+        points: [
+          { personality: "Black Smoke", weight: 2 * 1.0 },
+          { personality: "Sulfuric Acid", weight: 1 * 1.261 },
+        ],
+      },
+      {
+        text: "I act precisely and effectively, without unnecessary emotions.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+      {
+        text: "I create tension until everyone feels uncomfortable.",
+        points: [{ personality: "Ammonia", weight: 15 }],
+      },
+    ],
+  },
+  {
+    question: "What does your ideal revenge look like?",
+    answers: [
+      {
+        text: "Quick, spectacular, and attention-grabbing.",
+        points: [
+          { personality: "Nitroglycerin", weight: 2 * 1.036 },
+          { personality: "White Phosphorus", weight: 1 * 3.222 },
+        ],
+      },
+      {
+        text: "Slow but effective – no one knows when it will strike.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "Subtle but so well-planned no one notices.",
+        points: [
+          { personality: "Mustard Gas", weight: 2 * 7.25 },
+          { personality: "Black Smoke", weight: 1 * 1.0 },
+        ],
+      },
+      {
+        text: "Cold, logical, and without unnecessary emotions.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "How do you deal with difficult emotions?",
+    answers: [
+      {
+        text: "I explode; I need to vent my emotions.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I bottle them up and keep going until they destroy me.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I mask them, but I boil inside.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I freeze them to analyze the situation coolly.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "What do you do when a problem arises?",
+    answers: [
+      {
+        text: "I tackle it head-on with all my energy until I explode.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I handle it patiently, eliminating obstacles step by step.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I try to bypass the problem, leaving it for others to solve.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I neutralize the problem calmly and with detachment.",
+        points: [{ personality: "Chlorine", weight: 6 }],
+      },
+    ],
+  },
+  {
+    question: "What’s your approach to conflicts?",
+    answers: [
+      {
+        text: "I strike before anyone can realize.",
+        points: [{ personality: "White Phosphorus", weight: 2 * 3.222 }],
+      },
+      {
+        text: "I avoid open clashes but quietly poison the atmosphere.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I act coldly and strategically to minimize losses.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+      {
+        text: "I heat things up until everyone burns with emotions.",
+        points: [
+          { personality: "White Phosphorus", weight: 2 * 3.222 },
+          { personality: "Ammonia", weight: 10 },
+        ],
+      },
+    ],
+  },
+  {
+    question: "What slogan best describes you?",
+    answers: [
+      {
+        text: "I live fast and intensely – it’s all about the moment!",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "Patience is the key to success.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I don’t need to be visible to make an impact.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "Precision and coolness are my strengths.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "How do you act when you want to achieve something?",
+    answers: [
+      {
+        text: "I go all out without worrying about consequences.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I plan meticulously and wait for the right moment.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I slowly weaken my opponent, giving them no chance to react.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "I tackle the problem coolly and analytically.",
+        points: [{ personality: "Liquid Nitrogen", weight: 2 * 1.45 }],
+      },
+    ],
+  },
+  {
+    question: "How would you describe your presence in a group?",
+    answers: [
+      {
+        text: "I’m like dynamite – I make an impression fast.",
+        points: [{ personality: "Nitroglycerin", weight: 2 * 1.036 }],
+      },
+      {
+        text: "I work quietly in the background until everyone feels my impact.",
+        points: [{ personality: "Black Smoke", weight: 2 * 1.0 }],
+      },
+      {
+        text: "My strength lies in patience and consistency.",
+        points: [{ personality: "Sulfuric Acid", weight: 2 * 1.261 }],
+      },
+      {
+        text: "I neutralize conflicts and maintain balance.",
+        points: [{ personality: "Chlorine", weight: 2 * 4.833 }],
       },
     ],
   },

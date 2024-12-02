@@ -8,48 +8,48 @@ const api = axios.create({
   },
 });
 
-const account_id = 2;
-
 /*********************************************ACCOUNTS**********************************************/
 
-export const loginUser = (email: string, password: string) => {
-  if (email === "test@example.com" && password === "password123") {
-    return true;
+export const getUserByEmail = async (email: string) => {
+  try {
+    const responseData = await api.get("/accounts/get-user-by-email/", { params: { email } });
+    return responseData.data;
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    throw error;
   }
-  return false;
+};
+
+export const isRegistrated = async (email: string) => {
+  try {
+    const responseData = await api.get("/accounts/check-user-exists/", {params: { email }});
+    return responseData.data.exists;
+  } catch (error) {
+    console.error("Error during user check:", error);
+    throw error;
+  }
 };
 
 export const registerUser = async (
-  email: string,
-  password: string,
-  weddingDate: string,
-  firstName1: string,
-  firstName2: string
-): Promise<boolean> => {
-  if (email && password && firstName1 && firstName2) {
-    return true;
-  }
-  return false;
-};
-
-export const registerAccount = async (
   groomName: string,
   brideName: string,
   email: string,
   weddingDate: string
 ) => {
+  var accountId = undefined;
+
   try {
-    const accountResponse = await api.post("/accounts/", {
+    const accountResponse = await api.post("/accounts/accounts/", {
       groom_name: groomName,
       bride_name: brideName,
       email: email,
       mail_frequency: "normal",
     });
 
-    const accountId = accountResponse.data.id;
+    accountId = accountResponse.data.id;
     console.log("Account created:", accountResponse.data);
 
-    const detailsResponse = await api.post("/account-details/", {
+    const detailsResponse = await api.post("/accounts/account-details/", {
       account: accountId,
       wedding_date: weddingDate,
       newlyweds_table_id: null,
@@ -63,10 +63,52 @@ export const registerAccount = async (
       details: detailsResponse.data,
     };
   } catch (error) {
-    console.error("Error during account registration:", error);
+    if (accountId) {
+      await api.delete(`/accounts/accounts/${accountId}/`);
+      console.log("Account deleted (rollback).");
+    }
+    console.error("Error during registration:", error);
     throw error;
   }
 };
+
+export const login = async (mail: string) => {
+  try {
+      const response = await api.post('/login/', 
+          { mail: mail }, 
+          { withCredentials: true } 
+      );
+      return response.data;
+  } catch (error) {
+      console.error("Error during login:", error);
+      throw error;
+  }
+};
+
+export const logout = async () => {
+  try {
+    await api.get('/logout/', 
+      // await api.post('/logout/', 
+      { withCredentials: true } 
+    );
+  } catch (error) {
+    console.error("Error during logout:", error);
+    throw error;
+  }
+};
+
+export const checkSession = async () => {
+  try {
+    const response = await api.get('/check-session/', 
+      { withCredentials: true } 
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during checking session:", error);
+    throw error;
+  }
+};
+
 
 /*********************************************EXPENSES**********************************************/
 
