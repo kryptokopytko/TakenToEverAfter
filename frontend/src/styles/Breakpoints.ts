@@ -1,1 +1,1 @@
-export const BurgerBreakpoint = "1630px";
+export const BurgerBreakpoint = "1800px";

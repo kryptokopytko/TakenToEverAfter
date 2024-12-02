@@ -7,6 +7,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
 import { listOfListsOfGuests } from "../exampleData";
+import Checkbox from "../components/ui/Checkbox";
 interface PrintablesPageProps {
 
 }
@@ -28,7 +29,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [additionalText, setAdditionalText] = useState("Come 15 minutes before the start of the ceremony");
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
     const [showAllInvites, setShowAllInvites] = useState(false);
-
+    const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
 
     const handleExportPDF = () => {
         const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
@@ -87,6 +88,18 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                                 guestText={guestText}
                                 propsGuestList={guests}
                             />
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
+                                <Checkbox
+                                    checked={deliveredInvites.includes(index)}
+                                    onChange={() => {
+                                        deliveredInvites.includes(index) ?
+                                            setDeliveredInvites(deliveredInvites.filter((invite) => invite != index)) :
+                                            setDeliveredInvites([...deliveredInvites, index])
+                                    }
+                                    }
+                                />
+                                Delivered Invite
+                            </div>
                         </div>
                     ))}
                 </Invites>

@@ -13,7 +13,7 @@ export const PhotosContainer = styled.div`
   display: flex;
   gap: 3rem;
   overflow: auto;
-  width: calc(100%);
+  width: calc(100% - 6rem);
   position: absolute;
   left: 0;
   padding: 0 3rem;

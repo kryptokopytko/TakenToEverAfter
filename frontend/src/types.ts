@@ -20,6 +20,7 @@ export interface Guest {
   name: string;
   decision: Decision;
   tags: string[];
+  hasPlusOne: boolean;
 }
 
 export const decisionTypes = ["yes", "maybe", "no", "not invited"];

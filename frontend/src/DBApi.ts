@@ -12,7 +12,9 @@ const api = axios.create({
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const responseData = await api.get("/accounts/get-user-by-email/", { params: { email } });
+    const responseData = await api.get("/accounts/get-user-by-email/", {
+      params: { email },
+    });
     return responseData.data;
   } catch (error) {
     console.error("Error fetching user by email:", error);
@@ -22,7 +24,9 @@ export const getUserByEmail = async (email: string) => {
 
 export const isRegistrated = async (email: string) => {
   try {
-    const responseData = await api.get("/accounts/check-user-exists/", {params: { email }});
+    const responseData = await api.get("/accounts/check-user-exists/", {
+      params: { email },
+    });
     return responseData.data.exists;
   } catch (error) {
     console.error("Error during user check:", error);
@@ -74,22 +78,24 @@ export const registerUser = async (
 
 export const login = async (mail: string) => {
   try {
-      const response = await api.post('/login/', 
-          { mail: mail }, 
-          { withCredentials: true } 
-      );
-      return response.data;
+    const response = await api.post(
+      "/login/",
+      { mail: mail },
+      { withCredentials: true }
+    );
+    return response.data;
   } catch (error) {
-      console.error("Error during login:", error);
-      throw error;
+    console.error("Error during login:", error);
+    throw error;
   }
 };
 
 export const logout = async () => {
   try {
-    await api.get('/logout/', 
-      // await api.post('/logout/', 
-      { withCredentials: true } 
+    await api.get(
+      "/logout/",
+      // await api.post('/logout/',
+      { withCredentials: true }
     );
   } catch (error) {
     console.error("Error during logout:", error);
@@ -99,16 +105,15 @@ export const logout = async () => {
 
 export const checkSession = async () => {
   try {
-    const response = await api.get('/check-session/', 
-      { withCredentials: true } 
-    );
+    const response = await api.get("/check-session/", {
+      withCredentials: true,
+    });
     return response.data;
   } catch (error) {
     console.error("Error during checking session:", error);
     throw error;
   }
 };
-
 
 /*********************************************EXPENSES**********************************************/
 
@@ -244,7 +249,7 @@ export const getGuests = async () => {
 };
 
 // email ignorowany
-export const addGuest = async (guestName: string) => {
+export const addGuest = async (guestName: string, account_id: number) => {
   const newGuest = {
     account: account_id,
     name: guestName,
@@ -305,7 +310,16 @@ export const updateGuestGroups = async (
   }
 };
 
-export const updateTags = (tag: string, weight: number) => {};
+export const updateTags = (
+  tag: string,
+  weight: number,
+  oneInvite: boolean
+) => {};
+
+export const getAllSharedInviteNames = () => {
+  return ["family"];
+};
+
 export const updateGroupRank = async (groupId: number, newRank: number) => {
   try {
     const groupResponse = await api.get(`/groups/${groupId}/`);
