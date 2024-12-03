@@ -3,7 +3,6 @@ import { guests, location, pairSurnames, date, time } from '../exampleData';
 import { Guest, Account, AccountDetails } from "../types";
 
 interface UserContextType {
-    weddingDate: string;
     weddingTime: string;
     weddingLocation: string[];
     viewLocation: string;
@@ -16,7 +15,6 @@ interface UserContextType {
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
-    setWeddingDate: (date: string) => void;
     setWeddingTime: (time: string) => void;
     setWeddingLocation: (location: string[]) => void;
     setGuestList: (guests: Guest[]) => void;
@@ -33,7 +31,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [isLogged, setIsLogged] = useState(false);
 
     const [surnames, setSurnames] = useState(pairSurnames);
-    const [weddingDate, setWeddingDate] = useState(date);
     const [weddingTime, setWeddingTime] = useState(time);
     const [weddingLocation, setWeddingLocation] = useState(location);
     const [guestList, setGuestList] = useState(guests);
@@ -43,14 +40,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return (
         <UserContext.Provider
             value={{
-                weddingDate,
                 weddingTime,
                 weddingLocation,
                 guestList,
                 setAccount,
                 setAccountDetails,
                 setSurnames,
-                setWeddingDate,
                 setWeddingTime,
                 setWeddingLocation,
                 setGuestList,

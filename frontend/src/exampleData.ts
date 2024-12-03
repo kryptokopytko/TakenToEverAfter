@@ -1,9 +1,18 @@
 import { Guest, Image, Task } from "./types";
 
-const description =
-  "How does a bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten Spot in the Caribbean by providence, impoverished, in squalor Grow up to be a hero and a scholar?";
+// ***********************ACCOUNT*********************************
 
-export const guests: Guest[] = [
+const groomName = "Smurf";
+const brideName = "Smurfette";
+const pairSurnames = ["Elderberry", "Tumblesworth"];
+
+const date = "06.12.2024";
+const time = "15:00";
+const location = ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"];
+
+// ***********************GUESTS*********************************
+
+const guests: Guest[] = [
   {
     name: "Baby Smurf",
     decision: "yes",
@@ -231,7 +240,54 @@ export const guests: Guest[] = [
   },
 ];
 
-export const expenses = [
+const listOfListsOfGuests: Guest[][] = [
+  [
+    {
+      name: "Baby Smurf",
+      decision: "yes",
+      tags: ["family"],
+    },
+    {
+      name: "Baker Smurf",
+      decision: "yes",
+      tags: ["grooms", "family"],
+    },
+    {
+      name: "Brainy Smurf",
+      decision: "maybe",
+      tags: ["brides", "friends"],
+    },
+  ],
+  [
+    {
+      name: "Timid Smurf",
+      decision: "maybe",
+      tags: ["grooms", "friends"],
+    },
+    {
+      name: "Tracker Smurf",
+      decision: "yes",
+      tags: ["brides", "family"],
+    },
+    {
+      name: "Weepy Smurf",
+      decision: "no",
+      tags: ["grooms", "friends"],
+    },
+    {
+      name: "Wild Smurf",
+      decision: "yes",
+      tags: ["brides", "family"],
+    },
+  ],
+];
+
+// ***********************EXPENSES*********************************
+
+const description =
+  "How does a bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten Spot in the Caribbean by providence, impoverished, in squalor Grow up to be a hero and a scholar?";
+
+const expenses = [
   {
     category: "Venue",
     subExpenses: [
@@ -274,7 +330,9 @@ export const expenses = [
   },
 ];
 
-export const initialTasks: Task[] = [
+// ***********************TASKS*************************************
+
+const tasks: Task[] = [
   {
     category: "Planning",
     subTasks: [
@@ -357,7 +415,7 @@ export const initialTasks: Task[] = [
   },
 ];
 
-export const initialChoices = [
+const choices = [
   {
     choice: "Venue",
 
@@ -477,7 +535,9 @@ export const initialChoices = [
   },
 ];
 
-export const exampleImages: Image[] = [
+// ***********************PHOTOS*************************************
+
+const images: Image[] = [
   {
     id: 1,
     name: "Sunset",
@@ -580,7 +640,7 @@ export const exampleImages: Image[] = [
     isApproved: true,
   },
 ];
-export const oldPhotos = [
+const oldPhotos = [
   {
     id: 13,
     name: "Dancing",
@@ -604,57 +664,13 @@ export const oldPhotos = [
   },
 ];
 
-export const location = ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"];
+// *******************************************************************
 
-export const time = "15:00";
-
-export const pairSurnames = ["Elderberry", "Tumblesworth"];
-
-export const groomName = "Smurf";
-export const brideName = "Smurfette";
-
-export const date = "06.12.2024";
-
-export const weddingGuestList = ["Baby Smurf", "Baker Smurf"];
-
-export const listOfListsOfGuests: Guest[][] = [
-  [
-    {
-      name: "Baby Smurf",
-      decision: "yes",
-      tags: ["family"],
-    },
-    {
-      name: "Baker Smurf",
-      decision: "yes",
-      tags: ["grooms", "family"],
-    },
-    {
-      name: "Brainy Smurf",
-      decision: "maybe",
-      tags: ["brides", "friends"],
-    },
-  ],
-  [
-    {
-      name: "Timid Smurf",
-      decision: "maybe",
-      tags: ["grooms", "friends"],
-    },
-    {
-      name: "Tracker Smurf",
-      decision: "yes",
-      tags: ["brides", "family"],
-    },
-    {
-      name: "Weepy Smurf",
-      decision: "no",
-      tags: ["grooms", "friends"],
-    },
-    {
-      name: "Wild Smurf",
-      decision: "yes",
-      tags: ["brides", "family"],
-    },
-  ],
-];
+const Example = { 
+  groomName, brideName, pairSurnames,
+  date, time, location,
+  guests, listOfListsOfGuests,
+  expenses, tasks, choices,
+  images, oldPhotos,
+};
+export default Example;

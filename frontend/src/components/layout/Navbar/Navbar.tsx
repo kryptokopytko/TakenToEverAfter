@@ -7,14 +7,13 @@ import { useUser } from "../../../providers/UserContext";
 import { sectionLinks, sections } from "../sections";
 import Button from "../../ui/Button";
 import DropdownSelector from "../../ui/Dropdown/Dropdown";
-import { groomName, brideName } from "../../../exampleData";
+import Example from "../../../exampleData";
 import { logout } from "../../../DBApi";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
 
-  const { setIsLogged, account, isLogged, weddingDate, language, setLanguage, viewLocation } = useUser();
-
+  const { setIsLogged, account, accountDetails, isLogged, language, setLanguage, viewLocation } = useUser();
   const { setTheme, theme, themes } = useTheme();
 
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
@@ -44,8 +43,6 @@ const Navbar: React.FC = () => {
     }
   }
 
-
-
   const toggleBurgerMenu = () => {
     setIsBurgerOpen(prev => !prev);
   };
@@ -55,9 +52,11 @@ const Navbar: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const weddingDate = isLogged? accountDetails?.wedding_date : Example.date; 
+
   const calculateDaysLeft = () => {
     const today = new Date();
-    const wedding = new Date(convertDateFormat(weddingDate));
+    const wedding = new Date(convertDateFormat(weddingDate!));
     const differenceInTime = wedding.getTime() - today.getTime();
     return Math.ceil(differenceInTime / (1000 * 3600 * 24));
   };
@@ -71,15 +70,16 @@ const Navbar: React.FC = () => {
             <NamesContainer>
               {isLogged ?
                 <Heading level={3} color="primary">{`${account?.groom_name} & ${account?.bride_name}`}</Heading> :
-                <Heading level={3} color='primary'>{groomName} & {brideName} </Heading>}
+                <Heading level={3} color='primary'>{Example.groomName} & {Example.brideName} </Heading>}
             </NamesContainer>
           </LogoContainer>
         </StyledLink>
-        <DateContainer>
+        {weddingDate && (<DateContainer>
           {calculateDaysLeft() > 0 ?
-            <Label size='small' color='primary'>{calculateDaysLeft()} days left</Label> : <></>}
+              <Label size='small' color='primary'>{calculateDaysLeft()} days left</Label> : <></>
+          }
           <Label size='small' color='primary'>{weddingDate} </Label>
-        </DateContainer>
+        </DateContainer>)}
         <ButtonsContainer>
 
           <DropdownSelector
