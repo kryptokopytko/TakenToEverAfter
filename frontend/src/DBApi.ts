@@ -1,4 +1,3 @@
-import { Image } from "./types";
 import axios from "axios";
 
 const api = axios.create({
@@ -8,7 +7,7 @@ const api = axios.create({
   },
 });
 
-/*********************************************ACCOUNTS**********************************************/
+/*********************************************ACCOUNTS***************************************************/
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -115,16 +114,16 @@ export const checkSession = async () => {
   }
 };
 
-/*********************************************EXPENSES**********************************************/
+/*********************************************EXPENSES***************************************************/
 
-export const addExpense = (
-  category: string,
-  subCategory: string,
-  amount: number,
-  description: string
-) => {};
+// export const addExpense = (
+//   category: string,
+//   subCategory: string,
+//   amount: number,
+//   description: string
+// ) => {};
 
-export const addExpense2 = async (
+export const addExpense = async (
   account: number,
   expense_card: number,
   price: number,
@@ -147,8 +146,8 @@ export const addExpense2 = async (
   }
 };
 
-export const removeExpense = (category: string, subCategory: string) => {};
-export const removeExpense2 = async (id: number) => {
+// export const removeExpense = (category: string, subCategory: string) => {};
+export const removeExpense = async (id: number) => {
   try {
     const response = await api.delete(`/expenses/${id}/`);
     console.log(`Expense with ID ${id} removed successfully.`);
@@ -159,14 +158,14 @@ export const removeExpense2 = async (id: number) => {
   }
 };
 
-export const updateExpense = (
-  category: string,
-  subCategory: string,
-  newAmount: number,
-  description: string
-) => {};
+// export const updateExpense = (
+//   category: string,
+//   subCategory: string,
+//   newAmount: number,
+//   description: string
+// ) => {};
 
-export const updateExpense2 = async (
+export const updateExpense = async (
   id: number,
   expense_card: number,
   price: number,
@@ -236,7 +235,7 @@ export const transferPotentialExpenseToExpense = async (
     throw error;
   }
 };
-/*********************************************GUESTS**********************************************/
+/*********************************************GUESTS*****************************************************/
 
 export const getGuests = async () => {
   try {
@@ -269,8 +268,8 @@ export const addGuest = async (guestName: string, account_id: number) => {
     });
 };
 
-export const removeGuest = (guestName: string) => {};
-export const removeGuest2 = async (id: Number) => {
+// export const removeGuest = (guestName: string) => {};
+export const removeGuest = async (id: Number) => {
   try {
     const response = await api.delete(`/guests/${id}/`);
     console.log(`Guest with ID ${id} has been removed.`);
@@ -388,7 +387,7 @@ export const handOutInvitation = async (invitationId: number) => {
 
 export const handleDecision = (guestName: string, decision: "yes" | "no") => {};
 
-/*********************************************PHOTOS**********************************************/
+/*********************************************PHOTOS*****************************************************/
 
 export const updateFavoriteStatus = async (
   imageId: number,
@@ -507,16 +506,16 @@ export const sendResponse = (guestName: string, response: "yes" | "no") => {};
 /*********************************************SEATING****************************************************/
 /*********************************************TASKS******************************************************/
 
-export const addTask = (
-  category: string,
-  task: {
-    name: string;
-    deadline: string;
-    completed: boolean;
-    description: string;
-  }
-) => {};
-export const removeTask = (category: string, taskName: string) => {};
+// export const addTask = (
+//   category: string,
+//   task: {
+//     name: string;
+//     deadline: string;
+//     completed: boolean;
+//     description: string;
+//   }
+// ) => {};
+// export const removeTask = (category: string, taskName: string) => {};
 export const updateTask = (
   category: string,
   taskName: string,
@@ -543,7 +542,7 @@ export const addCategory = async (accountId: number, categoryName: string) => {
   }
 };
 
-export const addTask2 = async (
+export const addTask = async (
   account: number,
   category: number,
   name: string,
@@ -568,7 +567,7 @@ export const addTask2 = async (
   }
 };
 
-export const removeTask2 = async (id: number) => {
+export const removeTask = async (id: number) => {
   try {
     const response = await api.delete(`/tasks/${id}/`);
 

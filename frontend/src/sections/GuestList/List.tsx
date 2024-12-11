@@ -4,7 +4,7 @@ import { GridContainer } from "../../styles/section";
 import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
 import { Tag, TagContainer } from "../../styles/tag";
-import { getAllSharedInviteNames } from "../../dummyDBApi";
+import { getAllSharedInviteNames } from "../../DBApi";
 
 const GuestItem = styled.div`
   display: flex;
@@ -48,7 +48,9 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecisio
           <GuestItem key={index}>
             <Body size="big">{guest.name}</Body>
             <TagContainer>
-              {guest.tags.map((tag, idx) => tag && <Tag isOneInvite={sharedInviteNames.includes(tag)} key={idx}>{tag}</Tag>)}
+              {guest.tags.map((tag, idx) => tag && 
+              <Tag isOneInvite={sharedInviteNames.includes(tag)} key={idx}>{tag}</Tag>
+              )}
             </TagContainer>
             {guest.decision === 'maybe' && !isHomePage ? (
               <DecisionButtons>

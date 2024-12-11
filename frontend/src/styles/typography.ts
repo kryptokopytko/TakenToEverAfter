@@ -114,6 +114,7 @@ const Body = styled.p<BodyProps>`
       font-weight: 600;
     `}
 `;
+Body.shouldForwardProp = (prop) => prop !== "hslColor";
 
 const Label = styled.p<LabelProps>`
   font-family: ${fontStyles.labelFont};

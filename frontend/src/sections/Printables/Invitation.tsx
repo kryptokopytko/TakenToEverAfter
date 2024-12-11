@@ -34,18 +34,18 @@ const Border = styled.div`
 `;
 
 const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
-    const { account, surnames, weddingDate, weddingTime, weddingLocation, guestList } = useUser();
+    const { account, accountDetails, weddingDetails, guestList } = useUser();
     const newGuestList = propsGuestList ? propsGuestList : guestList.slice(0, 3);;
     return (
         <Border>
             <Container>
                 <Heading level={1}></Heading>
-                <Heading level={1}>{account?.groom_name} {account?.bride_name}</Heading>
+                <Heading level={1}>{account.groomName} {account.brideName}</Heading>
                 <Subtitle level={1}> ------ and ------ </Subtitle>
-                <Heading level={1}>{account?.groom_name} {account?.bride_name}</Heading>
+                <Heading level={1}>{account.groomName} {account.brideName}</Heading>
                 <Body size='big'>{mainText ? mainText : "Request the pleasure of your company at the celebration of their marriage"}</Body>
-                <Subtitle level={2}>{weddingDate} {weddingTime}</Subtitle>
-                <Body size='big'>{weddingLocation.join(', ')}</Body>
+                <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails.weddingTime}</Subtitle>
+                <Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>
                 <Subtitle level={2}>  {guestText ? guestText : "It would be our honor to celebrate this day with:"}</Subtitle>
 
                 {newGuestList.map((guest, index) => (

@@ -6,7 +6,7 @@ import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
-import { listOfListsOfGuests } from "../exampleData";
+import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 interface PrintablesPageProps {
 
@@ -32,7 +32,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
 
     const handleExportPDF = () => {
-        const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
+        const inviteIds = Example.listOfListsOfGuests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
 
@@ -80,7 +80,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             </MenuContainer>
             {showAllInvites ? (
                 <Invites>
-                    {listOfListsOfGuests.map((guests, index) => (
+                    {Example.listOfListsOfGuests.map((guests, index) => (
                         <div id={`invite-${index}`} key={index}>
                             <Invitation
                                 mainText={mainText}

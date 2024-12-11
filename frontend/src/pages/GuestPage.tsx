@@ -10,7 +10,7 @@ import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
 import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite, getAllSharedInviteNames } from "../DBApi";
-import { guests as initialGuests } from "../exampleData";
+import Example from "../exampleData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
 
@@ -22,7 +22,7 @@ const GuestPage: React.FC = () => {
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
   const [currentDecision, setCurrentDecision] = useState<Decision | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
-  const [guests, setGuests] = useState<Guest[]>(initialGuests);
+  const [guests, setGuests] = useState<Guest[]>(Example.guests);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
   const [filterByTag, setFilterByTag] = useState<string>('');
@@ -46,7 +46,7 @@ const GuestPage: React.FC = () => {
     if (guest) {
       setSelectedGuestTags(guest.tags);
       setCurrentDecision(guest.decision);
-      setHasPlusOne(guest.hasPlusOne);
+      setHasPlusOne(guest.hasPlusOne ?? false);
       const pair = getPartner(guest.name);
       if (pair)
         setPairValue(pair);

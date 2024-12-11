@@ -1,30 +1,109 @@
-export type Decision = "yes" | "maybe" | "no" | "not invited";
-
+/*********************************************ACCOUNTS***************************************************/
 export interface Account {
-  id: number; 
-  groom_name: string;
-  bride_name: string;
+  groomName: string;
+  brideName: string;
   email: string;
-  mail_frequency: 'high' | 'normal' | 'none';
+  mailFrequency: 'high' | 'normal' | 'none';
 }
 
 export interface AccountDetails {
-  id: number; 
-  account: Account;
-  wedding_date: string | null; 
-  newlyweds_table_id: number | null;
-  budget_limit: number | null; 
+  weddingDate: string | null; 
+  newlywedsTableId: number | null;
+  budgetLimit: number | null; 
 }
 
-export interface Guest {
+export interface WeddingDetails {
+  weddingTime: string;
+  weddingLocation: string[];
+  surnames: string[];
+}
+
+/*********************************************EXPENSES***************************************************/
+export interface SubExpense {
+  subCategory: string;
+  amount: number;
+  description: string;
+}
+
+export interface Expense {
+  category: string;
+  subExpenses: SubExpense[];
+}
+
+export type Expenses = Expense[];
+
+export type Option = {
+  option: string;
+  amount: number;
+  isPicked: boolean;
+  description: string;
+};
+
+export type Choice = {
+  choice: string;
+  options: Option[];
+};
+
+/*********************************************GUESTS*****************************************************/
+export type Guest = {
+  // id: number;
   name: string;
   decision: Decision;
-  tags: string[];
+  tags: number[];
+  // invitationId: number;
   hasPlusOne?: boolean;
 }
 
-export const decisionTypes = ["yes", "maybe", "no", "not invited"];
+export type Tag = {
+  id: number;
+  name: string;
+  rank: number;
+}
 
+export type Invitation = {
+  id: number;
+  handed_out: boolean;
+}
+
+export type Decision = "yes" | "no" | "unknown";
+export const decisionTypes = ["yes", "no", "unknown"];
+
+/*********************************************PHOTOS*****************************************************/
+export interface Image {
+  id: number;
+  name?: string;
+  link: string;
+  isFavorite?: boolean;
+  author?: string;
+  isVertical?: boolean;
+  isApproved?: boolean;
+}
+
+/*********************************************PREFERENCES************************************************/
+/*********************************************QUESTIONNAIRE**********************************************/
+export interface BooleanQuestion {
+  id: number;
+  content: string;
+}
+
+export interface BooleanAnswer {
+  questionId: number;
+  guestId: number;
+  answer: boolean;
+}
+
+export interface StringQuestion {
+  id: number;
+  content: string;
+}
+
+export interface StringAnswer {
+  questionId: number;
+  guestId: number;
+  answer: string;
+}
+
+/*********************************************SEATING****************************************************/
 export interface Table {
   id: string;
   x: number;
@@ -40,19 +119,7 @@ export interface RectangularTable extends Table {
   length: number;
 }
 
-export interface SubExpense {
-  subCategory: string;
-  amount: number;
-  description: string;
-}
-
-export interface Expense {
-  category: string;
-  subExpenses: SubExpense[];
-}
-
-export type Expenses = Expense[];
-
+/*********************************************TASKS******************************************************/
 export interface SubTask {
   name: string;
   completed: boolean;
@@ -63,26 +130,4 @@ export interface SubTask {
 export interface Task {
   category: string;
   subTasks: SubTask[];
-}
-
-export type Option = {
-  option: string;
-  amount: number;
-  isPicked: boolean;
-  description: string;
-};
-
-export type Choice = {
-  choice: string;
-  options: Option[];
-};
-
-export interface Image {
-  name?: string;
-  link: string;
-  isFavorite?: boolean;
-  author?: string;
-  isVertical?: boolean;
-  isApproved?: boolean;
-  id: number;
 }

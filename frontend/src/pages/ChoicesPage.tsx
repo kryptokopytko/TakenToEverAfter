@@ -5,7 +5,7 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
-import { initialChoices } from "../exampleData";
+import Example from "../exampleData";
 import { addChoice, removeChoice, updateChoice } from "../DBApi";
 
 interface ChoicesPageProps { }
@@ -14,7 +14,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [choiceName, setChoiceName] = useState('');
     const [choiceAmount, setChoiceAmount] = useState('');
     const [choiceCategory, setChoiceCategory] = useState('');
-    const [choices, setChoices] = useState(initialChoices);
+    const [choices, setChoices] = useState(Example.choices);
     const [existingChoice, setExistingChoice] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [choiceDescription, setChoiceDescription] = useState('');

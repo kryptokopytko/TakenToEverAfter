@@ -19,6 +19,7 @@ const HeaderContainer = styled.div<{ isHomePage: boolean }>`
     grid-template-columns: 1fr;
   }
 `;
+HeaderContainer.shouldForwardProp = (prop) => prop !== "isHomePage";
 
 
 interface BudgetProps {

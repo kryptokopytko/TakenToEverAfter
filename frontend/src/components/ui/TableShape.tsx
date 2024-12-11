@@ -20,6 +20,7 @@ const GuestContainer = styled.div<{ radius: number; isOval: boolean }>`
   height: 100%;
   pointer-events: none;
 `;
+GuestContainer.shouldForwardProp = (prop) => prop !== "isOval";
 
 const GuestBadge = styled.span`
   position: absolute;
@@ -43,6 +44,7 @@ const StyledTableShape = styled.div<TableShapeProps>`
   justify-content: center;
   align-items: center;
 `;
+StyledTableShape.shouldForwardProp = (prop) => prop !== "isOval" && prop !== "updatePosition";
 
 const TableShape: React.FC<TableShapeProps> = ({
     id, x, y, guests, height, width, isOval, updatePosition, children

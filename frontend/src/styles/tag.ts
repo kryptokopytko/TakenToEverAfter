@@ -16,6 +16,7 @@ export const Tag = styled(Body)<{
     opacity: 0.9;
   }
 `;
+Tag.shouldForwardProp = (prop) => prop !== "isOneInvite";
 
 export const TagContainer = styled.div`
   display: flex;

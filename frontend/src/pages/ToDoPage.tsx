@@ -5,7 +5,7 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useState, useEffect } from "react";
-import { initialTasks } from "../exampleData";
+import Example from "../exampleData";
 import { addTask, removeTask, updateTask } from "../DBApi";
 
 interface ToDoPageProps { }
@@ -14,7 +14,7 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     const [taskName, setTaskName] = useState('');
     const [taskDeadline, setTaskDeadline] = useState('');
     const [taskCategory, setTaskCategory] = useState('');
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, setTasks] = useState(Example.tasks);
     const [existingTask, setExistingTask] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [taskDescription, setTaskDescription] = useState('');
@@ -61,7 +61,9 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
             }
         });
 
-        addTask(taskCategory, newTask);
+        addTask(0, 0, "", null, null);
+        // addTask(taskCategory, newTask);
+       
         setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
@@ -88,7 +90,8 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
         );
 
 
-        removeTask(taskCategory, taskName);
+        removeTask(0);
+        // removeTask(taskCategory, taskName);
 
         setNotification(`Task "${taskName}" removed from category "${taskCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);

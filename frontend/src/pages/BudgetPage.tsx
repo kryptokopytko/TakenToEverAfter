@@ -3,7 +3,7 @@ import Budget from "../sections/Budget/Budget";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/ui/Input";
 import { useState, useEffect } from "react";
-import { expenses as initialExpenses } from "../exampleData";
+import Example from "../exampleData";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SubExpense } from "../types";
@@ -15,7 +15,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [inputExpenseName, setInputExpenseName] = useState('');
     const [inputExpensePrice, setInputExpensePrice] = useState('');
     const [inputCategory, setInputCategory] = useState('');
-    const [expenses, setExpenses] = useState(initialExpenses);
+    const [expenses, setExpenses] = useState(Example.expenses);
     const [existingExpense, setExistingExpense] = useState<SubExpense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');

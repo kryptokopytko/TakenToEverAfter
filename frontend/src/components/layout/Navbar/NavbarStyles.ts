@@ -102,6 +102,7 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
     padding: 0;
   }
 `;
+MobileMenu.shouldForwardProp = (prop) => prop !== "isOpen";
 
 export const LogoContainer = styled.div`
   display: flex;

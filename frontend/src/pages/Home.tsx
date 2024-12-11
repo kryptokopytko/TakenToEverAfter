@@ -8,7 +8,7 @@ import TableChart from "../sections/TableChart/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import { guests, expenses, initialTasks, initialChoices } from "../exampleData";
+import Example from "../exampleData";
 import { handleDecision, handleInvite } from "../DBApi";
 
 
@@ -46,19 +46,19 @@ const Home = () => {
         <Hero />
         <div id="guest-list">
           <GuestList
-            guests={guests}
+            guests={Example.guests}
             handleInvite={handleInvite}
             handleDecision={handleDecision}
             isHomePage={true} />
         </div>
         <div id="budget">
-          <Budget isHomePage={true} expenses={expenses} />
+          <Budget isHomePage={true} expenses={Example.expenses} />
         </div>
         <div id="to-do">
-          <ToDo isHomePage={true} initialTasks={initialTasks} />
+          <ToDo isHomePage={true} initialTasks={Example.tasks} />
         </div>
         <div id="choices">
-          <Choices isHomePage={true} initialChoices={initialChoices} />
+          <Choices isHomePage={true} initialChoices={Example.choices} />
         </div>
         <div id="photo-album">
           <FavouritePhotos isHomePage={true} />

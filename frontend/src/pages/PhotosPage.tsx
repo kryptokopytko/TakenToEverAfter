@@ -2,7 +2,7 @@ import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../exampleData";
+import Example from "../exampleData";
 import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
@@ -17,7 +17,7 @@ const PhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState("");
     const [photoAuthor, setPhotoAuthor] = useState("");
     const [isVertical, setIsVertical] = useState(false);
-    const [photos, setPhotos] = useState(exampleImages);
+    const [photos, setPhotos] = useState(Example.images);
     const [imageUrl, setImageUrl] = useState<string | null>(null); // Store the image URL
 
     const handleAddPhoto = async () => {

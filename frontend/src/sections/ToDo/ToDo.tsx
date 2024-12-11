@@ -7,7 +7,7 @@ import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Task } from "../../types";
-import { handleTaskCompletion } from "../../DBApi";
+import { updateTaskCompletion } from "../../DBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
@@ -21,7 +21,7 @@ interface ToDoProps {
 }
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks, onTaskChange }) => {
-  const { weddingDate } = useUser();
+  const { accountDetails } = useUser();
   const [tasks, setTasks] = useState(initialTasks);
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -51,7 +51,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
 
   const isWeddingDate = (date: Date) => {
-    const weddingDateFormatted = new Date(weddingDate.split(".").reverse().join("-"));
+    const weddingDateFormatted = new Date(accountDetails.weddingDate!.split(".").reverse().join("-"));
     return weddingDateFormatted.toDateString() === date.toDateString();
   };
 
@@ -91,7 +91,8 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
     const subTask = task.subTasks[subTaskIndex];
 
     { onTaskChange ? onTaskChange(subTask.name, task.category) : {} };
-    handleTaskCompletion(subTask.name, task.category, !subTask.completed);
+    updateTaskCompletion(0, !subTask.completed);
+    // updateTaskCompletion(subTask.id, !subTask.completed);
     const updatedTasks = tasks.map((task, index) => {
       if (index === categoryIndex) {
         const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {

@@ -1,285 +1,82 @@
-import { Guest, Image, Task } from "./types";
+import { Guest, Image, Task, Account, AccountDetails, WeddingDetails, Tag } from "./types";
 
 // ***********************ACCOUNT*********************************
 
-const groomName = "Smurf";
-const brideName = "Smurfette";
-const pairSurnames = ["Elderberry", "Tumblesworth"];
+const account : Account = {
+  groomName: "Smurf",
+  brideName: "Smurfette",
+  email: "",
+  mailFrequency: 'none'
+}
 
-const date = "06.12.2024";
-const time = "15:00";
-const location = ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"];
+const accountDetails : AccountDetails = {
+  weddingDate: "06.12.2024", 
+  newlywedsTableId: null,
+  budgetLimit: 1234 
+}
+
+const weddingDetails : WeddingDetails = {
+  weddingTime: "15:00",
+  weddingLocation: ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"],
+  surnames: ["Elderberry", "Tumblesworth"]
+};
 
 // ***********************GUESTS*********************************
+
+const tags: Tag[] = [
+  {
+    id: 0,
+    name: "family",
+    rank: 2
+  },
+  {
+    id: 1,
+    name: "friends",
+    rank: 1
+  }
+];
 
 const guests: Guest[] = [
   {
     name: "Baby Smurf",
     decision: "yes",
-    tags: ["family"],
+    tags: [0],
   },
   {
     name: "Baker Smurf",
     decision: "yes",
-    tags: ["grooms", "family"],
+    tags: [0],
   },
   {
     name: "Brainy Smurf",
-    decision: "maybe",
-    tags: ["brides", "friends"],
+    decision: "unknown",
+    tags: [1],
   },
   {
     name: "Chef Smurf",
     decision: "yes",
-    tags: ["grooms", "family"],
+    tags: [1],
   },
   {
     name: "Clumsy Smurf",
     decision: "yes",
-    tags: ["grooms", "friends"],
+    tags: [],
   },
   {
     name: "Dizzy Smurf",
     decision: "yes",
-    tags: ["brides", "friends"],
+    tags: [0],
   },
   {
     name: "Farmer Smurf",
-    decision: "maybe",
-    tags: ["grooms", "family"],
+    decision: "unknown",
+    tags: [0],
   },
   {
     name: "Greedy Smurf",
     decision: "no",
-    tags: ["brides", "family"],
+    tags: [1],
   },
-  {
-    name: "Grouchy Smurf",
-    decision: "no",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Hefty Smurf",
-    decision: "yes",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Jokey Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "New Smurf",
-    decision: "not invited",
-    tags: ["friends"],
-  },
-  {
-    name: "Painter Smurf",
-    decision: "maybe",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Papa Smurf",
-    decision: "yes",
-    tags: ["family"],
-  },
-  {
-    name: "Sassy Smurf",
-    decision: "yes",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Scaredy Smurf",
-    decision: "no",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Smurf Lily",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Smurf Storm",
-    decision: "maybe",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Smurfette",
-    decision: "yes",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Snappy Smurf",
-    decision: "yes",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Vanity Smurf",
-    decision: "maybe",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Architect Smurf",
-    decision: "yes",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Astro Smurf",
-    decision: "yes",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Clockwork Smurf",
-    decision: "maybe",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Doctor Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Dopey Smurf",
-    decision: "no",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Druid Smurf",
-    decision: "yes",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Editor Smurf",
-    decision: "maybe",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Fisher Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Handy Smurf",
-    decision: "yes",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Hunter Smurf",
-    decision: "yes",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "King Smurf",
-    decision: "no",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Lazy Smurf",
-    decision: "maybe",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Miner Smurf",
-    decision: "yes",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Nanny Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Navigator Smurf",
-    decision: "yes",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Natural Smurf",
-    decision: "yes",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Poet Smurf",
-    decision: "maybe",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Reporter Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Sculptor Smurf",
-    decision: "maybe",
-    tags: ["grooms", "family"],
-  },
-  {
-    name: "Sloppy Smurf",
-    decision: "no",
-    tags: ["brides", "friends"],
-  },
-  {
-    name: "Timid Smurf",
-    decision: "maybe",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Tracker Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-  {
-    name: "Weepy Smurf",
-    decision: "no",
-    tags: ["grooms", "friends"],
-  },
-  {
-    name: "Wild Smurf",
-    decision: "yes",
-    tags: ["brides", "family"],
-  },
-];
-
-const listOfListsOfGuests: Guest[][] = [
-  [
-    {
-      name: "Baby Smurf",
-      decision: "yes",
-      tags: ["family"],
-    },
-    {
-      name: "Baker Smurf",
-      decision: "yes",
-      tags: ["grooms", "family"],
-    },
-    {
-      name: "Brainy Smurf",
-      decision: "maybe",
-      tags: ["brides", "friends"],
-    },
-  ],
-  [
-    {
-      name: "Timid Smurf",
-      decision: "maybe",
-      tags: ["grooms", "friends"],
-    },
-    {
-      name: "Tracker Smurf",
-      decision: "yes",
-      tags: ["brides", "family"],
-    },
-    {
-      name: "Weepy Smurf",
-      decision: "no",
-      tags: ["grooms", "friends"],
-    },
-    {
-      name: "Wild Smurf",
-      decision: "yes",
-      tags: ["brides", "family"],
-    },
-  ],
 ];
 
 // ***********************EXPENSES*********************************
@@ -667,9 +464,9 @@ const oldPhotos = [
 // *******************************************************************
 
 const Example = { 
-  groomName, brideName, pairSurnames,
-  date, time, location,
-  guests, listOfListsOfGuests,
+  account, accountDetails, 
+  weddingDetails,
+  tags, guests,
   expenses, tasks, choices,
   images, oldPhotos,
 };

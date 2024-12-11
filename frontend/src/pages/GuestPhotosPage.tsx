@@ -6,14 +6,14 @@ import Input from "../components/ui/Input";
 import { SpaceBetweenContainer } from "../styles/section";
 import { addPhotoToApi } from "../DBApi";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../exampleData";
+import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 
 const GuestPhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState('');
     const [photoLink, setPhotoLink] = useState('');
     const [isVertical, setIsVertical] = useState(false);
-    const [photos, setPhotos] = useState(exampleImages);
+    const [photos, setPhotos] = useState(Example.images);
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
     const [areYourExpanded, setareYourExpanded] = useState(true);
     const guestName = new URLSearchParams(location.search).get('guest');
