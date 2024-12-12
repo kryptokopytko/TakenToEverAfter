@@ -82,7 +82,7 @@ const AppContent = () => {
   };
 
     fetchSession();
-  }, [setAccount]);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -127,7 +127,7 @@ const App = () => {
       <ThemeProvider>
         <UserProvider>
           <TableProvider>
-            <Router>
+            <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
               <AppContent />
             </Router>
           </TableProvider>

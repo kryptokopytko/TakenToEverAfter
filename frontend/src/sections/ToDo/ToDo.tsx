@@ -57,7 +57,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
 
   const tileClassName = ({ date }: { date: Date }) => {
-    if (isWeddingDate(date)) {
+    if (accountDetails.weddingDate && isWeddingDate(date)) {
       return "wedding-date";
     }
     if (isDateDeadline(date)) {
@@ -149,7 +149,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
               <SubTaskList>
                 {task.subTasks.map((subTask, subTaskIndex) => (
-                  <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'relative' }} key={subTaskIndex}>
                     <SpaceBetweenContainer key={subTaskIndex} className="subtask-container">
                       <Checkbox
                         checked={subTask.completed}

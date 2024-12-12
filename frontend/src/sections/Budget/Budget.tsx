@@ -76,7 +76,7 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
                         </SpaceBetweenContainer>
 
                         {expense.subExpenses.map((subExpense, subIndex) => (
-                            <div style={{ position: 'relative' }}>
+                            <div style={{ position: 'relative' }} key={subIndex}>
                                 <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
                                     <Body size='big'>{subExpense.subCategory}</Body>
                                     <Body size='big'>${subExpense.amount}</Body>

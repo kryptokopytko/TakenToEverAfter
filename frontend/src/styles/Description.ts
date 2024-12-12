@@ -32,3 +32,4 @@ export const DescriptionContainer = styled.div<{
     opacity: 100%;
   }
 `;
+DescriptionContainer.shouldForwardProp = (prop) => !["move", "rmove"].includes(prop);

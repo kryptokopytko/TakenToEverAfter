@@ -44,7 +44,7 @@ const StyledTableShape = styled.div<TableShapeProps>`
   justify-content: center;
   align-items: center;
 `;
-StyledTableShape.shouldForwardProp = (prop) => prop !== "isOval" && prop !== "updatePosition";
+StyledTableShape.shouldForwardProp = (prop) => !["isOval", "updatePosition"].includes(prop);
 
 const TableShape: React.FC<TableShapeProps> = ({
     id, x, y, guests, height, width, isOval, updatePosition, children

@@ -53,7 +53,7 @@ const Home = () => {
         </div>
         <div id="budget">
           <Budget isHomePage={true} expenses={Example.expenses} />
-        </div>
+        </div> 
         <div id="to-do">
           <ToDo isHomePage={true} initialTasks={Example.tasks} />
         </div>
