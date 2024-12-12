@@ -10,12 +10,10 @@ interface FooterProps { }
 
 const Footer: React.FC<FooterProps> = () => {
   const { fontSize, setFontSize } = useTheme();
-  const { viewLocation } = useUser();
-  const currentSectionName = sectionLinks.find((section) => section.link === viewLocation);
-  const currentSection = sections.find((section) => currentSectionName ?
-    section.name === currentSectionName.name : {
-      name: "Home"
-    }) ?? { name: "Home", description: "" };
+  const { viewLocation, language } = useUser();
+  const currentSectionName = sectionLinks.find((section) => section.link === viewLocation) ?? {name: "Home"};
+  const currentSection = sections.find((section) =>
+    section.english.name === currentSectionName.name);
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFontSize(Number(e.target.value));
@@ -33,25 +31,25 @@ const Footer: React.FC<FooterProps> = () => {
 
   return (
     <Container>
-      {currentSection.name.toLowerCase() === 'home' ? (
+      {currentSection!.english.name.toLowerCase() === 'home' ? (
         < HidingSection >
           <Heading level={3}>Sections</Heading>
           <ListContainer>
             {sections
-              .filter(section => section.name !== 'Home')
+              .filter(section => section.english.name !== 'Home')
               .sort()
               .map((section) => (
-                <Body key={section.name} onClick={() => scrollToSection(section.name.toLowerCase().replace(/\s+/g, '-'))}>
-                  {section.name}
+                <Body key={section.english.name} onClick={() => scrollToSection(section.english.name.toLowerCase().replace(/\s+/g, '-'))}>
+                  {section[language].name}
                 </Body>
               ))}
           </ListContainer>
         </HidingSection>
       ) : (
         <Section>
-          <Heading level={3}>{currentSection.name}</Heading>
+          <Heading level={3}>{currentSection![language].name}</Heading>
           <Body>
-            {currentSection.description}
+            {currentSection![language].description}
           </Body>
         </Section>
       )
@@ -80,10 +78,10 @@ const Footer: React.FC<FooterProps> = () => {
       <Section>
         <Heading level={3}>Contact</Heading>
         <div style={{ marginTop: '-2rem' }}>
-          <Body>City, State, ZIP: Wedding City, WC 12345</Body>
-          <Body>Email: contact@takentoeverafter.com</Body>
+          <Body>Email: takentoeverafter@gmail.com</Body>
+          <Body>Phone: (+48) 123-456-789</Body>
           <Body>Address: 123 Wedding Lane</Body>
-          <Body>Phone: (123) 456-7890</Body>
+          <Body>Wroclaw, 12-345</Body>
         </div>
       </Section>
     </Container >

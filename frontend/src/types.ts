@@ -80,6 +80,8 @@ export interface Image {
 }
 
 /*********************************************PREFERENCES************************************************/
+export type Language = 'english' | 'polish';
+
 /*********************************************QUESTIONNAIRE**********************************************/
 export interface BooleanQuestion {
   id: number;

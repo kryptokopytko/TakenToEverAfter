@@ -10,7 +10,7 @@ const account : Account = {
 }
 
 const accountDetails : AccountDetails = {
-  weddingDate: "06.12.2024", 
+  weddingDate: "06.12.2025", 
   newlywedsTableId: null,
   budgetLimit: 1234 
 }

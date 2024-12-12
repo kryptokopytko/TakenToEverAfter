@@ -1,10 +1,10 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
     viewLocation: string;
-    language: string;
+    language: Language;
     isLogged: boolean;
     weddingDetails: WeddingDetails;
     guestList: Guest[];
@@ -17,14 +17,14 @@ interface UserContextType {
     setGuestList: (guests: Guest[]) => void;
     setWeddingDetails: (weddingDetails: WeddingDetails) => void;
     setViewLocation: (location: string) => void;
-    setLanguage: (language: string) => void;
+    setLanguage: (language: Language) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [viewLocation, setViewLocation] = useState("Home");
-    const [language, setLanguage] = useState("english");
+    const [language, setLanguage] = useState<Language>("english");
     const [isLogged, setIsLogged] = useState(false);
 
     const [account, setAccount] = useState<Account>(Example.account);

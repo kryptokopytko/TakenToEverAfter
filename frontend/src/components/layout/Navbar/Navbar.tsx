@@ -7,9 +7,9 @@ import { useUser } from "../../../providers/UserContext";
 import { sectionLinks, sections } from "../sections";
 import Button from "../../ui/Button";
 import DropdownSelector from "../../ui/Dropdown/Dropdown";
-import Example from "../../../exampleData";
 import { logout } from "../../../DBApi";
 import { useNavigate } from "react-router-dom";
+import { translations } from "../../../translations";
 
 const Navbar: React.FC = () => {
 
@@ -52,11 +52,9 @@ const Navbar: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const weddingDate = isLogged? accountDetails?.wedding_date : Example.date; 
-
   const calculateDaysLeft = () => {
     const today = new Date();
-    const wedding = new Date(convertDateFormat(weddingDate!));
+    const wedding = new Date(convertDateFormat(accountDetails.weddingDate!));
     const differenceInTime = wedding.getTime() - today.getTime();
     return Math.ceil(differenceInTime / (1000 * 3600 * 24));
   };
@@ -68,17 +66,15 @@ const Navbar: React.FC = () => {
           <LogoContainer>
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
-              {isLogged ?
-                <Heading level={3} color="primary">{`${account?.groom_name} & ${account?.bride_name}`}</Heading> :
-                <Heading level={3} color='primary'>{Example.groomName} & {Example.brideName} </Heading>}
+                <Heading level={3} color="primary">{`${account.groomName} & ${account.brideName}`}</Heading>
             </NamesContainer>
           </LogoContainer>
         </StyledLink>
-        {weddingDate && (<DateContainer>
+        {accountDetails.weddingDate && (<DateContainer>
           {calculateDaysLeft() > 0 ?
-              <Label size='small' color='primary'>{calculateDaysLeft()} days left</Label> : <></>
+              <Label size='small' color='primary'>{calculateDaysLeft() + " " + translations[language].daysLeft}</Label> : <></>
           }
-          <Label size='small' color='primary'>{weddingDate} </Label>
+          <Label size='small' color='primary'>{accountDetails.weddingDate} </Label>
         </DateContainer>)}
         <ButtonsContainer>
 
@@ -100,13 +96,13 @@ const Navbar: React.FC = () => {
             color='primary'
 
             options={sections.map(section => ({
-              label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
-              value: section.name,
+              label: section[language].name,
+              value: section.english.name,
             }))}
             onOptionSelect={(selected) => {
-              const section = sections.find(sec => sec.name === selected);
+              const section = sections.find(sec => sec.english.name === selected);
               if (section) {
-                window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
+                window.location.href = `/${section.english.name.toLowerCase().replace(" ", "_")}`;
               }
             }}
             initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
@@ -115,10 +111,10 @@ const Navbar: React.FC = () => {
 
           <div style={{ marginTop: '-1.5rem' }}>
             <Button onClick={handleLanguageChange} variant="transparent">
-              <Label color="primary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
+              <Label color="primary">{translations[language].changeLanguage}</Label>
             </Button>
             <Button onClick={handleLoginChange} variant="transparent">
-              <Label color="primary">{isLogged ? 'Log out' : 'Log in'}</Label>
+              <Label color="primary">{isLogged ? translations[language].logout : translations[language].login}</Label>
             </Button>
           </div>
         </ButtonsContainer>
@@ -134,12 +130,12 @@ const Navbar: React.FC = () => {
             <div>
               <div style={{ marginLeft: '-1.6rem' }}>
                 <div>
-                  <Button onClick={handleLoginChange} variant="transparent">
-                    <Label color="tertiary">{isLogged ? 'Log out' : 'Log in'}</Label>
-                  </Button>
+                <Button onClick={handleLoginChange} variant="transparent">
+                  <Label color="tertiary">{isLogged ? translations[language].logout : translations[language].login}</Label>
+                </Button>
                 </div>
                 <Button onClick={handleLanguageChange} variant="transparent">
-                  <Label color="tertiary">{language === "english" ? "Change to Polish" : "Change to English"}</Label>
+                  <Label color="tertiary">{translations[language].changeLanguage}</Label>
                 </Button>
               </div>
               <DropdownSelector
@@ -155,13 +151,13 @@ const Navbar: React.FC = () => {
             <DropdownSelector
               title="Menu"
               options={sections.map(section => ({
-                label: section.name.charAt(0).toUpperCase() + section.name.slice(1),
-                value: section.name,
+                label: section[language].name,
+                value: section.english.name,
               }))}
               onOptionSelect={(selected) => {
-                const section = sections.find(sec => sec.name === selected);
+                const section = sections.find(sec => sec.english.name === selected);
                 if (section) {
-                  window.location.href = `/${section.name.toLowerCase().replace(" ", "_")}`;
+                  window.location.href = `/${section.english.name.toLowerCase().replace(" ", "_")}`;
                 }
               }}
               initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}

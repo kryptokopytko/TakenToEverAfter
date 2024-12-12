@@ -118,7 +118,7 @@ const Body = styled.p<BodyProps>`
 `;
 Body.shouldForwardProp = (prop) => prop !== "hslColor";
 
-const Label = styled.span<LabelProps>`
+const Label = styled.div<LabelProps>`
   font-family: ${fontStyles.labelFont};
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
