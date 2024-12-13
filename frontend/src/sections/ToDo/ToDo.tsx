@@ -140,9 +140,11 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
                       <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
                         {task.deadline}
                       </Label>
-                      <DescriptionContainer move={-5}>
-                        <Description>{task.description}</Description>
-                      </DescriptionContainer>
+                      {task.description != "" && (
+                        <DescriptionContainer move={-5}>
+                          <Description>{task.description}</Description>
+                        </DescriptionContainer>
+                      )}
                     </SpaceBetweenContainer>
                   </div>
                 ))}

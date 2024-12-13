@@ -17,7 +17,7 @@ const useExampleFunctions = () => {
         }
 
         const newTask: Task = {
-            id: Math.random() * 1000000000,
+            id: Math.round(Math.random() * 1000000000),
             name: name,
             description: description,
             deadline: deadline,
@@ -87,7 +87,7 @@ const useExampleFunctions = () => {
     };
 
     const addCategory = async (categoryName: string) => {
-        const categoryId = Math.random() * 1000000000;
+        const categoryId = Math.round(Math.random() * 1000000000);
         setTaskCards([
             ...taskCards, 
             {
@@ -115,6 +115,11 @@ const useExampleFunctions = () => {
         );
     }
 
+    const getTasks = async () => {
+        return taskCards;
+    }
+
+
     /********************************************************************************************************/
     const getAllSharedInviteNames = () => {
         return ["family"];
@@ -122,7 +127,7 @@ const useExampleFunctions = () => {
 
     /********************************************************************************************************/
     return {
-        addTask, removeTask, updateTask, addCategory, updateTaskCompletion,
+        addTask, removeTask, updateTask, addCategory, updateTaskCompletion, getTasks,
         getAllSharedInviteNames,
     };
 }

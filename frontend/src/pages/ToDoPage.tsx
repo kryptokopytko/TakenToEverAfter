@@ -15,7 +15,7 @@ const ToDoPage = () => {
     const [taskDescription, setTaskDescription] = useState<string | null>('');
     const [taskId, setTaskId] = useState<number | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
-    const {taskCards} = useUser();
+    const {taskCards, setTaskCards} = useUser();
     const FunctionsProxy = useFunctionsProxy();
 
     const findCategory = (taskId: number) => {
@@ -32,29 +32,37 @@ const ToDoPage = () => {
         setTaskId(null);
     }
 
-    const handleAddTask = () => {
-        FunctionsProxy.addTask(taskCategory.id!, taskName, taskDescription || "", taskDeadline);
+    const refreshTaskCards = async () => {
+        const updatedTaskCards = await FunctionsProxy.getTasks(); 
+        setTaskCards(updatedTaskCards); 
+      };
+
+    const handleAddTask = async () => {
+        await FunctionsProxy.addTask(taskCategory.id!, taskCategory.name, taskName, taskDescription || "", taskDeadline);
        
         setNotification(`Task "${taskName}" added to category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
         
+        await refreshTaskCards();
         clean();
     };
 
 
-    const handleRemoveTask = () => {
-        FunctionsProxy.removeTask(taskId!);
+    const handleRemoveTask = async () => {
+        await FunctionsProxy.removeTask(taskId!);
         setNotification(`Task "${taskName}" removed from category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
-
+        
+        await refreshTaskCards();
         clean();
     };
 
-    const handleUpdateTask = () => {
-        FunctionsProxy.updateTask(taskId!, taskCategory.id!, taskName, taskDescription, taskDeadline);
+    const handleUpdateTask = async () => {
+        await FunctionsProxy.updateTask(taskId!, taskCategory.id, taskCategory.name, taskName, taskDescription, taskDeadline);
         setNotification(`Task "${taskName}" updated in category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
-
+       
+        await refreshTaskCards();
         clean();
     };
 

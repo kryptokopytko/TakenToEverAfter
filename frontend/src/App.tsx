@@ -27,6 +27,8 @@ import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { checkSession, getTasks, getGuests } from "./DBApi";
+import Example from "./exampleData";
+
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -84,7 +86,13 @@ const AppContent = () => {
 
         const taskCards = await getTasks();
         setTaskCards(taskCards);
-      }
+      } else {
+        setIsLogged(false);
+        setAccount(Example.account);
+        setAccountDetails(Example.accountDetails);
+        setWeddingDetails(Example.weddingDetails);
+        setTaskCards(Example.taskCards); 
+    }
   };
 
     fetchSession();

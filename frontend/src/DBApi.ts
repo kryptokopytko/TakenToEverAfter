@@ -560,7 +560,7 @@ export const addTask = async (
       const newCategory = await addCategory(categoryName);
       categoryId = newCategory.id;
     }
-    
+
     const newTask = {
       categoryId,
       name,
