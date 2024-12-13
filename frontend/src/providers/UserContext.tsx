@@ -1,23 +1,25 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
     viewLocation: string;
     language: Language;
     isLogged: boolean;
-    weddingDetails: WeddingDetails;
+    weddingDetails: WeddingDetails | null;
     guestList: Guest[];
     account: Account;
     accountDetails: AccountDetails;
+    taskCards: TaskCard[];
     
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
     setGuestList: (guests: Guest[]) => void;
-    setWeddingDetails: (weddingDetails: WeddingDetails) => void;
+    setWeddingDetails: (weddingDetails: WeddingDetails | null) => void;
     setViewLocation: (location: string) => void;
     setLanguage: (language: Language) => void;
+    setTaskCards: (taskCards: TaskCard[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -30,7 +32,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [account, setAccount] = useState<Account>(Example.account);
     const [accountDetails, setAccountDetails] = useState<AccountDetails>(Example.accountDetails);
     const [guestList, setGuestList] = useState<Guest[]>([]);
-    const [weddingDetails, setWeddingDetails] = useState<WeddingDetails>(Example.weddingDetails);
+    const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails);
+    const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
 
     return (
         <UserContext.Provider
@@ -42,13 +45,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 guestList,
                 account,
                 accountDetails,
+                taskCards,
                 setWeddingDetails,
                 setGuestList,
                 setAccount,
                 setAccountDetails,
                 setIsLogged,
                 setViewLocation,
-                setLanguage
+                setLanguage,
+                setTaskCards
             }}
         >
             {children}

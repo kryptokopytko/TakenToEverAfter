@@ -122,14 +122,17 @@ export interface RectangularTable extends Table {
 }
 
 /*********************************************TASKS******************************************************/
-export interface SubTask {
+export interface Task {
+  id: number;
   name: string;
   completed: boolean;
   deadline: string;
   description: string;
+  assignees: string[];
 }
 
-export interface Task {
+export interface TaskCard {
+  id: number;
   category: string;
-  subTasks: SubTask[];
+  tasks: Task[];
 }

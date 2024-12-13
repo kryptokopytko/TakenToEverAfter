@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TaskCard, Task } from "./types";
 
 const api = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -505,27 +506,30 @@ export const sendResponse = (guestName: string, response: "yes" | "no") => {};
 
 /*********************************************SEATING****************************************************/
 /*********************************************TASKS******************************************************/
-
-// export const addTask = (
-//   category: string,
-//   task: {
-//     name: string;
-//     deadline: string;
-//     completed: boolean;
-//     description: string;
-//   }
-// ) => {};
-// export const removeTask = (category: string, taskName: string) => {};
-export const updateTask = (
-  category: string,
-  taskName: string,
-  updatedTask: { deadline: string; description: string }
-) => {};
-export const handleTaskCompletion = (
-  taskName: string,
-  category: string,
-  completed: boolean
-) => {};
+export const updateTask = async (
+  taskId: number,
+  categoryId: number,
+  name: string,
+  description: string | null = null,
+  deadline: string | null = null
+) => {
+  try {
+    const updatedTask = {
+      category: categoryId,
+      name: name,
+      description: description,
+      deadline: deadline,
+    };
+    const response = await api.patch(`/tasks/tasks/${taskId}/`, updatedTask, 
+      { withCredentials: true }
+    );
+    console.log("Task updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating task:", error);
+    throw error;
+  }
+};
 
 export const addCategory = async (accountId: number, categoryName: string) => {
   try {
@@ -543,7 +547,6 @@ export const addCategory = async (accountId: number, categoryName: string) => {
 };
 
 export const addTask = async (
-  account: number,
   category: number,
   name: string,
   description: string | null = null,
@@ -551,7 +554,6 @@ export const addTask = async (
 ) => {
   try {
     const newTask = {
-      account,
       category,
       name,
       description,
@@ -630,3 +632,28 @@ export const assignTask = async (
     throw error;
   }
 };
+
+export const getTasks = async () => {
+  try {
+    const response = await api.get(`/tasks/user-tasks`, 
+      { withCredentials: true }
+    );
+    const taskCards = response.data.taskCards.map((card: TaskCard): TaskCard => {
+      return {
+        id: card.id,
+        category: card.category,
+        tasks: card.tasks.map((task: Task): Task => ({
+          id: task.id,
+          name: task.name,
+          completed: task.completed,
+          deadline: task.deadline,
+          description: task.description, 
+          assignees: task.assignees
+        })),
+  }});
+    return taskCards; 
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    throw error; 
+  }
+}

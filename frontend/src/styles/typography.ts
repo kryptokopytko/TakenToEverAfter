@@ -91,7 +91,7 @@ const Subtitle = styled.h2<SubtitleProps>`
 `;
 Subtitle.shouldForwardProp = (prop) => prop !== "level";
 
-const Body = styled.p<BodyProps>`
+const Body = styled.div<BodyProps>`
   font-family: ${fontStyles.bodyFont};
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};

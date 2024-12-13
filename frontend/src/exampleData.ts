@@ -1,4 +1,4 @@
-import { Guest, Image, Task, Account, AccountDetails, WeddingDetails, Tag } from "./types";
+import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag } from "./types";
 
 // ***********************ACCOUNT*********************************
 
@@ -129,84 +129,108 @@ const expenses = [
 
 // ***********************TASKS*************************************
 
-const tasks: Task[] = [
+const taskCards: TaskCard[] = [
   {
+    id: 0,
     category: "Planning",
-    subTasks: [
+    tasks: [
       {
+        id:0,
         name: "Create guest list",
         description: description,
         completed: false,
         deadline: "2024-10-05",
+        assignees: []
       },
       {
+        id:1,
         name: "Select venue",
         description: description,
         completed: true,
         deadline: "2024-09-25",
+        assignees: []
       },
     ],
   },
   {
+    id: 1,
     category: "Catering",
-    subTasks: [
+    tasks: [
       {
+        id:2,
         name: "Confirm menu",
         description: description,
         completed: false,
         deadline: "2024-10-10",
+        assignees: []
       },
       {
+        id:3,
         name: "Hire caterer",
         description: description,
         completed: true,
         deadline: "2024-09-28",
+        assignees: []
       },
     ],
   },
   {
+    id: 2,
     category: "Decorations",
-    subTasks: [
+    tasks: [
       {
+        id:4,
         name: "Choose flowers",
         description: description,
         completed: false,
         deadline: "2024-10-15",
+        assignees: []
       },
       {
+        id:5,
         name: "Design table setup",
         description: description,
         completed: false,
         deadline: "2024-10-12",
+        assignees: []
       },
       {
+        id:6,
         name: "Choose color theme",
         description: description,
         completed: false,
         deadline: "2024-10-20",
+        assignees: []
       },
       {
+        id:7,
         name: "Choose kayaks",
         description: description,
         completed: true,
         deadline: "2024-09-29",
+        assignees: []
       },
     ],
   },
   {
+    id: 3,
     category: "Entertainment",
-    subTasks: [
+    tasks: [
       {
+        id:8,
         name: "Book DJ",
         description: description,
         completed: true,
         deadline: "2024-09-22",
+        assignees: []
       },
       {
+        id:9,
         name: "Plan activities",
         description: description,
         completed: true,
         deadline: "2024-09-23",
+        assignees: []
       },
     ],
   },
@@ -461,13 +485,42 @@ const oldPhotos = [
   },
 ];
 
-// *******************************************************************
+// **********************SEATINGS*************************************
+const roundTables = [{
+  id: "children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
+      'Bernadeta Nowak',
+      'Celina Wiśniewska',
+      'Derek Jankowski',
+      'Eugenia Zawisza',
+      'Felicja Grabowska',
+      'Genowefa Zielińska',
+      'Hiacynta Kaczmarek',
+      'Irenka Lewandowska',
+      'Józefina Szymańska',
+      'Kornela Kamińska']
+}];
 
+const rectangularTables = [{
+  id: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
+      'Bernadeta Nowak',
+      'Celina Wiśniewska',
+      'Derek Jankowski',
+      'Eugenia Zawisza',
+      'Felicja Grabowska',
+      'Genowefa Zielińska',
+      'Hiacynta Kaczmarek',
+      'Irenka Lewandowska',
+      'Józefina Szymańska',
+      'Kornela Kamińska']
+}];
+
+// *******************************************************************
 const Example = { 
   account, accountDetails, 
   weddingDetails,
   tags, guests,
-  expenses, tasks, choices,
+  expenses, taskCards, choices,
   images, oldPhotos,
+  roundTables, rectangularTables
 };
 export default Example;

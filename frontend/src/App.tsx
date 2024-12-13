@@ -26,7 +26,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession } from "./DBApi";
+import { checkSession, getTasks, getGuests } from "./DBApi";
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -69,7 +69,9 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  const { setViewLocation, setAccount, setIsLogged, setAccountDetails } = useUser();
+  const { 
+    isLogged, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards
+   } = useUser();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -78,11 +80,15 @@ const AppContent = () => {
         setIsLogged(true);
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
+        setWeddingDetails(null);
+
+        const taskCards = await getTasks();
+        setTaskCards(taskCards);
       }
   };
 
     fetchSession();
-  }, []);
+  }, [isLogged]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -27,6 +27,7 @@ const SuggestionItem = styled.li<{ isSelected: boolean }>`
     color: ${({ theme }) => theme.body};
   }
 `;
+SuggestionItem.shouldForwardProp = (prop) => prop !== "isSelected";
 
 interface GuidedInputProps extends InputProps {
     suggestions: string[];
@@ -37,11 +38,10 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number>(-1);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-    const [inputValue, setInputValueLocal] = useState<string>(inputProps.value || '');
+    const inputValue = inputProps.value as string; 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const userInput = e.target.value;
-        setInputValueLocal(userInput);
 
         const filtered = suggestions.filter(suggestion =>
             suggestion.toLowerCase().includes(userInput.toLowerCase())
@@ -62,7 +62,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
 
 
     const handleClick = (suggestion: string) => {
-        setInputValueLocal(suggestion);
         setFilteredSuggestions([]);
         setShowSuggestions(false);
         if (setInputValue) {

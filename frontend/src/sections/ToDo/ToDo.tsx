@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Body, Heading, Label } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
@@ -6,7 +6,6 @@ import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
-import { Task } from "../../types";
 import { updateTaskCompletion } from "../../DBApi";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
@@ -16,32 +15,25 @@ import { Description, DescriptionContainer } from "../../styles/Description";
 interface ToDoProps {
   onDeadlineChange?: (deadline: Date) => void;
   isHomePage?: boolean;
-  initialTasks: Task[];
   onTaskChange?: (taskName: string, category: string) => void;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks, onTaskChange }) => {
-  const { accountDetails } = useUser();
-  const [tasks, setTasks] = useState(initialTasks);
+const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange }) => {
+  const { accountDetails, taskCards, setTaskCards } = useUser();
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const totalTasks = tasks.reduce((total, task) => total + task.subTasks.length, 0);
-  const completedTasks = tasks.reduce(
-    (completed, task) => completed + task.subTasks.filter((subTask) => subTask.completed).length,
+  const totalTasks = taskCards.reduce((total, card) => total + card.tasks.length, 0);
+  const completedTasks = taskCards.reduce(
+    (completed, card) => completed + card.tasks.filter((task) => task.completed).length,
     0
   );
 
-  useEffect(() => {
-    setTasks(initialTasks);
-  }, [initialTasks]);
-
-
   const getTasksForDate = (date: Date) => {
-    return tasks
-      .flatMap((task) => task.subTasks)
-      .filter((subTask) => new Date(subTask.deadline).toDateString() === date.toDateString())
-      .map((subTask) => subTask.name);
+    return taskCards
+      .flatMap((card) => card.tasks)
+      .filter((task) => new Date(task.deadline).toDateString() === date.toDateString())
+      .map((task) => task.name);
   };
 
 
@@ -86,27 +78,26 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
     return null;
   };
 
-  const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
-    const task = tasks[categoryIndex];
-    const subTask = task.subTasks[subTaskIndex];
+  const handleTaskChange = (cardIndex: number, taskIndex: number) => {
+    const card = taskCards[cardIndex];
+    const task = card.tasks[taskIndex];
 
-    { onTaskChange ? onTaskChange(subTask.name, task.category) : {} };
-    updateTaskCompletion(0, !subTask.completed);
-    // updateTaskCompletion(subTask.id, !subTask.completed);
-    const updatedTasks = tasks.map((task, index) => {
-      if (index === categoryIndex) {
-        const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {
-          if (subIndex === subTaskIndex) {
-            return { ...subTask, completed: !subTask.completed };
+    { onTaskChange ? onTaskChange(task.name, card.category) : {} };
+    updateTaskCompletion(task.id, !task.completed);
+    const updatedCards = taskCards.map((card, index) => {
+      if (index === cardIndex) {
+        const updatedTasks = card.tasks.map((task, idx) => {
+          if (idx === taskIndex) {
+            return { ...task, completed: !task.completed };
           }
-          return subTask;
+          return task;
         });
-        return { ...task, subTasks: updatedSubTasks };
+        return { ...card, tasks: updatedTasks };
       }
-      return task;
+      return card;
     });
 
-    setTasks(updatedTasks);
+    setTaskCards(updatedCards);
   };
 
   const toggleList = () => {
@@ -137,33 +128,33 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
       <div>
         <GridContainer isExpanded={isExpanded} minWidth="28rem">
-          {tasks.map((task, categoryIndex) => (
-            <Card color="primary" key={categoryIndex}>
+          {taskCards.map((card, cardIndex) => (
+            <Card color="primary" key={cardIndex}>
               <SpaceBetweenContainer border>
-                <Heading level={4}>{task.category}</Heading>
+                <Heading level={4}>{card.category}</Heading>
                 <Heading level={4}>
-                  {task.subTasks.filter((subTask) => subTask.completed).length}/
-                  {task.subTasks.length}
+                  {card.tasks.filter((task) => task.completed).length}/
+                  {card.tasks.length}
                 </Heading>
               </SpaceBetweenContainer>
 
               <SubTaskList>
-                {task.subTasks.map((subTask, subTaskIndex) => (
-                  <div style={{ position: 'relative' }} key={subTaskIndex}>
-                    <SpaceBetweenContainer key={subTaskIndex} className="subtask-container">
+                {card.tasks.map((task, taskIndex) => (
+                  <div style={{ position: 'relative' }} key={taskIndex}>
+                    <SpaceBetweenContainer key={taskIndex} className="subtask-container">
                       <Checkbox
-                        checked={subTask.completed}
-                        onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                        checked={task.completed}
+                        onChange={() => handleTaskChange(cardIndex, taskIndex)}
                       />
 
                       <Body size="big" style={{ marginLeft: "0.5rem" }}>
-                        {subTask.name}
+                        {task.name}
                       </Body>
                       <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
-                        {subTask.deadline}
+                        {task.deadline}
                       </Label>
                       <DescriptionContainer move={-5}>
-                        <Description>{subTask.description}</Description>
+                        <Description>{task.description}</Description>
                       </DescriptionContainer>
                     </SpaceBetweenContainer>
                   </div>
