@@ -9,7 +9,7 @@ import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
 import Example from "../exampleData";
-import { handleDecision, handleInvite } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 
 
 const Container = styled.div`
@@ -39,6 +39,7 @@ const SectionsContainer = styled.div`
 
 
 const Home = () => {
+  const FunctionsProxy = useFunctionsProxy();
 
   return (
     <Container>
@@ -47,15 +48,15 @@ const Home = () => {
         <div id="guest-list">
           <GuestList
             guests={Example.guests}
-            handleInvite={handleInvite}
-            handleDecision={handleDecision}
+            handleInvite={FunctionsProxy.handleInvite}
+            handleDecision={FunctionsProxy.handleDecision}
             isHomePage={true} />
         </div>
         <div id="budget">
           <Budget isHomePage={true} expenses={Example.expenses} />
         </div> 
         <div id="to-do">
-          <ToDo isHomePage={true} initialTasks={Example.tasks} />
+          <ToDo isHomePage={true} />
         </div>
         <div id="choices">
           <Choices isHomePage={true} initialChoices={Example.choices} />

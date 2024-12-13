@@ -28,8 +28,9 @@ def list_files_in_directory(directory):
         if 'node_modules' in dirs:
             dirs.remove('node_modules')
         
+        whitelist = ['DBApi.ts', 'exampleData.ts', 'exampleDataFunctions.ts', 'types.ts', 'PhotosPage.tsx', 'ImgurUploader.tsx'] 
         for file in files:
-            if file.endswith(('.tsx', '.ts')) and not file.endswith(('dummyDBApi.ts')) and not file.endswith(('exampleData.ts'))and not  file.endswith(('PhotosPage.tsx')) and not  file.endswith(('ImgurUploader.tsx')) :
+            if file.endswith(('.tsx', '.ts')) and not any(file.endswith(whitelisted) for whitelisted in whitelist):
                 remove_comments_from_file(os.path.join(root, file))
 
 current_directory = os.getcwd() 

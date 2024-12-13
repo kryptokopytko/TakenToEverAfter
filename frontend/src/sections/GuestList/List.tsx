@@ -4,7 +4,7 @@ import { GridContainer } from "../../styles/section";
 import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
 import { Tag, TagContainer } from "../../styles/tag";
-import { getAllSharedInviteNames } from "../../DBApi";
+import useFunctionsProxy from "../../FunctionHandler";
 
 const GuestItem = styled.div`
   display: flex;
@@ -37,7 +37,8 @@ interface ListProps {
 }
 
 const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecision, handleInvite }) => {
-  const sharedInviteNames: string[] = getAllSharedInviteNames();
+  const FunctionsProxy = useFunctionsProxy();
+  const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
 
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">

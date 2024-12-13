@@ -6,7 +6,7 @@ import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
 import Example from "../exampleData";
-import { addChoice, removeChoice, updateChoice } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 
 interface ChoicesPageProps { }
 
@@ -18,6 +18,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [existingChoice, setExistingChoice] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [choiceDescription, setChoiceDescription] = useState('');
+    const FunctionsProxy = useFunctionsProxy();
 
     useEffect(() => {
         const normalizedChoiceName = choiceName.trim().toLowerCase();
@@ -73,7 +74,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             );
         }
 
-        addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
+        FunctionsProxy.addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
         setNotification(`Choice "${choiceName}" added to category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
@@ -99,7 +100,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             }).filter(choice => choice.options.length > 0)
         );
 
-        removeChoice(choiceCategory, choiceName);
+        FunctionsProxy.removeChoice(choiceCategory, choiceName);
         setNotification(`Choice "${choiceName}" removed from category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
@@ -123,7 +124,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             })
         );
 
-        updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
+        FunctionsProxy.updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
         setNotification(`Choice "${choiceName}" updated in category "${choiceCategory}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };

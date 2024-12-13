@@ -9,7 +9,7 @@ import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
-import { removeGuest, addGuest, updateGuestTags, updateTags, handleDecision, handleInvite, getAllSharedInviteNames } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 import Example from "../exampleData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
@@ -32,7 +32,8 @@ const GuestPage: React.FC = () => {
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
   const [arePair, setArePair] = useState(false);
   const [oneInvite, setOneInvite] = useState(false);
-  const sharedInviteNames: string[] = getAllSharedInviteNames();
+  const FunctionsProxy = useFunctionsProxy();
+  const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
 
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
@@ -95,16 +96,16 @@ const GuestPage: React.FC = () => {
         guest.name === guestName ? { ...guest, decision } : guest
       )
     );
-    handleDecision(guestName, decision);
+    FunctionsProxy.handleDecision(guestName, decision);
   };
 
   const handleInviteChange = (guestName: string) => {
     setGuests((prevGuests) =>
       prevGuests.map((guest) =>
-        guest.name === guestName ? { ...guest, decision: 'maybe' } : guest
+        guest.name === guestName ? { ...guest, decision: 'unknown' } : guest
       )
     );
-    handleInvite(guestName);
+    FunctionsProxy.handleInvite(guestName);
   };
 
   const possibleTags = allTags.filter(tag => !selectedGuestTags.includes(tag));
@@ -137,12 +138,12 @@ const GuestPage: React.FC = () => {
             guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, hasPlusOne } : guest
           )
         );
-        updateGuestTags(trimmedName, selectedGuestTags);
+        FunctionsProxy.updateGuestTags(trimmedName, selectedGuestTags);
         setNotification(`Modified: ${trimmedName}`);
       } else {
         const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', hasPlusOne };
         setGuests(prevGuests => [...prevGuests, newGuest]);
-        addGuest(trimmedName, 42);
+        FunctionsProxy.addGuest(trimmedName, 42);
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -153,7 +154,7 @@ const GuestPage: React.FC = () => {
   const handleDeleteGuest = () => {
     if (currentGuest) {
       setGuests(prevGuests => prevGuests.filter(guest => guest.name !== currentGuest.name));
-      removeGuest(currentGuest.name);
+      FunctionsProxy.removeGuest(currentGuest.name);
       setNotification(`Removed: ${currentGuest.name}`);
     } else {
       alert("Please select a guest to delete!");

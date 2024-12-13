@@ -126,7 +126,7 @@ export interface Task {
   id: number;
   name: string;
   completed: boolean;
-  deadline: string;
+  deadline: string | null;
   description: string;
   assignees: string[];
 }

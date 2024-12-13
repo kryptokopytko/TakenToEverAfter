@@ -508,12 +508,18 @@ export const sendResponse = (guestName: string, response: "yes" | "no") => {};
 /*********************************************TASKS******************************************************/
 export const updateTask = async (
   taskId: number,
-  categoryId: number,
+  categoryId: number | null,
+  categoryName: string,
   name: string,
   description: string | null = null,
   deadline: string | null = null
 ) => {
   try {
+    if (!categoryId) {
+      const newCategory = await addCategory(categoryName);
+      categoryId = newCategory.id;
+    }
+
     const updatedTask = {
       category: categoryId,
       name: name,
@@ -531,13 +537,9 @@ export const updateTask = async (
   }
 };
 
-export const addCategory = async (accountId: number, categoryName: string) => {
+export const addCategory = async (categoryName: string) => {
   try {
-    const newCategory = {
-      account: accountId,
-      name: categoryName,
-    };
-    const response = await api.post("/todo_list_categories/", newCategory);
+    const response = await api.post("/todo_list_categories/", categoryName);
     console.log("New category created:", response.data);
     return response.data;
   } catch (error) {
@@ -547,14 +549,20 @@ export const addCategory = async (accountId: number, categoryName: string) => {
 };
 
 export const addTask = async (
-  category: number,
+  categoryId: number | null,
+  categoryName: string,
   name: string,
-  description: string | null = null,
+  description: string,
   deadline: string | null = null
 ) => {
   try {
+    if (!categoryId) {
+      const newCategory = await addCategory(categoryName);
+      categoryId = newCategory.id;
+    }
+    
     const newTask = {
-      category,
+      categoryId,
       name,
       description,
       deadline,
@@ -586,10 +594,7 @@ export const updateTaskCompletion = async (
   isCompleted: boolean
 ) => {
   try {
-    const updatedTaskData = {
-      completed: isCompleted,
-    };
-    const response = await api.put(`/tasks/${taskId}/`, updatedTaskData);
+    const response = await api.patch(`/tasks/${taskId}/`, isCompleted);
     console.log("Task completion status updated:", response.data);
     return response.data;
   } catch (error) {

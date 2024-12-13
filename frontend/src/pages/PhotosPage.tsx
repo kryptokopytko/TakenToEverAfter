@@ -7,7 +7,7 @@ import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
-import { addPhotoToApi } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 import Checkbox from "../components/ui/Checkbox";
 import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
 
@@ -18,7 +18,8 @@ const PhotosPage: React.FC = () => {
     const [photoAuthor, setPhotoAuthor] = useState("");
     const [isVertical, setIsVertical] = useState(false);
     const [photos, setPhotos] = useState(Example.images);
-    const [imageUrl, setImageUrl] = useState<string | null>(null); // Store the image URL
+    const [imageUrl, setImageUrl] = useState<string | null>(null); 
+    const FunctionsProxy = useFunctionsProxy();
 
     const handleAddPhoto = async () => {
         try {
@@ -38,7 +39,7 @@ const PhotosPage: React.FC = () => {
             };
 
             setPhotos((prevPhotos) => [...prevPhotos, newImage]);
-            addPhotoToApi(newImage);
+            FunctionsProxy.addPhotoToApi(newImage);
 
             setPhotoName("");
             setPhotoAuthor("");

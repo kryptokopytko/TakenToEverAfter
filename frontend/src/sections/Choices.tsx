@@ -4,7 +4,7 @@ import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useEffect, useState } from "react";
 import { Card } from "../styles/card";
 import { Choice } from "../types";
-import { handleChoicePick } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";
@@ -21,6 +21,7 @@ interface ChoicesProps {
 const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
     const [choices, setChoices] = useState(initialChoices);
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
+    const FunctionsProxy = useFunctionsProxy();
 
     useEffect(() => {
         setChoices(initialChoices);
@@ -36,7 +37,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
         newChoices[choiceIndex].options[optionIndex].isPicked = true;
         setChoices(newChoices);
         const { option } = newChoices[choiceIndex].options[optionIndex];
-        handleChoicePick(option, newChoices[choiceIndex].choice, true);
+        FunctionsProxy.handleChoicePick(option, newChoices[choiceIndex].choice, true);
     };
 
     const handleUnpick = (choiceIndex: number, optionIndex: number) => {
@@ -44,7 +45,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
         newChoices[choiceIndex].options[optionIndex].isPicked = false;
         setChoices(newChoices);
         const { option } = newChoices[choiceIndex].options[optionIndex];
-        handleChoicePick(option, newChoices[choiceIndex].choice, false);
+        FunctionsProxy.handleChoicePick(option, newChoices[choiceIndex].choice, false);
     };
 
     const totalPicked = choices.flatMap(choice => choice.options).filter(option => option.isPicked);

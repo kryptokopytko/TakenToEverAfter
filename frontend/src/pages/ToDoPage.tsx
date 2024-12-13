@@ -5,7 +5,7 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useState } from "react";
-import { addTask, removeTask, updateTask } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 import { useUser } from "../providers/UserContext";
 
 const ToDoPage = () => {
@@ -16,9 +16,11 @@ const ToDoPage = () => {
     const [taskId, setTaskId] = useState<number | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const {taskCards} = useUser();
+    const FunctionsProxy = useFunctionsProxy();
 
     const findCategory = (taskId: number) => {
         const card = taskCards.find((card) => card.tasks.find((task) => task.id === taskId));
+        setTaskCategory({id: card!.id, name: card!.category});
         return {id: card!.id, name: card!.category};
     };
 
@@ -31,7 +33,7 @@ const ToDoPage = () => {
     }
 
     const handleAddTask = () => {
-        addTask(taskCategory.id!, taskName, taskDescription, taskDeadline);
+        FunctionsProxy.addTask(taskCategory.id!, taskName, taskDescription || "", taskDeadline);
        
         setNotification(`Task "${taskName}" added to category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
@@ -41,7 +43,7 @@ const ToDoPage = () => {
 
 
     const handleRemoveTask = () => {
-        removeTask(taskId!);
+        FunctionsProxy.removeTask(taskId!);
         setNotification(`Task "${taskName}" removed from category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
@@ -49,7 +51,7 @@ const ToDoPage = () => {
     };
 
     const handleUpdateTask = () => {
-        updateTask(taskId!, taskCategory.id!, taskName, taskDescription, taskDeadline);
+        FunctionsProxy.updateTask(taskId!, taskCategory.id!, taskName, taskDescription, taskDeadline);
         setNotification(`Task "${taskName}" updated in category "${taskCategory.name}"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
 
@@ -85,6 +87,7 @@ const ToDoPage = () => {
                 <GuidedInput
                     value={taskName}
                     suggestions={taskCards.flatMap(card => card.tasks.map(task => task.name))}
+                    inputValue={taskName}
                     placeholder="Name of the task"
                     onChange={(e) => setTaskName(e.target.value)}
                     setInputValue={(value) => {
@@ -94,9 +97,10 @@ const ToDoPage = () => {
                     
                         if (selectedTask) {
                           setTaskId(selectedTask.id);
+                          setTaskName(selectedTask.name);
                           setTaskDescription(selectedTask.description);
                           setTaskDeadline(selectedTask.deadline);
-                          setTaskCategory(findCategory(selectedTask.id));
+                          findCategory(selectedTask.id);
                         } else {
                           setTaskId(null);
                           setTaskDescription(""); 
@@ -117,21 +121,20 @@ const ToDoPage = () => {
                 <Subtitle level={3}>Category</Subtitle>
                 <GuidedInput
                     value={taskCategory.name}
-                    suggestions={taskCards.map((card) => card.category)}
-                    placeholder="Category"
+                    suggestions={taskCards.map(card => card.category)}
+                    inputValue={taskCategory.name}
+                    placeholder="Name of the category"
+                    onChange={(e) => setTaskCategory({name: e.target.value, id: null})}
                     setInputValue={(value) => {
-                        const selectedCard = taskCards.find((card) => card.category === value);
-                        if (selectedCard) {
-                            setTaskCategory({ name: selectedCard.category, id: selectedCard.id });
-                        } else if (!taskId) {
-                            setTaskCategory({id: null, name: ""}); 
+                        const selectedCategory = taskCards.find(card => card.category === value);
+                        if (selectedCategory) {
+                            setTaskCategory({ name: selectedCategory.category, id: selectedCategory.id });
+                        } else {
+                            setTaskCategory({ name: value, id: null });
                         }
                     }}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setTaskCategory((prev) => ({ ...prev, category: value })); 
-                    }}
                 />
+
                 <Subtitle level={3}>Description</Subtitle>
                 <Input
                     value={taskDescription || ""}

@@ -7,7 +7,7 @@ import Example from "../exampleData";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SubExpense } from "../types";
-import { addExpense, removeExpense, updateExpense } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 
 interface BudgetPageProps { }
 
@@ -19,6 +19,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [existingExpense, setExistingExpense] = useState<SubExpense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');
+    const FunctionsProxy = useFunctionsProxy();
 
     const expenseNames = expenses.flatMap(expense =>
         expense.subExpenses.map(subExpense => subExpense.subCategory.toLowerCase())
@@ -83,7 +84,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 });
             });
             setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
-            updateExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
+            FunctionsProxy.updateExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
         } else {
 
             setExpenses(prevExpenses => [
@@ -96,7 +97,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 }
             ]);
             setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
-            addExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
+            FunctionsProxy.addExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
         }
         setTimeout(() => setNotification(null), notificationTimeOut);
 
@@ -129,7 +130,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         );
 
         setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
-        removeExpense(inputCategory, inputExpenseName);
+        FunctionsProxy.removeExpense(inputCategory, inputExpenseName);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 

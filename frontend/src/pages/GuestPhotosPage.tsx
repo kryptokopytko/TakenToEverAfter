@@ -4,7 +4,7 @@ import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { SpaceBetweenContainer } from "../styles/section";
-import { addPhotoToApi } from "../DBApi";
+import useFunctionsProxy from "../FunctionHandler";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
@@ -17,6 +17,7 @@ const GuestPhotosPage: React.FC = () => {
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
     const [areYourExpanded, setareYourExpanded] = useState(true);
     const guestName = new URLSearchParams(location.search).get('guest');
+    const FunctionsProxy = useFunctionsProxy();
 
     const handleAddPhoto = () => {
         const newPhoto = {
@@ -29,7 +30,7 @@ const GuestPhotosPage: React.FC = () => {
             isVertical: isVertical,
         };
         setPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
-        addPhotoToApi(newPhoto);
+        FunctionsProxy.addPhotoToApi(newPhoto);
         setPhotoName('');
         setPhotoLink('');
         setIsVertical(false);

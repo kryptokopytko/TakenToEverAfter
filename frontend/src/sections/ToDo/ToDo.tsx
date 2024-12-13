@@ -6,7 +6,7 @@ import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
-import { updateTaskCompletion } from "../../DBApi";
+import useFunctionsProxy from "../../FunctionHandler";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
@@ -19,9 +19,10 @@ interface ToDoProps {
 }
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange }) => {
-  const { accountDetails, taskCards, setTaskCards } = useUser();
+  const { accountDetails, taskCards } = useUser();
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const FunctionsProxy = useFunctionsProxy();
 
   const totalTasks = taskCards.reduce((total, card) => total + card.tasks.length, 0);
   const completedTasks = taskCards.reduce(
@@ -32,7 +33,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
   const getTasksForDate = (date: Date) => {
     return taskCards
       .flatMap((card) => card.tasks)
-      .filter((task) => new Date(task.deadline).toDateString() === date.toDateString())
+      .filter((task) => new Date(task.deadline!).toDateString() === date.toDateString())
       .map((task) => task.name);
   };
 
@@ -83,21 +84,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
     const task = card.tasks[taskIndex];
 
     { onTaskChange ? onTaskChange(task.name, card.category) : {} };
-    updateTaskCompletion(task.id, !task.completed);
-    const updatedCards = taskCards.map((card, index) => {
-      if (index === cardIndex) {
-        const updatedTasks = card.tasks.map((task, idx) => {
-          if (idx === taskIndex) {
-            return { ...task, completed: !task.completed };
-          }
-          return task;
-        });
-        return { ...card, tasks: updatedTasks };
-      }
-      return card;
-    });
-
-    setTaskCards(updatedCards);
+    FunctionsProxy.updateTaskCompletion(task.id, !task.completed);
   };
 
   const toggleList = () => {
