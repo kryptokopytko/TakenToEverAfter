@@ -1,4 +1,4 @@
-import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag } from "./types";
+import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag, Invitation } from "./types";
 
 // ***********************ACCOUNT*********************************
 
@@ -36,46 +36,83 @@ const tags: Tag[] = [
   }
 ];
 
+const invitations: Invitation[] = [
+  {
+    id: 0,
+    handedOut: false
+  },
+  {
+    id: 1,
+    handedOut: false
+  },
+  {
+    id: 2,
+    handedOut: true
+  },
+  {
+    id: 3,
+    handedOut: false
+  }
+];
+
 const guests: Guest[] = [
   {
+    id: 0,
     name: "Baby Smurf",
     decision: "yes",
     tags: [0],
+    invitationId: 0
   },
   {
+    id: 1,
     name: "Baker Smurf",
     decision: "yes",
     tags: [0],
+    invitationId: 0
   },
   {
+    id: 2,
     name: "Brainy Smurf",
     decision: "unknown",
     tags: [1],
+    invitationId: 1
   },
   {
+    id: 3,
     name: "Chef Smurf",
     decision: "yes",
     tags: [1],
+    hasPlusOne: false,
+    invitationId: 2
   },
   {
+    id: 4,
     name: "Clumsy Smurf",
     decision: "yes",
     tags: [],
+    hasPlusOne: true,
+    invitationId: 3
   },
   {
+    id: 5,
     name: "Dizzy Smurf",
     decision: "yes",
     tags: [0],
+    invitationId: 2
   },
   {
+    id: 6,
     name: "Farmer Smurf",
     decision: "unknown",
     tags: [0],
+    invitationId: 2
   },
   {
+    id: 7,
     name: "Greedy Smurf",
     decision: "no",
     tags: [1],
+    invitationId: 1
   },
 ];
 
@@ -518,7 +555,7 @@ const rectangularTables = [{
 const Example = { 
   account, accountDetails, 
   weddingDetails,
-  tags, guests,
+  tags, guests, invitations,
   expenses, taskCards, choices,
   images, oldPhotos,
   roundTables, rectangularTables

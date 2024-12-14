@@ -46,11 +46,11 @@ export type Choice = {
 
 /*********************************************GUESTS*****************************************************/
 export type Guest = {
-  // id: number;
+  id: number;
   name: string;
   decision: Decision;
   tags: number[];
-  // invitationId: number;
+  invitationId: number;
   hasPlusOne?: boolean;
 }
 
@@ -62,7 +62,7 @@ export type Tag = {
 
 export type Invitation = {
   id: number;
-  handed_out: boolean;
+  handedOut: boolean;
 }
 
 export type Decision = "yes" | "no" | "unknown";

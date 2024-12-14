@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -7,7 +7,9 @@ interface UserContextType {
     language: Language;
     isLogged: boolean;
     weddingDetails: WeddingDetails | null;
-    guestList: Guest[];
+    guests: Guest[];
+    tags: Tag[];
+    invitations: Invitation[];
     account: Account;
     accountDetails: AccountDetails;
     taskCards: TaskCard[];
@@ -15,7 +17,9 @@ interface UserContextType {
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
-    setGuestList: (guests: Guest[]) => void;
+    setGuests: (guests: Guest[]) => void;
+    setTags: (tags: Tag[]) => void;
+    setInvitations: (invitations: Invitation[]) => void;
     setWeddingDetails: (weddingDetails: WeddingDetails | null) => void;
     setViewLocation: (location: string) => void;
     setLanguage: (language: Language) => void;
@@ -31,9 +35,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const [account, setAccount] = useState<Account>(Example.account);
     const [accountDetails, setAccountDetails] = useState<AccountDetails>(Example.accountDetails);
-    const [guestList, setGuestList] = useState<Guest[]>([]);
+    const [guests, setGuests] = useState<Guest[]>(Example.guests);
     const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails);
     const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
+    const [tags, setTags] = useState<Tag[]>(Example.tags);
+    const [invitations, setInvitations] = useState<Invitation[]>(Example.invitations);
 
     return (
         <UserContext.Provider
@@ -42,12 +48,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 language,
                 isLogged,
                 weddingDetails,
-                guestList,
+                guests,
+                tags,
+                invitations,
                 account,
                 accountDetails,
                 taskCards,
                 setWeddingDetails,
-                setGuestList,
+                setGuests,
+                setTags,
+                setInvitations,
                 setAccount,
                 setAccountDetails,
                 setIsLogged,

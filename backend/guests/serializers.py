@@ -1,19 +1,23 @@
 from rest_framework import serializers
-from .models import Group, Invitation, Guest
+from .models import Tag, Invitation, Guest
 
-class GroupSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Group
+        model = Tag
         fields = ('id', 'account', 'name', 'rank')
 
 
 class InvitationSerializer(serializers.ModelSerializer):
+    handedOut = serializers.CharField(source='handed_out')
+
     class Meta:
         model = Invitation
-        fields = ('id', 'account', 'handed_out', 'guests')
+        fields = ('id', 'account', 'handedOut', 'guests')
 
 
 class GuestSerializer(serializers.ModelSerializer):
+    hahasPlusOne = serializers.CharField(source='plus_one')
+
     class Meta:
         model = Guest
-        fields = ('id', 'account', 'name', 'group_numbers', 'invitation', 'confirmation', 'plus_one')
+        fields = ('id', 'account', 'name', 'tag_numbers', 'invitation', 'decision', 'hasPlusOne')

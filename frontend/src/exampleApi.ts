@@ -1,8 +1,8 @@
 import { useUser } from "./providers/UserContext";
-import { Task, TaskCard } from "./types";
+import { Task, TaskCard, Guest } from "./types";
 
 const useExampleFunctions = () => {
-    const { taskCards, setTaskCards } = useUser();
+    const { taskCards, setTaskCards, guests, setGuests } = useUser();
   
     /*********************************************TASKS******************************************************/
     const addTask = async (
@@ -120,7 +120,15 @@ const useExampleFunctions = () => {
     }
 
 
-    /********************************************************************************************************/
+    /************************************GUESTS****************************************************************/
+    const handleDecision = (guestId: number, decision: "yes" | "no") => {
+        setGuests(
+            guests.map((guest) =>
+              guest.id === guestId ? { ...guest, decision } : guest
+            )
+          );
+    };
+
     const getAllSharedInviteNames = () => {
         return ["family"];
     };
@@ -128,6 +136,7 @@ const useExampleFunctions = () => {
     /********************************************************************************************************/
     return {
         addTask, removeTask, updateTask, addCategory, updateTaskCompletion, getTasks,
+        handleDecision,
         getAllSharedInviteNames,
     };
 }

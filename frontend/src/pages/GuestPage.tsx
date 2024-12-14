@@ -10,9 +10,9 @@ import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
 import useFunctionsProxy from "../FunctionHandler";
-import Example from "../exampleData";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
+import { useUser } from "../providers/UserContext";
 
 const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -22,7 +22,6 @@ const GuestPage: React.FC = () => {
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
   const [currentDecision, setCurrentDecision] = useState<Decision | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
-  const [guests, setGuests] = useState<Guest[]>(Example.guests);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
   const [filterByTag, setFilterByTag] = useState<string>('');
@@ -34,6 +33,7 @@ const GuestPage: React.FC = () => {
   const [oneInvite, setOneInvite] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
   const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
+  const {guests} = useUser();
 
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
@@ -90,13 +90,8 @@ const GuestPage: React.FC = () => {
     setNewTagWeight(value.replace(/\D/g, ''));
   };
 
-  const handleDecisionChange = (guestName: string, decision: 'yes' | 'no') => {
-    setGuests((prevGuests) =>
-      prevGuests.map((guest) =>
-        guest.name === guestName ? { ...guest, decision } : guest
-      )
-    );
-    FunctionsProxy.handleDecision(guestName, decision);
+  const handleDecisionChange = (guestId: number, decision: 'yes' | 'no') => {
+    FunctionsProxy.handleDecision(guestId, decision);
   };
 
   const handleInviteChange = (guestName: string) => {

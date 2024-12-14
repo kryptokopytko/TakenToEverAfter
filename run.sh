@@ -1,3 +1,5 @@
+#!/bin/bash
+
 concurrently --handle-input \
   -n "BACKEND,FRONTEND" \
   --prefix-colors "bgBlue.bold,bgGreen.bold" \

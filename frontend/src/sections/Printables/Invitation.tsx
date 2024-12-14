@@ -34,8 +34,8 @@ const Border = styled.div`
 `;
 
 const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
-    const { account, accountDetails, weddingDetails, guestList } = useUser();
-    const newGuestList = propsGuestList ? propsGuestList : guestList.slice(0, 3);;
+    const { account, accountDetails, weddingDetails, guests } = useUser();
+    const newGuestList = propsGuestList ? propsGuestList : guests.slice(0, 3);;
     return (
         <Border>
             <Container>

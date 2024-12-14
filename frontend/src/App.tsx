@@ -26,7 +26,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession, getTasks, getGuests } from "./DBApi";
+import { checkSession, getTasks, getGuestsInfo } from "./DBApi";
 import Example from "./exampleData";
 
 
@@ -72,7 +72,8 @@ const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
   const { 
-    isLogged, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards
+    isLogged, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
+    setGuests, setTags, setInvitations,
    } = useUser();
 
   useEffect(() => {
@@ -83,7 +84,12 @@ const AppContent = () => {
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
         setWeddingDetails(null);
-
+        
+        const guestsInfo = await getGuestsInfo();
+        setGuests(guestsInfo.guests);
+        setTags(guestsInfo.tags);
+        setInvitations(guestsInfo.invitations);
+        
         const taskCards = await getTasks();
         setTaskCards(taskCards);
       } else {
@@ -92,6 +98,9 @@ const AppContent = () => {
         setAccountDetails(Example.accountDetails);
         setWeddingDetails(Example.weddingDetails);
         setTaskCards(Example.taskCards); 
+        setGuests(Example.guests);
+        setTags(Example.tags);
+        setInvitations(Example.invitations);
     }
   };
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TaskCard, Task } from "./types";
+import { TaskCard, Task, Guest, Tag, Invitation } from "./types";
 
 const api = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -94,7 +94,6 @@ export const logout = async () => {
   try {
     await api.get(
       "/logout/",
-      // await api.post('/logout/',
       { withCredentials: true }
     );
   } catch (error) {
@@ -116,24 +115,16 @@ export const checkSession = async () => {
 };
 
 /*********************************************EXPENSES***************************************************/
-
-// export const addExpense = (
-//   category: string,
-//   subCategory: string,
-//   amount: number,
-//   description: string
-// ) => {};
-
 export const addExpense = async (
   account: number,
-  expense_card: number,
+  expenseCard: number,
   price: number,
   notes: string | null = null
 ) => {
   try {
     const newExpense = {
       account,
-      expense_card,
+      expenseCard,
       price,
       notes,
     };
@@ -147,7 +138,6 @@ export const addExpense = async (
   }
 };
 
-// export const removeExpense = (category: string, subCategory: string) => {};
 export const removeExpense = async (id: number) => {
   try {
     const response = await api.delete(`/expenses/${id}/`);
@@ -158,13 +148,6 @@ export const removeExpense = async (id: number) => {
     throw error;
   }
 };
-
-// export const updateExpense = (
-//   category: string,
-//   subCategory: string,
-//   newAmount: number,
-//   description: string
-// ) => {};
 
 export const updateExpense = async (
   id: number,
@@ -248,7 +231,45 @@ export const getGuests = async () => {
   }
 };
 
-// email ignorowany
+export const getGuestsInfo = async () => {
+  try {
+    const [guestsResponse, tagsResponse, invitationsResponse] = await Promise.all([
+      api.get("/guests/user-guests/",  { withCredentials: true }),
+      api.get("/guests/user-tags/",  { withCredentials: true }),
+      api.get("/guests/user-invitations/",  { withCredentials: true })
+    ]);
+
+    const guests: Guest[] = guestsResponse.data.guests.map((guest: any) => ({
+      id: guest.id,
+      name: guest.name,
+      decision: guest.confirmation,
+      tags: guest.group_numbers,
+      invitationId: guest.invitation?.id || null,
+      hasPlusOne: guest.plus_one
+    }));
+
+    const tags: Tag[] = tagsResponse.data.tags.map((tag: any) => ({
+      id: tag.id,
+      name: tag.name,
+      rank: tag.rank
+    }));
+
+    const invitations: Invitation[] = invitationsResponse.data.invitations.map((invitation: any) => ({
+      id: invitation.id,
+      handedOut: invitation.handed_out
+    }));
+
+    return {
+      guests,
+      tags,
+      invitations
+    };
+  } catch (error) {
+    console.error("Error fetching guests information:", error);
+    throw error;
+  }
+};
+
 export const addGuest = async (guestName: string, account_id: number) => {
   const newGuest = {
     account: account_id,
@@ -386,7 +407,9 @@ export const handOutInvitation = async (invitationId: number) => {
   }
 };
 
-export const handleDecision = (guestName: string, decision: "yes" | "no") => {};
+export const handleDecision = (guestId: number, decision: "yes" | "no") => {
+  
+};
 
 /*********************************************PHOTOS*****************************************************/
 
