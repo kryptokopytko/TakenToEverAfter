@@ -1,4 +1,4 @@
-import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag, Invitation } from "./types";
+import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag, Invitation, ExpenseCard, Choice } from "./types";
 
 // ***********************ACCOUNT*********************************
 
@@ -18,7 +18,8 @@ const accountDetails : AccountDetails = {
 const weddingDetails : WeddingDetails = {
   weddingTime: "15:00",
   weddingLocation: ["Kościół św. Marii", "ul. Wesoła 12", "Kraków"],
-  surnames: ["Elderberry", "Tumblesworth"]
+  groomSurname: "Elderberry",
+  brideSurname: "Tumblesworth"
 };
 
 // ***********************GUESTS*********************************
@@ -117,51 +118,163 @@ const guests: Guest[] = [
 ];
 
 // ***********************EXPENSES*********************************
-
-const description =
-  "How does a bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten Spot in the Caribbean by providence, impoverished, in squalor Grow up to be a hero and a scholar?";
-
-const expenses = [
+const expenses: ExpenseCard[] = [
   {
+    id: 1,
     category: "Venue",
-    subExpenses: [
-      { subCategory: "Rental", amount: 700, description: description },
-      { subCategory: "Cleaning", amount: 300, description: description },
-    ],
-  },
-
-  {
-    category: "Photography",
-    subExpenses: [
-      { subCategory: "Photographer", amount: 250, description: description },
-      { subCategory: "Album", amount: 50, description: description },
-    ],
-  },
-
-  {
-    category: "Entertainment",
-    subExpenses: [
-      { subCategory: "DJ", amount: 80, description: description },
-      { subCategory: "Games", amount: 20, description: description },
-    ],
+    expenses: [
+      { id: 1, name: "Wedding hall rental", amount: 5000, description: "Rental fee for the wedding venue including space for ceremony and reception." },
+      { id: 2, name: "Ceremony location setup", amount: 1000, description: "Cost for arranging chairs, decor, and sound system at the ceremony location." }
+    ]
   },
   {
+    id: 2,
     category: "Catering",
-    subExpenses: [
-      { subCategory: "Dinner", amount: 300, description: description },
-      { subCategory: "Vodka", amount: 50, description: description },
-      { subCategory: "Vine", amount: 300, description: description },
-      { subCategory: "Supper", amount: 200, description: description },
-      { subCategory: "Ice Cream", amount: 100, description: description },
-    ],
+    expenses: [
+      { id: 3, name: "Full course meal for guests", amount: 3000, description: "Three-course meal served to all wedding guests." },
+      { id: 4, name: "Wedding cake", amount: 800, description: "Large wedding cake with multiple tiers and decorations." },
+      { id: 5, name: "Beverages and drinks", amount: 500, description: "Alcoholic and non-alcoholic drinks for guests throughout the event." }
+    ]
   },
   {
-    category: "Decorations",
-    subExpenses: [
-      { subCategory: "Flowers", amount: 100, description: description },
-      { subCategory: "Lighting", amount: 100, description: description },
-    ],
+    id: 3,
+    category: "Photography",
+    expenses: [
+      { id: 6, name: "Professional wedding photography package", amount: 1500, description: "Full-day professional photography for the wedding day." },
+      { id: 7, name: "Videography services", amount: 1200, description: "Videographer to capture video footage throughout the wedding day." }
+    ]
   },
+  {
+    id: 4,
+    category: "Attire",
+    expenses: [
+      { id: 8, name: "Wedding dress and accessories", amount: 2000, description: "Bridal gown with accessories such as veil and jewelry." },
+      { id: 9, name: "Groom's suit and shoes", amount: 1000, description: "Formal suit and shoes for the groom." }
+    ]
+  },
+  {
+    id: 5,
+    category: "Entertainment",
+    expenses: [
+      { id: 10, name: "Live band for the reception", amount: 800, description: "Live music performed by a band at the reception." },
+      { id: 11, name: "DJ and sound system rental", amount: 400, description: "DJ services and sound equipment for music and announcements." }
+    ]
+  },
+  {
+    id: 6,
+    category: "Decorations",
+    expenses: [
+      { id: 12, name: "Flowers and table decorations", amount: 1500, description: "Floral arrangements and centerpieces for tables." },
+      { id: 13, name: "Lighting setup for venue", amount: 700, description: "Lighting setup to enhance the ambiance of the venue." }
+    ]
+  },
+  {
+    id: 7,
+    category: "Transportation",
+    expenses: [
+      { id: 14, name: "Limousine rental for the couple", amount: 600, description: "Luxury limousine for the couple’s arrival and departure." },
+      { id: 15, name: "Shuttle service for guests", amount: 300, description: "Shuttle buses for transporting guests to and from the venue." }
+    ]
+  },
+  {
+    id: 8,
+    category: "Miscellaneous",
+    expenses: [
+      { id: 16, name: "Wedding invitations", amount: 500, description: "Design and printing of wedding invitations for guests." },
+      { id: 17, name: "Guest favors", amount: 200, description: "Small gifts for guests as a token of appreciation." }
+    ]
+  }
+];
+
+const choices: Choice[] = [
+  {
+    id: 1,
+    category: "Photography",
+    options: [
+      {
+        id: 1,
+        name: "Full-day photography with two photographers",
+        amount: 1500,
+        description: "Two photographers capturing the entire day from start to finish.",
+        pros: "Comprehensive coverage, high-quality photos",
+        cons: "Expensive package"
+      },
+      {
+        id: 2,
+        name: "Half-day photography with one photographer",
+        amount: 800,
+        description: "One photographer covering just the ceremony and key moments.",
+        pros: "More affordable",
+        cons: "Limited photo coverage"
+      }
+    ]
+  },
+  {
+    id: 2,
+    category: "Entertainment",
+    options: [
+      {
+        id: 3,
+        name: "Live band (5 musicians) for the entire evening",
+        amount: 1200,
+        description: "A live band providing music throughout the reception.",
+        pros: "Live performance creates a great atmosphere",
+        cons: "Higher cost"
+      },
+      {
+        id: 4,
+        name: "Professional DJ and sound system",
+        amount: 400,
+        description: "A DJ with a sound system providing music and announcements.",
+        pros: "More affordable and flexible music selection",
+        cons: "Less unique than live music"
+      }
+    ]
+  },
+  {
+    id: 3,
+    category: "Transportation",
+    options: [
+      {
+        id: 5,
+        name: "Luxury limousine for the wedding couple",
+        amount: 600,
+        description: "Luxury limousine rental for the bride and groom’s transport.",
+        pros: "Elegant and stylish arrival",
+        cons: "High rental cost"
+      },
+      {
+        id: 6,
+        name: "Classic car rental",
+        amount: 300,
+        description: "Classic car for a more affordable yet stylish wedding ride.",
+        pros: "Affordable and still classy",
+        cons: "Less luxurious option"
+      }
+    ]
+  },
+  {
+    id: 4,
+    category: "Venue Decorations",
+    options: [
+      {
+        id: 7,
+        name: "Premium floral and lighting decorations",
+        amount: 1500,
+        description: "Luxurious flowers and lighting setup for the venue.",
+        pros: "Stunning and photogenic setup",
+        cons: "Expensive option"
+      },
+      {
+        id: 8,
+        name: "Basic table and lighting setup",
+        amount: 700,
+        description: "Simple yet elegant flowers and lighting for the tables.",
+        pros: "More budget-friendly",
+        cons: "Simpler, less visually impressive"
+      }
+    ]
+  }
 ];
 
 // ***********************TASKS*************************************
@@ -172,17 +285,17 @@ const taskCards: TaskCard[] = [
     category: "Planning",
     tasks: [
       {
-        id:0,
+        id: 0,
         name: "Create guest list",
-        description: description,
+        description: "Compile a list of all guests for the wedding.",
         completed: false,
         deadline: "2024-10-05",
         assignees: []
       },
       {
-        id:1,
+        id: 1,
         name: "Select venue",
-        description: description,
+        description: "Decide on the location for the ceremony and reception.",
         completed: true,
         deadline: "2024-09-25",
         assignees: []
@@ -194,17 +307,17 @@ const taskCards: TaskCard[] = [
     category: "Catering",
     tasks: [
       {
-        id:2,
+        id: 2,
         name: "Confirm menu",
-        description: description,
+        description: "Finalize the food and drink options for the event.",
         completed: false,
         deadline: "2024-10-10",
         assignees: []
       },
       {
-        id:3,
+        id: 3,
         name: "Hire caterer",
-        description: description,
+        description: "Book a catering company to provide food for the wedding.",
         completed: true,
         deadline: "2024-09-28",
         assignees: []
@@ -216,33 +329,33 @@ const taskCards: TaskCard[] = [
     category: "Decorations",
     tasks: [
       {
-        id:4,
+        id: 4,
         name: "Choose flowers",
-        description: description,
+        description: "Select flower arrangements for the ceremony and tables.",
         completed: false,
         deadline: "2024-10-15",
         assignees: []
       },
       {
-        id:5,
+        id: 5,
         name: "Design table setup",
-        description: description,
+        description: "Plan the layout and decorations for guest tables.",
         completed: false,
         deadline: "2024-10-12",
         assignees: []
       },
       {
-        id:6,
+        id: 6,
         name: "Choose color theme",
-        description: description,
+        description: "Pick the main color palette for the wedding decor.",
         completed: false,
         deadline: "2024-10-20",
         assignees: []
       },
       {
-        id:7,
+        id: 7,
         name: "Choose kayaks",
-        description: description,
+        description: "Decide on decorative kayaks for the outdoor theme.",
         completed: true,
         deadline: "2024-09-29",
         assignees: []
@@ -254,17 +367,17 @@ const taskCards: TaskCard[] = [
     category: "Entertainment",
     tasks: [
       {
-        id:8,
+        id: 8,
         name: "Book DJ",
-        description: description,
+        description: "Hire a DJ to provide music during the reception.",
         completed: true,
         deadline: "2024-09-22",
         assignees: []
       },
       {
-        id:9,
+        id: 9,
         name: "Plan activities",
-        description: description,
+        description: "Organize fun games or activities for the guests.",
         completed: true,
         deadline: "2024-09-23",
         assignees: []
@@ -273,125 +386,6 @@ const taskCards: TaskCard[] = [
   },
 ];
 
-const choices = [
-  {
-    choice: "Venue",
-
-    options: [
-      {
-        option: "Castle",
-        description: description,
-        amount: 700,
-        isPicked: false,
-      },
-      {
-        option: "Beach",
-        description: description,
-        amount: 300,
-        isPicked: false,
-      },
-      {
-        option: "Garden",
-        description: description,
-        amount: 400,
-        isPicked: false,
-      },
-      {
-        option: "Hotel",
-        description: description,
-        amount: 500,
-        isPicked: false,
-      },
-    ],
-  },
-  {
-    choice: "Catering",
-    options: [
-      {
-        option: "Buffet",
-        description: description,
-        amount: 50,
-        isPicked: false,
-      },
-      {
-        option: "Sit-down dinner",
-        description: description,
-        amount: 75,
-        isPicked: false,
-      },
-      {
-        option: "Barbecue",
-        description: description,
-        amount: 60,
-        isPicked: true,
-      },
-    ],
-  },
-  {
-    choice: "Decor",
-    options: [
-      {
-        option: "Floral arrangements",
-        description: description,
-        amount: 200,
-        isPicked: true,
-      },
-      {
-        option: "Balloon decorations",
-        description: description,
-        amount: 100,
-        isPicked: false,
-      },
-      {
-        option: "Fairy lights",
-        description: description,
-        amount: 150,
-        isPicked: true,
-      },
-    ],
-  },
-  {
-    choice: "Entertainment",
-    options: [
-      {
-        option: "Live band",
-        description: description,
-        amount: 1000,
-        isPicked: true,
-      },
-      { option: "DJ", amount: 500, description: description, isPicked: false },
-      {
-        option: "Photo booth",
-        description: description,
-        amount: 300,
-        isPicked: true,
-      },
-    ],
-  },
-  {
-    choice: "Photography",
-    options: [
-      {
-        option: "Professional photographer",
-        description: description,
-        amount: 1200,
-        isPicked: false,
-      },
-      {
-        option: "Videographer",
-        description: description,
-        amount: 1500,
-        isPicked: false,
-      },
-      {
-        option: "Photo package",
-        description: description,
-        amount: 800,
-        isPicked: false,
-      },
-    ],
-  },
-];
 
 // ***********************PHOTOS*************************************
 

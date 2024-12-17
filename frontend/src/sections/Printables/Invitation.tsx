@@ -40,9 +40,9 @@ const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guest
         <Border>
             <Container>
                 <Heading level={1}></Heading>
-                <Heading level={1}>{account.groomName} {account.brideName}</Heading>
+                <Heading level={1}>{account.brideName} {weddingDetails?.brideSurname || ""}</Heading>
                 <Subtitle level={1}> ------ and ------ </Subtitle>
-                <Heading level={1}>{account.groomName} {account.brideName}</Heading>
+                <Heading level={1}>{account.groomName} {weddingDetails?.groomSurname || ""}</Heading>
                 <Body size='big'>{mainText ? mainText : "Request the pleasure of your company at the celebration of their marriage"}</Body>
                 <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails && (weddingDetails.weddingTime)}</Subtitle>
                 {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}

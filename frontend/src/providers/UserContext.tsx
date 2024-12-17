@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -13,6 +13,8 @@ interface UserContextType {
     account: Account;
     accountDetails: AccountDetails;
     taskCards: TaskCard[];
+    expenseCards: ExpenseCard[];
+    choices: Choice[];
     
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
@@ -24,6 +26,8 @@ interface UserContextType {
     setViewLocation: (location: string) => void;
     setLanguage: (language: Language) => void;
     setTaskCards: (taskCards: TaskCard[]) => void;
+    setExpenseCards: (expenseCards: ExpenseCard[]) => void;
+    setChoices: (choices: Choice[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -40,6 +44,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
     const [tags, setTags] = useState<Tag[]>(Example.tags);
     const [invitations, setInvitations] = useState<Invitation[]>(Example.invitations);
+    const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses);
+    const [choices, setChoices] = useState<Choice[]>(Example.choices);
 
     return (
         <UserContext.Provider
@@ -54,6 +60,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 account,
                 accountDetails,
                 taskCards,
+                expenseCards,
+                choices,
+
                 setWeddingDetails,
                 setGuests,
                 setTags,
@@ -63,7 +72,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setIsLogged,
                 setViewLocation,
                 setLanguage,
-                setTaskCards
+                setTaskCards,
+                setExpenseCards,
+                setChoices,
             }}
         >
             {children}

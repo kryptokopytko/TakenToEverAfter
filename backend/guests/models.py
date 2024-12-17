@@ -18,7 +18,7 @@ class Invitation(models.Model):
 class Guest(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 
     name = models.CharField(max_length=150)  
-    tag_numbers = models.JSONField()
+    tags = models.ManyToManyField(Tag, related_name="guests") 
     invitation = models.ForeignKey(Invitation, null=True, on_delete=models.SET_NULL, related_name="guests") 
     decision = models.CharField(
         max_length=8,
@@ -29,4 +29,4 @@ class Guest(models.Model):
         ],
         default='unknown'
     ) 
-    plus_one = models.BooleanField(default=False) 
+    plus_one = models.BooleanField(default=False, blank=True) 

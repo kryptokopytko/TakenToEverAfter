@@ -219,6 +219,50 @@ export const transferPotentialExpenseToExpense = async (
     throw error;
   }
 };
+
+export const getExpenses = async () => {
+  try {
+    const response = await api.get(`/expenses/user-expenses`, {
+      withCredentials: true
+    });
+
+    const expenseCards = response.data.expenseCards.map((card: any) => {
+      return {
+        id: card.id,
+        category: card.category,
+        expenses: card.expenses.map((expense: any) => ({
+          id: expense.id,
+          name: expense.name,
+          amount: expense.amount,
+          description: expense.description
+        }))
+      };
+    });
+
+    const choices = response.data.choices.map((choice: any) => {
+      return {
+        id: choice.id,
+        category: choice.category,
+        options: choice.options.map((option: any) => ({
+          id: option.id,
+          name: option.name,
+          amount: option.amount,
+          description: option.description,
+          pros: option.pros,
+          cons: option.cons
+        }))
+      };
+    });
+
+    return {
+      expenseCards,
+      choices
+    };
+  } catch (error) {
+    console.error('Error fetching expenses:', error);
+    throw error;
+  }
+};
 /*********************************************GUESTS*****************************************************/
 
 export const getGuests = async () => {
@@ -243,7 +287,7 @@ export const getGuestsInfo = async () => {
       id: guest.id,
       name: guest.name,
       decision: guest.confirmation,
-      tags: guest.group_numbers,
+      tags: guest.tags,
       invitationId: guest.invitation?.id || null,
       hasPlusOne: guest.plus_one
     }));

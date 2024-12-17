@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
           <LogoContainer>
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
-                <Heading level={3} color="primary">{`${account.groomName} & ${account.brideName}`}</Heading>
+                <Heading level={3} color="primary">{`${account.brideName} & ${account.groomName}`}</Heading>
             </NamesContainer>
           </LogoContainer>
         </StyledLink>

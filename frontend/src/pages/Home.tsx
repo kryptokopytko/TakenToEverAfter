@@ -47,7 +47,6 @@ const Home = () => {
         <Hero />
         <div id="guest-list">
           <GuestList
-            guests={Example.guests}
             handleInvite={FunctionsProxy.handleInvite}
             handleDecision={FunctionsProxy.handleDecision}
             isHomePage={true} />
@@ -55,11 +54,11 @@ const Home = () => {
         <div id="budget">
           <Budget isHomePage={true} expenses={Example.expenses} />
         </div> 
-        <div id="to-do">
-          <ToDo isHomePage={true} />
-        </div>
         <div id="choices">
           <Choices isHomePage={true} initialChoices={Example.choices} />
+        </div>
+        <div id="to-do">
+          <ToDo isHomePage={true} />
         </div>
         <div id="photo-album">
           <FavouritePhotos isHomePage={true} />

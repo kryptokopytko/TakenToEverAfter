@@ -15,32 +15,32 @@ export interface AccountDetails {
 export interface WeddingDetails {
   weddingTime: string;
   weddingLocation: string[];
-  surnames: string[];
+  groomSurname: string;
+  brideSurname: string;
 }
 
 /*********************************************EXPENSES***************************************************/
-export interface SubExpense {
-  subCategory: string;
-  amount: number;
-  description: string;
-}
-
 export interface Expense {
-  category: string;
-  subExpenses: SubExpense[];
+  id: number;
+  name: string;
+  amount: number;
+  description: string;
 }
 
-export type Expenses = Expense[];
+export interface ExpenseCard {
+  id: number;
+  category: string;
+  expenses: Expense[];
+}
 
-export type Option = {
-  option: string;
-  amount: number;
-  isPicked: boolean;
-  description: string;
+export interface Option extends Expense {
+  pros?: String;
+  cons?: String;
 };
 
-export type Choice = {
-  choice: string;
+export interface Choice {
+  id: number;
+  category: string;
   options: Option[];
 };
 

@@ -337,7 +337,7 @@ const GuestPage: React.FC = () => {
         </ButtonContainer>
       </MenuContainer>
 
-      <GuestList isHomePage={false} guests={filteredGuests} handleDecision={handleDecisionChange} handleInvite={handleInviteChange}>
+      <GuestList isHomePage={false} handleDecision={handleDecisionChange} handleInvite={handleInviteChange}>
 
         <SelectorContainer>
           <DropdownSelector

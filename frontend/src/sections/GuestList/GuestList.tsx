@@ -7,6 +7,7 @@ import { SpaceBetweenContainer } from "../../styles/section";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Guest, decisionTypes } from "../../types";
 import { Link } from "react-router-dom";
+import { useUser } from "../../providers/UserContext";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -19,14 +20,14 @@ const SummaryContainer = styled.div`
 
 interface GuestListProps {
   isHomePage?: boolean;
-  guests: Guest[];
   handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
   handleInvite: (guestName: string) => void;
   children?: React.ReactNode;
 }
 
-const GuestList: React.FC<GuestListProps> = ({ isHomePage, guests, handleDecision, handleInvite, children }) => {
+const GuestList: React.FC<GuestListProps> = ({ isHomePage, handleDecision, handleInvite, children }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
+  const {guests} = useUser();
 
   const countDecisions = (decisionType: string) => {
     return guests.filter((guest) => guest.decision === decisionType).length;

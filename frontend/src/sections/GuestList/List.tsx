@@ -53,13 +53,12 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecisio
               <Tag isOneInvite={sharedInviteNames.includes(tag)} key={idx}>{tag}</Tag>
               )}
             </TagContainer>
-            {guest.decision === 'maybe' && !isHomePage ? (
+            {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
+                <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
                 <Button variant="transparent" onClick={() => handleDecision(guest.name, 'yes')}>yes/</Button>
                 <Button variant="transparent" onClick={() => handleDecision(guest.name, 'no')}>no</Button>
               </DecisionButtons>
-            ) : guest.decision === 'not invited' ? (
-              <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
             ) : (
               <Label size="small">{guest.decision}</Label>
             )}
