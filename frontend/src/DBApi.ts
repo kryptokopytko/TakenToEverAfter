@@ -180,9 +180,8 @@ export const updateChoice = (
 ) => {};
 
 export const handleChoicePick = (
-  choiceName: string,
-  category: string,
-  picked: boolean
+  choiceId: number,
+  categoryId: number,
 ) => {};
 
 export const addChoice = (
@@ -286,7 +285,7 @@ export const getGuestsInfo = async () => {
     const guests: Guest[] = guestsResponse.data.guests.map((guest: any) => ({
       id: guest.id,
       name: guest.name,
-      decision: guest.confirmation,
+      decision: guest.decision,
       tags: guest.tags,
       invitationId: guest.invitation?.id || null,
       hasPlusOne: guest.plus_one
@@ -334,7 +333,6 @@ export const addGuest = async (guestName: string, account_id: number) => {
     });
 };
 
-// export const removeGuest = (guestName: string) => {};
 export const removeGuest = async (id: Number) => {
   try {
     const response = await api.delete(`/guests/${id}/`);

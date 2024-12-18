@@ -8,9 +8,6 @@ import TableChart from "../sections/TableChart/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import Example from "../exampleData";
-import useFunctionsProxy from "../FunctionHandler";
-
 
 const Container = styled.div`
   display: flex;
@@ -39,23 +36,19 @@ const SectionsContainer = styled.div`
 
 
 const Home = () => {
-  const FunctionsProxy = useFunctionsProxy();
-
   return (
     <Container>
       <SectionsContainer>
         <Hero />
         <div id="guest-list">
           <GuestList
-            handleInvite={FunctionsProxy.handleInvite}
-            handleDecision={FunctionsProxy.handleDecision}
             isHomePage={true} />
         </div>
         <div id="budget">
-          <Budget isHomePage={true} expenses={Example.expenses} />
+          <Budget isHomePage={true} />
         </div> 
         <div id="choices">
-          <Choices isHomePage={true} initialChoices={Example.choices} />
+          <Choices isHomePage={true} />
         </div>
         <div id="to-do">
           <ToDo isHomePage={true} />

@@ -31,11 +31,10 @@ SuggestionItem.shouldForwardProp = (prop) => prop !== "isSelected";
 
 interface GuidedInputProps extends InputProps {
     suggestions: string[];
-    inputValue: string;
     setInputValue?: (value: string) => void;
 }
 
-const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, inputValue, setInputValue, placeholder, ...inputProps }) => {
+const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, placeholder, ...inputProps }) => {
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number>(-1);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
@@ -92,7 +91,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, inputValue, setI
         <InputContainer>
             <Input
                 {...inputProps}
-                value={inputValue}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 type={'text'}
@@ -102,7 +100,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, inputValue, setI
                 <SuggestionsList>
                     {filteredSuggestions.map((suggestion, index) => (
                         <SuggestionItem
-                            key={suggestion}
+                            key={index}
                             isSelected={index === activeSuggestionIndex}
                             onClick={() => handleClick(suggestion)}
                         >

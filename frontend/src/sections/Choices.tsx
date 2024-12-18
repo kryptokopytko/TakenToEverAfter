@@ -1,13 +1,13 @@
 import { Body, Heading } from "../styles/typography";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../styles/section";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card } from "../styles/card";
-import { Choice } from "../types";
 import useFunctionsProxy from "../FunctionHandler";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";
+import { useUser } from "../providers/UserContext";
 
 const LimitedWidth = styled.span`
     max-width: 50%;
@@ -15,85 +15,49 @@ const LimitedWidth = styled.span`
 
 interface ChoicesProps {
     isHomePage?: boolean;
-    initialChoices: Choice[];
 }
 
-const Choices: React.FC<ChoicesProps> = ({ isHomePage, initialChoices }) => {
-    const [choices, setChoices] = useState(initialChoices);
+const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
     const FunctionsProxy = useFunctionsProxy();
 
-    useEffect(() => {
-        setChoices(initialChoices);
-    }, [initialChoices]);
-
+    const {choices} = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
     };
 
-    const handlePick = (choiceIndex: number, optionIndex: number) => {
-        const newChoices = [...choices];
-        newChoices[choiceIndex].options[optionIndex].isPicked = true;
-        setChoices(newChoices);
-        const { option } = newChoices[choiceIndex].options[optionIndex];
-        FunctionsProxy.handleChoicePick(option, newChoices[choiceIndex].choice, true);
+    const handlePick = (choiceId: number, categoryId: number) => {
+        FunctionsProxy.handleChoicePick(choiceId, categoryId);
     };
-
-    const handleUnpick = (choiceIndex: number, optionIndex: number) => {
-        const newChoices = [...choices];
-        newChoices[choiceIndex].options[optionIndex].isPicked = false;
-        setChoices(newChoices);
-        const { option } = newChoices[choiceIndex].options[optionIndex];
-        FunctionsProxy.handleChoicePick(option, newChoices[choiceIndex].choice, false);
-    };
-
-    const totalPicked = choices.flatMap(choice => choice.options).filter(option => option.isPicked);
-    const totalCount = totalPicked.length;
-    const totalAmount = totalPicked.reduce((sum, option) => sum + option.amount, 0);
 
     return (
         <div>
             <SpaceBetweenContainer>
                 <Heading level={1}>Choices:</Heading>
-                <Heading level={1}>{totalCount} selected</Heading>
-                <Heading level={1}>Total: ${totalAmount}</Heading>
             </SpaceBetweenContainer>
 
             <GridContainer isExpanded={isExpanded} minWidth='28rem'>
                 {choices.map((choice, choiceIndex) => {
-                    const selectedOptions = choice.options.filter(option => option.isPicked);
-                    const selectedCount = selectedOptions.length;
-                    const selectedAmount = selectedOptions.reduce((sum, option) => sum + option.amount, 0);
 
                     return (
                         <Card color='light' key={choiceIndex}>
                             <SpaceBetweenContainer border>
-                                <Heading level={4}>{choice.choice}</Heading>
-                                <Heading level={4}>
-                                    {selectedCount} selected
-                                </Heading>
-                                <Heading level={4}>${selectedAmount}</Heading>
+                                <Heading level={4}>{choice.category}</Heading>
                             </SpaceBetweenContainer>
 
                             {choice.options.map((option, optionIndex) => (
                                 <SpaceBetweenContainer key={optionIndex} style={{ marginLeft: '1rem', position: 'relative' }}>
                                     <LimitedWidth>
-                                        <Body size='big'>{option.option}</Body>
+                                        <Body size='big'>{option.name}</Body>
                                     </LimitedWidth>
                                     <LimitedWidth>
                                         <Body size='big'>${option.amount}</Body>
                                     </LimitedWidth>
                                     <LimitedWidth>
-                                        {option.isPicked ? (
-                                            <Button onClick={() => handleUnpick(choiceIndex, optionIndex)} variant='primary'>
-                                                Unpick
-                                            </Button>
-                                        ) : (
-                                            <Button onClick={() => handlePick(choiceIndex, optionIndex)}>
-                                                Pick
-                                            </Button>
-                                        )}
+                                        <Button onClick={() => handlePick(option.id, choice.id)}>
+                                            Pick
+                                        </Button>
                                     </LimitedWidth>
                                     <DescriptionContainer rmove={-8}>
                                         <Description>{option.description}</Description>

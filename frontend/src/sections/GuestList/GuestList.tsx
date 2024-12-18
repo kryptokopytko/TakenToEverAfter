@@ -8,6 +8,7 @@ import { exportToPDF } from "../Printables/exportToPdf";
 import { Guest, decisionTypes } from "../../types";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserContext";
+import useFunctionsProxy from "../../FunctionHandler";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -20,14 +21,13 @@ const SummaryContainer = styled.div`
 
 interface GuestListProps {
   isHomePage?: boolean;
-  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
-  handleInvite: (guestName: string) => void;
   children?: React.ReactNode;
 }
 
-const GuestList: React.FC<GuestListProps> = ({ isHomePage, handleDecision, handleInvite, children }) => {
+const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const {guests} = useUser();
+  const FunctionsProxy = useFunctionsProxy();
 
   const countDecisions = (decisionType: string) => {
     return guests.filter((guest) => guest.decision === decisionType).length;
@@ -56,7 +56,13 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, handleDecision, handl
           </Subtitle>
         ))}
       </SummaryContainer>
-      <List isHomePage={isHomePage} list={guests} isExpanded={isExpanded} handleDecision={handleDecision} handleInvite={handleInvite} />
+      <List
+        isHomePage={isHomePage} 
+        list={guests} 
+        isExpanded={isExpanded} 
+        handleDecision={FunctionsProxy.handleDecision} 
+        handleInvite={FunctionsProxy.handleInvite}
+      />
       <ButtonContainer>
         {isHomePage ?
           <Link to="guest_list">

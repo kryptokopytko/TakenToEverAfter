@@ -32,7 +32,7 @@ interface ListProps {
   list: Guest[];
   isExpanded: boolean;
   isHomePage?: boolean;
-  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
+  handleDecision: (guestId: number, decision: 'yes' | 'no') => void;
   handleInvite: (guestName: string) => void;
 }
 
@@ -56,8 +56,8 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecisio
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
                 <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
-                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'yes')}>yes/</Button>
-                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'no')}>no</Button>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, 'yes')}>yes/</Button>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, 'no')}>no</Button>
               </DecisionButtons>
             ) : (
               <Label size="small">{guest.decision}</Label>
