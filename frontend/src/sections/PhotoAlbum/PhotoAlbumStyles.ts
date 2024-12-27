@@ -51,6 +51,7 @@ export const Indicator = styled.span<{ isChecked?: boolean; isLeft?: boolean }>`
     transform: scale(1.15);
   }
 `;
+Indicator.shouldForwardProp = (prop) => !["isChecked", "isLeft"].includes(prop); 
 
 export const FullScreenModal = styled.div<{ visible: boolean }>`
   display: ${(props) => (props.visible ? "flex" : "none")};
@@ -64,6 +65,7 @@ export const FullScreenModal = styled.div<{ visible: boolean }>`
   align-items: center;
   z-index: 999;
 `;
+FullScreenModal.shouldForwardProp = (prop) => !["visible"].includes(prop); 
 
 export const FullScreenImage = styled.img`
   max-width: 90%;

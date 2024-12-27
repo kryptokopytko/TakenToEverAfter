@@ -10,3 +10,5 @@ export const Card = styled.div<{ color: string; centered?: string }>`
   flex-direction: column;
   justify-content: ${({ centered }) => centered};
 `;
+Card.shouldForwardProp = (prop) => !["color", "centered"].includes(prop); 
+

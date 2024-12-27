@@ -31,6 +31,7 @@ const UploadBox = styled.div<{ isDragging: boolean }>`
     border-color: #444;
   }
 `;
+UploadBox.shouldForwardProp = (prop) => !["isDragging"].includes(prop); 
 
 const UploadHint = styled.p`
   font-size: 1rem;

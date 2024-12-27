@@ -27,7 +27,7 @@ export const DropdownMenu = styled.div<{
     max-height: none;
   }
 `;
-DropdownMenu.shouldForwardProp = (prop) => prop !== "isOpen";
+DropdownMenu.shouldForwardProp = (prop) => !["isOpen", "breakpoint"].includes(prop);
 
 export const RadioButton = styled.label`
   display: flex;

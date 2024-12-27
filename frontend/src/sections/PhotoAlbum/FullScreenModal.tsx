@@ -21,6 +21,7 @@ const FullScreenModalContainer = styled.div<{ visible: boolean }>`
     align-items: center;
     z-index: 999;
 `;
+FullScreenModalContainer.shouldForwardProp = (prop) => !["visible"].includes(prop); 
 
 const FullScreenImage = styled.img`
     max-width: 90%;

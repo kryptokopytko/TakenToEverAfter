@@ -42,3 +42,5 @@ export const StyledCheckbox = styled.div<{ checked: boolean }>`
     fill: white;
   }
 `;
+StyledCheckbox.shouldForwardProp = (prop) => !["checked"].includes(prop); 
+

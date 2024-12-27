@@ -5,6 +5,8 @@ export const ColorBox = styled.div<{ color: string }>`
   height: 3.5rem;
   background-color: ${(props) => props.color};
 `;
+ColorBox.shouldForwardProp = (prop) => !["color"].includes(prop); 
+
 
 export const ColorRow = styled.div`
   display: flex;

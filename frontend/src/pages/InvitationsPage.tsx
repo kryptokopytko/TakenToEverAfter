@@ -8,8 +8,9 @@ import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
 import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
-interface PrintablesPageProps {
+import { useUser } from "../providers/UserContext";
 
+interface PrintablesPageProps {
 }
 
 const InputWrapper = styled.div`
@@ -30,9 +31,10 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
+    const { guests } = useUser();
 
     const handleExportPDF = () => {
-        const inviteIds = Example.listOfListsOfGuests.map((_, index) => `invite-${index}`);
+        const inviteIds = guests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
 
@@ -80,13 +82,13 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             </MenuContainer>
             {showAllInvites ? (
                 <Invites>
-                    {Example.listOfListsOfGuests.map((guests, index) => (
+                    {guests.map((guest, index) => (
                         <div id={`invite-${index}`} key={index}>
                             <Invitation
                                 mainText={mainText}
                                 additionalText={additionalText}
                                 guestText={guestText}
-                                propsGuestList={guests}
+                                propsGuestList={[guest]}
                             />
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
                                 <Checkbox

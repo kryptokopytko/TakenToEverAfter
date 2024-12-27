@@ -3,10 +3,10 @@ import Budget from "../sections/Budget/Budget";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import Input from "../components/ui/Input";
 import { useState, useEffect } from "react";
-import Example from "../exampleData";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
-import { SubExpense } from "../types";
+import { Expense } from "../types";
+import { useUser } from "../providers/UserContext";
 import useFunctionsProxy from "../API/FunctionHandler";
 
 interface BudgetPageProps { }
@@ -15,25 +15,26 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [inputExpenseName, setInputExpenseName] = useState('');
     const [inputExpensePrice, setInputExpensePrice] = useState('');
     const [inputCategory, setInputCategory] = useState('');
-    const [expenses, setExpenses] = useState(Example.expenses);
-    const [existingExpense, setExistingExpense] = useState<SubExpense | null>(null);
+    const [existingExpense, setExistingExpense] = useState<Expense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');
     const FunctionsProxy = useFunctionsProxy();
 
-    const expenseNames = expenses.flatMap(expense =>
-        expense.subExpenses.map(subExpense => subExpense.subCategory.toLowerCase())
+    const { expenseCards } = useUser();
+
+    const expenseNames = expenseCards.flatMap(expenseCard =>
+        expenseCard.expenses.map(expense => expense.name.toLowerCase())
     );
 
-    const categories = expenses.map(expense => expense.category.toLowerCase());
+    const categories = expenseCards.map(expenseCard => expenseCard.category.toLowerCase());
 
     useEffect(() => {
         const normalizedCategory = inputCategory.trim().toLowerCase();
         const normalizedExpenseName = inputExpenseName.trim().toLowerCase();
-        const category = expenses.find(expense => expense.category.toLowerCase() === normalizedCategory);
+        const category = expenseCards.find(expenseCard => expenseCard.category.toLowerCase() === normalizedCategory);
 
         if (category) {
-            const existingSubExpense = category.subExpenses.find(sub => sub.subCategory.toLowerCase() === normalizedExpenseName);
+            const existingSubExpense = category.expenses.find(expense => expense.name.toLowerCase() === normalizedExpenseName);
             if (existingSubExpense) {
                 setExistingExpense(existingSubExpense);
                 setInputExpensePrice(existingSubExpense.amount.toString());
@@ -43,8 +44,23 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         } else {
             setExistingExpense(null);
         }
-    }, [inputExpenseName, inputCategory, expenses]);
+    }, [inputExpenseName, inputCategory, expenseCards]);
 
+    const clear = () => {
+        setInputExpenseName('');
+        setInputExpensePrice('');
+        setInputCategory('');
+        setInputExpenseDescription('');
+    }
+
+    const handleUpdateExpense = () => {
+        const expenseAmount = Number(inputExpensePrice);
+        FunctionsProxy.updateExpense(existingExpense!.id, inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
+        
+        setNotification(`Expense "${inputExpenseName}" updated"`);
+        setTimeout(() => setNotification(null), notificationTimeOut);
+        clear();
+    }
     const handleAddExpense = () => {
         const expenseAmount = Number(inputExpensePrice);
         const normalizedCategory = inputCategory.toLowerCase();
@@ -52,39 +68,8 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         const categoryExists = categories.includes(normalizedCategory);
 
         if (categoryExists) {
-            setExpenses(prevExpenses => {
-                return prevExpenses.map(expense => {
-                    if (expense.category.toLowerCase() === normalizedCategory) {
-                        const existingSubExpense = expense.subExpenses.find(
-                            subExpense => subExpense.subCategory.toLowerCase() === normalizedExpenseName
-                        );
-
-                        if (existingSubExpense) {
-
-                            return {
-                                ...expense,
-                                subExpenses: expense.subExpenses.map(subExpense =>
-                                    subExpense.subCategory.toLowerCase() === normalizedExpenseName
-                                        ? { ...subExpense, amount: expenseAmount, description: inputExpenseDescription }
-                                        : subExpense
-                                )
-                            };
-                        } else {
-
-                            return {
-                                ...expense,
-                                subExpenses: [
-                                    ...expense.subExpenses,
-                                    { subCategory: inputExpenseName, amount: expenseAmount, description: inputExpenseDescription }
-                                ]
-                            };
-                        }
-                    }
-                    return expense;
-                });
-            });
-            setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
             FunctionsProxy.updateExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
+            setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
         } else {
 
             setExpenses(prevExpenses => [
@@ -100,37 +85,13 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
             FunctionsProxy.addExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
         }
         setTimeout(() => setNotification(null), notificationTimeOut);
-
-        
-        setInputExpenseName('');
-        setInputExpensePrice('');
-        setInputCategory('');
-        setInputExpenseDescription('');
+        clear();
     };
 
 
     const handleRemoveExpense = () => {
-        const normalizedCategory = inputCategory.toLowerCase();
-
-        setExpenses(prevExpenses =>
-            prevExpenses
-                .map(expense => {
-                    if (expense.category.toLowerCase() === normalizedCategory) {
-                        const updatedSubExpenses = expense.subExpenses.filter(
-                            subExpense => subExpense.subCategory.toLowerCase() !== inputExpenseName.toLowerCase()
-                        );
-                        return {
-                            ...expense,
-                            subExpenses: updatedSubExpenses
-                        };
-                    }
-                    return expense;
-                })
-                .filter(expense => expense.subExpenses.length > 0)
-        );
-
+        FunctionsProxy.removeExpense(existingExpense!.id);
         setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
-        FunctionsProxy.removeExpense(inputCategory, inputExpenseName);
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
@@ -194,7 +155,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 <ButtonContainer>
                     {existingExpense ? (
                         <>
-                            <Button onClick={handleAddExpense}>Modify Expense</Button>
+                            <Button onClick={handleUpdateExpense}>Modify Expense</Button>
                             <Button onClick={handleRemoveExpense}>Remove Expense</Button>
                         </>
                     ) : isInputValid() ? (
@@ -209,7 +170,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 </ButtonContainer>
             </MenuContainer>
 
-            <Budget expenses={expenses} />
+            <Budget />
         </Container>
     );
 };

@@ -95,7 +95,6 @@ const ToDoPage = () => {
                 <GuidedInput
                     value={taskName}
                     suggestions={taskCards.flatMap(card => card.tasks.map(task => task.name))}
-                    inputValue={taskName}
                     placeholder="Name of the task"
                     onChange={(e) => setTaskName(e.target.value)}
                     setInputValue={(value) => {
@@ -130,7 +129,6 @@ const ToDoPage = () => {
                 <GuidedInput
                     value={taskCategory.name}
                     suggestions={taskCards.map(card => card.category)}
-                    inputValue={taskCategory.name}
                     placeholder="Name of the category"
                     onChange={(e) => setTaskCategory({name: e.target.value, id: null})}
                     setInputValue={(value) => {

@@ -33,6 +33,7 @@ const StyledInput = styled.input<{
     border: 2px solid ${({ theme }) => theme.tertiary};
   }
 `;
+StyledInput.shouldForwardProp = (prop) => !["variant", "size"].includes(prop);
 
 const StyledTextArea = styled.textarea<{
     variant?: 'tertiary' | 'secondary';
@@ -59,6 +60,8 @@ const StyledTextArea = styled.textarea<{
     border: 2px solid ${({ theme }) => theme.tertiary};
   }
 `;
+StyledTextArea.shouldForwardProp = (prop) => !["variant"].includes(prop);
+
 
 export interface InputProps {
     variant?: 'tertiary' | 'secondary';

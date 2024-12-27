@@ -37,17 +37,19 @@ export const removeExpense = async (id: number) => {
 export const updateExpense = async (
   id: number,
   expense_card: number,
+  name: string,
   price: number,
   notes: string | null = null
 ) => {
   try {
     const updatedExpense = {
       expense_card,
+      name,
       price,
       notes,
     };
 
-    const response = await api.patch(`/expenses/${id}/`, updatedExpense);
+    const response = await api.patch(`/expenses/expenses/${id}/`, updatedExpense);
     console.log("Expense updated:", response.data);
     return response.data;
   } catch (error) {

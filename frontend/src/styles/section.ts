@@ -46,4 +46,4 @@ export const GridContainer = styled.div<{
     overflow-wrap: break-word;
   }
 `;
-GridContainer.shouldForwardProp = (prop) => prop !== "isExpanded" && prop !== "minWidth" && prop !== "minHeight";
+GridContainer.shouldForwardProp = (prop) => !["isExpanded", "minWidth", "minHeight", "padding"].includes(prop); 

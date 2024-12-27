@@ -19,7 +19,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         addRoundTable, addRectangularTable, roundTables, rectangularTables
     } = useTable();
 
-    const { guestList } = useUser();
+    const { guests } = useUser();
 
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");
@@ -261,7 +261,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 <HorizontalLine />
                 <Heading level={3}>Assign Guests to Table</Heading>
                 <GuidedInput
-                    suggestions={guestList.map(guest => guest.name)}
+                    suggestions={guests.map(guest => guest.name)}
                     value={inputValue}
                     setInputValue={setInputValue}
                     placeholder="Search guest name"

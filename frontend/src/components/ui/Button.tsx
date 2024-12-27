@@ -35,8 +35,7 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transp
     cursor: not-allowed;
   }
 `;
-StyledButton.shouldForwardProp = (prop) => prop !== "hslColor";
-
+StyledButton.shouldForwardProp = (prop) => !["variant", "size", "hslColor", "minWidth"].includes(prop);
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'transparent';
