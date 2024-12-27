@@ -5,7 +5,7 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useState } from "react";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 import { useUser } from "../providers/UserContext";
 
 const ToDoPage = () => {

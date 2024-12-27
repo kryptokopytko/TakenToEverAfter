@@ -4,13 +4,15 @@ import Input from "../components/ui/Input";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
 import { Notification } from "../styles/page";
-import { registerUser } from "../DBApi";
+import { registerUser } from "../API/DbApi/DBApi";
 import { Container, Form } from "../styles/form";
+import { useUser } from "../providers/UserContext";
 
 const RegistrationPage: React.FC = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const userEmail = searchParams.get('mail');
+    const {language} = useUser();
     
     const [email, setEmail] = useState(userEmail? userEmail : '');
     const [weddingDate, setWeddingDate] = useState('');
@@ -58,7 +60,7 @@ const RegistrationPage: React.FC = () => {
         }
 
         try {
-            const success = await registerUser(groomName, brideName, email, weddingDate, );
+            const success = await registerUser(groomName, brideName, email, weddingDate, language);
             if (success) {
                 setIsRegistered(true);
                 setErrorMessage(null);
@@ -107,20 +109,20 @@ const RegistrationPage: React.FC = () => {
                     placeholder="Select wedding date"
                 />
 
-                <Label>First Name (Groom)</Label>
-                <Input
-                    type="text"
-                    value={groomName}
-                    onChange={handleGroomNameChange}
-                    placeholder="Enter first name of groom"
-                />
-
                 <Label>First Name (Bride)</Label>
                 <Input
                     type="text"
                     value={brideName}
                     onChange={handleBrideNameChange}
                     placeholder="Enter first name of bride"
+                />
+
+                <Label>First Name (Groom)</Label>
+                <Input
+                    type="text"
+                    value={groomName}
+                    onChange={handleGroomNameChange}
+                    placeholder="Enter first name of groom"
                 />
 
                 {errorMessage && (

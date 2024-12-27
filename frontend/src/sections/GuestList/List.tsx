@@ -4,7 +4,7 @@ import { GridContainer } from "../../styles/section";
 import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
 import { Tag, TagContainer } from "../../styles/tag";
-import useFunctionsProxy from "../../FunctionHandler";
+import useFunctionsProxy from "../../API/FunctionHandler";
 
 const GuestItem = styled.div`
   display: flex;

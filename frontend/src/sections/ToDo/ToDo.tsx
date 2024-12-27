@@ -6,7 +6,7 @@ import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
-import useFunctionsProxy from "../../FunctionHandler";
+import useFunctionsProxy from "../../API/FunctionHandler";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";

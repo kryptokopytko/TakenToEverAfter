@@ -26,4 +26,4 @@ export const initialThemes = {
   },
 };
 
-export type Theme = typeof initialThemes.nude;
+export const initialFontSize = 16;

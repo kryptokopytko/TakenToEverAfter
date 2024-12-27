@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Subtitle } from "../styles/typography";
 import { Container } from "../styles/form";
-import { sendResponse } from "../DBApi";
+import { sendResponse } from "../API/DbApi/DBApi";
 import Input from "../components/ui/Input";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Invitation from "../sections/Printables/Invitation";

@@ -5,10 +5,10 @@ import Button, { ButtonContainer } from "../../components/ui/Button";
 import { useState } from "react";
 import { SpaceBetweenContainer } from "../../styles/section";
 import { exportToPDF } from "../Printables/exportToPdf";
-import { Guest, decisionTypes } from "../../types";
+import { decisionTypes } from "../../types";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserContext";
-import useFunctionsProxy from "../../FunctionHandler";
+import useFunctionsProxy from "../../API/FunctionHandler";
 
 const SummaryContainer = styled.div`
   display: flex;

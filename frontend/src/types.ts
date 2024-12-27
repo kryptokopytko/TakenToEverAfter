@@ -45,7 +45,7 @@ export interface Choice {
 };
 
 /*********************************************GUESTS*****************************************************/
-export type Guest = {
+export interface Guest {
   id: number;
   name: string;
   decision: Decision;
@@ -54,13 +54,13 @@ export type Guest = {
   hasPlusOne?: boolean;
 }
 
-export type Tag = {
+export interface Tag {
   id: number;
   name: string;
   rank: number;
 }
 
-export type Invitation = {
+export interface Invitation {
   id: number;
   handedOut: boolean;
 }
@@ -81,6 +81,22 @@ export interface Image {
 
 /*********************************************PREFERENCES************************************************/
 export type Language = 'english' | 'polish';
+
+export interface Theme {
+  primary: string;
+  light: string;
+  secondary: string;
+  tertiary: string;
+  dark: string;
+  body: string;
+  hue: number;
+  saturation: number;
+  lightness: number;
+}
+
+export interface Themes {
+  [key: string]: Theme;
+}
 
 /*********************************************QUESTIONNAIRE**********************************************/
 export interface BooleanQuestion {

@@ -7,7 +7,7 @@ import { useUser } from "../../../providers/UserContext";
 import { sectionLinks, sections } from "../sections";
 import Button from "../../ui/Button";
 import DropdownSelector from "../../ui/Dropdown/Dropdown";
-import { logout } from "../../../DBApi";
+import { logout } from "../../../API/DbApi/DBApi";
 import { useNavigate } from "react-router-dom";
 import { translations } from "../../../translations";
 

@@ -7,7 +7,7 @@ import Example from "../exampleData";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SubExpense } from "../types";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 
 interface BudgetPageProps { }
 

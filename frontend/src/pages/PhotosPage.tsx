@@ -7,7 +7,7 @@ import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 import Checkbox from "../components/ui/Checkbox";
 import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
 

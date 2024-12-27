@@ -9,7 +9,7 @@ import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
 import { SpaceBetweenContainer } from "../styles/section";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
@@ -33,7 +33,7 @@ const GuestPage: React.FC = () => {
   const [oneInvite, setOneInvite] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
   const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
-  const {guests} = useUser();
+  const {guests, setGuests} = useUser();
 
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);

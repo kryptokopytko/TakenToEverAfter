@@ -26,8 +26,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession, getTasks, getGuestsInfo, getExpenses } from "./DBApi";
+import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences } from "./API/DbApi/DBApi";
 import Example from "./exampleData";
+import { initialFontSize, initialThemes } from "./styles/theme";
 
 
 const AppContainer = styled.div`
@@ -72,9 +73,11 @@ const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
   const { 
-    isLogged, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
+    isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
     setGuests, setTags, setInvitations, setExpenseCards, setChoices,
    } = useUser();
+
+   const {setTheme, setThemes, setFontSize} = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -96,6 +99,12 @@ const AppContent = () => {
         const { expenseCards, choices } = await getExpenses();
         setExpenseCards(expenseCards);
         setChoices(choices);
+
+        const {preferences, themes} = await getUserPreferences();
+        setFontSize(preferences.fontSize);
+        setThemes(themes);
+        setTheme(preferences.colorTheme || initialThemes.nude);
+        setLanguage(preferences.language);
       } else {
         setIsLogged(false);
         setAccount(Example.account);
@@ -107,6 +116,10 @@ const AppContent = () => {
         setInvitations(Example.invitations);
         setExpenseCards(Example.expenses);
         setChoices(Example.choices);
+        setFontSize(initialFontSize);
+        setThemes(initialThemes);
+        setTheme(initialThemes.nude);
+        setLanguage("english");
     }
   };
 

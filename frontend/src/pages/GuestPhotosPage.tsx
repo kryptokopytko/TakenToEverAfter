@@ -4,7 +4,7 @@ import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { SpaceBetweenContainer } from "../styles/section";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";

@@ -5,6 +5,7 @@ import { Container, MenuContainer } from "../styles/page";
 import { useTheme } from "../providers/ThemeContext";
 import ThemeDisplay from "../sections/ThemeConstructor/ThemeDisplay";
 import styled from "styled-components";
+import useFunctionsProxy from "../API/FunctionHandler";
 
 const ThemeContainer = styled.div`
     display: flex;
@@ -16,6 +17,7 @@ const ThemeContainer = styled.div`
 interface ThemeConstructorPageProps { }
 
 const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
+    const FunctionsProxy = useFunctionsProxy();
     const { themes, setThemes } = useTheme();
     const savedThemes = Object.keys(themes).filter(themeKey => !themeKey.startsWith('custom'));
     const newThemes = Object.keys(themes).filter(themeKey => themeKey.startsWith('custom'));
@@ -44,16 +46,8 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
 
         const newThemesCopy = { ...themes };
         const themeData = newThemesCopy[themeKey];
-
-
-        delete newThemesCopy[themeKey];
-
-
-        newThemesCopy[newName] = themeData;
-
-
-        setThemes(newThemesCopy);
-
+        
+        FunctionsProxy.addNewTheme(newName, themeData);
 
         setInputValues((prevValues) => {
             const updatedValues = { ...prevValues };
@@ -63,6 +57,8 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     };
     const handleDelete = (themeKey: string) => {
 
+        FunctionsProxy.deleteTheme(themeKey);
+        
         const newThemesCopy = { ...themes };
 
 

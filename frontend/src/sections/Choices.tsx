@@ -3,7 +3,7 @@ import Button, { ButtonContainer } from "../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../styles/section";
 import { useState } from "react";
 import { Card } from "../styles/card";
-import useFunctionsProxy from "../FunctionHandler";
+import useFunctionsProxy from "../API/FunctionHandler";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";

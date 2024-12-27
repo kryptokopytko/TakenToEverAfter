@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image } from '../../types';
 import { GridContainer } from '../../styles/section';
 import { Body } from '../../styles/typography';
-import useFunctionsProxy from "../../FunctionHandler";
+import useFunctionsProxy from "../../API/FunctionHandler";
 import { Container, Indicator, PhotoCard, PhotoImage, PhotoInfo } from './PhotoAlbumStyles';
 import FullScreenModal from './FullScreenModal';
 
