@@ -5,6 +5,7 @@ import { useTheme } from "../../../providers/ThemeContext";
 import { sectionLinks, sections } from '../sections';
 import { useUser } from '../../../providers/UserContext';
 import { Slider } from '../../../Slider';
+import { translations } from "../../../translations";
 
 interface FooterProps { }
 
@@ -33,7 +34,7 @@ const Footer: React.FC<FooterProps> = () => {
     <Container>
       {currentSection!.english.name.toLowerCase() === 'home' ? (
         < HidingSection >
-          <Heading level={3}>Sections</Heading>
+          <Heading level={3}>{translations[language].sectionsHeading}</Heading>
           <ListContainer>
             {sections
               .filter(section => section.english.name !== 'Home')
@@ -57,10 +58,10 @@ const Footer: React.FC<FooterProps> = () => {
 
       <Section>
         <span style={{ textAlign: 'center', marginBottom: '-1rem' }}>
-          <Heading level={3}>Taken to Ever After</Heading>
+          <Heading level={3}>{translations[language].appName}</Heading>
         </span>
         <div style={{ textAlign: 'center', display: "flex", alignItems: 'center' }}>
-          <label htmlFor="fontSizeSlider"><Body>Adjust font size:</Body></label>
+          <label htmlFor="fontSizeSlider"><Body>{translations[language].adjustFontSize}</Body></label>
           <Slider
             type="range"
             id="fontSizeSlider"
@@ -71,17 +72,17 @@ const Footer: React.FC<FooterProps> = () => {
           />
           <span style={{ marginLeft: '0.5rem' }}><Body>{Math.round(fontSize)}px</Body></span>
         </div>
-        <Body>Your wedding planning made easy</Body>
+        <Body>{translations[language].weddingPlanning}</Body>
       </Section>
 
 
       <Section>
-        <Heading level={3}>Contact</Heading>
+        <Heading level={3}>{translations[language].contact}</Heading>
         <div style={{ marginTop: '-2rem' }}>
-          <Body>Email: takentoeverafter@gmail.com</Body>
-          <Body>Phone: (+48) 123-456-789</Body>
-          <Body>Address: 123 Wedding Lane</Body>
-          <Body>Wroclaw, 12-345</Body>
+          <Body>{translations[language].email}</Body>
+          <Body>{translations[language].phone}</Body>
+          <Body>{translations[language].address}</Body>
+          <Body>{translations[language].location}</Body>
         </div>
       </Section>
     </Container >

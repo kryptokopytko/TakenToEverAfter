@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
 
           <DropdownSelector
             color='primary'
-            title="Theme"
+            title={translations[language].theme}
             options={Object.keys(themes).map(themeKey => ({
               label: themeKey.charAt(0).toUpperCase() + themeKey.slice(1),
               value: themeKey,

@@ -2,6 +2,8 @@ import React from 'react';
 import ColorVariation from './ColorVariation';
 import { Card } from '../../styles/card';
 import { Body, Heading } from '../../styles/typography';
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 interface ColorCompositionsProps {
     color: { hue: number; saturation: number; lightness: number };
@@ -39,6 +41,7 @@ const generateLightnessVariations = (hue: number, saturation: number, lightnessA
 
 const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
     const { hue, saturation, lightness } = color;
+    const { language } = useUser();
 
     const lightVariations = generateLightnessVariations(hue, saturation, [30, 48, 70, 89, 98]);
     const randomVariations = generateLightnessVariations(hue, saturation, randomCompositionLightness(75));
@@ -58,20 +61,52 @@ const ColorCompositions: React.FC<ColorCompositionsProps> = ({ color }) => {
 
     return (
         <>
-            <ColorVariation title="Contrast Variation" variation={contrastVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Hue Variation" variation={hueVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-
-            <ColorVariation title="Light Variation" variation={lightVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Dark Variation" variation={darkVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
-            <ColorVariation title="Random Variation" variation={randomVariations} hslBodyColor={hslBodyColor} hue={hue} saturation={saturation} lightness={lightness} />
+            <ColorVariation 
+                title={translations[language].contrastVariation} 
+                variation={contrastVariations} 
+                hslBodyColor={hslBodyColor} 
+                hue={hue} 
+                saturation={saturation} 
+                lightness={lightness} 
+            />
+            <ColorVariation 
+                title={translations[language].hueVariation} 
+                variation={hueVariations} 
+                hslBodyColor={hslBodyColor} 
+                hue={hue} 
+                saturation={saturation} 
+                lightness={lightness} 
+            />
+            <ColorVariation 
+                title={translations[language].lightVariation} 
+                variation={lightVariations} 
+                hslBodyColor={hslBodyColor} 
+                hue={hue} 
+                saturation={saturation} 
+                lightness={lightness} 
+            />
+            <ColorVariation 
+                title={translations[language].darkVariation} 
+                variation={darkVariations} 
+                hslBodyColor={hslBodyColor} 
+                hue={hue} 
+                saturation={saturation} 
+                lightness={lightness} 
+            />
+            <ColorVariation 
+                title={translations[language].randomVariation} 
+                variation={randomVariations} 
+                hslBodyColor={hslBodyColor} 
+                hue={hue} 
+                saturation={saturation} 
+                lightness={lightness} 
+            />
             <Card color='primary'>
-                <Heading level={3}>Suggestion</Heading>
-                <Body size='bold'>Aim for a saturation between 30-75%</Body>
-                <Body>Vibrant colors can be tiring for the eyes,<br /> while desaturated colors may appear dull</Body>
-                <Body size='bold'>For greens use Contrast or Hue Variation</Body>
-                <Body>The human eye is most sensitive to shades of green, use more contrasting combinations </Body>
-
-
+                <Heading level={3}>{translations[language].suggestion}</Heading>
+                <Body size='bold'>{translations[language].saturationInfo}</Body>
+                <Body>{translations[language].vibrantColorsInfo}</Body>
+                <Body size='bold'>{translations[language].greensVariation}</Body>
+                <Body>{translations[language].greenInfo}</Body>
             </Card>
         </>
     );

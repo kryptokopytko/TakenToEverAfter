@@ -4,18 +4,20 @@ import { Container, PhotosContainer, StyledImage } from './FavouritePhotosStyles
 import Example from "../../exampleData";
 import React from 'react';
 import { Link } from "react-router-dom";
+import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 interface FavouritePhotosProps {
   isHomePage?: boolean;
 }
 
 const FavouritePhotos: React.FC<FavouritePhotosProps> = ({ isHomePage }) => {
-
+  const {language} = useUser();
   const favoritePhotos = Example.images.filter(image => image.isFavorite);
 
   return (
     <Container>
-      <Heading level={1}>Favourite Photos</Heading>
+      <Heading level={1}>{translations[language].favouritePhotos}</Heading>
       <div style={{ height: '60vh', marginBottom: '3rem' }}>
         <PhotosContainer>
           {favoritePhotos.map(image => (
@@ -26,7 +28,7 @@ const FavouritePhotos: React.FC<FavouritePhotosProps> = ({ isHomePage }) => {
       {isHomePage ?
         <ButtonContainer>
           <Link to="photo_album">
-            <Button>Manage Photos</Button></Link>
+            <Button>{translations[language].managePhotos}</Button></Link>
         </ButtonContainer>
         : <></>}
     </Container>

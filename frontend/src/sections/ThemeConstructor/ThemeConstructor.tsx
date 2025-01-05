@@ -8,6 +8,8 @@ import { useTheme } from "../../providers/ThemeContext";
 import Button from "../../components/ui/Button";
 import { Card } from "../../styles/card";
 import { Link } from "react-router-dom";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 const ContentContainer = styled.div`
   text-align: center;
@@ -25,6 +27,7 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
         lightness: theme.lightness,
     });
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
+    const { language } = useUser();
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
     };
@@ -40,10 +43,10 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
     return (
         <ContentContainer>
             <SpaceBetweenContainer>
-                <Heading level={1}>Establish a theme</Heading>
+                <Heading level={1}>{translations[language].establishTheme}</Heading>
                 {isHomePage ?
                     <Button onClick={toggleList}>
-                        {isExpanded ? "Collapse List" : "Expand List"}
+                        {isExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button> : <></>}
             </SpaceBetweenContainer>
             <GridContainer isExpanded={isExpanded} minHeight='60vh'>
@@ -54,7 +57,7 @@ const ThemeConstructor: React.FC<ThemeConstructorProps> = ({ isHomePage }) => {
             </GridContainer>
             {isHomePage ?
                 <Link to="theme_constructor">
-                    <Button>Manage Theme</Button></Link>
+                    <Button>{translations[language].manageTheme}</Button></Link>
                 : <></>}
         </ContentContainer>
     );

@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";
 import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 const LimitedWidth = styled.span`
     max-width: 50%;
@@ -21,7 +22,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
     const FunctionsProxy = useFunctionsProxy();
 
-    const {choices} = useUser();
+    const { choices, language } = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -34,7 +35,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
     return (
         <div>
             <SpaceBetweenContainer>
-                <Heading level={1}>Choices:</Heading>
+                <Heading level={1}>{translations[language].choices + ":"}</Heading>
             </SpaceBetweenContainer>
 
             <GridContainer isExpanded={isExpanded} minWidth='28rem'>
@@ -56,7 +57,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
                                     </LimitedWidth>
                                     <LimitedWidth>
                                         <Button onClick={() => handlePick(option.id, choice.id)}>
-                                            Pick
+                                            {translations[language].pick}
                                         </Button>
                                     </LimitedWidth>
                                     <DescriptionContainer rmove={-8}>
@@ -72,12 +73,12 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
             <ButtonContainer>
                 {isHomePage ?
                     <Link to="/choices">
-                        <Button>Manage Choices</Button>
+                        <Button>{translations[language].manageChoices}</Button>
                     </Link>
                     : <></>}
                 <div style={{ display: isHomePage ? 'block' : 'none' }}>
                     <Button onClick={toggleList} >
-                        {isExpanded ? 'Collapse List' : 'Expand List'}
+                        {isExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button>
                 </div>
             </ButtonContainer>

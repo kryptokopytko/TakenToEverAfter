@@ -9,6 +9,7 @@ import { Card } from "../../styles/card";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../../styles/Description";
 import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 const HeaderContainer = styled.div<{ isHomePage: boolean }>`
   display: grid;
@@ -29,7 +30,7 @@ interface BudgetProps {
 const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
-    const {expenseCards} = useUser();
+    const {expenseCards, language} = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -45,22 +46,22 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
     })).sort((a, b) => b.value - a.value);
 
     if (remainingBudget > 0)
-        pieData.push({ value: remainingBudget, label: 'Remaining' });
+        pieData.push({ value: remainingBudget, label: translations[language].remaining });
 
     return (
         <div id='budget'>
             <HeaderContainer isHomePage={isHomePage ? isHomePage : false}>
                 <div>
                     <SpaceBetweenContainer>
-                        <Heading level={1}>Budget:</Heading>
+                        <Heading level={1}>{translations[language].budget + ":"}</Heading>
                         <Heading level={1}>${totalBudget}</Heading>
                     </SpaceBetweenContainer>
                     <SpaceBetweenContainer>
-                        <Heading level={2}>Remaining:</Heading>
+                        <Heading level={2}>{translations[language].remaining + ":"}</Heading>
                         <Heading level={2}>${remainingBudget}</Heading>
                     </SpaceBetweenContainer>
                     <SpaceBetweenContainer>
-                        <Heading level={3}>Spent:</Heading>
+                        <Heading level={3}>{translations[language].spent + ":"}</Heading>
                         <Heading level={3}>${totalSpent}</Heading>
                     </SpaceBetweenContainer>
                 </div>
@@ -92,12 +93,12 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
             <ButtonContainer>
                 {isHomePage ? <>
                     <Link to="budget">
-                        <Button>Manage Budget</Button></Link>
+                        <Button>{translations[language].manageBudget}</Button></Link>
                     <Button onClick={toggleList}>
-                        {isExpanded ? 'Collapse List' : 'Expand List'}
+                        {isExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button>
                 </> : <></>}
-                <Button onClick={() => exportToPDF("budget")}>Export to PDF</Button>
+                <Button onClick={() => exportToPDF("budget")}>{translations[language].exportToPDF}</Button>
 
             </ButtonContainer>
         </div>

@@ -6,6 +6,7 @@ import Button from "../../components/ui/Button";
 import { StyledTag, TagContainer } from "../../styles/tag";
 import useFunctionsProxy from "../../API/FunctionHandler";
 import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 const GuestItem = styled.div`
   display: flex;
@@ -37,12 +38,12 @@ interface ListProps {
 
 const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
   const FunctionsProxy = useFunctionsProxy();
-  const {tags} = useUser();
+  const { tags, language } = useUser();
 
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">
       {list.length === 0 ? (
-        <EmptyMessage>No such guests</EmptyMessage>
+        <EmptyMessage>{translations[language].noGuests}</EmptyMessage>
       ) : (
         list.map((guest, index) => (
           <GuestItem key={index}>
@@ -59,9 +60,15 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
             </TagContainer>
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handOutInvitation(guest.invitationId)}>Invite</Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'yes')}>yes/</Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'no')}>no</Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handOutInvitation(guest.invitationId)}>
+                  {translations[language].invite}
+                </Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'yes')}>
+                  {translations[language].yes}
+                </Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'no')}>
+                  {translations[language].no}
+                </Button>
               </DecisionButtons>
             ) : (
               <Label size="small">{guest.decision}</Label>

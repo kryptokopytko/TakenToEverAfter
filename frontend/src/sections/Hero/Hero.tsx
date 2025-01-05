@@ -1,8 +1,12 @@
 import { Heading, Body, Subtitle } from "../../styles/typography";
 import dancingPair from '/pictures/dancing1.png';
-import { LinkList, Container, Content, TextSection, HiddenText, ImageSection, Image, SummaryText } from "./HeroStyles";
+import { LinkList, Container, Content, TextSection, HiddenText, ImageSection, Image } from "./HeroStyles";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 const Hero = () => {
+  const {language} = useUser();
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -16,53 +20,48 @@ const Hero = () => {
         <TextSection>
           <HiddenText>
             <Subtitle level={1}>
-              Let us help you with:
+              {translations[language].letUsHelp + ":"}
             </Subtitle>
             <LinkList>
               <Body size='big' onClick={() => scrollToSection('guest-list')}>
-                ♠ Guest Confirmations with QR codes
+                {"♠ " + translations[language].guestConfirmations}
               </Body>
               <Body size='big' onClick={() => scrollToSection('budget')}>
-                ♠ Budget Management and expense tracking
+                {"♠ " + translations[language].budgetManagement}
               </Body>
               <Body size='big' onClick={() => scrollToSection('to-do')}>
-                ♠ Task Management with deadlines and calendar view
+                {"♠ " + translations[language].taskManagement}
               </Body>
               <Body size='big' onClick={() => scrollToSection('guest-list')}>
-                ♠ Guest List Management with invitation status
+                {"♠ " + translations[language].guestListManagement}
               </Body>
               <Body size='big' onClick={() => scrollToSection('guest-list')}>
-                ♠ Customized Email Notifications for RSVP updates
+                {"♠ " + translations[language].emailNotifications}
               </Body>
               <Body size='big' onClick={() => scrollToSection('theme-constructor')}>
-                ♠ Personalized Theme customization
+                {"♠ " + translations[language].themeCustomization}
               </Body>
               <Body size='big' onClick={() => scrollToSection('table-chart')}>
-                ♠ Seating Arrangements with various preferences
+                {"♠ " + translations[language].seatingArrangements}
               </Body>
               <Body size='big' onClick={() => scrollToSection('table-chart')}>
-                ♠ Exportable Seating Plan with guest names
+                {"♠ " + translations[language].exportableSeatingPlan}
               </Body>
               <Body size='big' onClick={() => scrollToSection('photo-album')}>
-                ♠ Photo Album and guest photo uploads
+                {"♠ " + translations[language].photoAlbum}
               </Body>
               <Body size='big' onClick={() => scrollToSection('printables')}>
-                ♠ Invitation and Place Card Generation
+                {"♠ " + translations[language].invitationGeneration}
               </Body>
             </LinkList>
           </HiddenText>
         </TextSection>
         <ImageSection>
-          <Heading level={1}>Taken to Ever After</Heading>
+          <Heading level={1}>{translations[language].appName}</Heading>
           <div>
             <Body size="big" style={{ display: 'inline', marginTop: '-2rem' }}>
-              A comprehensive wedding planning app designed to help couples manage their special day effortlessly.
+              {translations[language].appDescription}
             </Body>
-            <SummaryText>{' '}
-              <Body size='big' style={{ display: 'inline' }}>
-                From guest lists and RSVPs to budgeting and seating arrangements, we provide all the tools you need for a smooth and memorable wedding.
-              </Body>
-            </SummaryText>
           </div>
           <Image src={dancingPair} alt="Dancing Couple" />
         </ImageSection>

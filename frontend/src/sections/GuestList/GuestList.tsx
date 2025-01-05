@@ -8,6 +8,7 @@ import { exportToPDF } from "../Printables/exportToPdf";
 import { decisionTypes } from "../../types";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ interface GuestListProps {
 
 const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
-  const {guests} = useUser();
+  const {guests, language} = useUser();
 
   const countDecisions = (decisionType: string) => {
     return guests.filter((guest) => guest.decision === decisionType).length;
@@ -38,21 +39,24 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
   return (
     <div id="guest-list">
       <SpaceBetweenContainer>
-        <Heading level={1}>Guest List:</Heading>
+        <Heading level={1}>{translations[language].guestList + ":"}</Heading>
         {isHomePage ? (
           <Button onClick={toggleList}>
-            {isExpanded ? "Collapse List" : "Expand List"}
+            {isExpanded ? translations[language].collapseList : translations[language].expandList}
           </Button>
         ) : (
           children
         )}
       </SpaceBetweenContainer>
       <SummaryContainer>
-        {decisionTypes.map((decision) => (
+      {decisionTypes.map((decision) => {
+        const decisionKey = decision as keyof typeof translations["english"];
+        return (
           <Subtitle key={decision} level={1}>
-            {decision.charAt(0).toUpperCase() + decision.slice(1)}: {countDecisions(decision)}
+            {translations[language][decisionKey]}: {countDecisions(decision)}
           </Subtitle>
-        ))}
+        );
+      })}
       </SummaryContainer>
       <List
         isHomePage={isHomePage} 
@@ -62,9 +66,9 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
       <ButtonContainer>
         {isHomePage ?
           <Link to="guest_list">
-            <Button>Manage Guests</Button> </Link>
+            <Button>{translations[language].manageGuests}</Button> </Link>
           : <></>}
-        <Button onClick={() => exportToPDF("guest-list")}>Export to PDF</Button>
+        <Button onClick={() => exportToPDF("guest-list")}>{translations[language].exportToPDF}</Button>
       </ButtonContainer>
     </div>
   );

@@ -5,6 +5,8 @@ import { Subtitle } from "../../styles/typography";
 import { ColorBox, ColorRow } from "./ColorBox";
 import { Card } from "../../styles/card";
 import { useTheme } from "../../providers/ThemeContext";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 interface ThemeDisplayProps {
     themes: Record<string, any>;
@@ -20,6 +22,7 @@ interface ThemeDisplayProps {
 
 const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, inputValue, onChange, isSaved, handleSave, handleDelete }) => {
     const { setTheme } = useTheme();
+    const { language } = useUser();
 
     const handleCopyTheme = (theme: Record<string, any>) => {
         const hslColors = Object.values(theme)
@@ -28,7 +31,7 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
             .join(", ");
 
         navigator.clipboard.writeText(hslColors)
-            .then(() => alert("Theme colors copied to clipboard in HSL format!"))
+            .then(() => alert(translations[language].themeColorsCopied))
             .catch(err => console.error("Failed to copy colors to clipboard: ", err));
     };
 
@@ -44,12 +47,12 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
                                     {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}
                                 </Subtitle> : <>
                                     <div style={{ marginBottom: '-1rem' }}>
-                                        <Subtitle level={2}>Set a Name</Subtitle>
+                                        <Subtitle level={2}>{translations[language].setName}</Subtitle>
                                     </div>
                                     <Input
                                         value={inputValue[themeKey] || ""}
                                         onChange={(e) => onChange(themeKey, e.target.value)}
-                                        placeholder="Enter theme name"
+                                        placeholder={translations[language].enterThemeName}
                                     /> </>}
                             <ColorRow>
                                 {Object.entries(themes[themeKey])
@@ -64,14 +67,14 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
                             </ColorRow>
                             {!isSaved ? (
                                 <ButtonContainer>
-                                    <Button onClick={() => setTheme(themes[themeKey])}>Pick</Button>
-                                    <Button onClick={() => handleSave(themeKey)}>Save</Button>
+                                    <Button onClick={() => setTheme(themes[themeKey])}>{translations[language].pick}</Button>
+                                    <Button onClick={() => handleSave(themeKey)}>{translations[language].save}</Button>
                                 </ButtonContainer>
                             ) : (
                                 <ButtonContainer>
-                                    <Button onClick={() => setTheme(themes[themeKey])}>Pick</Button>
-                                    <Button onClick={() => handleDelete(themeKey)}>Delete</Button>
-                                    <Button onClick={() => handleCopyTheme(themes[themeKey])}>Copy Theme</Button>
+                                    <Button onClick={() => setTheme(themes[themeKey])}>{translations[language].pick}</Button>
+                                    <Button onClick={() => handleDelete(themeKey)}>{translations[language].delete}</Button>
+                                    <Button onClick={() => handleCopyTheme(themes[themeKey])}>{translations[language].copyTheme}</Button>
                                 </ButtonContainer>
                             )}
                         </div>

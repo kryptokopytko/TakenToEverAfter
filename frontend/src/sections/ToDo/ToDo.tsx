@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
 import { Description, DescriptionContainer } from "../../styles/Description";
+import { translations } from "../../translations";
 
 interface ToDoProps {
   onDeadlineChange?: (deadline: Date) => void;
@@ -19,7 +20,7 @@ interface ToDoProps {
 }
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange }) => {
-  const { accountDetails, taskCards } = useUser();
+  const { accountDetails, taskCards, language } = useUser();
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const FunctionsProxy = useFunctionsProxy();
@@ -94,7 +95,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
   return (
     <Container id="todo-list">
       <SpaceBetweenContainer>
-        <Heading level={1}>To Do:</Heading>
+        <Heading level={1}>{translations[language].toDo + ":"}</Heading>
         <Heading level={1}>
           {completedTasks} / {totalTasks}
         </Heading>
@@ -156,14 +157,14 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
       </div>
 
       <ButtonContainer>
-        <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
+        <Button onClick={() => exportToPDF("todo-list")}>{translations[language].exportToPDF}</Button>
         {isHomePage ? (
           <>
             <Link to="to_do">
-              <Button>Manage To Do</Button>
+              <Button>{translations[language].manageToDo}</Button>
             </Link>
             <Button onClick={toggleList}>
-              {isExpanded ? "Collapse List" : "Expand List"}
+              {isExpanded ? translations[language].collapseList : translations[language].expandList}
             </Button>
           </>
         ) : (

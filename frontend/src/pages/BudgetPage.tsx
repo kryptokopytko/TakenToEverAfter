@@ -8,6 +8,8 @@ import Button, { ButtonContainer } from "../components/ui/Button";
 import { Expense } from "../types";
 import { useUser } from "../providers/UserContext";
 import useFunctionsProxy from "../API/FunctionHandler";
+import { translations } from "../translations";
+
 
 interface BudgetPageProps { }
 
@@ -21,7 +23,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');
     const FunctionsProxy = useFunctionsProxy();
 
-    const { expenseCards } = useUser();
+    const { expenseCards, language } = useUser();
 
     const expenseNames = expenseCards.flatMap(expenseCard =>
         expenseCard.expenses.map(expense => expense.name.toLowerCase())
@@ -65,7 +67,9 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
         FunctionsProxy.updateExpense(existingExpense!.id, categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
         
-        setNotification(`Expense "${inputExpenseName}" updated"`);
+        setNotification(
+            translations[language].expenseUpdated.replace('{name}', inputExpenseName)
+          );
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     }
@@ -78,7 +82,11 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         } 
 
         FunctionsProxy.addExpense(categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
-        setNotification(`Expense "${inputExpenseName}" added to category "${inputCategory}"`);
+        setNotification(
+            translations[language].expenseAdded
+              .replace('{name}', inputExpenseName)
+              .replace('{category}', inputCategory)
+          );          
 
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
@@ -87,7 +95,11 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
     const handleRemoveExpense = () => {
         FunctionsProxy.removeExpense(existingExpense!.id);
-        setNotification(`Expense "${inputExpenseName}" removed from category "${inputCategory}"`);
+        setNotification(
+            translations[language].expenseRemoved
+              .replace('{name}', inputExpenseName)
+              .replace('{category}', inputCategory)
+          );
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
@@ -106,21 +118,21 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         <Container isBudget={true}>
             <MenuContainer isBudget={true}>
                 <div style={{ marginBottom: '-2rem' }}>
-                    <Heading level={2}>Manage Expenses</Heading>
+                    <Heading level={2}>{translations[language].manageExpenses}</Heading>
                 </div>
-                <Subtitle level={3}>Name</Subtitle>
+                <Subtitle level={3}>{translations[language].name}</Subtitle>
                 <GuidedInput
                     value={inputExpenseName}
                     setInputValue={(name) => setInputExpenseName(name)}
                     suggestions={expenseNames.map(name => name.charAt(0).toUpperCase() + name.slice(1))}
-                    placeholder="Name of the expense"
+                    placeholder={translations[language].expenseNamePlaceholder}
                     onChange={(e) => setInputExpenseName(e.target.value)}
                 />
 
                 <Subtitle level={3}>Price</Subtitle>
                 <Input
                     value={inputExpensePrice}
-                    placeholder="Price of the expense"
+                    placeholder={translations[language].expensePricePlaceholder}
                     type='number'
                     onChange={(e) => {
                         const value = e.target.value;
@@ -131,18 +143,18 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 />
 
 
-                <Subtitle level={3}>Category</Subtitle>
+                <Subtitle level={3}>{translations[language].category}</Subtitle>
                 <GuidedInput
                     value={inputCategory}
                     suggestions={categories.map(cat => cat.charAt(0).toUpperCase() + cat.slice(1))}
-                    placeholder="Name of category"
+                    placeholder={translations[language].categoryPlaceholder}
                     setInputValue={(name) => setInputCategory(name)}
                     onChange={(e) => setInputCategory(e.target.value)}
                 />
-                <Subtitle level={3}>Description</Subtitle>
+                <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={inputExpenseDescription}
-                    placeholder="Description of the expense"
+                    placeholder={translations[language].expenseDescriptionPlaceholder}
                     onChange={(e) => setInputExpenseDescription(e.target.value)}
                 />
 
@@ -151,16 +163,16 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 <ButtonContainer>
                     {existingExpense ? (
                         <>
-                            <Button onClick={handleUpdateExpense}>Modify Expense</Button>
-                            <Button onClick={handleRemoveExpense}>Remove Expense</Button>
+                            <Button onClick={handleUpdateExpense}>{translations[language].modifyExpense}</Button>
+                            <Button onClick={handleRemoveExpense}>{translations[language].removeExpense}</Button>
                         </>
                     ) : isInputValid() ? (
                         <Button onClick={handleAddExpense}>
-                            {categories.includes(inputCategory.trim().toLowerCase()) ? 'Add Expense' : 'Add Expense and Category'}
+                            {categories.includes(inputCategory.trim().toLowerCase()) ? translations[language].addExpense : translations[language].addExpenseAndCategory}
                         </Button>
                     ) : (
                         <Button disabled>
-                            {categories.includes(inputCategory.trim().toLowerCase()) ? 'Add Expense' : 'Add Expense and Category'}
+                            {categories.includes(inputCategory.trim().toLowerCase()) ? translations[language].addExpense : translations[language].addExpenseAndCategory}
                         </Button>
                     )}
                 </ButtonContainer>
