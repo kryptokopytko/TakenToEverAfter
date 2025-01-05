@@ -3,7 +3,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from accounts.views import get_account_from_session
 from .models import ExpenseCard, Expense, PotentialExpenseCard, PotentialExpense
-from .serializers import ExpenseCardSerializer, ExpenseSerializer, PotentialExpenseCardSerializer, PotentialExpenseSerializer
+from .serializers import ExpenseCardSerializer, ExpenseSerializer, PotentialExpenseCardSerializer, PotentialExpenseSerializer, \
+    EmailExpenseSerializer, EmailExpenseSerializerPl
+from emails.email_template import send_generic_email
 
 class ExpenseCardView(viewsets.ModelViewSet):
     serializer_class = ExpenseCardSerializer
@@ -30,6 +32,7 @@ def add_expense(request):
     serializer = ExpenseSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
+        send_generic_email(request, Expense, EmailExpenseSerializer, EmailExpenseSerializerPl, "Expense List", "Lista Wydatków")
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 

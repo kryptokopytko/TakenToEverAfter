@@ -22,3 +22,34 @@ class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
         fields = ('id', 'account', 'name', 'tags', 'invitation', 'decision', 'hasPlusOne')
+
+class EmailTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('name',)
+
+
+class EmailGuestSerializer(serializers.ModelSerializer):
+    tags = EmailTagSerializer(many=True)
+
+    class Meta:
+        model = Guest
+        fields = ('name', 'tags', 'decision', 'plus_one')
+
+DECISIONS_TO_PL = {
+    'yes': 'Tak',
+    'no': 'Nie',
+    'unknown': 'Nieznane',
+}
+
+class EmailGuestSerializerPl(serializers.ModelSerializer):
+    tagi = EmailTagSerializer(many=True)
+    osoba_towarzysząca = serializers.CharField(source='plus_one')
+    decyzja = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Guest
+        fields = ('imię', 'tagi', 'decyzja', 'osoba_towarzysząca') 
+
+    def get_decyzja(self, obj):
+        return DECISIONS_TO_PL.get(obj.decision, obj.decision)

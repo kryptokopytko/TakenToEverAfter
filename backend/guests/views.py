@@ -2,9 +2,10 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from accounts.views import get_account_from_session
-
 from .models import Tag, Invitation, Guest
-from .serializers import TagSerializer, InvitationSerializer, GuestSerializer
+from .serializers import TagSerializer, InvitationSerializer, GuestSerializer, EmailGuestSerializer, EmailGuestSerializerPl
+from emails.email_template import send_generic_email
+
 
 class TagView(viewsets.ModelViewSet):
     serializer_class = TagSerializer
@@ -57,6 +58,7 @@ def add_guest(request):
     serializer = GuestSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
+        send_generic_email(request, Guest, EmailGuestSerializer, EmailGuestSerializerPl, "Guest List", "Lista Gości")
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
