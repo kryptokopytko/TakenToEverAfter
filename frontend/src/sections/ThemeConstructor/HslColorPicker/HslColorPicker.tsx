@@ -86,7 +86,7 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
     }
   };
 
-  const handleInputColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputColorChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value.trim();
     setInputColor(value);
 

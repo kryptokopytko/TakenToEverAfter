@@ -1,20 +1,20 @@
 import api from "./axiosInstance";
 
 export const addExpense = async (
-  account: number,
   expenseCard: number,
+  name: string,
   price: number,
   notes: string | null = null
 ) => {
   try {
     const newExpense = {
-      account,
       expenseCard,
+      name,
       price,
       notes,
     };
 
-    const response = await api.post("/expenses/", newExpense);
+    const response = await api.post("/expenses/add-expense", newExpense, {withCredentials: true});
     console.log("Expense created:", response.data);
     return response.data;
   } catch (error) {

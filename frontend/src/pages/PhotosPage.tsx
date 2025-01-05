@@ -71,7 +71,7 @@ const PhotosPage: React.FC = () => {
         <Container color="light">
             <MenuContainer>
                 <Heading level={2}>Photos</Heading>
-                <ImgurUploader onImageUpload={setImageUrl} /> {/* Pass function to handle image URL */}
+                <ImgurUploader onImageUpload={setImageUrl} /> 
 
                 <Subtitle level={3}>Photo Name</Subtitle>
                 <Input

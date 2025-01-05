@@ -15,6 +15,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [inputExpenseName, setInputExpenseName] = useState('');
     const [inputExpensePrice, setInputExpensePrice] = useState('');
     const [inputCategory, setInputCategory] = useState('');
+    const [categoryId, setCategoryId] = useState<number | null>(null);
     const [existingExpense, setExistingExpense] = useState<Expense | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');
@@ -34,6 +35,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         const category = expenseCards.find(expenseCard => expenseCard.category.toLowerCase() === normalizedCategory);
 
         if (category) {
+            setCategoryId(category.id);
             const existingSubExpense = category.expenses.find(expense => expense.name.toLowerCase() === normalizedExpenseName);
             if (existingSubExpense) {
                 setExistingExpense(existingSubExpense);
@@ -53,37 +55,31 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         setInputExpenseDescription('');
     }
 
-    const handleUpdateExpense = () => {
+    const handleUpdateExpense = async () => {
         const expenseAmount = Number(inputExpensePrice);
-        FunctionsProxy.updateExpense(existingExpense!.id, inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
+
+        if (!categoryId) {
+            const id = await FunctionsProxy.addCategory(inputCategory);
+            setCategoryId(id);
+        } 
+
+        FunctionsProxy.updateExpense(existingExpense!.id, categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
         
         setNotification(`Expense "${inputExpenseName}" updated"`);
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     }
-    const handleAddExpense = () => {
+    const handleAddExpense = async () => {
         const expenseAmount = Number(inputExpensePrice);
-        const normalizedCategory = inputCategory.toLowerCase();
-        const normalizedExpenseName = inputExpenseName.toLowerCase();
-        const categoryExists = categories.includes(normalizedCategory);
 
-        if (categoryExists) {
-            FunctionsProxy.updateExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
-            setNotification(`Expense "${inputExpenseName}" updated in category "${inputCategory}"`);
-        } else {
+        if (!categoryId) {
+            const id = await FunctionsProxy.addCategory(inputCategory);
+            setCategoryId(id);
+        } 
 
-            setExpenses(prevExpenses => [
-                ...prevExpenses,
-                {
-                    category: inputCategory,
-                    subExpenses: [
-                        { subCategory: inputExpenseName, amount: expenseAmount, description: inputExpenseDescription }
-                    ]
-                }
-            ]);
-            setNotification(`Expense "${inputExpenseName}" added to new category "${inputCategory}"`);
-            FunctionsProxy.addExpense(inputCategory, inputExpenseName, expenseAmount, inputExpenseDescription);
-        }
+        FunctionsProxy.addExpense(categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
+        setNotification(`Expense "${inputExpenseName}" added to category "${inputCategory}"`);
+
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     };

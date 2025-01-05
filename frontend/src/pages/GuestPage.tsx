@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import GuestList from "../sections/GuestList/GuestList";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Subtitle } from "../styles/typography";
-import { Decision, Guest } from "../types";
+import { Decision, Guest, Tag } from "../types";
 import GuidedInput from "../components/ui/GuidedInput";
-import { Tag, TagContainer } from "../styles/tag";
+import { StyledTag, TagContainer } from "../styles/tag";
 import Input from "../components/ui/Input";
 import { Container, MenuContainer, Notification } from "../styles/page";
 import { SelectorContainer } from "../components/ui/Dropdown/DropdownStyles";
@@ -18,7 +18,7 @@ const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [pairValue, setPairValue] = useState('');
   const [newTag, setNewTag] = useState('');
-  const [selectedGuestTags, setSelectedGuestTags] = useState<string[]>([]);
+  const [selectedGuestTags, setSelectedGuestTags] = useState<Tag[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
   const [currentDecision, setCurrentDecision] = useState<Decision | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
@@ -32,8 +32,7 @@ const GuestPage: React.FC = () => {
   const [arePair, setArePair] = useState(false);
   const [oneInvite, setOneInvite] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
-  const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
-  const {guests, setGuests} = useUser();
+  const {guests, tags} = useUser();
 
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
@@ -45,7 +44,7 @@ const GuestPage: React.FC = () => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
     setCurrentGuest(guest);
     if (guest) {
-      setSelectedGuestTags(guest.tags);
+      setSelectedGuestTags(tags.filter(tag => guest.tags.includes(tag.id)));
       setCurrentDecision(guest.decision);
       setHasPlusOne(guest.hasPlusOne ?? false);
       const pair = getPartner(guest.name);
@@ -66,22 +65,6 @@ const GuestPage: React.FC = () => {
       setArePair(false);
   }, [pairValue, pairs])
 
-  useEffect(() => {
-    setAllTags(getAllTags());
-  }, [guests]);
-
-  const getAllTags = () => {
-    const allTags: string[] = [];
-    guests.forEach(guest => {
-      guest.tags.forEach(tag => {
-        if (!allTags.includes(tag)) {
-          allTags.push(tag);
-        }
-      });
-    });
-    return allTags;
-  };
-
   const allDecisions = guests.map((guest) => guest.decision || 'not invited');
   const decisions = Array.from(new Set(allDecisions));
 
@@ -90,37 +73,9 @@ const GuestPage: React.FC = () => {
     setNewTagWeight(value.replace(/\D/g, ''));
   };
 
-  const handleDecisionChange = (guestId: number, decision: 'yes' | 'no') => {
-    FunctionsProxy.handleDecision(guestId, decision);
-  };
-
-  const handleInviteChange = (guestName: string) => {
-    setGuests((prevGuests) =>
-      prevGuests.map((guest) =>
-        guest.name === guestName ? { ...guest, decision: 'unknown' } : guest
-      )
-    );
-    FunctionsProxy.handleInvite(guestName);
-  };
-
-  const possibleTags = allTags.filter(tag => !selectedGuestTags.includes(tag));
-
-  const handleAddTag = (tag: string) => {
-    const weight = Number(newTagWeight);
-    const updatedTags = [...selectedGuestTags, tag];
+  const handleRemoveTag = (tag: Tag) => {
+    const updatedTags = selectedGuestTags.filter(existingTag => existingTag.id !== tag.id);
     setSelectedGuestTags(updatedTags);
-    if (currentGuest) {
-      updateGuestTags(currentGuest.name, updatedTags);
-      updateTags(tag, weight, oneInvite);
-    }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    const updatedTags = selectedGuestTags.filter(existingTag => existingTag !== tag);
-    setSelectedGuestTags(updatedTags);
-    if (currentGuest) {
-      updateGuestTags(currentGuest.name, updatedTags);
-    }
   };
 
   const handleAddOrModifyGuest = () => {
@@ -128,17 +83,10 @@ const GuestPage: React.FC = () => {
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
       if (existingGuest && currentDecision) {
-        setGuests((prevGuests) =>
-          prevGuests.map(guest =>
-            guest.name === trimmedName ? { ...guest, tags: selectedGuestTags, decision: currentDecision, hasPlusOne } : guest
-          )
-        );
-        FunctionsProxy.updateGuestTags(trimmedName, selectedGuestTags);
+        FunctionsProxy.updateGuestTags(existingGuest.id, selectedGuestTags.map(tag => tag.id));
         setNotification(`Modified: ${trimmedName}`);
       } else {
-        const newGuest: Guest = { name: trimmedName, tags: selectedGuestTags, decision: currentDecision || 'not invited', hasPlusOne };
-        setGuests(prevGuests => [...prevGuests, newGuest]);
-        FunctionsProxy.addGuest(trimmedName, 42);
+        FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne );
         setNotification(`Added: ${trimmedName}`);
       }
     } else {
@@ -148,8 +96,7 @@ const GuestPage: React.FC = () => {
 
   const handleDeleteGuest = () => {
     if (currentGuest) {
-      setGuests(prevGuests => prevGuests.filter(guest => guest.name !== currentGuest.name));
-      FunctionsProxy.removeGuest(currentGuest.name);
+      FunctionsProxy.removeGuest(currentGuest.id);
       setNotification(`Removed: ${currentGuest.name}`);
     } else {
       alert("Please select a guest to delete!");
@@ -170,20 +117,6 @@ const GuestPage: React.FC = () => {
       alert("Tag is empty or already exists!");
     }
   };
-
-  const sortedGuests = [...guests].sort((a, b) => {
-    if (sortBy === 'asc') {
-      return a.name.localeCompare(b.name);
-    } else {
-      return b.name.localeCompare(a.name);
-    }
-  });
-
-  const filteredGuests = sortedGuests.filter(guest => {
-    const tagMatch = filterByTag === '' || guest.tags.includes(filterByTag);
-    const decisionMatch = filterByDecision === 'all' || guest.decision.toLowerCase() === filterByDecision.toLowerCase();
-    return tagMatch && decisionMatch;
-  });
 
   const addPair = (guestName: string, partnerName: string) => {
     setPairs((prevPairs) => [
@@ -288,25 +221,14 @@ const GuestPage: React.FC = () => {
         {selectedGuestTags.length > 0 && (
           <TagContainer>
             {selectedGuestTags.map((tag, index) => (
-              <Tag isOneInvite={sharedInviteNames.includes(tag)} key={index} onClick={() => handleRemoveTag(tag)}>
-                {tag}
-              </Tag>
+              <StyledTag isOneInvite={false} key={index} onClick={() => handleRemoveTag(tag)}>
+              {/* <StyledTag isOneInvite={sharedInviteNames.includes(tag.name)} key={index} onClick={() => handleRemoveTag(tag)}> */}
+                {tag.name}
+              </StyledTag>
             ))}
           </TagContainer>
         )}
 
-        {possibleTags.length > 0 && (
-          <>
-            <Subtitle level={2}>Add Tags:</Subtitle>
-            <TagContainer>
-              {possibleTags.map((tag, index) => (
-                <Tag isOneInvite={sharedInviteNames.includes(tag)} key={index} onClick={() => handleAddTag(tag)}>
-                  {tag}
-                </Tag>
-              ))}
-            </TagContainer>
-          </>
-        )}
         <div style={{ margin: '0.5rem' }}>
           New tag name
           <Input
@@ -337,7 +259,7 @@ const GuestPage: React.FC = () => {
         </ButtonContainer>
       </MenuContainer>
 
-      <GuestList isHomePage={false} handleDecision={handleDecisionChange} handleInvite={handleInviteChange}>
+      <GuestList isHomePage={false}>
 
         <SelectorContainer>
           <DropdownSelector

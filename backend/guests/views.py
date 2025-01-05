@@ -47,3 +47,27 @@ def get_user_invitations(request):
     return Response({
         "invitations": serialized_invitations
     })
+
+@api_view(['POST'])
+def add_guest(request):
+    account = get_account_from_session(request)
+    data = request.data
+    data['account'] = account
+
+    serializer = GuestSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def add_tag(request):
+    account = get_account_from_session(request)
+    data = request.data
+    data['account'] = account
+    
+    serializer = TagSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)

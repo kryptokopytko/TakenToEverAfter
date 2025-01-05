@@ -1,4 +1,4 @@
-from .views import TagView, InvitationView, GuestView, get_user_tags, get_user_guests, get_user_invitations
+from .views import TagView, InvitationView, GuestView, get_user_tags, get_user_guests, get_user_invitations, add_tag, add_guest
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 
@@ -12,5 +12,7 @@ urlpatterns = router.urls
 urlpatterns += [
     path('user-tags/', get_user_tags, name='user-tags'),
     path('user-guests/', get_user_guests, name='user-guests'),
-    path('user-invitations/', get_user_invitations, name='user-invitations')
+    path('user-invitations/', get_user_invitations, name='user-invitations'),
+    path('add-tag/', add_tag, name='add-tag'),
+    path('add-guest/', add_guest, name='add-guest'),
 ]

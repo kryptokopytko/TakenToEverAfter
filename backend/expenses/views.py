@@ -21,6 +21,18 @@ class PotentialExpenseView(viewsets.ModelViewSet):
     serializer_class = PotentialExpenseSerializer
     queryset = PotentialExpense.objects.all()
 
+@api_view(['POST'])
+def add_expense(request):
+    account = get_account_from_session(request)
+    data = request.data
+    data['account'] = account
+
+    serializer = ExpenseSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
 @api_view(['GET'])
 def get_user_expenses(request):
     account = get_account_from_session(request)

@@ -1,4 +1,5 @@
 import api from "./axiosInstance";
+import { Guest, Tag, Invitation } from "../../types";
 
 
 export const getGuests = async () => {
@@ -50,25 +51,36 @@ export const getGuestsInfo = async () => {
   }
 };
 
-export const addGuest = async (guestName: string, account_id: number) => {
-  const newGuest = {
-    account: account_id,
-    name: guestName,
-    group_numbers: [],
-    invitation: null,
-    confirmation: "unknown",
-    plus_one: false,
+export const addTag = async (name: string, rank: number) => {
+  const newTag = {
+    name,
+    rank,
   };
 
-  api
-    .post("/guests/guests/", newGuest)
-    .then((response) => {
-      console.log("New guest created:", response.data);
-    })
-    .catch((error) => {
-      console.error("There was an error creating the guest:", error);
-    });
+  try {
+    const response = await api.post("/tags/add_tag/", newTag, { withCredentials: true });
+    return response.data.id;
+  } catch (error) {
+    console.error("There was an error creating the tag:", error);
+  }
 };
+
+export const addGuest = async (guestName: string, groupNumbers: Number[], plusOne: boolean) => {
+  const newGuest = {
+    name: guestName,
+    groupNumbers,
+    invitation: null,
+    confirmation: "unknown",
+    plusOne
+  };
+
+  try {
+    await api.post("/guests/add_guest/", newGuest, { withCredentials: true });
+  } catch (error) {
+    console.error("There was an error creating the guest:", error);
+  }
+};
+
 
 export const removeGuest = async (id: Number) => {
   try {
@@ -80,7 +92,7 @@ export const removeGuest = async (id: Number) => {
   }
 };
 
-export const updateGuestGroups = async (
+export const updateGuestTags = async (
   guestId: number,
   updatedGroupsId: number[]
 ) => {
@@ -103,16 +115,6 @@ export const updateGuestGroups = async (
     );
     throw error;
   }
-};
-
-export const updateTags = (
-  tag: string,
-  weight: number,
-  oneInvite: boolean
-) => {};
-
-export const getAllSharedInviteNames = () => {
-  return ["family"];
 };
 
 export const updateGroupRank = async (groupId: number, newRank: number) => {

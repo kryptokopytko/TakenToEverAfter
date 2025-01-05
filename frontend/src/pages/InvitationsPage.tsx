@@ -6,7 +6,6 @@ import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
-import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
 

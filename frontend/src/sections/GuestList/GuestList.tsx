@@ -8,7 +8,6 @@ import { exportToPDF } from "../Printables/exportToPdf";
 import { decisionTypes } from "../../types";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserContext";
-import useFunctionsProxy from "../../API/FunctionHandler";
 
 const SummaryContainer = styled.div`
   display: flex;
@@ -27,7 +26,6 @@ interface GuestListProps {
 const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const {guests} = useUser();
-  const FunctionsProxy = useFunctionsProxy();
 
   const countDecisions = (decisionType: string) => {
     return guests.filter((guest) => guest.decision === decisionType).length;
@@ -60,8 +58,6 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
         isHomePage={isHomePage} 
         list={guests} 
         isExpanded={isExpanded} 
-        handleDecision={FunctionsProxy.handleDecision} 
-        handleInvite={FunctionsProxy.handleInvite}
       />
       <ButtonContainer>
         {isHomePage ?

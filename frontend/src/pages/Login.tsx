@@ -9,6 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from "../providers/UserContext";
 
+interface GoogleJwtPayload {
+    email: string;
+}
+
 const LoginPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -16,7 +20,12 @@ const LoginPage: React.FC = () => {
     const { isLogged, setIsLogged, setAccount } = useUser();
 
     const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
-        const email = jwtDecode(response.credential!).email;
+        if (!response.credential) {
+            throw new Error("Credential is missing from the Google login response.");
+        }
+        
+        const decodedToken = jwtDecode<GoogleJwtPayload>(response.credential);
+        const email = decodedToken.email;
 
         try {
           const isUserRegistered = await isRegistrated(email);

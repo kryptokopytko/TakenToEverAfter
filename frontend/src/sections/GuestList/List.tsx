@@ -3,8 +3,9 @@ import { Body, Label } from "../../styles/typography";
 import { GridContainer } from "../../styles/section";
 import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
-import { Tag, TagContainer } from "../../styles/tag";
+import { StyledTag, TagContainer } from "../../styles/tag";
 import useFunctionsProxy from "../../API/FunctionHandler";
+import { useUser } from "../../providers/UserContext";
 
 const GuestItem = styled.div`
   display: flex;
@@ -32,13 +33,11 @@ interface ListProps {
   list: Guest[];
   isExpanded: boolean;
   isHomePage?: boolean;
-  handleDecision: (guestId: number, decision: 'yes' | 'no') => void;
-  handleInvite: (guestName: string) => void;
 }
 
-const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecision, handleInvite }) => {
+const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
   const FunctionsProxy = useFunctionsProxy();
-  const sharedInviteNames: string[] = FunctionsProxy.getAllSharedInviteNames();
+  const {tags} = useUser();
 
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">
@@ -49,15 +48,20 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecisio
           <GuestItem key={index}>
             <Body size="big">{guest.name}</Body>
             <TagContainer>
-              {guest.tags.map((tag, idx) => tag && 
-              <Tag isOneInvite={sharedInviteNames.includes(tag)} key={idx}>{tag}</Tag>
-              )}
+              {guest.tags.map((tagId, idx) => {
+                const tag = tags.find(tag => tag.id === tagId);
+                return tag ? (
+                  <StyledTag isOneInvite={true} key={idx}>
+                    {tag.name}
+                  </StyledTag>
+                ) : null; 
+              })}
             </TagContainer>
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
-                <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
-                <Button variant="transparent" onClick={() => handleDecision(guest.id, 'yes')}>yes/</Button>
-                <Button variant="transparent" onClick={() => handleDecision(guest.id, 'no')}>no</Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handOutInvitation(guest.invitationId)}>Invite</Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'yes')}>yes/</Button>
+                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'no')}>no</Button>
               </DecisionButtons>
             ) : (
               <Label size="small">{guest.decision}</Label>

@@ -1,4 +1,5 @@
 import api from "./axiosInstance";
+import { Theme } from "../../types";
 
 export const getUserPreferences = async () => {
   try {
