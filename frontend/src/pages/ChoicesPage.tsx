@@ -7,6 +7,7 @@ import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
 import useFunctionsProxy from "../API/FunctionHandler";
 import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 interface ChoicesPageProps { }
 
@@ -18,7 +19,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [notification, setNotification] = useState<string | null>(null);
     const [choiceDescription, setChoiceDescription] = useState('');
     const FunctionsProxy = useFunctionsProxy();
-    const {choices} = useUser();
+    const { choices, language } = useUser();
 
     useEffect(() => {
         const normalizedChoiceName = choiceName.trim().toLowerCase();
@@ -44,7 +45,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         const choiceExists = categoryIndex !== -1 && choices[categoryIndex].options.some(option => option.name.toLowerCase() === choiceName.toLowerCase());
 
         if (choiceExists) {
-            setNotification(`Choice "${choiceName}" already exists in category "${choiceCategory}"`);
+            setNotification(translations[language].choiceAlreadyExists.replace("{name}", choiceName).replace("{category}", choiceCategory));
             setTimeout(() => setNotification(null), notificationTimeOut);
             return;
         }
@@ -56,7 +57,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         }
 
         FunctionsProxy.addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
-        setNotification(`Choice "${choiceName}" added to category "${choiceCategory}"`);
+        setNotification(translations[language].choiceAdded.replace("{name}", choiceName).replace("{category}", choiceCategory));
         setTimeout(() => setNotification(null), notificationTimeOut);
 
         
@@ -69,14 +70,14 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
 
     const handleRemoveChoice = () => {
         FunctionsProxy.removeChoice(choiceCategory, choiceName);
-        setNotification(`Choice "${choiceName}" removed from category "${choiceCategory}"`);
+        setNotification(translations[language].choiceRemoved.replace("{name}", choiceName).replace("{category}", choiceCategory));
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
     const handleUpdateChoice = () => {
         const parsedAmount = parseFloat(choiceAmount);
         FunctionsProxy.updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
-        setNotification(`Choice "${choiceName}" updated in category "${choiceCategory}"`);
+        setNotification(translations[language].choiceUpdated.replace("{name}", choiceName).replace("{category}", choiceCategory));
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
@@ -95,40 +96,40 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <Heading level={2}>Manage Choices</Heading>
+                <Heading level={2}>{translations[language].manageChoices}</Heading>
 
-                <Subtitle level={3}>Choice Name</Subtitle>
+                <Subtitle level={3}>{translations[language].choiceName}</Subtitle>
                 <GuidedInput
                     value={choiceName}
                     setInputValue={setChoiceName}
                     suggestions={choices.flatMap(choice => choice.options.map(option => option.name))}
-                    placeholder="Name of the choice"
+                    placeholder={translations[language].choiceName}
                     onChange={(e) => {
                         setChoiceName(e.target.value);
                         setExistingChoice(null);
                     }}
                 />
 
-                <Subtitle level={3}>Amount</Subtitle>
+                <Subtitle level={3}>{translations[language].amount}</Subtitle>
                 <Input
                     value={choiceAmount}
-                    placeholder="Price for the choice"
+                    placeholder={translations[language].price}
                     type="number"
                     onChange={(e) => setChoiceAmount(e.target.value)}
                 />
 
-                <Subtitle level={3}>Category</Subtitle>
+                <Subtitle level={3}>{translations[language].category}</Subtitle>
                 <GuidedInput
                     value={choiceCategory}
                     suggestions={choices.map(choice => choice.category)}
-                    placeholder="Category"
+                    placeholder={translations[language].category}
                     setInputValue={setChoiceCategory}
                     onChange={(e) => setChoiceCategory(e.target.value)}
                 />
-                <Subtitle level={3}>Description</Subtitle>
+                <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={choiceDescription}
-                    placeholder="Description of the choice"
+                    placeholder={translations[language].description}
                     onChange={(e) => setChoiceDescription(e.target.value)}
                 />
 
@@ -138,13 +139,13 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 <ButtonContainer>
                     {existingChoice ? (
                         <>
-                            <Button onClick={handleUpdateChoice}>Modify Choice</Button>
-                            <Button onClick={handleRemoveChoice}>Remove Choice</Button>
+                            <Button onClick={handleUpdateChoice}>{translations[language].modifyChoice}</Button>
+                            <Button onClick={handleRemoveChoice}>{translations[language].delete}</Button>
                         </>
                     ) : isInputValid() ? (
-                        <Button onClick={handleAddChoice}>Add Choice</Button>
+                        <Button onClick={handleAddChoice}>{translations[language].add}</Button>
                     ) : (
-                        <Button disabled>Add Choice</Button>
+                        <Button disabled>{translations[language].add}</Button>
                     )}
                 </ButtonContainer>
             </MenuContainer>

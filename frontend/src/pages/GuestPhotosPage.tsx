@@ -8,6 +8,8 @@ import useFunctionsProxy from "../API/FunctionHandler";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
+import { translations } from "../translations";
+import { useUser } from "../providers/UserContext";
 
 const GuestPhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState('');
@@ -18,6 +20,7 @@ const GuestPhotosPage: React.FC = () => {
     const [areYourExpanded, setareYourExpanded] = useState(true);
     const guestName = new URLSearchParams(location.search).get('guest');
     const FunctionsProxy = useFunctionsProxy();
+    const { language } = useUser();
 
     const handleAddPhoto = () => {
         const newPhoto = {
@@ -55,22 +58,22 @@ const GuestPhotosPage: React.FC = () => {
     return (
         <Container color='light'>
             <MenuContainer>
-                <Heading level={2}>Upload Photos</Heading>
+                <Heading level={2}>{translations[language].uploadPhotos}</Heading>
 
-                <Subtitle level={3}>Photo Name</Subtitle>
+                <Subtitle level={3}>{translations[language].photoName}</Subtitle>
                 <Input
                     value={photoName}
                     onChange={(e) => setPhotoName(e.target.value)}
-                    placeholder="Enter photo name"
+                    placeholder={translations[language].photoName}
                 />
 
 
-                <Subtitle level={3}>Photo Link</Subtitle>
+                <Subtitle level={3}>{translations[language].photoLink}</Subtitle>
                 <div style={{ marginBottom: '1.5rem' }}>
                     <Input
                         value={photoLink}
                         onChange={(e) => setPhotoLink(e.target.value)}
-                        placeholder="Enter photo URL"
+                        placeholder={translations[language].photoLink}
                     />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -78,23 +81,22 @@ const GuestPhotosPage: React.FC = () => {
                         checked={isVertical}
                         onChange={() => setIsVertical(!isVertical)}
                     />
-                    Is vertical?
+                    {translations[language].isVertical}
                 </div>
                 <ButtonContainer>
-                    <Button onClick={handleAddPhoto}>Add Photo</Button>
+                    <Button onClick={handleAddPhoto}>{translations[language].addPhoto}</Button>
                 </ButtonContainer>
             </MenuContainer>
 
             <div>
                 <SpaceBetweenContainer>
-                    <Subtitle level={1}>Your Photos</Subtitle>
+                    <Subtitle level={1}>{translations[language].yourPhotos}</Subtitle>
                     <Button onClick={() => setareYourExpanded(!areYourExpanded)}>
-                        {areYourExpanded ? "Collapse List" : "Expand List"}
+                        {areYourExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button>
                 </SpaceBetweenContainer>
                 <PhotoAlbum
                     isGuest={true}
-
                     images={yourPhotos}
                     isExpanded={areYourExpanded}
                     handleApproveChange={handleApproveChange}
@@ -102,9 +104,9 @@ const GuestPhotosPage: React.FC = () => {
                 />
 
                 <SpaceBetweenContainer>
-                    <Subtitle level={1}>Approved Photos</Subtitle>
+                    <Subtitle level={1}>{translations[language].approvedPhotos}</Subtitle>
                     <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>
-                        {areApprovedExpanded ? "Collapse List" : "Expand List"}
+                        {areApprovedExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button>
                 </SpaceBetweenContainer>
                 <PhotoAlbum
@@ -114,9 +116,6 @@ const GuestPhotosPage: React.FC = () => {
                     handleApproveChange={handleApproveChange}
                     handleDeletePhoto={handleDeletePhoto}
                 />
-
-
-
             </div>
         </Container>
     );

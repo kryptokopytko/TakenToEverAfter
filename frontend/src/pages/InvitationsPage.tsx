@@ -8,6 +8,7 @@ import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 interface PrintablesPageProps {
 }
@@ -25,12 +26,13 @@ const Invites = styled.div`
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
 }) => {
-    const [mainText, setMainText] = useState("Request the pleasure of your company at the celebration of their marriage");
-    const [additionalText, setAdditionalText] = useState("Come 15 minutes before the start of the ceremony");
-    const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
+    const { guests, language } = useUser();
+
+    const [mainText, setMainText] = useState(translations[language].exampleMainText);
+    const [additionalText, setAdditionalText] = useState(translations[language].exampleAdditionalText);
+    const [guestText, setGuestText] = useState(translations[language].exampleGuestText);
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
-    const { guests } = useUser();
 
     const handleExportPDF = () => {
         const inviteIds = guests.map((_, index) => `invite-${index}`);
@@ -41,43 +43,43 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
         <Container>
             <MenuContainer>
-                <Heading level={2}>Customize Invitation Text</Heading>
-                <Subtitle level={3}>Additional Text</Subtitle>
+                <Heading level={2}>{translations[language].customizeInvitationText}</Heading>
+                <Subtitle level={3}>{translations[language].additionalText}</Subtitle>
 
                 <InputWrapper>
                     <Input
                         size="long"
                         value={additionalText}
                         onChange={(e) => setAdditionalText(e.target.value)}
-                        placeholder="Additional Text"
+                        placeholder={translations[language].additionalText}
                     />
                 </InputWrapper>
 
-                <Subtitle level={3}>Guest Text</Subtitle>
+                <Subtitle level={3}>{translations[language].guestText}</Subtitle>
                 <InputWrapper>
                     <Input
                         size="long"
                         value={guestText}
                         onChange={(e) => setGuestText(e.target.value)}
-                        placeholder="Guest Invitation Text"
+                        placeholder={translations[language].guestText}
                     />
                 </InputWrapper>
 
-                <Subtitle level={3}>Main Text</Subtitle>
+                <Subtitle level={3}>{translations[language].mainText}</Subtitle>
                 <InputWrapper>
                     <Input
                         size="long"
                         value={mainText}
                         onChange={(e) => setMainText(e.target.value)}
-                        placeholder="Main Invitation Text"
+                        placeholder={translations[language].mainText}
                     />
                 </InputWrapper>
 
                 <Button onClick={() => setShowAllInvites(!showAllInvites)}>
-                    {showAllInvites ? "Show Single Invite" : "Show All Invites"}
+                    {showAllInvites ? translations[language].showSingleInvite : translations[language].showAllInvites}
                 </Button>
                 {showAllInvites ?
-                    <Button onClick={handleExportPDF}>Export to PDF</Button> : <></>}
+                    <Button onClick={handleExportPDF}>{translations[language].exportToPDF}</Button> : <></>}
             </MenuContainer>
             {showAllInvites ? (
                 <Invites>
@@ -99,7 +101,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                                     }
                                     }
                                 />
-                                Delivered Invite
+                                {translations[language].delivered}
                             </div>
                         </div>
                     ))}

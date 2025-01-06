@@ -7,6 +7,7 @@ import Button, { ButtonContainer } from "../components/ui/Button";
 import { useState } from "react";
 import useFunctionsProxy from "../API/FunctionHandler";
 import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 const ToDoPage = () => {
     const [taskName, setTaskName] = useState('');
@@ -15,7 +16,7 @@ const ToDoPage = () => {
     const [taskDescription, setTaskDescription] = useState<string | null>('');
     const [taskId, setTaskId] = useState<number | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
-    const {taskCards, setTaskCards} = useUser();
+    const { taskCards, setTaskCards, language } = useUser();
     const FunctionsProxy = useFunctionsProxy();
 
     const findCategory = (taskId: number) => {
@@ -39,8 +40,7 @@ const ToDoPage = () => {
 
     const handleAddTask = async () => {
         await FunctionsProxy.addTask(taskCategory.id!, taskCategory.name, taskName, taskDescription || "", taskDeadline);
-       
-        setNotification(`Task "${taskName}" added to category "${taskCategory.name}"`);
+        setNotification(translations[language].taskAdded.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
         
         await refreshTaskCards();
@@ -50,7 +50,7 @@ const ToDoPage = () => {
 
     const handleRemoveTask = async () => {
         await FunctionsProxy.removeTask(taskId!);
-        setNotification(`Task "${taskName}" removed from category "${taskCategory.name}"`);
+        setNotification(translations[language].taskRemoved.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
         
         await refreshTaskCards();
@@ -59,7 +59,7 @@ const ToDoPage = () => {
 
     const handleUpdateTask = async () => {
         await FunctionsProxy.updateTask(taskId!, taskCategory.id, taskCategory.name, taskName, taskDescription, taskDeadline);
-        setNotification(`Task "${taskName}" updated in category "${taskCategory.name}"`);
+        setNotification(translations[language].taskUpdated.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
        
         await refreshTaskCards();
@@ -88,14 +88,14 @@ const ToDoPage = () => {
         <Container>
             <MenuContainer>
                 <div style={{ marginBottom: "-2rem" }}>
-                    <Heading level={2}>Manage To Do</Heading>
+                    <Heading level={2}>{translations[language].manageToDo}</Heading>
                 </div>
 
-                <Subtitle level={3}>Task Name</Subtitle>
+                <Subtitle level={3}>{translations[language].taskName}</Subtitle>
                 <GuidedInput
                     value={taskName}
                     suggestions={taskCards.flatMap(card => card.tasks.map(task => task.name))}
-                    placeholder="Name of the task"
+                    placeholder={translations[language].taskName}
                     onChange={(e) => setTaskName(e.target.value)}
                     setInputValue={(value) => {
                         const selectedTask = taskCards
@@ -117,19 +117,19 @@ const ToDoPage = () => {
                     }}
                 />
 
-                <Subtitle level={3}>Deadline</Subtitle>
+                <Subtitle level={3}>{translations[language].deadline}</Subtitle>
                 <Input
                     value={taskDeadline || ""}
-                    placeholder="Task deadline"
+                    placeholder={translations[language].deadline}
                     type="date"
                     onChange={(e) => setTaskDeadline(e.target.value)}
                 />
 
-                <Subtitle level={3}>Category</Subtitle>
+                <Subtitle level={3}>{translations[language].category}</Subtitle>
                 <GuidedInput
                     value={taskCategory.name}
                     suggestions={taskCards.map(card => card.category)}
-                    placeholder="Name of the category"
+                    placeholder={translations[language].category}
                     onChange={(e) => setTaskCategory({name: e.target.value, id: null})}
                     setInputValue={(value) => {
                         const selectedCategory = taskCards.find(card => card.category === value);
@@ -141,10 +141,10 @@ const ToDoPage = () => {
                     }}
                 />
 
-                <Subtitle level={3}>Description</Subtitle>
+                <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={taskDescription || ""}
-                    placeholder="Description of the task"
+                    placeholder={translations[language].description}
                     onChange={(e) => setTaskDescription(e.target.value)}
                 />
 
@@ -155,14 +155,14 @@ const ToDoPage = () => {
                     {taskId ? (
                         <>
                             {isInputValid() ?
-                                <Button onClick={handleUpdateTask}>Modify Task</Button> :
-                                <Button disabled>Modify Task</Button>}
-                            <Button onClick={handleRemoveTask}>Remove Task</Button>
+                                <Button onClick={handleUpdateTask}>{translations[language].modifyTask}</Button> :
+                                <Button disabled>{translations[language].modifyTask}</Button>}
+                            <Button onClick={handleRemoveTask}>{translations[language].removeTask}</Button>
                         </>
                     ) : isInputValid() ? (
-                        <Button onClick={handleAddTask}>Add Task</Button>
+                        <Button onClick={handleAddTask}>{translations[language].addTask}</Button>
                     ) : (
-                        <Button disabled>Add Task</Button>
+                        <Button disabled>{translations[language].addTask}</Button>
                     )}
                 </ButtonContainer>
             </MenuContainer>

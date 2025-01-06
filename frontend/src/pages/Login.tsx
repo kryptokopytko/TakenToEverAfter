@@ -8,6 +8,7 @@ import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 interface GoogleJwtPayload {
     email: string;
@@ -17,7 +18,7 @@ const LoginPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const { isLogged, setIsLogged, setAccount } = useUser();
+    const { isLogged, setIsLogged, setAccount, language } = useUser();
 
     const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
         if (!response.credential) {
@@ -44,7 +45,7 @@ const LoginPage: React.FC = () => {
     };
 
     const handleGoogleLoginError = () => {
-        setErrorMessage("Google login failed. Please try again.");
+        setErrorMessage(translations[language].loginFailed);
     };
 
     if (isLogged) {
@@ -52,8 +53,8 @@ const LoginPage: React.FC = () => {
             <Container>
                 <Form>
                     <div style={{ textAlign: 'center' }}>
-                        <Heading level={2}>Welcome back!</Heading>
-                        <p>You have successfully logged in.</p>
+                        <Heading level={2}>{translations[language].welcomeBack}</Heading>
+                        <p>{translations[language].successfullyLogged}</p>
                     </div>
                 </Form>
             </Container>
@@ -64,7 +65,7 @@ const LoginPage: React.FC = () => {
         <Container>
             <Form>
                 <div style={{ marginLeft: '-3rem' }}>
-                    <Heading level={2}>Login</Heading>
+                    <Heading level={2}>{translations[language].login}</Heading>
                 </div>
 
                 {errorMessage && (
