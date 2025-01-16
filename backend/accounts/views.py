@@ -46,3 +46,19 @@ def get_account_from_session(request):
         return account
     except Account.DoesNotExist:
         raise APIException("Account not found")
+    
+class AccountModelViewSet(viewsets.ModelViewSet):
+    def perform_create(self, serializer):
+        account = get_account_from_session(self.request)
+        serializer.save(account=account)
+        self.after_create(serializer.instance)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self.after_update(instance)
+
+    def after_create(self, instance):
+        pass
+
+    def after_update(self, instance):
+        pass

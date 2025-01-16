@@ -1,23 +1,33 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from accounts.views import get_account_from_session
+from accounts.views import get_account_from_session, AccountModelViewSet
 from .models import Tag, Invitation, Guest
 from .serializers import TagSerializer, InvitationSerializer, GuestSerializer, EmailGuestSerializer, EmailGuestSerializerPl
 from emails.email_template import send_generic_email
 
 
-class TagView(viewsets.ModelViewSet):
+class TagView(AccountModelViewSet):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
 
-class InvitationView(viewsets.ModelViewSet):
+class InvitationView(AccountModelViewSet):
     serializer_class = InvitationSerializer
     queryset = Invitation.objects.all()
 
-class GuestView(viewsets.ModelViewSet):
+class GuestView(AccountModelViewSet):
     serializer_class = GuestSerializer
     queryset = Guest.objects.all()
+
+    def after_create(self, instance):
+        send_generic_email(
+            self.request,
+            Guest,
+            EmailGuestSerializer,
+            EmailGuestSerializerPl,
+            "Guest List",
+            "Lista Gości"
+        )
 
 @api_view(['GET'])
 def get_user_guests(request):
@@ -49,27 +59,3 @@ def get_user_invitations(request):
         "invitations": serialized_invitations
     })
 
-@api_view(['POST'])
-def add_guest(request):
-    account = get_account_from_session(request)
-    data = request.data
-    data['account'] = account.id
-
-    serializer = GuestSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        send_generic_email(request, Guest, EmailGuestSerializer, EmailGuestSerializerPl, "Guest List", "Lista Gości")
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
-
-@api_view(['POST'])
-def add_tag(request):
-    account = get_account_from_session(request)
-    data = request.data
-    data['account'] = account
-    
-    serializer = TagSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)

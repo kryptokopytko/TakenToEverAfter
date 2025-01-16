@@ -19,22 +19,23 @@ const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [pairValue, setPairValue] = useState('');
   const [newTag, setNewTag] = useState('');
+  const [newTagWeight, setNewTagWeight] = useState('');
   const [selectedGuestTags, setSelectedGuestTags] = useState<Tag[]>([]);
   const [currentGuest, setCurrentGuest] = useState<Guest | undefined>(undefined);
   const [currentDecision, setCurrentDecision] = useState<Decision | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
-  const [allTags, setAllTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
   const [filterByTag, setFilterByTag] = useState<string>('');
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
-  const [newTagWeight, setNewTagWeight] = useState('');
   const [hasPlusOne, setHasPlusOne] = useState(false);
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
   const [arePair, setArePair] = useState(false);
   const [oneInvite, setOneInvite] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
-  const { guests, tags, language } = useUser();
-
+  const { guests, tags, language, setGuests, setTags } = useUser();
+  const possibleTags = tags.filter(tag => 
+    !selectedGuestTags.some(selectedTag => selectedTag.id === tag.id)
+  );
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
     return pair ? pair.partner : null;
@@ -79,7 +80,7 @@ const GuestPage: React.FC = () => {
     setSelectedGuestTags(updatedTags);
   };
 
-  const handleAddOrModifyGuest = () => {
+  const handleAddOrModifyGuest = async () => {
     const trimmedName = inputValue.trim();
     if (trimmedName) {
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
@@ -87,9 +88,18 @@ const GuestPage: React.FC = () => {
         FunctionsProxy.updateGuestTags(existingGuest.id, selectedGuestTags.map(tag => tag.id));
         setNotification(translations[language].guestModified.replace("{name}", trimmedName));
       } else {
-        FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne );
-        setNotification(translations[language].guestAdded.replace("{name}", trimmedName));
-      }
+        const newInvitationId = await FunctionsProxy.newInvitation();
+        const newGuestId = await FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne );
+          setNotification(translations[language].guestAdded.replace("{name}", trimmedName));
+          setGuests([...guests, {
+              id: newGuestId,
+              name: trimmedName,
+              decision: "unknown",
+              tags: selectedGuestTags.map(tag => tag.id),
+              invitationId: newInvitationId,
+              hasPlusOne: hasPlusOne
+          }])
+        }
     } else {
       alert(translations[language].alertEmptyGuestName);
     }
@@ -108,16 +118,27 @@ const GuestPage: React.FC = () => {
     setNewTag(e.target.value);
   };
 
-  const handleAddNewTag = () => {
+  const handleAddNewTag = async () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag && !allTags.includes(trimmedTag)) {
-      setAllTags(prevTags => [...prevTags, trimmedTag]);
+    if (trimmedTag && !tags.some(tag => tag.name === trimmedTag)) {
+      const newTagId = await FunctionsProxy.addTag(trimmedTag, Number(newTagWeight));
+
+      setTags([...tags, {id: newTagId, name: trimmedTag, rank: Number(newTagWeight)}]);
       setNewTag('');
       setOneInvite(false);
     } else {
       alert(translations[language].alertTagEmptyOrExists);
     }
   };
+
+  const addTagToGuest = async (tag: Tag) => {
+    const updatedTags = [...selectedGuestTags, tag];
+    setSelectedGuestTags(updatedTags);
+    if (currentGuest) {
+      await FunctionsProxy.updateGuestTags(currentGuest.id, updatedTags.map(tag => tag.id));
+    }
+  };
+
 
   const addPair = (guestName: string, partnerName: string) => {
     setPairs((prevPairs) => [
@@ -174,7 +195,7 @@ const GuestPage: React.FC = () => {
                 title={translations[language].decision}
                 initialSelectedOption={currentGuest.decision}
                 options={decisions.map((decision) => ({
-                  label: decision.charAt(0).toUpperCase() + decision.slice(1),
+                  label: translations[language][decision],
                   value: decision,
                 }))}
                 onOptionSelect={(selectedOption) => setCurrentDecision(selectedOption as Decision)}
@@ -206,7 +227,7 @@ const GuestPage: React.FC = () => {
         </ButtonContainer>
 
         {notification && <Notification>{notification}</Notification>}
-        {currentGuest && (
+        {currentGuest && hasPlusOne && (
           <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
             <Subtitle level={3}>{translations[language].namedPartner}:</Subtitle>
             <GuidedInput
@@ -227,11 +248,26 @@ const GuestPage: React.FC = () => {
           <TagContainer>
             {selectedGuestTags.map((tag, index) => (
               <StyledTag isOneInvite={false} key={index} onClick={() => handleRemoveTag(tag)}>
-              {/* <StyledTag isOneInvite={sharedInviteNames.includes(tag.name)} key={index} onClick={() => handleRemoveTag(tag)}> */}
                 {tag.name}
               </StyledTag>
             ))}
+
+            <StyledTag isOneInvite={false} key={"invitation"} onClick={() => {}}>
+              {currentGuest?.invitationId}
+            </StyledTag>
           </TagContainer>
+        )}
+        {tags.length > 0 && (
+          <>
+            <Subtitle level={2}>{translations[language].addTags}:</Subtitle>
+            <TagContainer>
+              {possibleTags.map((tag, index) => (
+                <StyledTag isOneInvite={false} key={index} onClick={() => addTagToGuest(tag)}>
+                  {tag.name}
+                </StyledTag>
+              ))}
+            </TagContainer>
+          </>
         )}
 
         <div style={{ margin: '0.5rem' }}>
@@ -271,7 +307,7 @@ const GuestPage: React.FC = () => {
           <DropdownSelector
             title={translations[language].filterByTag}
             initialSelectedOption={filterByTag || "All"}
-            options={allTags.map(tag => ({ label: tag, value: tag }))}
+            options={tags.map(tag => ({ label: tag.name, value: tag.name }))}
             onOptionSelect={(selectedOption) => {
               if (typeof selectedOption === 'string') {
                 setFilterByTag(selectedOption);
@@ -287,7 +323,7 @@ const GuestPage: React.FC = () => {
             options={[
               { label: translations[language].all, value: "all" },
               ...decisions.map(decision => ({
-                label: decision.charAt(0).toUpperCase() + decision.slice(1),
+                label: translations[language][decision],
                 value: decision,
               }))
             ]}

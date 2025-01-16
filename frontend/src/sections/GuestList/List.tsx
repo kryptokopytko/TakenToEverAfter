@@ -52,11 +52,14 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
               {guest.tags.map((tagId, idx) => {
                 const tag = tags.find(tag => tag.id === tagId);
                 return tag ? (
-                  <StyledTag isOneInvite={true} key={idx}>
+                  <StyledTag isOneInvite={false} key={idx}>
                     {tag.name}
                   </StyledTag>
                 ) : null; 
               })}
+              <StyledTag isOneInvite={true} key={"invitation"}>
+                {guest.invitationId}
+              </StyledTag>
             </TagContainer>
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>

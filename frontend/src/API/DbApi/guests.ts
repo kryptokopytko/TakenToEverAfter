@@ -58,7 +58,7 @@ export const addTag = async (name: string, rank: number) => {
   };
 
   try {
-    const response = await api.post("/tags/add-tag/", newTag, { withCredentials: true });
+    const response = await api.post("/guests/tags/", newTag, { withCredentials: true });
     return response.data.id;
   } catch (error) {
     console.error("There was an error creating the tag:", error);
@@ -75,9 +75,11 @@ export const addGuest = async (guestName: string, groupNumbers: Number[], plusOn
   };
 
   try {
-    await api.post("/guests/add-guest/", newGuest, { withCredentials: true });
+    const response = await api.post("/guests/guests/", newGuest, { withCredentials: true });
+    return response.data.id;
   } catch (error) {
     console.error("There was an error creating the guest:", error);
+    return -1;
   }
 };
 
@@ -102,7 +104,7 @@ export const updateGuestTags = async (
 
     const updatedGuestData = {
       ...guest,
-      group_numbers: updatedGroupsId,
+      tags: updatedGroupsId,
     };
 
     const response = await api.patch(`/guests/guests/${guestId}/`, updatedGuestData);
@@ -159,6 +161,16 @@ export const updateGuestConfirmation = async (
     throw error;
   }
 };
+
+export const newInvitation = async () => {
+  try {
+    const response = await api.post("/guests/invitations/", {}, { withCredentials: true });
+    return response.data.id;
+  } catch (error) {
+    console.error("There was an error creating the invitation:", error);
+    return -1;
+  }
+}
 
 export const handOutInvitation = async (invitationId: number) => {
   try {
