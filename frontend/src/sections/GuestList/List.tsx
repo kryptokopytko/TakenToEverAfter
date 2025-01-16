@@ -63,10 +63,10 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
                 <Button variant="transparent" onClick={() => FunctionsProxy.handOutInvitation(guest.invitationId)}>
                   {translations[language].invite}
                 </Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'yes')}>
+                <Button variant="transparent" onClick={() => FunctionsProxy.updateGuestConfirmation(guest.id, true)}>
                   {translations[language].yes}
                 </Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handleDecision(guest.id, 'no')}>
+                <Button variant="transparent" onClick={() => FunctionsProxy.updateGuestConfirmation(guest.id, false)}>
                   {translations[language].no}
                 </Button>
               </DecisionButtons>

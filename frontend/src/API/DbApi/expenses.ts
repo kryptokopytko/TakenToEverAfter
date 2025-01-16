@@ -8,13 +8,13 @@ export const addExpense = async (
 ) => {
   try {
     const newExpense = {
-      expenseCard,
+      expense_card: expenseCard,
       name,
-      price,
-      notes,
+      amount: price,
+      description: notes,
     };
 
-    const response = await api.post("/expenses/add-expense", newExpense, {withCredentials: true});
+    const response = await api.post("/expenses/add-expense/", newExpense, {withCredentials: true});
     console.log("Expense created:", response.data);
     return response.data;
   } catch (error) {
@@ -23,9 +23,24 @@ export const addExpense = async (
   }
 };
 
+export const addExpenseCategory = async (name: string) => {
+  try {
+    const response = await api.post(
+      "/expenses/add-expense-category/",
+      { category: name },
+      { withCredentials: true }
+    );
+    console.log("Expense category created:", response.data);
+    return response.data.id;
+  } catch (error) {
+    console.error("Error adding expense category:", error);
+    throw error;
+  }
+};
+
 export const removeExpense = async (id: number) => {
   try {
-    const response = await api.delete(`/expenses/${id}/`);
+    const response = await api.delete(`/expenses/expenses/${id}/`);
     console.log(`Expense with ID ${id} removed successfully.`);
     return response.data;
   } catch (error) {

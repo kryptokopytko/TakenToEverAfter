@@ -27,13 +27,25 @@ class PotentialExpenseView(viewsets.ModelViewSet):
 def add_expense(request):
     account = get_account_from_session(request)
     data = request.data
-    data['account'] = account
+    data['account'] = account.id
 
     serializer = ExpenseSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         send_generic_email(request, Expense, EmailExpenseSerializer, EmailExpenseSerializerPl, "Expense List", "Lista Wydatków")
         return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def add_expense_category(request):
+    account = get_account_from_session(request)
+    data = request.data
+    data['account'] = account.id  
+
+    serializer = ExpenseCardSerializer(data=data)
+    if serializer.is_valid():
+        expense_card = serializer.save() 
+        return Response({"id": expense_card.id}, status=201) 
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])

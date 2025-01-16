@@ -17,7 +17,7 @@ class InvitationSerializer(serializers.ModelSerializer):
 
 class GuestSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
-    hasPlusOne = serializers.CharField(source='plus_one')
+    hasPlusOne = serializers.BooleanField(source='plus_one')
 
     class Meta:
         model = Guest

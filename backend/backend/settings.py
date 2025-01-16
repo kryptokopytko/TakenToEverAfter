@@ -92,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'TakenToEverAfter',
-        'USER': 'user',
-        'PASSWORD': '1234qwer',
+        'USER': os.getenv("DJANGO_USERNAME"),
+        'PASSWORD': os.getenv("DJANGO_PASSWORD"),
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -156,5 +156,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'takentoeverafter@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_APP_PASSWORD')
+EMAIL_HOST_USER = os.getenv('APP_EMAIL')
+EMAIL_HOST_PASSWORD = os.getenv('APP_EMAIL_PASSWORD')

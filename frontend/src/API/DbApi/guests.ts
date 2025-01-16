@@ -58,7 +58,7 @@ export const addTag = async (name: string, rank: number) => {
   };
 
   try {
-    const response = await api.post("/tags/add_tag/", newTag, { withCredentials: true });
+    const response = await api.post("/tags/add-tag/", newTag, { withCredentials: true });
     return response.data.id;
   } catch (error) {
     console.error("There was an error creating the tag:", error);
@@ -68,14 +68,14 @@ export const addTag = async (name: string, rank: number) => {
 export const addGuest = async (guestName: string, groupNumbers: Number[], plusOne: boolean) => {
   const newGuest = {
     name: guestName,
-    groupNumbers,
+    tags: groupNumbers,
     invitation: null,
     confirmation: "unknown",
-    plusOne
+    hasPlusOne: plusOne
   };
 
   try {
-    await api.post("/guests/add_guest/", newGuest, { withCredentials: true });
+    await api.post("/guests/add-guest/", newGuest, { withCredentials: true });
   } catch (error) {
     console.error("There was an error creating the guest:", error);
   }
@@ -141,14 +141,14 @@ export const updateGuestConfirmation = async (
   confirmation: boolean
 ) => {
   try {
-    const guestResponse = await api.get(`/guests/${guestId}/`);
+    const guestResponse = await api.get(`/guests/guests/${guestId}/`);
     const guest = guestResponse.data;
 
     const updatedGuestData = {
       ...guest,
-      confirmation: confirmation ? "yes" : "no",
+      decision: confirmation ? "yes" : "no",
     };
-    const response = await api.patch(`/guests/${guestId}/`, updatedGuestData);
+    const response = await api.patch(`/guests/guests/${guestId}/`, updatedGuestData);
     console.log("Guest confirmation updated:", response.data);
     return response.data;
   } catch (error) {

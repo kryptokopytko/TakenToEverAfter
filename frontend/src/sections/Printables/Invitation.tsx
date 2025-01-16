@@ -3,6 +3,7 @@ import { Body, Heading, Subtitle } from "../../styles/typography";
 import styled from 'styled-components';
 import { useUser } from '../../providers/UserContext';
 import { Guest } from '../../types';
+import { translations } from "../../translations";
 
 interface InvitationProps {
     additionalText?: string;
@@ -34,19 +35,19 @@ const Border = styled.div`
 `;
 
 const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
-    const { account, accountDetails, weddingDetails, guests } = useUser();
+    const { account, accountDetails, weddingDetails, guests, language } = useUser();
     const newGuestList = propsGuestList ? propsGuestList : guests.slice(0, 3);;
     return (
         <Border>
             <Container>
                 <Heading level={1}></Heading>
                 <Heading level={1}>{account.brideName} {weddingDetails?.brideSurname || ""}</Heading>
-                <Subtitle level={1}> ------ and ------ </Subtitle>
+                <Subtitle level={1}> ------ & ------ </Subtitle>
                 <Heading level={1}>{account.groomName} {weddingDetails?.groomSurname || ""}</Heading>
-                <Body size='big'>{mainText ? mainText : "Request the pleasure of your company at the celebration of their marriage"}</Body>
+                <Body size='big'>{mainText ? mainText : translations[language].exampleMainText}</Body>
                 <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails && (weddingDetails.weddingTime)}</Subtitle>
                 {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}
-                <Subtitle level={2}>  {guestText ? guestText : "It would be our honor to celebrate this day with:"}</Subtitle>
+                <Subtitle level={2}>  {guestText ? guestText : translations[language].exampleGuestText}</Subtitle>
 
                 {newGuestList.map((guest, index) => (
                     <span key={index}><Body size='big'>{guest.name}</Body></span>

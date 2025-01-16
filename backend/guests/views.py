@@ -53,7 +53,7 @@ def get_user_invitations(request):
 def add_guest(request):
     account = get_account_from_session(request)
     data = request.data
-    data['account'] = account
+    data['account'] = account.id
 
     serializer = GuestSerializer(data=data)
     if serializer.is_valid():

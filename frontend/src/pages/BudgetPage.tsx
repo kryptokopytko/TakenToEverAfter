@@ -77,7 +77,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         const expenseAmount = Number(inputExpensePrice);
 
         if (!categoryId) {
-            const id = await FunctionsProxy.addCategory(inputCategory);
+            const id = await FunctionsProxy.addExpenseCategory(inputCategory);
             setCategoryId(id);
         } 
 

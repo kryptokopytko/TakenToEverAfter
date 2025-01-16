@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
@@ -33,6 +33,14 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     const [guestText, setGuestText] = useState(translations[language].exampleGuestText);
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
+
+    useEffect(() => {
+        if (language) {
+            setMainText(translations[language].exampleMainText);
+            setAdditionalText(translations[language].exampleAdditionalText);
+            setGuestText(translations[language].exampleGuestText);
+        }
+    }, [language]);
 
     const handleExportPDF = () => {
         const inviteIds = guests.map((_, index) => `invite-${index}`);
