@@ -48,12 +48,10 @@ const GuestPage: React.FC = () => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
     setCurrentGuest(guest);
     if (guest) {
-      console.log(guest);
-
-      
       setSelectedGuestTags(tags.filter(tag => guest.tags.includes(tag.id)));
       setCurrentDecision(guest.decision);
       setHasPlusOne(guest.hasPlusOne);
+      setInvitationId(guest.invitationId);
       const pair = getPartner(guest.name);
       if (pair)
         setPairValue(pair);
@@ -61,6 +59,8 @@ const GuestPage: React.FC = () => {
     } else {
       setSelectedGuestTags([]);
       setCurrentDecision(undefined);
+      setInvitationId(-1);
+      setHasPlusOne(false);
     }
 
   }, [inputValue, guests]);
@@ -105,7 +105,14 @@ const GuestPage: React.FC = () => {
     
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
       if (existingGuest && currentDecision) {
-        FunctionsProxy.updateGuestTags(existingGuest.id, selectedGuestTags.map(tag => tag.id));
+        const updatedGuest = {
+          ...existingGuest, 
+          decision: currentDecision,
+          tags: selectedGuestTags.map(tag => tag.id),
+          invitationId: invitationId,
+          hasPlusOne: hasPlusOne,
+        };
+        FunctionsProxy.updateGuest(updatedGuest);
         setNotification(translations[language].guestModified.replace("{name}", trimmedName));
       } else {
         const newGuestId = await FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne, invitationId );
@@ -241,7 +248,7 @@ const GuestPage: React.FC = () => {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
           <Checkbox
             checked={hasPlusOne}
-            onChange={() => setHasPlusOne(!hasPlusOne)}
+            onChange={() => setHasPlusOne(prev => !prev)}
           />
           {translations[language].hasPlusOne}
         </div>

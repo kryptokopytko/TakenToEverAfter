@@ -94,6 +94,18 @@ export const removeGuest = async (id: Number) => {
   }
 };
 
+export const updateGuest = async (
+  updatedGuest: Guest
+) => {
+  try {
+    const response = await api.put(`/guests/guests/${updatedGuest.id}/`, updatedGuest, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error("There was an error updating the guest:", error);
+    return null;
+  }
+};
+
 export const updateGuestTags = async (
   guestId: number,
   updatedGroupsId: number[]
