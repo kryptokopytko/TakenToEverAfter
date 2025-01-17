@@ -14,6 +14,7 @@ import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
 import { translations } from "../translations";
+import { addGuest } from "../API/DbApi/guests";
 
 const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -30,25 +31,29 @@ const GuestPage: React.FC = () => {
   const [hasPlusOne, setHasPlusOne] = useState(false);
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
   const [arePair, setArePair] = useState(false);
-  const [oneInvite, setOneInvite] = useState(false);
+  const [invitationId, setInvitationId] = useState(-1);
   const FunctionsProxy = useFunctionsProxy();
-  const { guests, tags, language, setGuests, setTags } = useUser();
+  const { guests, tags, language, setGuests, setTags, invitations } = useUser();
+  
   const possibleTags = tags.filter(tag => 
     !selectedGuestTags.some(selectedTag => selectedTag.id === tag.id)
   );
+  
   const getPartner = (guestName: string): string | null => {
     const pair = pairs.find((pair) => pair.guest === guestName);
     return pair ? pair.partner : null;
   };
 
-
   useEffect(() => {
     const guest = guests.find(guest => guest.name.toLowerCase() === inputValue.toLowerCase());
     setCurrentGuest(guest);
     if (guest) {
+      console.log(guest);
+
+      
       setSelectedGuestTags(tags.filter(tag => guest.tags.includes(tag.id)));
       setCurrentDecision(guest.decision);
-      setHasPlusOne(guest.hasPlusOne ?? false);
+      setHasPlusOne(guest.hasPlusOne);
       const pair = getPartner(guest.name);
       if (pair)
         setPairValue(pair);
@@ -70,6 +75,16 @@ const GuestPage: React.FC = () => {
   const allDecisions = guests.map((guest) => guest.decision || 'not invited');
   const decisions = Array.from(new Set(allDecisions));
 
+  const clearForm = () => {
+    setInputValue('');
+    setNewTag('');
+    setNewTagWeight('');
+    setSelectedGuestTags([]);
+    setCurrentGuest(undefined);
+    setCurrentDecision(undefined);
+    setHasPlusOne(false);
+  } 
+
   const handleNewTagWeightChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
     setNewTagWeight(value.replace(/\D/g, ''));
@@ -83,23 +98,31 @@ const GuestPage: React.FC = () => {
   const handleAddOrModifyGuest = async () => {
     const trimmedName = inputValue.trim();
     if (trimmedName) {
+      if (invitationId == -1) {
+        const newInvitationId = await FunctionsProxy.newInvitation();
+        setInvitationId(newInvitationId);
+      }
+    
       const existingGuest = guests.find(guest => guest.name.toLowerCase() === trimmedName.toLowerCase());
       if (existingGuest && currentDecision) {
         FunctionsProxy.updateGuestTags(existingGuest.id, selectedGuestTags.map(tag => tag.id));
         setNotification(translations[language].guestModified.replace("{name}", trimmedName));
       } else {
-        const newInvitationId = await FunctionsProxy.newInvitation();
-        const newGuestId = await FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne );
+        const newGuestId = await FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne, invitationId );
           setNotification(translations[language].guestAdded.replace("{name}", trimmedName));
           setGuests([...guests, {
               id: newGuestId,
               name: trimmedName,
               decision: "unknown",
               tags: selectedGuestTags.map(tag => tag.id),
-              invitationId: newInvitationId,
+              invitationId: invitationId,
               hasPlusOne: hasPlusOne
-          }])
+          }]);
         }
+        setTimeout(() => {
+          setNotification(""); 
+          clearForm();
+      }, 2000);
     } else {
       alert(translations[language].alertEmptyGuestName);
     }
@@ -108,7 +131,12 @@ const GuestPage: React.FC = () => {
   const handleDeleteGuest = () => {
     if (currentGuest) {
       FunctionsProxy.removeGuest(currentGuest.id);
+      setGuests(guests.filter(guest => guest.id != currentGuest.id))
       setNotification(translations[language].guestRemoved.replace("{name}", currentGuest.name));
+      setTimeout(() => {
+        setNotification(""); 
+        clearForm();
+      }, 2000);
     } else {
       alert(translations[language].alertSelectGuestToDelete);
     }
@@ -125,7 +153,7 @@ const GuestPage: React.FC = () => {
 
       setTags([...tags, {id: newTagId, name: trimmedTag, rank: Number(newTagWeight)}]);
       setNewTag('');
-      setOneInvite(false);
+      setNewTagWeight('');
     } else {
       alert(translations[language].alertTagEmptyOrExists);
     }
@@ -148,31 +176,29 @@ const GuestPage: React.FC = () => {
     ]);
   };
 
-  const removePair = (guestName: string, partnerName: string) => {
-    setPairs((prevPairs) =>
-      prevPairs.filter(
-        (pair) =>
-          !(
-            (pair.guest === guestName && pair.partner === partnerName) ||
-            (pair.guest === partnerName && pair.partner === guestName)
-          )
-      )
-    );
-  };
-
-  const handleAddOrRemovePartner = () => {
+  const handleAddOrRemovePartner = async () => {
     if (currentGuest && pairValue) {
-      if (pairExists(currentGuest.name, pairValue)) {
-        removePair(currentGuest.name, pairValue);
-        setNotification(
-          translations[language].removedPartner.replace("{name}", pairValue)
-        );
-      } else {
+        const partner = guests.find(guest => guest.name.toLowerCase() === pairValue.toLowerCase());
+        if (!partner) {
+          addGuest(pairValue, [], false, currentGuest.invitationId);
+          const newGuestId = await FunctionsProxy.addGuest(pairValue, [], false, currentGuest.invitationId);
+          setGuests([...guests, {
+              id: newGuestId,
+              name: pairValue,
+              decision: "unknown",
+              tags: [],
+              invitationId: currentGuest.invitationId,
+              hasPlusOne: false
+          }]);
+        }
+  
         addPair(currentGuest.name, pairValue);
         setNotification(
           translations[language].addedPartner.replace("{name}", pairValue)
         );
-      }
+      setTimeout(() => {
+        setNotification(""); 
+      }, 2000);
     } else {
       alert(translations[language].alertSelectGuestAndPartner);
     }
@@ -219,6 +245,28 @@ const GuestPage: React.FC = () => {
           />
           {translations[language].hasPlusOne}
         </div>
+
+        <DropdownSelector
+          title={translations[language].invitation}
+          initialSelectedOption={currentGuest ? currentGuest.invitationId.toString() : "new"}
+          options={[
+            ...invitations.map((invitation) => {
+              const associatedGuests = guests
+                .filter((guest) => guest.invitationId === invitation.id)
+                .map((guest) => guest.name)
+                .join(", ");
+              return {
+                label: `${invitation.id} (${associatedGuests || "No guests"})`,
+                value: invitation.id.toString(),
+              };
+            }),
+            ...(currentGuest
+              ? [] 
+              : [{ label: translations[language].newInvitation, value: "new" }]), 
+          ]}
+          onOptionSelect={(selectedOption) => setInvitationId(Number(selectedOption))}
+        />
+
         <ButtonContainer>
           <Button onClick={handleAddOrModifyGuest}>
             {currentGuest ? translations[language].modify : translations[language].add}
@@ -243,6 +291,7 @@ const GuestPage: React.FC = () => {
             </Button>
           </div>
         )}
+
         <Subtitle level={2}>{translations[language].currentTags}:</Subtitle>
         {selectedGuestTags.length > 0 && (
           <TagContainer>
@@ -251,10 +300,6 @@ const GuestPage: React.FC = () => {
                 {tag.name}
               </StyledTag>
             ))}
-
-            <StyledTag isOneInvite={false} key={"invitation"} onClick={() => {}}>
-              {currentGuest?.invitationId}
-            </StyledTag>
           </TagContainer>
         )}
         {tags.length > 0 && (
@@ -270,6 +315,7 @@ const GuestPage: React.FC = () => {
           </>
         )}
 
+        <Subtitle level={2}>{translations[language].createTag}:</Subtitle>
         <div style={{ margin: '0.5rem' }}>
           {translations[language].newTagName}
           <Input
@@ -286,14 +332,6 @@ const GuestPage: React.FC = () => {
             placeholder={translations[language].newTagWeightPlaceholder}
             type="number"
           />
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '1rem' }}>
-          <Checkbox
-            checked={oneInvite}
-            onChange={() => setOneInvite(!oneInvite)}
-          />
-          {translations[language].tagInviteQuestion}
         </div>
 
         <ButtonContainer>

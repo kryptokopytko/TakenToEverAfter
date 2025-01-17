@@ -51,7 +51,7 @@ export interface Guest {
   decision: Decision;
   tags: number[];
   invitationId: number;
-  hasPlusOne?: boolean;
+  hasPlusOne: boolean;
 }
 
 export interface Tag {

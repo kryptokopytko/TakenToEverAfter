@@ -23,10 +23,11 @@ class GuestSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     hasPlusOne = serializers.BooleanField(source='plus_one')
     account = serializers.PrimaryKeyRelatedField(read_only=True) 
+    invitationId = serializers.PrimaryKeyRelatedField(queryset=Invitation.objects.all(), source='invitation')
 
     class Meta:
         model = Guest
-        fields = ('id', 'account', 'name', 'tags', 'invitation', 'decision', 'hasPlusOne')
+        fields = ('id', 'account', 'name', 'tags', 'invitationId', 'decision', 'hasPlusOne')
 
 class EmailTagSerializer(serializers.ModelSerializer):
     class Meta:

@@ -60,7 +60,6 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
       </SummaryContainer>
       <List
         isHomePage={isHomePage} 
-        list={guests} 
         isExpanded={isExpanded} 
       />
       <ButtonContainer>

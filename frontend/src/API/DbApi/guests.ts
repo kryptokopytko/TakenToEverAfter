@@ -25,8 +25,8 @@ export const getGuestsInfo = async () => {
       name: guest.name,
       decision: guest.decision,
       tags: guest.tags,
-      invitationId: guest.invitation?.id || null,
-      hasPlusOne: guest.plus_one
+      invitationId: guest.invitationId,
+      hasPlusOne: guest.hasPlusOne
     }));
 
     const tags: Tag[] = tagsResponse.data.tags.map((tag: any) => ({
@@ -65,11 +65,11 @@ export const addTag = async (name: string, rank: number) => {
   }
 };
 
-export const addGuest = async (guestName: string, groupNumbers: Number[], plusOne: boolean) => {
+export const addGuest = async (guestName: string, groupNumbers: Number[], plusOne: boolean, invitationId: number) => {
   const newGuest = {
     name: guestName,
     tags: groupNumbers,
-    invitation: null,
+    invitationId: invitationId,
     confirmation: "unknown",
     hasPlusOne: plusOne
   };

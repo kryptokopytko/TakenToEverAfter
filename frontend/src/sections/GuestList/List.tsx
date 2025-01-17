@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Body, Label } from "../../styles/typography";
 import { GridContainer } from "../../styles/section";
-import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
 import { StyledTag, TagContainer } from "../../styles/tag";
 import useFunctionsProxy from "../../API/FunctionHandler";
@@ -31,21 +30,32 @@ const EmptyMessage = styled(Label)`
 `;
 
 interface ListProps {
-  list: Guest[];
   isExpanded: boolean;
   isHomePage?: boolean;
 }
 
-const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
+const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
   const FunctionsProxy = useFunctionsProxy();
-  const { tags, language } = useUser();
+  const { tags, language, guests, setGuests } = useUser();
+
+  function handOutInvitation(invitationId: number) {
+    FunctionsProxy.handOutInvitation(invitationId);
+  }
+  
+  function handleDecision(guestId: number, decision: boolean) {
+    FunctionsProxy.updateGuestConfirmation(guestId, decision);
+    setGuests(
+      guests.map((guest) =>
+        guest.id === guestId ? { ...guest, decision: decision? "yes" : "no" } : guest)
+    )
+  }
 
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">
-      {list.length === 0 ? (
+      {guests.length === 0 ? (
         <EmptyMessage>{translations[language].noGuests}</EmptyMessage>
       ) : (
-        list.map((guest, index) => (
+        guests.map((guest, index) => (
           <GuestItem key={index}>
             <Body size="big">{guest.name}</Body>
             <TagContainer>
@@ -63,13 +73,13 @@ const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage }) => {
             </TagContainer>
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
-                <Button variant="transparent" onClick={() => FunctionsProxy.handOutInvitation(guest.invitationId)}>
+                <Button variant="transparent" onClick={() => handOutInvitation(guest.invitationId)}>
                   {translations[language].invite}
                 </Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.updateGuestConfirmation(guest.id, true)}>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, true)}>
                   {translations[language].yes}
                 </Button>
-                <Button variant="transparent" onClick={() => FunctionsProxy.updateGuestConfirmation(guest.id, false)}>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, false)}>
                   {translations[language].no}
                 </Button>
               </DecisionButtons>
