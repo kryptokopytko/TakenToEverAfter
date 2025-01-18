@@ -1,32 +1,28 @@
 from rest_framework import serializers
 from .models import ExpenseCard, Expense, PotentialExpenseCard, PotentialExpense
 
-class ExpenseCardSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source='name')
-
-    class Meta:
-        model = ExpenseCard
-        fields = ('id', 'account', 'category')
-
-
 class ExpenseSerializer(serializers.ModelSerializer):
     amount = serializers.IntegerField(source='price')
     description = serializers.CharField(source='notes')
+    account = serializers.PrimaryKeyRelatedField(read_only=True) 
+    expenseCard = serializers.PrimaryKeyRelatedField(source='expense_card', read_only=True)
 
     class Meta:
         model = Expense
-        fields = ('id', 'account', 'expense_card', 'name', 'amount', 'description')
+        fields = ('id', 'account', 'expenseCard', 'name', 'amount', 'description')
 
-
-class PotentialExpenseCardSerializer(serializers.ModelSerializer):
+class ExpenseCardSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(read_only=True) 
     category = serializers.CharField(source='name')
-
+    expenses = ExpenseSerializer(many=True, read_only=True)
+    
     class Meta:
-        model = PotentialExpenseCard
-        fields = ('id', 'account', 'category')
+        model = ExpenseCard
+        fields = ('id', 'account', 'category', 'expenses')
 
 
 class PotentialExpenseSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(read_only=True) 
     amount = serializers.IntegerField(source='price')
     description = serializers.CharField(source='notes')
     pros = serializers.CharField()
@@ -35,6 +31,15 @@ class PotentialExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PotentialExpense
         fields = ('id', 'account', 'expense_card', 'name', 'amount', 'description', 'pros', 'cons')
+
+class PotentialExpenseCardSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(read_only=True) 
+    category = serializers.CharField(source='name')
+    options = ExpenseSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PotentialExpenseCard
+        fields = ('id', 'account', 'category', 'options')
 
 class EmailExpenseSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='expense_card.name')

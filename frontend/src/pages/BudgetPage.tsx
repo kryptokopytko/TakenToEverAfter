@@ -9,6 +9,7 @@ import { Expense } from "../types";
 import { useUser } from "../providers/UserContext";
 import useFunctionsProxy from "../API/FunctionHandler";
 import { translations } from "../translations";
+import { Description } from "../styles/Description";
 
 
 interface BudgetPageProps { }
@@ -23,7 +24,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const [inputExpenseDescription, setInputExpenseDescription] = useState('');
     const FunctionsProxy = useFunctionsProxy();
 
-    const { expenseCards, language } = useUser();
+    const { expenseCards, language, setExpenseCards } = useUser();
 
     const expenseNames = expenseCards.flatMap(expenseCard =>
         expenseCard.expenses.map(expense => expense.name.toLowerCase())
@@ -77,11 +78,28 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         const expenseAmount = Number(inputExpensePrice);
 
         if (!categoryId) {
-            const id = await FunctionsProxy.addExpenseCategory(inputCategory);
-            setCategoryId(id);
-        } 
+            const newCategoryId = await FunctionsProxy.addExpenseCategory(inputCategory);
+            setCategoryId(newCategoryId);
+            const expenseId = await FunctionsProxy.addExpense(newCategoryId, inputExpenseName, expenseAmount, inputExpenseDescription);
+            setExpenseCards([
+                ...expenseCards,
+                {
+                    id: newCategoryId,
+                    category: inputCategory,
+                    expenses: [
+                        {
+                            id: expenseId,
+                            name: inputExpenseName,
+                            amount: expenseAmount,
+                            description: inputExpenseDescription
+                        }
+                    ]
+                }
+            ]);
+        } else {
+            FunctionsProxy.addExpense(categoryId, inputExpenseName, expenseAmount, inputExpenseDescription);
+        }
 
-        FunctionsProxy.addExpense(categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
         setNotification(
             translations[language].expenseAdded
               .replace('{name}', inputExpenseName)

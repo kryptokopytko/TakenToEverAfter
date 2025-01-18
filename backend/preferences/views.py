@@ -6,12 +6,14 @@ from accounts.views import get_account_from_session
 from .models import ColorTheme, ViewPreferences
 from .serializers import ColorThemeSerializer, ViewPreferencesSerializer
 from accounts.models import Account
+from accounts.views import AccountModelViewSet
 
-class ColorThemeView(viewsets.ModelViewSet):
+
+class ColorThemeView(AccountModelViewSet):
     serializer_class = ColorThemeSerializer
     queryset = ColorTheme.objects.all()
 
-class ViewPreferencesView(viewsets.ModelViewSet):
+class ViewPreferencesView(AccountModelViewSet):
     serializer_class = ViewPreferencesSerializer
     queryset = ViewPreferences.objects.all()
 

@@ -1,26 +1,15 @@
 import api from "./axiosInstance";
 import { Guest, Tag, Invitation } from "../../types";
 
-
-export const getGuests = async () => {
-  try {
-    const response = await api.get("/guests/");
-    console.log("List of guests downloaded successfully.");
-    return response.data;
-  } catch (error) {
-    console.error("There was an error fetching the guests:", error);
-  }
-};
-
 export const getGuestsInfo = async () => {
   try {
     const [guestsResponse, tagsResponse, invitationsResponse] = await Promise.all([
-      api.get("/guests/user-guests/",  { withCredentials: true }),
-      api.get("/guests/user-tags/",  { withCredentials: true }),
-      api.get("/guests/user-invitations/",  { withCredentials: true })
+      api.get("/guests/guests/",  { withCredentials: true }),
+      api.get("/guests/tags/",  { withCredentials: true }),
+      api.get("/guests/invitations/",  { withCredentials: true })
     ]);
 
-    const guests: Guest[] = guestsResponse.data.guests.map((guest: any) => ({
+    const guests: Guest[] = guestsResponse.data.map((guest: any) => ({
       id: guest.id,
       name: guest.name,
       decision: guest.decision,
@@ -29,13 +18,13 @@ export const getGuestsInfo = async () => {
       hasPlusOne: guest.hasPlusOne
     }));
 
-    const tags: Tag[] = tagsResponse.data.tags.map((tag: any) => ({
+    const tags: Tag[] = tagsResponse.data.map((tag: any) => ({
       id: tag.id,
       name: tag.name,
       rank: tag.rank
     }));
 
-    const invitations: Invitation[] = invitationsResponse.data.invitations.map((invitation: any) => ({
+    const invitations: Invitation[] = invitationsResponse.data.map((invitation: any) => ({
       id: invitation.id,
       handedOut: invitation.handed_out
     }));

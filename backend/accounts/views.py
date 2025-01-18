@@ -48,6 +48,10 @@ def get_account_from_session(request):
         raise APIException("Account not found")
     
 class AccountModelViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        account = get_account_from_session(self.request)
+        return self.queryset.filter(account=account)
+
     def perform_create(self, serializer):
         account = get_account_from_session(self.request)
         serializer.save(account=account)

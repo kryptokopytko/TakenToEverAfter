@@ -84,7 +84,7 @@ const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
                 </Button>
               </DecisionButtons>
             ) : (
-              <Label size="small">{guest.decision}</Label>
+              <Label size="small">{translations[language][guest.decision]}</Label>
             )}
           </GuestItem>
         ))

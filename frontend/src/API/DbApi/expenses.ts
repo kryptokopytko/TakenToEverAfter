@@ -8,13 +8,13 @@ export const addExpense = async (
 ) => {
   try {
     const newExpense = {
-      expense_card: expenseCard,
+      expenseCard,
       name,
       amount: price,
       description: notes,
     };
 
-    const response = await api.post("/expenses/add-expense/", newExpense, {withCredentials: true});
+    const response = await api.post("/expenses/expenses/", newExpense, {withCredentials: true});
     console.log("Expense created:", response.data);
     return response.data;
   } catch (error) {
@@ -26,7 +26,7 @@ export const addExpense = async (
 export const addExpenseCategory = async (name: string) => {
   try {
     const response = await api.post(
-      "/expenses/add-expense-category/",
+      "/expenses/expense-cards/",
       { category: name },
       { withCredentials: true }
     );
@@ -51,14 +51,14 @@ export const removeExpense = async (id: number) => {
 
 export const updateExpense = async (
   id: number,
-  expense_card: number,
+  expenseCard: number,
   name: string,
   price: number,
   notes: string | null = null
 ) => {
   try {
     const updatedExpense = {
-      expense_card,
+      expenseCard,
       name,
       price,
       notes,
@@ -123,11 +123,11 @@ export const transferPotentialExpenseToExpense = async (
 
 export const getExpenses = async () => {
   try {
-    const response = await api.get(`/expenses/user-expenses`, {
+    const expensesResponse = await api.get(`/expenses/expense-cards`, {
       withCredentials: true
     });
 
-    const expenseCards = response.data.expenseCards.map((card: any) => {
+    const expenseCards = expensesResponse.data.map((card: any) => {
       return {
         id: card.id,
         category: card.category,
@@ -140,7 +140,10 @@ export const getExpenses = async () => {
       };
     });
 
-    const choices = response.data.choices.map((choice: any) => {
+    const choicesResponse = await api.get(`/expenses/choice-cards`, {
+      withCredentials: true
+    });
+    const choices = choicesResponse.data.map((choice: any) => {
       return {
         id: choice.id,
         category: choice.category,

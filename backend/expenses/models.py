@@ -18,7 +18,7 @@ class PotentialExpenseCard(models.Model):
 
 class PotentialExpense(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 
-    expense_card = models.ForeignKey(PotentialExpenseCard, on_delete=models.CASCADE, related_name='expenses')
+    expense_card = models.ForeignKey(PotentialExpenseCard, on_delete=models.CASCADE, related_name='options')
     name = models.CharField(max_length=255)
     price = models.IntegerField(null=True)
     pros = models.TextField(null=True)

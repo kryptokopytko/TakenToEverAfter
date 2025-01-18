@@ -9,20 +9,22 @@ from .serializers import (
     TaskAssignmentSerializer
 )
 from .models import ToDoListCategory, Task, TaskAssignee, TaskAssignment
+from accounts.views import AccountModelViewSet
 
-class ToDoListCategoryView(viewsets.ModelViewSet):
+
+class ToDoListCategoryView(AccountModelViewSet):
     serializer_class = ToDoListCategorySerializer
     queryset = ToDoListCategory.objects.all()
 
-class TaskView(viewsets.ModelViewSet):
+class TaskView(AccountModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
-class TaskAssigneeView(viewsets.ModelViewSet):
+class TaskAssigneeView(AccountModelViewSet):
     serializer_class = TaskAssigneeSerializer
     queryset = TaskAssignee.objects.all()
 
-class TaskAssignmentView(viewsets.ModelViewSet):
+class TaskAssignmentView(AccountModelViewSet):
     serializer_class = TaskAssignmentSerializer
     queryset = TaskAssignment.objects.all()
     
