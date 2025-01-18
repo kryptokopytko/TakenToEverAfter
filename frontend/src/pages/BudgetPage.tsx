@@ -9,7 +9,6 @@ import { Expense } from "../types";
 import { useUser } from "../providers/UserContext";
 import useFunctionsProxy from "../API/FunctionHandler";
 import { translations } from "../translations";
-import { Description } from "../styles/Description";
 
 
 interface BudgetPageProps { }
@@ -27,28 +26,36 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
     const { expenseCards, language, setExpenseCards } = useUser();
 
     const expenseNames = expenseCards.flatMap(expenseCard =>
-        expenseCard.expenses.map(expense => expense.name.toLowerCase())
+        expenseCard.expenses
     );
 
     const categories = expenseCards.map(expenseCard => expenseCard.category.toLowerCase());
 
     useEffect(() => {
-        const normalizedCategory = inputCategory.trim().toLowerCase();
         const normalizedExpenseName = inputExpenseName.trim().toLowerCase();
-        const category = expenseCards.find(expenseCard => expenseCard.category.toLowerCase() === normalizedCategory);
+        const category = expenseCards.find(expenseCard => expenseCard.expenses.some(expense => expense.name == normalizedExpenseName));
 
         if (category) {
-            setCategoryId(category.id);
             const existingSubExpense = category.expenses.find(expense => expense.name.toLowerCase() === normalizedExpenseName);
+            
             if (existingSubExpense) {
                 setExistingExpense(existingSubExpense);
                 setInputExpensePrice(existingSubExpense.amount.toString());
+                setInputCategory(category.category);
+                setInputExpenseDescription(existingSubExpense.description);
             } else {
                 setExistingExpense(null);
+                setInputExpensePrice('');
+                setInputCategory('');
+                setInputExpenseDescription('');
             }
         } else {
             setExistingExpense(null);
+            setInputExpensePrice('');
+            setInputCategory('');
+            setInputExpenseDescription('');
         }
+        
     }, [inputExpenseName, inputCategory, expenseCards]);
 
     const clear = () => {
@@ -142,7 +149,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 <GuidedInput
                     value={inputExpenseName}
                     setInputValue={(name) => setInputExpenseName(name)}
-                    suggestions={expenseNames.map(name => name.charAt(0).toUpperCase() + name.slice(1))}
+                    suggestions={expenseNames.map(expense => expense.name.charAt(0).toUpperCase() + expense.name.slice(1))}
                     placeholder={translations[language].expenseNamePlaceholder}
                     onChange={(e) => setInputExpenseName(e.target.value)}
                 />
