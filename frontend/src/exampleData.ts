@@ -62,21 +62,24 @@ const guests: Guest[] = [
     name: "Baby Smurf",
     decision: "yes",
     tags: [0],
-    invitationId: 0
+    invitationId: 0,
+    hasPlusOne: true
   },
   {
     id: 1,
     name: "Baker Smurf",
     decision: "yes",
     tags: [0],
-    invitationId: 0
+    invitationId: 0,
+    hasPlusOne: false
   },
   {
     id: 2,
     name: "Brainy Smurf",
     decision: "unknown",
     tags: [1],
-    invitationId: 1
+    invitationId: 1,
+    hasPlusOne: false
   },
   {
     id: 3,
@@ -99,21 +102,24 @@ const guests: Guest[] = [
     name: "Dizzy Smurf",
     decision: "yes",
     tags: [0],
-    invitationId: 2
+    invitationId: 2,
+    hasPlusOne: false
   },
   {
     id: 6,
     name: "Farmer Smurf",
     decision: "unknown",
     tags: [0],
-    invitationId: 2
+    invitationId: 2,
+    hasPlusOne: false
   },
   {
     id: 7,
     name: "Greedy Smurf",
     decision: "no",
     tags: [1],
-    invitationId: 1
+    invitationId: 1,
+    hasPlusOne: false
   },
 ];
 

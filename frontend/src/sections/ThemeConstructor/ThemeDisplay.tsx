@@ -7,6 +7,7 @@ import { Card } from "../../styles/card";
 import { useTheme } from "../../providers/ThemeContext";
 import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
+import useFunctionsProxy from "../../API/FunctionHandler";
 
 interface ThemeDisplayProps {
     themes: Record<string, any>;
@@ -23,6 +24,7 @@ interface ThemeDisplayProps {
 const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, inputValue, onChange, isSaved, handleSave, handleDelete }) => {
     const { setTheme } = useTheme();
     const { language } = useUser();
+    const FunctionsProxy = useFunctionsProxy();
 
     const handleCopyTheme = (theme: Record<string, any>) => {
         const hslColors = Object.values(theme)
@@ -34,6 +36,11 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
             .then(() => alert(translations[language].themeColorsCopied))
             .catch(err => console.error("Failed to copy colors to clipboard: ", err));
     };
+
+    const pickTheme = async (themeKey: string) => {
+        setTheme(themes[themeKey]);
+        await FunctionsProxy.pickTheme(themeKey);
+    }
 
     return (
         <div>
@@ -67,12 +74,12 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
                             </ColorRow>
                             {!isSaved ? (
                                 <ButtonContainer>
-                                    <Button onClick={() => setTheme(themes[themeKey])}>{translations[language].pick}</Button>
+                                    <Button onClick={() => pickTheme(themeKey)}>{translations[language].pick}</Button>
                                     <Button onClick={() => handleSave(themeKey)}>{translations[language].save}</Button>
                                 </ButtonContainer>
                             ) : (
                                 <ButtonContainer>
-                                    <Button onClick={() => setTheme(themes[themeKey])}>{translations[language].pick}</Button>
+                                    <Button onClick={() => pickTheme(themeKey)}>{translations[language].pick}</Button>
                                     <Button onClick={() => handleDelete(themeKey)}>{translations[language].delete}</Button>
                                     <Button onClick={() => handleCopyTheme(themes[themeKey])}>{translations[language].copyTheme}</Button>
                                 </ButtonContainer>

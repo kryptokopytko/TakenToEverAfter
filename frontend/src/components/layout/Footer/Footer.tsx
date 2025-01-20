@@ -6,6 +6,7 @@ import { sectionLinks, sections } from '../sections';
 import { useUser } from '../../../providers/UserContext';
 import { Slider } from '../../../Slider';
 import { translations } from "../../../translations";
+import useFunctionsProxy from '../../../API/FunctionHandler';
 
 interface FooterProps { }
 
@@ -15,9 +16,11 @@ const Footer: React.FC<FooterProps> = () => {
   const currentSectionName = sectionLinks.find((section) => section.link === viewLocation) ?? {name: "Home"};
   const currentSection = sections.find((section) =>
     section.english.name === currentSectionName.name);
+  const FunctionsProxy = useFunctionsProxy();
 
-  const handleFontSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFontSizeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFontSize(Number(e.target.value));
+    await FunctionsProxy.changeFontSize(Number(e.target.value));
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);

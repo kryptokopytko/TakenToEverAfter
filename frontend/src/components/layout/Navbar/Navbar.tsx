@@ -10,6 +10,7 @@ import DropdownSelector from "../../ui/Dropdown/Dropdown";
 import { logout } from "../../../API/DbApi/DBApi";
 import { useNavigate } from "react-router-dom";
 import { translations } from "../../../translations";
+import useFunctionsProxy from "../../../API/FunctionHandler";
 
 const Navbar: React.FC = () => {
 
@@ -17,15 +18,16 @@ const Navbar: React.FC = () => {
   const { setTheme, theme, themes } = useTheme();
 
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
+  const FunctionsProxy = useFunctionsProxy();
 
-  const handleThemeChange = (selected: string | string[]) => {
+  const handleThemeChange = async (selected: string | string[]) => {
     const selectedKey = Array.isArray(selected) ? selected[0] : selected;
     const selectedTheme = themes[selectedKey as keyof typeof themes];
     if (selectedTheme) {
       setTheme(selectedTheme);
+      await FunctionsProxy.pickTheme(selectedKey);
     }
   };
-
 
   const handleLanguageChange = () => {
     setLanguage(language === "english" ? "polish" : "english");

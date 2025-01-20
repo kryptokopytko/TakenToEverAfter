@@ -103,6 +103,7 @@ const AppContent = () => {
         const {preferences, themes} = await getUserPreferences();
         setFontSize(preferences.fontSize);
         setThemes(themes);
+        setTheme(initialThemes.nude);
         setTheme(preferences.colorTheme || initialThemes.nude);
         setLanguage(preferences.language);
       } else {

@@ -50,7 +50,13 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
         const themeData = newThemesCopy[themeKey];
         
         FunctionsProxy.addNewTheme(newName, themeData);
-
+        
+        const { [themeKey]: removed, ...restOfThemes } = themes;
+        setThemes(
+            { ...restOfThemes, [newName]: themeData }
+        );
+          
+          
         setInputValues((prevValues) => {
             const updatedValues = { ...prevValues };
             delete updatedValues[themeKey];
