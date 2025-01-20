@@ -40,7 +40,7 @@ export const addExpenseCategory = async (name: string) => {
 
 export const removeExpense = async (id: number) => {
   try {
-    const response = await api.delete(`/expenses/expenses/${id}/`);
+    const response = await api.delete(`/expenses/expenses/${id}/`, {withCredentials: true});
     console.log(`Expense with ID ${id} removed successfully.`);
     return response.data;
   } catch (error) {
@@ -53,18 +53,18 @@ export const updateExpense = async (
   id: number,
   expenseCard: number,
   name: string,
-  price: number,
+  amount: number,
   notes: string | null = null
 ) => {
   try {
     const updatedExpense = {
       expenseCard,
       name,
-      price,
+      amount,
       notes,
     };
 
-    const response = await api.patch(`/expenses/expenses/${id}/`, updatedExpense);
+    const response = await api.patch(`/expenses/expenses/${id}/`, updatedExpense, { withCredentials: true });
     console.log("Expense updated:", response.data);
     return response.data;
   } catch (error) {
@@ -98,7 +98,7 @@ export const transferPotentialExpenseToExpense = async (
 ) => {
   try {
     const potentialExpenseResponse = await api.get(
-      `/potential-expenses/${potentialExpenseId}/`
+      `/potential-expenses/${potentialExpenseId}/`, {withCredentials: true}
     );
     const potentialExpense = potentialExpenseResponse.data;
 

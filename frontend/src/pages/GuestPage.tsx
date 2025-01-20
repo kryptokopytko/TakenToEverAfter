@@ -113,6 +113,7 @@ const GuestPage: React.FC = () => {
           hasPlusOne: hasPlusOne,
         };
         FunctionsProxy.updateGuest(updatedGuest);
+        setGuests(guests.map(guest => guest.id != existingGuest.id? guest : updatedGuest));
         setNotification(translations[language].guestModified.replace("{name}", trimmedName));
       } else {
         const newGuestId = await FunctionsProxy.addGuest(trimmedName, selectedGuestTags.map(tag => tag.id), hasPlusOne, invitationId );

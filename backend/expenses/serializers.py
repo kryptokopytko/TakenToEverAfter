@@ -5,7 +5,8 @@ class ExpenseSerializer(serializers.ModelSerializer):
     amount = serializers.IntegerField(source='price')
     description = serializers.CharField(source='notes')
     account = serializers.PrimaryKeyRelatedField(read_only=True) 
-    expenseCard = serializers.PrimaryKeyRelatedField(source='expense_card', read_only=True)
+    # expenseCard = serializers.PrimaryKeyRelatedField(source='expense_card', read_only=True)
+    expenseCard = serializers.PrimaryKeyRelatedField(source='expense_card', queryset=ExpenseCard.objects.all())
 
     class Meta:
         model = Expense

@@ -33,26 +33,33 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
     useEffect(() => {
         const normalizedExpenseName = inputExpenseName.trim().toLowerCase();
-        const category = expenseCards.find(expenseCard => expenseCard.expenses.some(expense => expense.name == normalizedExpenseName));
-
+        const category = expenseCards.find(expenseCard => expenseCard.expenses.some(expense =>
+             expense.name.trim().toLowerCase() == normalizedExpenseName
+        ));
+        
         if (category) {
+            setCategoryId(category.id);
             const existingSubExpense = category.expenses.find(expense => expense.name.toLowerCase() === normalizedExpenseName);
-            
-            if (existingSubExpense) {
-                setExistingExpense(existingSubExpense);
-                setInputExpensePrice(existingSubExpense.amount.toString());
-                setInputCategory(category.category);
-                setInputExpenseDescription(existingSubExpense.description);
-            } else {
-                setExistingExpense(null);
-                setInputExpensePrice('');
-                setInputCategory('');
-                setInputExpenseDescription('');
-            }
+            setExistingExpense(existingSubExpense!);
+            setInputExpensePrice(existingSubExpense!.amount.toString());
+            setInputCategory(category.category);
+            setInputExpenseDescription(existingSubExpense!.description);
         } else {
+            const normalizedCategory = inputCategory.trim().toLowerCase();
+            const category = expenseCards.find(expenseCard => expenseCard.category == normalizedCategory);
+        
+            if (category && inputExpenseName != '') {
+                setCategoryId(category.id);
+            } else {
+                setCategoryId(null);
+            }
+
+            if (inputExpenseName == '') {
+                setInputCategory('');
+            }
+
             setExistingExpense(null);
             setInputExpensePrice('');
-            setInputCategory('');
             setInputExpenseDescription('');
         }
         
@@ -67,14 +74,54 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
     const handleUpdateExpense = async () => {
         const expenseAmount = Number(inputExpensePrice);
+        const updatedExpense = {
+            id: existingExpense!.id,
+            name: inputExpenseName,
+            amount: expenseAmount,
+            description: inputExpenseDescription
+        };
 
         if (!categoryId) {
             const id = await FunctionsProxy.addCategory(inputCategory);
             setCategoryId(id);
-        } 
+            FunctionsProxy.updateExpense(existingExpense!.id, id, inputExpenseName, expenseAmount, inputExpenseDescription);
+            setExpenseCards([
+                ...expenseCards.map(card => {
+                    if (card.expenses.some(expense => expense.id === existingExpense?.id)) {
+                        return {
+                            ...card,
+                            expenses: card.expenses.filter(expense => expense.id !== existingExpense?.id)
+                        };
+                    }
+                    return card;
+                }),
+                {
+                    category: inputCategory,
+                    id: id,
+                    expenses: [updatedExpense]
+                }
+            ]);
+        } else {
+            FunctionsProxy.updateExpense(existingExpense!.id, categoryId, inputExpenseName, expenseAmount, inputExpenseDescription);
+            setExpenseCards(
+                expenseCards.map(card => {
+                    if (card.expenses.some(expense => expense.id === existingExpense?.id && card.id != categoryId)) {
+                        return {
+                            ...card,
+                            expenses: card.expenses.filter(expense => expense.id !== existingExpense?.id)
+                        };
+                    }
+                    if (card.id == categoryId) {
+                        return {
+                            ...card,
+                            expenses: card.expenses.map(expense => expense.id == existingExpense?.id? updatedExpense : expense)
+                        };
+                    }
+                    return card;
+                })
+            );
+        }
 
-        FunctionsProxy.updateExpense(existingExpense!.id, categoryId!, inputExpenseName, expenseAmount, inputExpenseDescription);
-        
         setNotification(
             translations[language].expenseUpdated.replace('{name}', inputExpenseName)
           );
@@ -104,7 +151,26 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
                 }
             ]);
         } else {
-            FunctionsProxy.addExpense(categoryId, inputExpenseName, expenseAmount, inputExpenseDescription);
+            const expenseId = await FunctionsProxy.addExpense(categoryId, inputExpenseName, expenseAmount, inputExpenseDescription);
+            setExpenseCards(
+                expenseCards.map(card => {
+                    if (card.id === categoryId) {
+                        return {
+                            ...card,
+                            expenses: [
+                                ...card.expenses,
+                                {
+                                    id: expenseId,
+                                    name: inputExpenseName,
+                                    amount: expenseAmount,
+                                    description: inputExpenseDescription
+                                }
+                            ]
+                        };
+                    }
+                    return card;
+                })
+            );
         }
 
         setNotification(
@@ -120,6 +186,12 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
     const handleRemoveExpense = () => {
         FunctionsProxy.removeExpense(existingExpense!.id);
+        setExpenseCards(
+            expenseCards.map(card => ({
+                ...card,
+                expenses: card.expenses.filter(expense => expense.id !== existingExpense!.id)
+            }))
+        );
         setNotification(
             translations[language].expenseRemoved
               .replace('{name}', inputExpenseName)
