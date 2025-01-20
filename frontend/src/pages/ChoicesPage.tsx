@@ -5,8 +5,9 @@ import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { useEffect, useState } from "react";
-import { initialChoices } from "../exampleData";
-import { addChoice, removeChoice, updateChoice } from "../DBApi";
+import useFunctionsProxy from "../API/FunctionHandler";
+import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 interface ChoicesPageProps { }
 
@@ -14,119 +15,234 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [choiceName, setChoiceName] = useState('');
     const [choiceAmount, setChoiceAmount] = useState('');
     const [choiceCategory, setChoiceCategory] = useState('');
-    const [choices, setChoices] = useState(initialChoices);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
     const [existingChoice, setExistingChoice] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [choiceDescription, setChoiceDescription] = useState('');
+    const [pros, setPros] = useState('');
+    const [cons, setCons] = useState('');
+    const FunctionsProxy = useFunctionsProxy();
+    const { choices, setChoices, language } = useUser();
 
     useEffect(() => {
-        const normalizedChoiceName = choiceName.trim().toLowerCase();
-        const normalizedCategory = choiceCategory.trim().toLowerCase();
-
-        const foundChoice = choices.find(choice =>
-            choice.choice.toLowerCase() === normalizedCategory &&
-            choice.options.some(option => option.option.toLowerCase() === normalizedChoiceName)
-        );
-
-        if (foundChoice) {
-            setExistingChoice(foundChoice);
-            setChoiceAmount(foundChoice.options.find(option => option.option.toLowerCase() === normalizedChoiceName)?.amount.toString() || '');
-        } else {
-            setExistingChoice(null);
-        }
-    }, [choiceName, choiceCategory, choices]);
-
-    const handleAddChoice = () => {
-        const parsedAmount = parseFloat(choiceAmount);
-
-        const categoryIndex = choices.findIndex(choice => choice.choice.toLowerCase() === choiceCategory.toLowerCase());
-        const choiceExists = categoryIndex !== -1 && choices[categoryIndex].options.some(option => option.option.toLowerCase() === choiceName.toLowerCase());
-
-        if (choiceExists) {
-            setNotification(`Choice "${choiceName}" already exists in category "${choiceCategory}"`);
-            setTimeout(() => setNotification(null), notificationTimeOut);
-            return;
-        }
-
-        if (categoryIndex === -1) {
-            setChoices(prevChoices => [
-                ...prevChoices,
-                {
-                    choice: choiceCategory,
-                    options: [{ option: choiceName, amount: parsedAmount, description: choiceDescription, isPicked: false }]
-                }
-            ]);
-        } else {
-            setChoices(prevChoices =>
-                prevChoices.map((choice, index) => {
-                    if (index === categoryIndex) {
-                        return {
-                            ...choice,
-                            options: [
-                                ...choice.options,
-                                { option: choiceName, amount: parsedAmount, description: choiceDescription, isPicked: false }
-                            ]
-                        };
-                    }
-                    return choice;
-                })
-            );
-        }
-
-        addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
-        setNotification(`Choice "${choiceName}" added to category "${choiceCategory}"`);
-        setTimeout(() => setNotification(null), notificationTimeOut);
-
+        const normalizedExpenseName = choiceName.trim().toLowerCase();
+        const category = choices.find(choiceCard => choiceCard.options.some(option =>
+             option.name.trim().toLowerCase() == normalizedExpenseName
+        ));
         
+        if (category) {
+            setCategoryId(category.id);
+            const choice = category.options.find(option => option.name.toLowerCase() === normalizedExpenseName);
+            setExistingChoice(choice);
+            setChoiceAmount(choice!.amount.toString());
+            setChoiceCategory(category.category);
+            setChoiceDescription(choice!.description);
+            setPros(choice!.pros || '');
+            setCons(choice!.cons || '');
+        } else {
+            const normalizedCategory = choiceCategory.trim().toLowerCase();
+            const category = choices.find(expenseCard => expenseCard.category == normalizedCategory);
+        
+            if (category && choiceName != '') {
+                setCategoryId(category.id);
+            } else {
+                setCategoryId(null);
+            }
+
+            if (choiceName == '') {
+                setChoiceCategory('');
+                setExistingChoice(null);
+                setChoiceAmount('');
+                setChoiceDescription('');
+                setPros('');
+                setCons('');
+            }
+        }
+        
+    }, [choiceName, choiceCategory, choices]);
+    
+    const clear = () => {
         setChoiceName('');
         setChoiceAmount('');
         setChoiceCategory('');
         setChoiceDescription('');
+        setPros('');
+        setCons('');
     };
+    
+    const handleAddChoice = async () => {
+        const choiceAmountValue = Number(choiceAmount);
+    
+        if (!categoryId) {
+            const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
+            setCategoryId(newCategoryId);
+            const choiceId = await FunctionsProxy.addChoice(
+                newCategoryId,
+                choiceName,
+                choiceAmountValue,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices([
+                ...choices,
+                {
+                    id: newCategoryId,
+                    category: choiceCategory,
+                    options: [
+                        {
+                            id: choiceId,
+                            name: choiceName,
+                            amount: choiceAmountValue,
+                            description: choiceDescription,
+                            pros,
+                            cons
+                        }
+                    ]
+                }
+            ]);
+        } else {
+            const choiceId = await FunctionsProxy.addChoice(
+                categoryId,
+                choiceName,
+                choiceAmountValue,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices(
+                choices.map(card => {
+                    if (card.id === categoryId) {
+                        return {
+                            ...card,
+                            options: [
+                                ...card.options,
+                                {
+                                    id: choiceId,
+                                    name: choiceName,
+                                    amount: choiceAmountValue,
+                                    description: choiceDescription,
+                                    pros,
+                                    cons
+                                }
+                            ]
+                        };
+                    }
+                    return card;
+                })
+            );
+        }
+    
+        setNotification(
+            translations[language].choiceAdded
+                .replace('{name}', choiceName)
+                .replace('{category}', choiceCategory)
+        );
+    
+        setTimeout(() => setNotification(null), notificationTimeOut);
+        clear();
+    };
+    
 
 
     const handleRemoveChoice = () => {
-        setChoices(prevChoices =>
-            prevChoices.map(choice => {
-                if (choice.choice.toLowerCase() === choiceCategory.toLowerCase()) {
-                    const updatedOptions = choice.options.filter(option => option.option.toLowerCase() !== choiceName.toLowerCase());
-                    return {
-                        ...choice,
-                        options: updatedOptions
-                    };
-                }
-                return choice;
-            }).filter(choice => choice.options.length > 0)
+        FunctionsProxy.removeChoice(existingChoice.id);
+        setChoices(
+            choices.map(card => ({
+                ...card,
+                options: card.options.filter(option => option.id !== existingChoice!.id)
+            }))
         );
-
-        removeChoice(choiceCategory, choiceName);
-        setNotification(`Choice "${choiceName}" removed from category "${choiceCategory}"`);
+        setNotification(translations[language].choiceRemoved.replace("{name}", choiceName).replace("{category}", choiceCategory));
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
-    const handleUpdateChoice = () => {
+    const handleUpdateChoice = async () => {
         const parsedAmount = parseFloat(choiceAmount);
-
-        setChoices(prevChoices =>
-            prevChoices.map(choice => {
-                if (choice.choice.toLowerCase() === choiceCategory.toLowerCase()) {
-                    return {
-                        ...choice,
-                        options: choice.options.map(option =>
-                            option.option.toLowerCase() === choiceName.toLowerCase()
-                                ? { ...option, amount: parsedAmount, description: choiceDescription }
-                                : option
-                        )
-                    };
+    
+        const updatedChoice = {
+            id: existingChoice!.id,
+            name: choiceName,
+            amount: parsedAmount,
+            description: choiceDescription,
+            pros: pros,
+            cons: cons
+        };
+    
+        if (!categoryId) {
+            const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
+            setCategoryId(newCategoryId);
+    
+            await FunctionsProxy.updateChoice(
+                existingChoice!.id,
+                newCategoryId,
+                choiceName,
+                parsedAmount,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices([
+                ...choices.map(card => {
+                    if (card.options.some(option => option.id === existingChoice?.id)) {
+                        return {
+                            ...card,
+                            options: card.options.filter(option => option.id !== existingChoice?.id)
+                        };
+                    }
+                    return card;
+                }),
+                {
+                    id: newCategoryId,
+                    category: choiceCategory,
+                    options: [updatedChoice]
                 }
-                return choice;
-            })
+            ]);
+        } else {
+            await FunctionsProxy.updateChoice(
+                existingChoice!.id,
+                categoryId,
+                choiceName,
+                parsedAmount,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices(
+                choices.map(card => {
+                    if (card.options.some(option => option.id === existingChoice?.id && card.id !== categoryId)) {
+                        return {
+                            ...card,
+                            options: card.options.filter(option => option.id !== existingChoice?.id)
+                        };
+                    }
+                    if (card.id === categoryId) {
+                        return {
+                            ...card,
+                            options: card.options.map(option =>
+                                option.id === existingChoice?.id ? updatedChoice : option
+                            )
+                        };
+                    }
+                    return card;
+                })
+            );
+        }
+    
+        setNotification(
+            translations[language].choiceUpdated
+                .replace("{name}", choiceName)
+                .replace("{category}", choiceCategory)
         );
-
-        updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
-        setNotification(`Choice "${choiceName}" updated in category "${choiceCategory}"`);
+    
         setTimeout(() => setNotification(null), notificationTimeOut);
+        clear();
     };
+    
 
 
 
@@ -143,63 +259,75 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <Heading level={2}>Manage Choices</Heading>
+                <Heading level={2}>{translations[language].manageChoices}</Heading>
 
-                <Subtitle level={3}>Choice Name</Subtitle>
+                <Subtitle level={3}>{translations[language].choiceName}</Subtitle>
                 <GuidedInput
                     value={choiceName}
                     setInputValue={setChoiceName}
-                    suggestions={choices.flatMap(choice => choice.options.map(option => option.option))}
-                    placeholder="Name of the choice"
+                    suggestions={choices.flatMap(choice => choice.options.map(option => option.name))}
+                    placeholder={translations[language].choiceName}
                     onChange={(e) => {
                         setChoiceName(e.target.value);
                         setExistingChoice(null);
                     }}
                 />
 
-                <Subtitle level={3}>Amount</Subtitle>
+                <Subtitle level={3}>{translations[language].amount}</Subtitle>
                 <Input
                     value={choiceAmount}
-                    placeholder="Price for the choice"
+                    placeholder={translations[language].price}
                     type="number"
                     onChange={(e) => setChoiceAmount(e.target.value)}
                 />
 
-                <Subtitle level={3}>Category</Subtitle>
+                <Subtitle level={3}>{translations[language].category}</Subtitle>
                 <GuidedInput
                     value={choiceCategory}
-                    suggestions={choices.map(choice => choice.choice)}
-                    placeholder="Category"
+                    suggestions={choices.map(choice => choice.category)}
+                    placeholder={translations[language].category}
                     setInputValue={setChoiceCategory}
                     onChange={(e) => setChoiceCategory(e.target.value)}
                 />
-                <Subtitle level={3}>Description</Subtitle>
+                
+                <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={choiceDescription}
-                    placeholder="Description of the choice"
+                    placeholder={translations[language].description}
                     onChange={(e) => setChoiceDescription(e.target.value)}
                 />
 
+                <Subtitle level={3}>{translations[language].pros}</Subtitle>
+                <Input
+                    value={pros}
+                    placeholder={translations[language].pros}
+                    onChange={(e) => setPros(e.target.value)}
+                />
+
+                <Subtitle level={3}>{translations[language].cons}</Subtitle>
+                <Input
+                    value={cons}
+                    placeholder={translations[language].cons}
+                    onChange={(e) => setCons(e.target.value)}
+                />
 
                 {notification && <Notification>{notification}</Notification>}
 
                 <ButtonContainer>
                     {existingChoice ? (
                         <>
-                            <Button onClick={handleUpdateChoice}>Modify Choice</Button>
-                            <Button onClick={handleRemoveChoice}>Remove Choice</Button>
+                            <Button onClick={handleUpdateChoice}>{translations[language].modifyChoice}</Button>
+                            <Button onClick={handleRemoveChoice}>{translations[language].delete}</Button>
                         </>
                     ) : isInputValid() ? (
-                        <Button onClick={handleAddChoice}>Add Choice</Button>
+                        <Button onClick={handleAddChoice}>{translations[language].add}</Button>
                     ) : (
-                        <Button disabled>Add Choice</Button>
+                        <Button disabled>{translations[language].add}</Button>
                     )}
                 </ButtonContainer>
             </MenuContainer>
 
-            <Choices
-                initialChoices={choices}
-            />
+            <Choices/>
         </Container>
     );
 };

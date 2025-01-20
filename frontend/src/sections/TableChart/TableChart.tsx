@@ -4,15 +4,19 @@ import { Heading } from "../../styles/typography";
 import Button from "../../components/ui/Button";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { SpaceBetweenContainer } from "../../styles/section";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 const TableChart: React.FC = () => {
+  const {language} = useUser();
+
   return (
     <div id="table-chart">
       <SpaceBetweenContainer>
-        <Heading level={2}>Room</Heading>
+        <Heading level={2}>{translations[language].room}</Heading>
         <div style={{ marginBottom: '2rem' }}>
           <Button onClick={() => exportToPDF("table-chart")}>
-            Export to PDF
+            {translations[language].exportToPDF}
           </Button>
         </div>
       </SpaceBetweenContainer>

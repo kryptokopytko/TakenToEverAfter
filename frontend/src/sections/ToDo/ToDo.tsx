@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Body, Heading, Label } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/ui/Button";
 import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
@@ -6,42 +6,36 @@ import { Card } from "../../styles/card";
 import { SubTaskList, Container } from "./ToDoStyles";
 import { StyledCalendar } from "./Calendar";
 import { exportToPDF } from "../Printables/exportToPdf";
-import { Task } from "../../types";
-import { handleTaskCompletion } from "../../DBApi";
+import useFunctionsProxy from "../../API/FunctionHandler";
 import { Link } from "react-router-dom";
 import Checkbox from "../../components/ui/Checkbox";
 import { useUser } from "../../providers/UserContext";
 import { Description, DescriptionContainer } from "../../styles/Description";
+import { translations } from "../../translations";
 
 interface ToDoProps {
   onDeadlineChange?: (deadline: Date) => void;
   isHomePage?: boolean;
-  initialTasks: Task[];
   onTaskChange?: (taskName: string, category: string) => void;
 }
 
-const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks, onTaskChange }) => {
-  const { weddingDate } = useUser();
-  const [tasks, setTasks] = useState(initialTasks);
+const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange }) => {
+  const { accountDetails, taskCards, language, setTaskCards } = useUser();
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const FunctionsProxy = useFunctionsProxy();
 
-  const totalTasks = tasks.reduce((total, task) => total + task.subTasks.length, 0);
-  const completedTasks = tasks.reduce(
-    (completed, task) => completed + task.subTasks.filter((subTask) => subTask.completed).length,
+  const totalTasks = taskCards.reduce((total, card) => total + card.tasks.length, 0);
+  const completedTasks = taskCards.reduce(
+    (completed, card) => completed + card.tasks.filter((task) => task.completed).length,
     0
   );
 
-  useEffect(() => {
-    setTasks(initialTasks);
-  }, [initialTasks]);
-
-
   const getTasksForDate = (date: Date) => {
-    return tasks
-      .flatMap((task) => task.subTasks)
-      .filter((subTask) => new Date(subTask.deadline).toDateString() === date.toDateString())
-      .map((subTask) => subTask.name);
+    return taskCards
+      .flatMap((card) => card.tasks)
+      .filter((task) => new Date(task.deadline!).toDateString() === date.toDateString())
+      .map((task) => task.name);
   };
 
 
@@ -51,13 +45,13 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
 
   const isWeddingDate = (date: Date) => {
-    const weddingDateFormatted = new Date(weddingDate.split(".").reverse().join("-"));
+    const weddingDateFormatted = new Date(accountDetails.weddingDate!.split(".").reverse().join("-"));
     return weddingDateFormatted.toDateString() === date.toDateString();
   };
 
 
   const tileClassName = ({ date }: { date: Date }) => {
-    if (isWeddingDate(date)) {
+    if (accountDetails.weddingDate && isWeddingDate(date)) {
       return "wedding-date";
     }
     if (isDateDeadline(date)) {
@@ -86,26 +80,26 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
     return null;
   };
 
-  const handleTaskChange = (categoryIndex: number, subTaskIndex: number) => {
-    const task = tasks[categoryIndex];
-    const subTask = task.subTasks[subTaskIndex];
+  const handleTaskChange = (cardIndex: number, taskIndex: number) => {
+    const card = taskCards[cardIndex];
+    const task = card.tasks[taskIndex];
 
-    { onTaskChange ? onTaskChange(subTask.name, task.category) : {} };
-    handleTaskCompletion(subTask.name, task.category, !subTask.completed);
-    const updatedTasks = tasks.map((task, index) => {
-      if (index === categoryIndex) {
-        const updatedSubTasks = task.subTasks.map((subTask, subIndex) => {
-          if (subIndex === subTaskIndex) {
-            return { ...subTask, completed: !subTask.completed };
-          }
-          return subTask;
-        });
-        return { ...task, subTasks: updatedSubTasks };
-      }
-      return task;
-    });
-
-    setTasks(updatedTasks);
+    { onTaskChange ? onTaskChange(task.name, card.category) : {} };
+    FunctionsProxy.updateTask(task.id, card.id, card.category, task.name, task.description, task.deadline, !task.completed);
+    setTaskCards(
+      taskCards.map((card, index) =>
+        index === cardIndex
+          ? {
+              ...card,
+              tasks: card.tasks.map((task, idx) =>
+                idx === taskIndex
+                  ? { ...task, completed: !task.completed }
+                  : task
+              ),
+            }
+          : card
+      )
+    );
   };
 
   const toggleList = () => {
@@ -115,7 +109,7 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
   return (
     <Container id="todo-list">
       <SpaceBetweenContainer>
-        <Heading level={1}>To Do:</Heading>
+        <Heading level={1}>{translations[language].toDo + ":"}</Heading>
         <Heading level={1}>
           {completedTasks} / {totalTasks}
         </Heading>
@@ -136,34 +130,36 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
 
       <div>
         <GridContainer isExpanded={isExpanded} minWidth="28rem">
-          {tasks.map((task, categoryIndex) => (
-            <Card color="primary" key={categoryIndex}>
+          {taskCards.map((card, cardIndex) => (
+            <Card color="primary" key={cardIndex}>
               <SpaceBetweenContainer border>
-                <Heading level={4}>{task.category}</Heading>
+                <Heading level={4}>{card.category}</Heading>
                 <Heading level={4}>
-                  {task.subTasks.filter((subTask) => subTask.completed).length}/
-                  {task.subTasks.length}
+                  {card.tasks.filter((task) => task.completed).length}/
+                  {card.tasks.length}
                 </Heading>
               </SpaceBetweenContainer>
 
               <SubTaskList>
-                {task.subTasks.map((subTask, subTaskIndex) => (
-                  <div style={{ position: 'relative' }}>
-                    <SpaceBetweenContainer key={subTaskIndex} className="subtask-container">
+                {card.tasks.map((task, taskIndex) => (
+                  <div style={{ position: 'relative' }} key={taskIndex}>
+                    <SpaceBetweenContainer key={taskIndex} className="subtask-container">
                       <Checkbox
-                        checked={subTask.completed}
-                        onChange={() => handleTaskChange(categoryIndex, subTaskIndex)}
+                        checked={task.completed}
+                        onChange={() => handleTaskChange(cardIndex, taskIndex)}
                       />
 
                       <Body size="big" style={{ marginLeft: "0.5rem" }}>
-                        {subTask.name}
+                        {task.name}
                       </Body>
                       <Label size="extraSmall" style={{ marginRight: "0.5rem" }}>
-                        {subTask.deadline}
+                        {task.deadline}
                       </Label>
-                      <DescriptionContainer move={-5}>
-                        <Description>{subTask.description}</Description>
-                      </DescriptionContainer>
+                      {task.description != "" && (
+                        <DescriptionContainer move={-5}>
+                          <Description>{task.description}</Description>
+                        </DescriptionContainer>
+                      )}
                     </SpaceBetweenContainer>
                   </div>
                 ))}
@@ -175,14 +171,14 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, initialTasks,
       </div>
 
       <ButtonContainer>
-        <Button onClick={() => exportToPDF("todo-list")}>Export to PDF</Button>
+        <Button onClick={() => exportToPDF("todo-list")}>{translations[language].exportToPDF}</Button>
         {isHomePage ? (
           <>
             <Link to="to_do">
-              <Button>Manage To Do</Button>
+              <Button>{translations[language].manageToDo}</Button>
             </Link>
             <Button onClick={toggleList}>
-              {isExpanded ? "Collapse List" : "Expand List"}
+              {isExpanded ? translations[language].collapseList : translations[language].expandList}
             </Button>
           </>
         ) : (

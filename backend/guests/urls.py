@@ -1,9 +1,10 @@
-from .views import GroupView, InvitationView, GuestView
+from .views import TagView, InvitationView, GuestView
 from rest_framework.routers import DefaultRouter
+from django.urls import path
 
 router = DefaultRouter()
 
-router.register(r'groups', GroupView)
+router.register(r'tags', TagView)
 router.register(r'invitations', InvitationView)
 router.register(r'guests', GuestView)
 

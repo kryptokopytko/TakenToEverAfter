@@ -9,5 +9,5 @@ class Account(models.Model):
 class AccountDetails(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
     wedding_date = models.DateField(null=True)
-    newlyweds_table_id = models.ForeignKey('seating.Table', null=True, on_delete=models.SET_NULL)
-    budget_limit = models.IntegerField(null=True)
+    newlyweds_table_id = models.IntegerField(null=True, blank=True)
+    budget_limit = models.IntegerField(null=True, blank=True)

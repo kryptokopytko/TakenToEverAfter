@@ -6,9 +6,10 @@ import { GridContainer, SpaceBetweenContainer } from "../../styles/section";
 import { useState } from "react";
 import { exportToPDF } from "../Printables/exportToPdf";
 import { Card } from "../../styles/card";
-import { Expenses } from "../../types";
 import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../../styles/Description";
+import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 const HeaderContainer = styled.div<{ isHomePage: boolean }>`
   display: grid;
@@ -19,70 +20,71 @@ const HeaderContainer = styled.div<{ isHomePage: boolean }>`
     grid-template-columns: 1fr;
   }
 `;
+HeaderContainer.shouldForwardProp = (prop) => prop !== "isHomePage";
 
 
 interface BudgetProps {
     isHomePage?: boolean;
-    expenses: Expenses;
 }
 
-const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
+const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
+    const {expenseCards, language} = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
     };
 
-    const totalSpent = expenses.reduce((total, expense) => total +
-        expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0), 0);
+    const totalSpent = expenseCards.reduce((total, card) => total +
+        card.expenses.reduce((sum, exp) => sum + exp.amount, 0), 0);
     const totalBudget = 3000;
     const remainingBudget = totalBudget - totalSpent;
-    const pieData = expenses.map((expense) => ({
-        label: expense.category,
-        value: expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)
+    const pieData = expenseCards.map((expenseCard) => ({
+        label: expenseCard.category,
+        value: expenseCard.expenses.reduce((sum, exp) => sum + exp.amount, 0)
     })).sort((a, b) => b.value - a.value);
 
     if (remainingBudget > 0)
-        pieData.push({ value: remainingBudget, label: 'Remaining' });
+        pieData.push({ value: remainingBudget, label: translations[language].remaining });
 
     return (
         <div id='budget'>
             <HeaderContainer isHomePage={isHomePage ? isHomePage : false}>
                 <div>
                     <SpaceBetweenContainer>
-                        <Heading level={1}>Budget:</Heading>
+                        <Heading level={1}>{translations[language].budget + ":"}</Heading>
                         <Heading level={1}>${totalBudget}</Heading>
                     </SpaceBetweenContainer>
                     <SpaceBetweenContainer>
-                        <Heading level={2}>Remaining:</Heading>
+                        <Heading level={2}>{translations[language].remaining + ":"}</Heading>
                         <Heading level={2}>${remainingBudget}</Heading>
                     </SpaceBetweenContainer>
                     <SpaceBetweenContainer>
-                        <Heading level={3}>Spent:</Heading>
+                        <Heading level={3}>{translations[language].spent + ":"}</Heading>
                         <Heading level={3}>${totalSpent}</Heading>
                     </SpaceBetweenContainer>
                 </div>
                 <PieChart data={pieData} />
             </HeaderContainer>
             <GridContainer isExpanded={isExpanded}>
-                {expenses.map((expense, index) => (
+                {expenseCards.map((expenseCard, index) => (
                     <Card color='light' key={index}>
 
                         <SpaceBetweenContainer border>
-                            <Heading level={4}>{expense.category}</Heading>
-                            <Heading level={4}>${expense.subExpenses.reduce((sum, exp) => sum + exp.amount, 0)}</Heading>
+                            <Heading level={4}>{expenseCard.category}</Heading>
+                            <Heading level={4}>${expenseCard.expenses.reduce((sum, exp) => sum + exp.amount, 0)}</Heading>
                         </SpaceBetweenContainer>
 
-                        {expense.subExpenses.map((subExpense, subIndex) => (
-                            <div style={{ position: 'relative' }}>
+                        {expenseCard.expenses.map((expense, subIndex) => (
+                            <div style={{ position: 'relative' }} key={subIndex}>
                                 <SpaceBetweenContainer key={subIndex} style={{ marginLeft: '1rem' }}>
-                                    <Body size='big'>{subExpense.subCategory}</Body>
-                                    <Body size='big'>${subExpense.amount}</Body>
+                                    <Body size='big'>{expense.name}</Body>
+                                    <Body size='big'>${expense.amount}</Body>
                                 </SpaceBetweenContainer>
-                                <DescriptionContainer move={-1}>
-                                    <Description>{subExpense.description}</Description>
-                                </DescriptionContainer>
+                                {expense.description && (<DescriptionContainer move={-1}>
+                                    <Description>{expense.description}</Description>
+                                </DescriptionContainer>)}
                             </div>
                         ))}
                     </Card>
@@ -91,12 +93,12 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage, expenses }) => {
             <ButtonContainer>
                 {isHomePage ? <>
                     <Link to="budget">
-                        <Button>Manage Budget</Button></Link>
+                        <Button>{translations[language].manageBudget}</Button></Link>
                     <Button onClick={toggleList}>
-                        {isExpanded ? 'Collapse List' : 'Expand List'}
+                        {isExpanded ? translations[language].collapseList : translations[language].expandList}
                     </Button>
                 </> : <></>}
-                <Button onClick={() => exportToPDF("budget")}>Export to PDF</Button>
+                <Button onClick={() => exportToPDF("budget")}>{translations[language].exportToPDF}</Button>
 
             </ButtonContainer>
         </div>

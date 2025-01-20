@@ -5,6 +5,9 @@ import { Container, MenuContainer } from "../styles/page";
 import { useTheme } from "../providers/ThemeContext";
 import ThemeDisplay from "../sections/ThemeConstructor/ThemeDisplay";
 import styled from "styled-components";
+import useFunctionsProxy from "../API/FunctionHandler";
+import { translations } from "../translations";
+import { useUser } from "../providers/UserContext";
 
 const ThemeContainer = styled.div`
     display: flex;
@@ -16,10 +19,11 @@ const ThemeContainer = styled.div`
 interface ThemeConstructorPageProps { }
 
 const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
+    const FunctionsProxy = useFunctionsProxy();
     const { themes, setThemes } = useTheme();
     const savedThemes = Object.keys(themes).filter(themeKey => !themeKey.startsWith('custom'));
     const newThemes = Object.keys(themes).filter(themeKey => themeKey.startsWith('custom'));
-
+    const { language } = useUser();
     const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
     const handleInputChange = (themeKey: string, value: string) => {
@@ -32,29 +36,27 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     const handleSave = (themeKey: string) => {
         const newName = inputValues[themeKey]?.trim();
         if (!newName) {
-            alert("Theme name cannot be empty.");
+            alert(translations[language].themeNameEmpty);
             return;
         }
 
         if (savedThemes.includes(newName)) {
-            alert("Theme name must be unique.");
+            alert(translations[language].themeNameUnique);
             return;
         }
 
 
         const newThemesCopy = { ...themes };
         const themeData = newThemesCopy[themeKey];
-
-
-        delete newThemesCopy[themeKey];
-
-
-        newThemesCopy[newName] = themeData;
-
-
-        setThemes(newThemesCopy);
-
-
+        
+        FunctionsProxy.addNewTheme(newName, themeData);
+        
+        const { [themeKey]: removed, ...restOfThemes } = themes;
+        setThemes(
+            { ...restOfThemes, [newName]: themeData }
+        );
+          
+          
         setInputValues((prevValues) => {
             const updatedValues = { ...prevValues };
             delete updatedValues[themeKey];
@@ -63,6 +65,8 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     };
     const handleDelete = (themeKey: string) => {
 
+        FunctionsProxy.deleteTheme(themeKey);
+        
         const newThemesCopy = { ...themes };
 
 
@@ -73,7 +77,7 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
 
             setThemes(newThemesCopy);
         } else {
-            alert("Theme not found.");
+            alert(translations[language].themeNotFound);
         }
     };
 
@@ -81,12 +85,12 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     return (
         <Container>
             <MenuContainer>
-                <Heading level={2}>Manage Themes</Heading>
+                <Heading level={2}>{translations[language].manageThemes}</Heading>
                 <ThemeContainer>
                     <ThemeDisplay
                         themes={themes}
                         themeKeys={savedThemes}
-                        title="Saved Themes:"
+                        title={translations[language].savedThemes + ":"}
                         inputValue={{}}
                         onChange={() => { }}
                         isSaved={true}
@@ -97,7 +101,7 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
                         <ThemeDisplay
                             themes={themes}
                             themeKeys={newThemes}
-                            title="New Themes:"
+                            title={translations[language].newThemes + ":"}
                             inputValue={inputValues}
                             onChange={handleInputChange}
                             isSaved={false}

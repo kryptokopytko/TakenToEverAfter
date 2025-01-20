@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { Body, Label } from "../../styles/typography";
 import { GridContainer } from "../../styles/section";
-import { Guest } from "../../types";
 import Button from "../../components/ui/Button";
-import { Tag, TagContainer } from "../../styles/tag";
-import { getAllSharedInviteNames } from "../../dummyDBApi";
+import { StyledTag, TagContainer } from "../../styles/tag";
+import useFunctionsProxy from "../../API/FunctionHandler";
+import { useUser } from "../../providers/UserContext";
+import { translations } from "../../translations";
 
 const GuestItem = styled.div`
   display: flex;
@@ -29,36 +30,61 @@ const EmptyMessage = styled(Label)`
 `;
 
 interface ListProps {
-  list: Guest[];
   isExpanded: boolean;
   isHomePage?: boolean;
-  handleDecision: (guestName: string, decision: 'yes' | 'no') => void;
-  handleInvite: (guestName: string) => void;
 }
 
-const List: React.FC<ListProps> = ({ list, isExpanded, isHomePage, handleDecision, handleInvite }) => {
-  const sharedInviteNames: string[] = getAllSharedInviteNames();
+const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
+  const FunctionsProxy = useFunctionsProxy();
+  const { tags, language, guests, setGuests } = useUser();
+
+  function handOutInvitation(invitationId: number) {
+    FunctionsProxy.handOutInvitation(invitationId);
+  }
+  
+  function handleDecision(guestId: number, decision: boolean) {
+    FunctionsProxy.updateGuestConfirmation(guestId, decision);
+    setGuests(
+      guests.map((guest) =>
+        guest.id === guestId ? { ...guest, decision: decision? "yes" : "no" } : guest)
+    )
+  }
 
   return (
     <GridContainer isExpanded={isExpanded} minWidth="30rem">
-      {list.length === 0 ? (
-        <EmptyMessage>No such guests</EmptyMessage>
+      {guests.length === 0 ? (
+        <EmptyMessage>{translations[language].noGuests}</EmptyMessage>
       ) : (
-        list.map((guest, index) => (
+        guests.map((guest, index) => (
           <GuestItem key={index}>
             <Body size="big">{guest.name}</Body>
             <TagContainer>
-              {guest.tags.map((tag, idx) => tag && <Tag isOneInvite={sharedInviteNames.includes(tag)} key={idx}>{tag}</Tag>)}
+              {guest.tags.map((tagId, idx) => {
+                const tag = tags.find(tag => tag.id === tagId);
+                return tag ? (
+                  <StyledTag isOneInvite={false} key={idx}>
+                    {tag.name}
+                  </StyledTag>
+                ) : null; 
+              })}
+              <StyledTag isOneInvite={true} key={"invitation"}>
+                {guest.invitationId}
+              </StyledTag>
             </TagContainer>
-            {guest.decision === 'maybe' && !isHomePage ? (
+            {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
-                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'yes')}>yes/</Button>
-                <Button variant="transparent" onClick={() => handleDecision(guest.name, 'no')}>no</Button>
+                <Button variant="transparent" onClick={() => handOutInvitation(guest.invitationId)}>
+                  {translations[language].invite}
+                </Button>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, true)}>
+                  {translations[language].yes}
+                </Button>
+                <Button variant="transparent" onClick={() => handleDecision(guest.id, false)}>
+                  {translations[language].no}
+                </Button>
               </DecisionButtons>
-            ) : guest.decision === 'not invited' ? (
-              <Button variant="transparent" onClick={() => handleInvite(guest.name)}>Invite</Button>
             ) : (
-              <Label size="small">{guest.decision}</Label>
+              <Label size="small">{translations[language][guest.decision]}</Label>
             )}
           </GuestItem>
         ))

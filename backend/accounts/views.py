@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from .models import Account, AccountDetails
 from .serializers import AccountSerializer, AccountDetailsSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import APIException
 
 class AccountView(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -34,3 +35,34 @@ def get_user_by_email(request):
         'email': user.email,
         'mail_frequency': user.mail_frequency,
     })
+
+def get_account_from_session(request):
+    mail = request.session.get('mail')
+    if not mail:
+        raise APIException("User email not found in session")
+
+    try:
+        account = Account.objects.get(email=mail)
+        return account
+    except Account.DoesNotExist:
+        raise APIException("Account not found")
+    
+class AccountModelViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        account = get_account_from_session(self.request)
+        return self.queryset.filter(account=account)
+
+    def perform_create(self, serializer):
+        account = get_account_from_session(self.request)
+        serializer.save(account=account)
+        self.after_create(serializer.instance)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self.after_update(instance)
+
+    def after_create(self, instance):
+        pass
+
+    def after_update(self, instance):
+        pass

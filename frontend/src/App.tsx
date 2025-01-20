@@ -6,7 +6,7 @@ import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
 import GuestPage from "./pages/GuestPage";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { fontStyles } from "./styles/typography";
 import TableChartPage from "./pages/TableChartPage";
 import BudgetPage from "./pages/BudgetPage";
@@ -21,13 +21,15 @@ import GuestResponsePage from "./pages/GuestResponsePage";
 import GuestPhotosPage from "./pages/GuestPhotosPage";
 import { UserProvider, useUser } from "./providers/UserContext";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession } from "./DBApi";
+import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos } from "./API/DbApi/DBApi";
+import Example from "./exampleData";
+import { initialFontSize, initialThemes } from "./styles/theme";
+
 
 const AppContainer = styled.div`
   background: ${({ theme }) =>
@@ -70,7 +72,12 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  const { setViewLocation, setAccount, setIsLogged, setAccountDetails } = useUser();
+  const { 
+    isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
+    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos
+   } = useUser();
+
+   const {setTheme, setThemes, setFontSize} = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -79,11 +86,50 @@ const AppContent = () => {
         setIsLogged(true);
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
-      }
+        setWeddingDetails(null);
+        
+        const guestsInfo = await getGuestsInfo();
+        setGuests(guestsInfo.guests);
+        setTags(guestsInfo.tags);
+        setInvitations(guestsInfo.invitations);
+        
+        const taskCards = await getTasks();
+        setTaskCards(taskCards);
+
+        const { expenseCards, choices } = await getExpenses();
+        setExpenseCards(expenseCards);
+        setChoices(choices);
+
+        const photos = await getPhotos();
+        setPhotos(photos);
+
+        const {preferences, themes} = await getUserPreferences();
+        setFontSize(preferences.fontSize);
+        setThemes(themes);
+        setTheme(initialThemes.nude);
+        setTheme(preferences.colorTheme || initialThemes.nude);
+        setLanguage(preferences.language);
+      } else {
+        setIsLogged(false);
+        setAccount(Example.account);
+        setAccountDetails(Example.accountDetails);
+        setWeddingDetails(Example.weddingDetails);
+        setTaskCards(Example.taskCards); 
+        setGuests(Example.guests);
+        setTags(Example.tags);
+        setInvitations(Example.invitations);
+        setExpenseCards(Example.expenses);
+        setChoices(Example.choices);
+        setPhotos(Example.images);
+        setFontSize(initialFontSize);
+        setThemes(initialThemes);
+        setTheme(initialThemes.nude);
+        setLanguage("english");
+    }
   };
 
     fetchSession();
-  }, [setAccount]);
+  }, [isLogged]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -128,7 +174,7 @@ const App = () => {
       <ThemeProvider>
         <UserProvider>
           <TableProvider>
-            <Router>
+            <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
               <AppContent />
             </Router>
           </TableProvider>

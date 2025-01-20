@@ -57,6 +57,7 @@ const Heading = styled.h1<HeadingProps>`
       font-weight: 400;
     `}
 `;
+Heading.shouldForwardProp = (prop) => !["level", "color"].includes(prop); 
 
 const Subtitle = styled.h2<SubtitleProps>`
   font-family: ${fontStyles.headingFont};
@@ -88,8 +89,9 @@ const Subtitle = styled.h2<SubtitleProps>`
       font-weight: 400;
     `}
 `;
+Subtitle.shouldForwardProp = (prop) => !["level", "color"].includes(prop); 
 
-const Body = styled.p<BodyProps>`
+const Body = styled.div<BodyProps>`
   font-family: ${fontStyles.bodyFont};
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
@@ -114,8 +116,10 @@ const Body = styled.p<BodyProps>`
       font-weight: 600;
     `}
 `;
+Body.shouldForwardProp = (prop) => !["size", "color", "hslColor"].includes(prop); 
 
-const Label = styled.p<LabelProps>`
+
+const Label = styled.div<LabelProps>`
   font-family: ${fontStyles.labelFont};
   color: ${({ color, theme }) =>
     color && theme[color] ? theme[color] : theme.body};
@@ -146,5 +150,6 @@ const Label = styled.p<LabelProps>`
       font-weight: 700;
     `}
 `;
+Label.shouldForwardProp = (prop) => !["size", "color"].includes(prop); 
 
 export { Heading, Subtitle, Body, Label };

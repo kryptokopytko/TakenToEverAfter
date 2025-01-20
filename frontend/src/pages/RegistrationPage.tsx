@@ -4,13 +4,16 @@ import Input from "../components/ui/Input";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Heading, Label } from "../styles/typography";
 import { Notification } from "../styles/page";
-import { registerUser } from "../DBApi";
+import { registerUser } from "../API/DbApi/DBApi";
 import { Container, Form } from "../styles/form";
+import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
 const RegistrationPage: React.FC = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const userEmail = searchParams.get('mail');
+    const { language } = useUser();
     
     const [email, setEmail] = useState(userEmail? userEmail : '');
     const [weddingDate, setWeddingDate] = useState('');
@@ -39,11 +42,11 @@ const RegistrationPage: React.FC = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (groomName.length < 3 || brideName.length < 3) {
-            return "First names must each be at least 3 characters long.";
+            return translations[language].nameTooShort;
         }
-
+    
         if (!emailRegex.test(email)) {
-            return "Invalid email address format.";
+            return translations[language].invalidEmail;
         }
 
         return null;
@@ -58,15 +61,15 @@ const RegistrationPage: React.FC = () => {
         }
 
         try {
-            const success = await registerUser(groomName, brideName, email, weddingDate, );
+            const success = await registerUser(groomName, brideName, email, weddingDate, language);
             if (success) {
                 setIsRegistered(true);
                 setErrorMessage(null);
             } else {
-                setErrorMessage("Registration failed. Please try again.");
+                setErrorMessage(translations[language].registrationFailed);
             }
         } catch (error) {
-            setErrorMessage("An error occurred during registration. Please try again.");
+            setErrorMessage(translations[language].registrationError);
         }
     };
 
@@ -75,9 +78,11 @@ const RegistrationPage: React.FC = () => {
             <Container>
                 <Form>
                     <div style={{ textAlign: 'center' }}>
-                        <Heading level={2}>Welcome,<br /> {groomName} & {brideName}</Heading>
-                        <p>Registration Successful! 
-                            {weddingDate ? 'Your wedding date is set for ' + weddingDate : <></>}</p>
+                        <Heading level={2}>{translations[language].welcome},<br /> {groomName} & {brideName}</Heading>
+                         <p>
+                            {translations[language].registrationSuccess}
+                            {weddingDate ? ` ${translations[language].weddingDateMessage} ${weddingDate}.` : ""}
+                        </p>
                     </div>
                 </Form>
             </Container>
@@ -88,39 +93,39 @@ const RegistrationPage: React.FC = () => {
         <Container>
             <Form>
                 <div style={{ marginBottom: '-2rem' }}>
-                    <Heading level={2}>Register</Heading>
+                    <Heading level={2}>{translations[language].register}</Heading>
                 </div>
 
-                <Label>Email</Label>
+                <Label>{translations[language].email}</Label>
                 <Input
                     type="email"
                     value={email}
                     onChange={handleEmailChange}
-                    placeholder={userEmail? userEmail : "Enter your email"}
+                    placeholder={userEmail ? userEmail : translations[language].emailPlaceholder}
                 />
 
-                <Label>Wedding Date</Label>
+                <Label>{translations[language].weddingDate}</Label>
                 <Input
                     type="date"
                     value={weddingDate}
                     onChange={handleWeddingDateChange}
-                    placeholder="Select wedding date"
+                    placeholder={translations[language].weddingDatePlaceholder}
                 />
 
-                <Label>First Name (Groom)</Label>
-                <Input
-                    type="text"
-                    value={groomName}
-                    onChange={handleGroomNameChange}
-                    placeholder="Enter first name of groom"
-                />
-
-                <Label>First Name (Bride)</Label>
+                <Label>{translations[language].brideName}</Label>
                 <Input
                     type="text"
                     value={brideName}
                     onChange={handleBrideNameChange}
-                    placeholder="Enter first name of bride"
+                    placeholder={translations[language].brideNamePlaceholder}
+                />
+
+                <Label>{translations[language].groomName}</Label>
+                <Input
+                    type="text"
+                    value={groomName}
+                    onChange={handleGroomNameChange}
+                    placeholder={translations[language].groomNamePlaceholder}
                 />
 
                 {errorMessage && (
@@ -130,7 +135,7 @@ const RegistrationPage: React.FC = () => {
                 )}
 
                 <ButtonContainer>
-                    <Button onClick={handleRegister}>Register</Button>
+                    <Button onClick={handleRegister}>{translations[language].register}</Button>
                 </ButtonContainer>
             </Form>
         </Container>

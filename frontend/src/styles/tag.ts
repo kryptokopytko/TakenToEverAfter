@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Body } from "./typography";
 
-export const Tag = styled(Body)<{
+export const StyledTag = styled(Body)<{
   isOneInvite: boolean;
 }>`
   background-color: ${({ theme, isOneInvite }) =>
@@ -16,6 +16,7 @@ export const Tag = styled(Body)<{
     opacity: 0.9;
   }
 `;
+StyledTag.shouldForwardProp = (prop) => prop !== "isOneInvite";
 
 export const TagContainer = styled.div`
   display: flex;

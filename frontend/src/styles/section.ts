@@ -12,6 +12,7 @@ export const SpaceBetweenContainer = styled.div<{ border?: boolean }>`
   flex-wrap: wrap;
   gap: 1rem;
 `;
+SpaceBetweenContainer.shouldForwardProp = (prop) => prop !== "border";
 
 export const GridContainer = styled.div<{
   isExpanded: boolean;
@@ -45,3 +46,4 @@ export const GridContainer = styled.div<{
     overflow-wrap: break-word;
   }
 `;
+GridContainer.shouldForwardProp = (prop) => !["isExpanded", "minWidth", "minHeight", "padding"].includes(prop); 

@@ -5,6 +5,8 @@ import { Card } from "../../styles/card";
 import Button from "../../components/ui/Button";
 import { useTheme } from "../../providers/ThemeContext";
 import { ColorBox, ColorRow } from "./ColorBox";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 const Container = styled.div`
   display: flex;
@@ -40,6 +42,7 @@ const ColorVariation: React.FC<ColorVariationProps> = ({
   title, variation, hslBodyColor, hue, saturation, lightness
 }) => {
   const { setTheme } = useTheme();
+  const { language } = useUser();
 
   return (
     <Card color="primary">
@@ -53,7 +56,9 @@ const ColorVariation: React.FC<ColorVariationProps> = ({
             </div>
           ))}
         </ColorRow>
-        <Button onClick={() => { setTheme(makeTheme(variation, hslBodyColor, hue, saturation, lightness)); }}>Pick this one</Button>
+        <Button onClick={() => { setTheme(makeTheme(variation, hslBodyColor, hue, saturation, lightness)); }}>
+          {translations[language].pickThis}
+        </Button>
       </Container>
     </Card>
   );

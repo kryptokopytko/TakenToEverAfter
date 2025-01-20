@@ -1,7 +1,12 @@
 frontend/node_modules
 client/node_modules
 node_modules/*
-*/migrations/*
+
+backend/*/migrations/*
+backend/accounts/migrations/*
+backend/expenses/migrations/*
+
 */__init__.py
 backend/db.sqlite3
-__pycache__/
+backend/*/__pycache__/*
+backend/__pycache__/

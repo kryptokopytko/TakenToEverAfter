@@ -11,6 +11,8 @@ import { useTable } from "../providers/TableContext";
 import GuidedInput from "../components/ui/GuidedInput";
 import { useUser } from "../providers/UserContext";
 import { SpaceBetweenContainer } from "../styles/section";
+import { translations } from "../translations";
+
 interface TableChartPageProps { }
 
 const TableChartPage: React.FC<TableChartPageProps> = () => {
@@ -19,7 +21,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         addRoundTable, addRectangularTable, roundTables, rectangularTables
     } = useTable();
 
-    const { guestList } = useUser();
+    const { guests, language } = useUser();
 
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");
@@ -101,12 +103,12 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         const updatedRoundTables = roundTables.filter((table) => table.id !== tableToRemove);
         const updatedRectangularTables = rectangularTables.filter((table) => table.id !== tableToRemove);
 
-        if (updatedRoundTables.length === roundTables.length && updatedRectangularTables.length === rectangularTables.length) {
-            setNotification(`Table "${tableToRemove}" not found.`);
+        if (!tableToRemove) {
+            setNotification(translations[language].tableNotFound.replace("{tableName}", tableToRemove));
         } else {
             setRoundTables(updatedRoundTables);
             setRectangularTables(updatedRectangularTables);
-            setNotification(`Table "${tableToRemove}" has been removed.`);
+            setNotification(translations[language].tableRemoved.replace("{tableName}", tableToRemove));
         }
 
         setTableToRemove("");
@@ -115,7 +117,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
 
     const handleAddTable = () => {
         if (allTableNames.includes(tableName.trim())) {
-            setNotification("Table name must be unique.");
+            setNotification(translations[language].tableNameNotUnique);
             setTimeout(() => setNotification(null), notificationTimeOut);
             return;
         }
@@ -136,11 +138,11 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 newTable.x = x;
                 newTable.y = y;
                 addRoundTable(newTable);
-                setNotification(`Added round table ${tableName.trim() || `#${roundTables.length + 1}`} with ${seats} seats.`);
+                setNotification(translations[language].roundTableAdded.replace("{tableName}", tableName.trim() || `#${roundTables.length + 1}`).replace("{seats}", seats.toString()));
                 setRoundSeats("");
                 setTableName("");
             } else {
-                setNotification("Invalid number of seats for a round table.");
+                setNotification(translations[language].invalidSeatsForRoundTable);
             }
         } else {
             const width = parseInt(rectWidth, 10);
@@ -158,12 +160,14 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 newTable.x = x;
                 newTable.y = y;
                 addRectangularTable(newTable);
-                setNotification(`Added rectangular table ${tableName.trim() || `#${rectangularTables.length + 1}`} with width ${width} and length ${length}.`);
+                setNotification(translations[language].rectangularTableAdded
+                    .replace("{tableName}", tableName.trim() || `#${rectangularTables.length + 1}`)
+                    .replace("{width}", width.toString()).replace("{length}", length.toString()));
                 setRectWidth("");
                 setRectLength("");
                 setTableName("");
             } else {
-                setNotification("Invalid dimensions for a rectangular table.");
+                setNotification(translations[language].invalidDimensionsForRectangularTable);
             }
         }
         setTimeout(() => setNotification(null), notificationTimeOut);
@@ -173,60 +177,58 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     return (
         <Container >
             <MenuContainer>
-                <Heading level={2}>Table chart</Heading>
+                <Heading level={2}>{translations[language].tableChart}</Heading>
 
-                <Subtitle level={3}>Room Width (m)</Subtitle>
-
+                <Subtitle level={3}>{translations[language].roomWidth}</Subtitle>
                 <Input
                     value={roomWidth}
                     type="number"
-                    placeholder="Room width in meters"
+                    placeholder={translations[language].roomWidthPlaceholder}
                     onChange={(e) => { setRoomWidth(e.target.value); updateRoomDimensions(e.target.value, roomLength) }}
-
                 />
-                <Subtitle level={3}>Room Length (m)</Subtitle>
 
+                <Subtitle level={3}>{translations[language].roomLength}</Subtitle>
                 <Input
                     value={roomLength}
                     type="number"
-                    placeholder="Room length in meters"
+                    placeholder={translations[language].roomLengthPlaceholder}
                     onChange={(e) => { setRoomLength(e.target.value); updateRoomDimensions(roomWidth, e.target.value) }}
 
                 />
+                
                 <HorizontalLine />
-
-                <Heading level={3}>Add Table</Heading>
-                <Subtitle level={3}>Name (optional)</Subtitle>
+                <Heading level={3}>{translations[language].addTable}</Heading>
+                
+                <Subtitle level={3}>{translations[language].nameOptional}</Subtitle>
                 <Input
                     value={tableName}
-                    placeholder="Enter table name"
+                    placeholder={translations[language].tableNamePlaceholder}
                     onChange={(e) => setTableName(e.target.value)}
                 />
-
                 {isRound ? (
                     <>
-                        <Subtitle level={3}>Seats</Subtitle>
+                        <Subtitle level={3}>{translations[language].seats}</Subtitle>
                         <Input
                             value={roundSeats}
                             type="number"
-                            placeholder="Number of seats"
+                            placeholder={translations[language].seatsPlaceholder}
                             onChange={(e) => setRoundSeats(e.target.value)}
                         />
                     </>
                 ) : (
                     <>
-                        <Subtitle level={3}>Width</Subtitle>
+                        <Subtitle level={3}>{translations[language].width}</Subtitle>
                         <Input
                             value={rectWidth}
                             type="number"
-                            placeholder="Number of seats on the width side"
+                            placeholder={translations[language].widthPlaceholder}
                             onChange={(e) => setRectWidth(e.target.value)}
                         />
-                        <Subtitle level={3}>Length</Subtitle>
+                        <Subtitle level={3}>{translations[language].length}</Subtitle>
                         <Input
                             value={rectLength}
                             type="number"
-                            placeholder="Number of seats on the length side"
+                            placeholder={translations[language].lengthPlaceholder}
                             onChange={(e) => setRectLength(e.target.value)}
                         />
                     </>
@@ -234,37 +236,37 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
 
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
                     <Checkbox checked={isRound} onChange={() => setIsRound(!isRound)} />
-                    Is table round
+                    {translations[language].isTableRound}
                 </div>
 
                 {notification && <Notification>{notification}</Notification>}
 
                 <ButtonContainer>
-                    <Button onClick={handleAddTable}>Add Table</Button>
+                    <Button onClick={handleAddTable}>{translations[language].addTable}</Button>
                 </ButtonContainer>
                 <HorizontalLine />
 
 
-                <Heading level={3}>Remove Table</Heading>
+                <Heading level={3}>{translations[language].removeTable}</Heading>
                 <GuidedInput
                     suggestions={allTableNames}
                     value={tableToRemove}
                     setInputValue={setTableToRemove}
-                    placeholder="Select table name"
+                    placeholder={translations[language].removeTablePlaceholder}
                     onChange={(e) => setTableToRemove(e.target.value)}
                 />
                 <ButtonContainer>
                     <Button onClick={handleRemoveTable} disabled={!tableToRemove}>
-                        Remove Table
+                        {translations[language].removeTable}
                     </Button>
                 </ButtonContainer>
                 <HorizontalLine />
-                <Heading level={3}>Assign Guests to Table</Heading>
+                <Heading level={3}>{translations[language].assignGuests}</Heading>
                 <GuidedInput
-                    suggestions={guestList.map(guest => guest.name)}
+                    suggestions={guests.map(guest => guest.name)}
                     value={inputValue}
                     setInputValue={setInputValue}
-                    placeholder="Search guest name"
+                    placeholder={translations[language].searchGuestPlaceholder}
                     onChange={(e) => setInputValue(e.target.value)}
                 />
                 <ButtonContainer>
@@ -277,12 +279,12 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                             }
                         }}
                     >
-                        {selectedGuests.includes(inputValue) ? "Remove" : "Add"}
+                        {selectedGuests.includes(inputValue) ? translations[language].delete : translations[language].add}
                     </Button>
                 </ButtonContainer>
                 <HorizontalLine />
 
-                <Subtitle level={3}>Main Table Guests:</Subtitle>
+                <Subtitle level={3}>{translations[language].mainTableGuests}:</Subtitle>
                 {selectedGuests.map((guest, index) => (
                     <div key={index}>
                         <SpaceBetweenContainer>
@@ -291,7 +293,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                             <Button
                                 onClick={() => setSelectedGuests(selectedGuests.filter(item => item !== guest))}
                             >
-                                Remove
+                                {translations[language].delete}
                             </Button>
                         </SpaceBetweenContainer>
                     </div>

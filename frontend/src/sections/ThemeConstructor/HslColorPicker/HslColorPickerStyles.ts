@@ -61,3 +61,4 @@ export const Slider = styled.input<SliderProps>`
     cursor: pointer;
   }
 `;
+Slider.shouldForwardProp = (prop) => !["hue", "saturation", "lightness"].includes(prop);

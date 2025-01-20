@@ -3,7 +3,8 @@ import { Body, Heading } from "../../../styles/typography";
 import Button from "../../../components/ui/Button";
 import { Slider, Container } from "./HslColorPickerStyles";
 import Input from "../../../components/ui/Input";
-
+import { translations } from "../../../translations";
+import { useUser } from "../../../providers/UserContext";
 
 const hexToHSL = (hex: string) => {
 
@@ -62,6 +63,7 @@ interface HslColorPickerProps {
 const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
   const { hue, saturation, lightness } = color;
   const [inputColor, setInputColor] = useState('');
+  const { language } = useUser();
 
   const handleHueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setColor({ ...color, hue: Number(e.target.value) });
@@ -80,13 +82,13 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
   const handleCopyColor = async () => {
     try {
       await navigator.clipboard.writeText(hslColor);
-      alert(`Copied the color: ${hslColor}`);
+      alert(translations[language].copiedColor.replace("{color}", hslColor));
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
   };
 
-  const handleInputColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputColorChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value.trim();
     setInputColor(value);
 
@@ -106,9 +108,9 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
 
   return (
     <Container>
-      <Heading level={3}>Pick a color</Heading>
+      <Heading level={3}>{translations[language].pickColor}</Heading>
 
-      <Body>Hue: {hue}</Body>
+      <Body>{translations[language].hue + ": " + hue}</Body>
       <Slider
         type="range"
         min={0}
@@ -120,7 +122,7 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
         onChange={handleHueChange}
       />
 
-      <Body>Saturation: {saturation === -1 ? "Dynamic" : `${saturation}%`}</Body>
+      <Body>{translations[language].saturation}: {saturation === -1 ? translations[language].dynamic : `${saturation}%`}</Body>
       <Slider
         type="range"
         min={0}
@@ -132,7 +134,7 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
         onChange={handleSaturationChange}
       />
 
-      <Body>Lightness: {lightness === -1 ? "Dynamic" : `${lightness}%`}</Body>
+      <Body>{translations[language].lightness}: {lightness === -1 ? translations[language].lightness : `${lightness}%`}</Body>
       <Slider
         type="range"
         min={0}
@@ -147,12 +149,12 @@ const HslColorPicker: React.FC<HslColorPickerProps> = ({ color, setColor }) => {
       <div style={{ marginTop: '1.5rem' }}>
         <Input
           value={inputColor}
-          placeholder="Paste color (hex or HSL)"
+          placeholder={translations[language].pasteColor}
           onChange={handleInputColorChange}
         />
       </div>
 
-      <Button onClick={handleCopyColor} hslColor={hslColor}>Copy color</Button>
+      <Button onClick={handleCopyColor} hslColor={hslColor}>{translations[language].copyColor}</Button>
     </Container>
   );
 };

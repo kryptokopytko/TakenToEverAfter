@@ -1,68 +1,85 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { guests, location, pairSurnames, date, time } from '../exampleData';
-import { Guest, Account, AccountDetails } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image } from "../types";
+import Example from "../exampleData";
 
 interface UserContextType {
-    weddingDate: string;
-    weddingTime: string;
-    weddingLocation: string[];
     viewLocation: string;
-    language: string;
+    language: Language;
     isLogged: boolean;
-    guestList: Guest[];
-    surnames: string[];
-    account: Account | null;
-    accountDetails: AccountDetails | null;
+    weddingDetails: WeddingDetails | null;
+    guests: Guest[];
+    tags: Tag[];
+    invitations: Invitation[];
+    account: Account;
+    accountDetails: AccountDetails;
+    taskCards: TaskCard[];
+    expenseCards: ExpenseCard[];
+    choices: Choice[];
+    photos: Image[];
+    
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
-    setWeddingDate: (date: string) => void;
-    setWeddingTime: (time: string) => void;
-    setWeddingLocation: (location: string[]) => void;
-    setGuestList: (guests: Guest[]) => void;
-    setSurnames: (surnames: string[]) => void;
-    setViewLocation: (viewLocation: string) => void;
-    setLanguage: (language: string) => void;
+    setGuests: (guests: Guest[]) => void;
+    setTags: (tags: Tag[]) => void;
+    setInvitations: (invitations: Invitation[]) => void;
+    setWeddingDetails: (weddingDetails: WeddingDetails | null) => void;
+    setViewLocation: (location: string) => void;
+    setLanguage: (language: Language) => void;
+    setTaskCards: (taskCards: TaskCard[]) => void;
+    setExpenseCards: (expenseCards: ExpenseCard[]) => void;
+    setChoices: (choices: Choice[]) => void;
+    setPhotos: (photos: Image[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [account, setAccount] = useState<Account | null>(null);
-    const [accountDetails, setAccountDetails] = useState<AccountDetails | null>(null);
+    const [viewLocation, setViewLocation] = useState("Home");
+    const [language, setLanguage] = useState<Language>("english");
     const [isLogged, setIsLogged] = useState(false);
 
-    const [surnames, setSurnames] = useState(pairSurnames);
-    const [weddingDate, setWeddingDate] = useState(date);
-    const [weddingTime, setWeddingTime] = useState(time);
-    const [weddingLocation, setWeddingLocation] = useState(location);
-    const [guestList, setGuestList] = useState(guests);
-    const [viewLocation, setViewLocation] = useState("Home");
-    const [language, setLanguage] = useState("english");
+    const [account, setAccount] = useState<Account>(Example.account);
+    const [accountDetails, setAccountDetails] = useState<AccountDetails>(Example.accountDetails);
+    const [guests, setGuests] = useState<Guest[]>(Example.guests);
+    const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails);
+    const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
+    const [tags, setTags] = useState<Tag[]>(Example.tags);
+    const [invitations, setInvitations] = useState<Invitation[]>(Example.invitations);
+    const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses);
+    const [choices, setChoices] = useState<Choice[]>(Example.choices);
+    const [photos, setPhotos] = useState<Image[]>(Example.images);
 
     return (
         <UserContext.Provider
             value={{
-                weddingDate,
-                weddingTime,
-                weddingLocation,
-                guestList,
-                setAccount,
-                setAccountDetails,
-                setSurnames,
-                setWeddingDate,
-                setWeddingTime,
-                setWeddingLocation,
-                setGuestList,
+                viewLocation,
+                language,
                 isLogged,
-                setIsLogged,
+                weddingDetails,
+                guests,
+                tags,
+                invitations,
                 account,
                 accountDetails,
-                surnames,
-                viewLocation,
+                taskCards,
+                expenseCards,
+                choices,
+                photos,
+
+                setWeddingDetails,
+                setGuests,
+                setTags,
+                setInvitations,
+                setAccount,
+                setAccountDetails,
+                setIsLogged,
                 setViewLocation,
-                language,
-                setLanguage
+                setLanguage,
+                setTaskCards,
+                setExpenseCards,
+                setChoices,
+                setPhotos,
             }}
         >
             {children}

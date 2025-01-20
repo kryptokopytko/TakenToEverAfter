@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
@@ -6,10 +6,11 @@ import Invitation from "../sections/Printables/Invitation";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { exportToPDF } from "../sections/Printables/exportToPdf";
-import { listOfListsOfGuests } from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
-interface PrintablesPageProps {
+import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
+interface PrintablesPageProps {
 }
 
 const InputWrapper = styled.div`
@@ -25,14 +26,24 @@ const Invites = styled.div`
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
 }) => {
-    const [mainText, setMainText] = useState("Request the pleasure of your company at the celebration of their marriage");
-    const [additionalText, setAdditionalText] = useState("Come 15 minutes before the start of the ceremony");
-    const [guestText, setGuestText] = useState("It would be our honor to celebrate this day with:");
+    const { guests, language } = useUser();
+
+    const [mainText, setMainText] = useState(translations[language].exampleMainText);
+    const [additionalText, setAdditionalText] = useState(translations[language].exampleAdditionalText);
+    const [guestText, setGuestText] = useState(translations[language].exampleGuestText);
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
 
+    useEffect(() => {
+        if (language) {
+            setMainText(translations[language].exampleMainText);
+            setAdditionalText(translations[language].exampleAdditionalText);
+            setGuestText(translations[language].exampleGuestText);
+        }
+    }, [language]);
+
     const handleExportPDF = () => {
-        const inviteIds = listOfListsOfGuests.map((_, index) => `invite-${index}`);
+        const inviteIds = guests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
 
@@ -40,53 +51,53 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
         <Container>
             <MenuContainer>
-                <Heading level={2}>Customize Invitation Text</Heading>
-                <Subtitle level={3}>Additional Text</Subtitle>
+                <Heading level={2}>{translations[language].customizeInvitationText}</Heading>
+                <Subtitle level={3}>{translations[language].additionalText}</Subtitle>
 
                 <InputWrapper>
                     <Input
                         size="long"
                         value={additionalText}
                         onChange={(e) => setAdditionalText(e.target.value)}
-                        placeholder="Additional Text"
+                        placeholder={translations[language].additionalText}
                     />
                 </InputWrapper>
 
-                <Subtitle level={3}>Guest Text</Subtitle>
+                <Subtitle level={3}>{translations[language].guestText}</Subtitle>
                 <InputWrapper>
                     <Input
                         size="long"
                         value={guestText}
                         onChange={(e) => setGuestText(e.target.value)}
-                        placeholder="Guest Invitation Text"
+                        placeholder={translations[language].guestText}
                     />
                 </InputWrapper>
 
-                <Subtitle level={3}>Main Text</Subtitle>
+                <Subtitle level={3}>{translations[language].mainText}</Subtitle>
                 <InputWrapper>
                     <Input
                         size="long"
                         value={mainText}
                         onChange={(e) => setMainText(e.target.value)}
-                        placeholder="Main Invitation Text"
+                        placeholder={translations[language].mainText}
                     />
                 </InputWrapper>
 
                 <Button onClick={() => setShowAllInvites(!showAllInvites)}>
-                    {showAllInvites ? "Show Single Invite" : "Show All Invites"}
+                    {showAllInvites ? translations[language].showSingleInvite : translations[language].showAllInvites}
                 </Button>
                 {showAllInvites ?
-                    <Button onClick={handleExportPDF}>Export to PDF</Button> : <></>}
+                    <Button onClick={handleExportPDF}>{translations[language].exportToPDF}</Button> : <></>}
             </MenuContainer>
             {showAllInvites ? (
                 <Invites>
-                    {listOfListsOfGuests.map((guests, index) => (
+                    {guests.map((guest, index) => (
                         <div id={`invite-${index}`} key={index}>
                             <Invitation
                                 mainText={mainText}
                                 additionalText={additionalText}
                                 guestText={guestText}
-                                propsGuestList={guests}
+                                propsGuestList={[guest]}
                             />
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
                                 <Checkbox
@@ -98,7 +109,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                                     }
                                     }
                                 />
-                                Delivered Invite
+                                {translations[language].delivered}
                             </div>
                         </div>
                     ))}

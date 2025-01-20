@@ -4,134 +4,66 @@ import { Container, MenuContainer, Notification, notificationTimeOut } from "../
 import Input from "../components/ui/Input";
 import GuidedInput from "../components/ui/GuidedInput";
 import Button, { ButtonContainer } from "../components/ui/Button";
-import { useState, useEffect } from "react";
-import { initialTasks } from "../exampleData";
-import { addTask, removeTask, updateTask } from "../DBApi";
+import { useState } from "react";
+import useFunctionsProxy from "../API/FunctionHandler";
+import { useUser } from "../providers/UserContext";
+import { translations } from "../translations";
 
-interface ToDoPageProps { }
-
-const ToDoPage: React.FC<ToDoPageProps> = () => {
+const ToDoPage = () => {
     const [taskName, setTaskName] = useState('');
-    const [taskDeadline, setTaskDeadline] = useState('');
-    const [taskCategory, setTaskCategory] = useState('');
-    const [tasks, setTasks] = useState(initialTasks);
-    const [existingTask, setExistingTask] = useState<any | null>(null);
+    const [taskDeadline, setTaskDeadline] = useState<string | null>('');
+    const [taskCategory, setTaskCategory] = useState<{id: number | null, name: string}>({id: null, name: ""});
+    const [taskDescription, setTaskDescription] = useState<string | null>('');
+    const [taskId, setTaskId] = useState<number | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
-    const [taskDescription, setTaskDescription] = useState('');
+    const { taskCards, setTaskCards, language } = useUser();
+    const FunctionsProxy = useFunctionsProxy();
 
-    useEffect(() => {
-        const normalizedTaskName = taskName.trim().toLowerCase();
-        const normalizedCategory = taskCategory.trim().toLowerCase();
-        const task = tasks.find(t =>
-            t.category.toLowerCase() === normalizedCategory &&
-            t.subTasks.some(subTask => subTask.name.toLowerCase() === normalizedTaskName)
-        );
+    const findCategory = (taskId: number) => {
+        const card = taskCards.find((card) => card.tasks.find((task) => task.id === taskId));
+        setTaskCategory({id: card!.id, name: card!.category});
+        return {id: card!.id, name: card!.category};
+    };
 
-        if (task) {
-            setExistingTask(task);
-            setTaskCategory(task.category);
-        } else {
-            setExistingTask(null);
-        }
-    }, [taskName, taskCategory, tasks]);
-
-    const handleAddTask = () => {
-        if (existingTask) {
-            setNotification(`Task "${taskName}" already exists in category "${taskCategory}"`);
-            setTimeout(() => setNotification(null), notificationTimeOut);
-            return;
-        }
-
-        const newTask = {
-            name: taskName,
-            deadline: taskDeadline,
-            description: taskDescription,
-            completed: false
-        };
-
-        setTasks(prevTasks => {
-            const categoryIndex = prevTasks.findIndex(task => task.category.toLowerCase() === taskCategory.toLowerCase());
-            if (categoryIndex !== -1) {
-                const updatedSubTasks = [...prevTasks[categoryIndex].subTasks, newTask];
-                return prevTasks.map((task, index) =>
-                    index === categoryIndex ? { ...task, subTasks: updatedSubTasks } : task
-                );
-            } else {
-                return [...prevTasks, { category: taskCategory, subTasks: [newTask] }];
-            }
-        });
-
-        addTask(taskCategory, newTask);
-        setNotification(`Task "${taskName}" added to category "${taskCategory}"`);
-        setTimeout(() => setNotification(null), notificationTimeOut);
-
-
+    const clean = () => {
         setTaskName('');
         setTaskDeadline('');
-        setTaskCategory('');
+        setTaskCategory({id:null, name: ""});
         setTaskDescription('');
-    };
+        setTaskId(null);
+    }
 
+    const refreshTaskCards = async () => {
+        const updatedTaskCards = await FunctionsProxy.getTasks(); 
+        setTaskCards(updatedTaskCards); 
+      };
 
-    const handleRemoveTask = () => {
-        setTasks(prevTasks =>
-            prevTasks.map(task => {
-                if (task.category.toLowerCase() === taskCategory.toLowerCase()) {
-                    const updatedSubTasks = task.subTasks.filter(subTask => subTask.name.toLowerCase() !== taskName.toLowerCase());
-                    return {
-                        ...task,
-                        subTasks: updatedSubTasks
-                    };
-                }
-                return task;
-            }).filter(task => task.subTasks.length > 0)
-        );
-
-
-        removeTask(taskCategory, taskName);
-
-        setNotification(`Task "${taskName}" removed from category "${taskCategory}"`);
+    const handleAddTask = async () => {
+        await FunctionsProxy.addTask(taskCategory.id!, taskCategory.name, taskName, taskDescription || "", taskDeadline);
+        setNotification(translations[language].taskAdded.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
+        
+        await refreshTaskCards();
+        clean();
     };
 
-    const handleUpdateTask = () => {
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
-                if (task.category.toLowerCase() === taskCategory.toLowerCase()) {
-                    return {
-                        ...task,
-                        subTasks: task.subTasks.map(subTask =>
-                            subTask.name.toLowerCase() === taskName.toLowerCase()
-                                ? { ...subTask, deadline: taskDeadline, description: taskDescription }
-                                : subTask
-                        )
-                    };
-                }
-                return task;
-            });
-        });
 
-        updateTask(taskCategory, taskName, { deadline: taskDeadline, description: taskDescription });
-        setNotification(`Task "${taskName}" updated in category "${taskCategory}"`);
+    const handleRemoveTask = async () => {
+        await FunctionsProxy.removeTask(taskId!);
+        setNotification(translations[language].taskRemoved.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
+        
+        await refreshTaskCards();
+        clean();
     };
 
-    const handleTaskChange = (taskName: string, category: string) => {
-        setTasks(prevTasks => {
-            return prevTasks.map(task => {
-                if (task.category.toLowerCase() === category.toLowerCase()) {
-                    return {
-                        ...task,
-                        subTasks: task.subTasks.map(subTask =>
-                            subTask.name.toLowerCase() === taskName.toLowerCase()
-                                ? { ...subTask, completed: !subTask.completed }
-                                : subTask
-                        )
-                    };
-                }
-                return task;
-            });
-        });
+    const handleUpdateTask = async () => {
+        await FunctionsProxy.updateTask(taskId!, taskCategory.id, taskCategory.name, taskName, taskDescription, taskDeadline);
+        setNotification(translations[language].taskUpdated.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
+        setTimeout(() => setNotification(null), notificationTimeOut);
+       
+        await refreshTaskCards();
+        clean();
     };
 
     const handleDeadlineChange = (deadline: Date) => {
@@ -145,9 +77,9 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
     const isInputValid = () => {
         return (
             taskName.trim() !== '' &&
-            taskDeadline.trim() !== '' &&
-            !isNaN(Date.parse(taskDeadline)) &&
-            taskCategory.trim() !== ''
+            (!taskDeadline || taskDeadline.trim() !== '' &&
+            !isNaN(Date.parse(taskDeadline))) &&
+            taskCategory.name.trim() !== ''
         );
     };
 
@@ -156,38 +88,63 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
         <Container>
             <MenuContainer>
                 <div style={{ marginBottom: "-2rem" }}>
-                    <Heading level={2}>Manage To Do</Heading>
+                    <Heading level={2}>{translations[language].manageToDo}</Heading>
                 </div>
 
-                <Subtitle level={3}>Task Name</Subtitle>
+                <Subtitle level={3}>{translations[language].taskName}</Subtitle>
                 <GuidedInput
                     value={taskName}
-                    setInputValue={setTaskName}
-                    suggestions={tasks.flatMap(task => task.subTasks.map(subTask => subTask.name))}
-                    placeholder="Name of the task"
+                    suggestions={taskCards.flatMap(card => card.tasks.map(task => task.name))}
+                    placeholder={translations[language].taskName}
                     onChange={(e) => setTaskName(e.target.value)}
+                    setInputValue={(value) => {
+                        const selectedTask = taskCards
+                          .flatMap((card) => card.tasks)
+                          .find((task) => task.name === value);
+                    
+                        if (selectedTask) {
+                          setTaskId(selectedTask.id);
+                          setTaskName(selectedTask.name);
+                          setTaskDescription(selectedTask.description);
+                          setTaskDeadline(selectedTask.deadline);
+                          findCategory(selectedTask.id);
+                        } else {
+                          setTaskId(null);
+                          setTaskDescription(""); 
+                          setTaskDeadline("");
+                          setTaskCategory({id: null, name: ""});
+                        }
+                    }}
                 />
 
-                <Subtitle level={3}>Deadline</Subtitle>
+                <Subtitle level={3}>{translations[language].deadline}</Subtitle>
                 <Input
-                    value={taskDeadline}
-                    placeholder="Task deadline"
+                    value={taskDeadline || ""}
+                    placeholder={translations[language].deadline}
                     type="date"
                     onChange={(e) => setTaskDeadline(e.target.value)}
                 />
 
-                <Subtitle level={3}>Category</Subtitle>
+                <Subtitle level={3}>{translations[language].category}</Subtitle>
                 <GuidedInput
-                    value={taskCategory}
-                    suggestions={tasks.map(task => task.category)}
-                    placeholder="Category"
-                    setInputValue={setTaskCategory}
-                    onChange={(e) => setTaskCategory(e.target.value)}
+                    value={taskCategory.name}
+                    suggestions={taskCards.map(card => card.category)}
+                    placeholder={translations[language].category}
+                    onChange={(e) => setTaskCategory({name: e.target.value, id: null})}
+                    setInputValue={(value) => {
+                        const selectedCategory = taskCards.find(card => card.category === value);
+                        if (selectedCategory) {
+                            setTaskCategory({ name: selectedCategory.category, id: selectedCategory.id });
+                        } else {
+                            setTaskCategory({ name: value, id: null });
+                        }
+                    }}
                 />
-                <Subtitle level={3}>Description</Subtitle>
+
+                <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
-                    value={taskDescription}
-                    placeholder="Description of the task"
+                    value={taskDescription || ""}
+                    placeholder={translations[language].description}
                     onChange={(e) => setTaskDescription(e.target.value)}
                 />
 
@@ -195,22 +152,22 @@ const ToDoPage: React.FC<ToDoPageProps> = () => {
                 {notification && <Notification>{notification}</Notification>}
 
                 <ButtonContainer>
-                    {existingTask ? (
+                    {taskId ? (
                         <>
                             {isInputValid() ?
-                                <Button onClick={handleUpdateTask}>Modify Task</Button> :
-                                <Button disabled>Modify Task</Button>}
-                            <Button onClick={handleRemoveTask}>Remove Task</Button>
+                                <Button onClick={handleUpdateTask}>{translations[language].modifyTask}</Button> :
+                                <Button disabled>{translations[language].modifyTask}</Button>}
+                            <Button onClick={handleRemoveTask}>{translations[language].removeTask}</Button>
                         </>
                     ) : isInputValid() ? (
-                        <Button onClick={handleAddTask}>Add Task</Button>
+                        <Button onClick={handleAddTask}>{translations[language].addTask}</Button>
                     ) : (
-                        <Button disabled>Add Task</Button>
+                        <Button disabled>{translations[language].addTask}</Button>
                     )}
                 </ButtonContainer>
             </MenuContainer>
 
-            <ToDo initialTasks={tasks} onTaskChange={handleTaskChange} onDeadlineChange={handleDeadlineChange} />
+            <ToDo onDeadlineChange={handleDeadlineChange} />
         </Container>
     );
 };

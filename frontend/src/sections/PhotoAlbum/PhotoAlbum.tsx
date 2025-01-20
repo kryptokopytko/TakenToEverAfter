@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image } from '../../types';
 import { GridContainer } from '../../styles/section';
 import { Body } from '../../styles/typography';
-import { updateApprovedStatus, updateFavoriteStatus } from '../../DBApi';
+import useFunctionsProxy from "../../API/FunctionHandler";
 import { Container, Indicator, PhotoCard, PhotoImage, PhotoInfo } from './PhotoAlbumStyles';
 import FullScreenModal from './FullScreenModal';
 
@@ -17,6 +17,7 @@ interface PhotoAlbumProps {
 const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleApproveChange, handleDeletePhoto, isGuest }) => {
     const [localImages, setLocalImages] = useState<Image[]>(images.map((image) => ({ ...image })));
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
+    const FunctionsProxy = useFunctionsProxy();
 
     useEffect(() => {
         setLocalImages(images);
@@ -27,7 +28,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         const image: Image = updatedImages[index];
         image.isFavorite = !image.isFavorite;
         setLocalImages(updatedImages);
-        updateFavoriteStatus(image.id, image.isFavorite);
+        FunctionsProxy.updateFavourite(image.id, image.isFavorite);
     };
 
     const toggleApproved = async (index: number): Promise<void> => {
@@ -36,7 +37,11 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         image.isApproved = !image.isApproved;
         setLocalImages(updatedImages);
         handleApproveChange(image.id, image.isApproved);
-        updateApprovedStatus(image.id, image.isApproved);
+        if (image.isApproved) {
+            await FunctionsProxy.acceptPhoto(image.id);
+        } else {
+            await FunctionsProxy.discardPhoto(image.id);
+        }
     };
 
     const deletePhoto = (id: number) => {

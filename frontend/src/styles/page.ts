@@ -34,6 +34,8 @@ export const Container = styled.div<{ isBudget?: boolean; color?: string }>`
     }
   }
 `;
+Container.shouldForwardProp = (prop) => !["isBudget", "color"].includes(prop); 
+
 
 export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
   padding: 1rem 2rem;
@@ -58,3 +60,4 @@ export const MenuContainer = styled.div<{ color?: string; isBudget?: boolean }>`
     overflow: auto;
   }
 `;
+MenuContainer.shouldForwardProp = (prop) => !["isBudget", "color"].includes(prop); 

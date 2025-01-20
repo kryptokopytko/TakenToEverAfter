@@ -1,9 +1,6 @@
 import { createContext, useState, useLayoutEffect, ReactNode, useContext } from "react";
-import { initialThemes, Theme } from "../styles/theme";
-
-interface Themes {
-  [key: string]: Theme;
-}
+import { initialFontSize, initialThemes } from "../styles/theme";
+import { Theme, Themes } from "../types";
 
 interface ThemeContextType {
   theme: Theme;
@@ -29,7 +26,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themes, setThemes] = useState<Themes>(initialThemes);
   const [theme, setCurrentTheme] = useState<Theme>(themes.nude);
   const [customThemeCount, setCustomThemeCount] = useState(0);
-  const [fontSize, setFontSize] = useState(16);
+  const [fontSize, setFontSize] = useState(initialFontSize);
 
   const calculateFontSize = () => {
     const screenWidth = window.innerWidth;
@@ -64,7 +61,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       console.log("Custom theme added:", customThemeKey, newTheme);
     } else {
       setCurrentTheme(newTheme);
-      console.log("Theme updated:", newTheme);
     }
   };
 

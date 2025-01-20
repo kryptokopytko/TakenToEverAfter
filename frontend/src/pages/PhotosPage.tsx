@@ -2,14 +2,15 @@ import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { exampleImages } from "../exampleData";
 import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
-import { addPhotoToApi } from "../DBApi";
+import useFunctionsProxy from "../API/FunctionHandler";
 import Checkbox from "../components/ui/Checkbox";
 import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
+import { translations } from "../translations";
+import { useUser } from "../providers/UserContext";
 
 const PhotosPage: React.FC = () => {
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
@@ -17,13 +18,14 @@ const PhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState("");
     const [photoAuthor, setPhotoAuthor] = useState("");
     const [isVertical, setIsVertical] = useState(false);
-    const [photos, setPhotos] = useState(exampleImages);
-    const [imageUrl, setImageUrl] = useState<string | null>(null); // Store the image URL
+    const [imageUrl, setImageUrl] = useState<string | null>(null); 
+    const FunctionsProxy = useFunctionsProxy();
+    const { language, photos, setPhotos } = useUser();
 
     const handleAddPhoto = async () => {
         try {
             if (!photoName.trim() || !imageUrl) {
-                alert("Please provide a photo name and upload an image.");
+                alert(translations[language].alertProvidePhotoDetails);
                 return;
             }
 
@@ -37,30 +39,31 @@ const PhotosPage: React.FC = () => {
                 id: Math.round(Math.random() * 10000000),
             };
 
-            setPhotos((prevPhotos) => [...prevPhotos, newImage]);
-            addPhotoToApi(newImage);
+            setPhotos([...photos, newImage]);
+            FunctionsProxy.addPhoto(newImage);
 
             setPhotoName("");
             setPhotoAuthor("");
             setIsVertical(false);
             setImageUrl(null);
 
-            alert(`Photo uploaded successfully! You can view it here: ${imageUrl}`);
+            alert(translations[language].alertPhotoUploadSuccess.replace("{url}", imageUrl));
         } catch (error) {
-            alert("Failed to upload image: " + error);
+            const errorMessage = (error as Error).message || "?";
+            alert(translations[language].alertPhotoUploadFail.replace("{error}", errorMessage));
         }
     };
 
     const handleApproveChange = (id: number, isApproved: boolean) => {
-        setPhotos((prevPhotos) =>
-            prevPhotos.map((photo) =>
+        setPhotos(
+            photos.map((photo) =>
                 photo.id === id ? { ...photo, isApproved } : photo
             )
         );
     };
 
     const handleDeletePhoto = (id: number) => {
-        setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.id !== id));
+        setPhotos(photos.filter((photo) => photo.id !== id));
     };
 
     const approvedImages = photos.filter((image) => image.isApproved);
@@ -69,20 +72,20 @@ const PhotosPage: React.FC = () => {
     return (
         <Container color="light">
             <MenuContainer>
-                <Heading level={2}>Photos</Heading>
-                <ImgurUploader onImageUpload={setImageUrl} /> {/* Pass function to handle image URL */}
+                <Heading level={2}>{translations[language].photos}</Heading>
+                <ImgurUploader onImageUpload={setImageUrl} /> 
 
-                <Subtitle level={3}>Photo Name</Subtitle>
+                <Subtitle level={3}>{translations[language].photoName}</Subtitle>
                 <Input
                     value={photoName}
                     onChange={(e) => setPhotoName(e.target.value)}
-                    placeholder="Enter photo name"
+                    placeholder={translations[language].photoName}
                 />
-                <Subtitle level={3}>Author (optional)</Subtitle>
+                <Subtitle level={3}>{translations[language].author}</Subtitle>
                 <Input
                     value={photoAuthor}
                     onChange={(e) => setPhotoAuthor(e.target.value)}
-                    placeholder="Enter author name"
+                    placeholder={translations[language].authorPlaceholder}
                 />
 
                 <div style={{ display: "flex", justifyContent: "center", marginTop: '2rem' }}>
@@ -90,19 +93,19 @@ const PhotosPage: React.FC = () => {
                         checked={isVertical}
                         onChange={() => setIsVertical(!isVertical)}
                     />
-                    Is vertical?
+                    {translations[language].isVertical}
                 </div>
                 <ButtonContainer>
-                    <Button onClick={handleAddPhoto}>Add Photo</Button>
+                    <Button onClick={handleAddPhoto}>{translations[language].addPhoto}</Button>
                 </ButtonContainer>
             </MenuContainer>
 
             <div>
                 <FavouritePhotos />
                 <SpaceBetweenContainer>
-                    <Subtitle level={1}>Approved Photos</Subtitle>
+                    <Subtitle level={1}>{translations[language].approvedPhotos}</Subtitle>
                     <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>
-                        {areApprovedExpanded ? "Hide" : "Show"}
+                        {areApprovedExpanded ? translations[language].hide : translations[language].show}
                     </Button>
                 </SpaceBetweenContainer>
                 {areApprovedExpanded && (
@@ -116,9 +119,9 @@ const PhotosPage: React.FC = () => {
                 )}
 
                 <SpaceBetweenContainer>
-                    <Subtitle level={1}>Pending Photos</Subtitle>
+                    <Subtitle level={1}>{translations[language].pendingPhotos}</Subtitle>
                     <Button onClick={() => setArePendingExpanded(!arePendingExpanded)}>
-                        {arePendingExpanded ? "Hide" : "Show"}
+                        {arePendingExpanded ? translations[language].hide : translations[language].show}
                     </Button>
                 </SpaceBetweenContainer>
                 {arePendingExpanded && (

@@ -8,9 +8,6 @@ import TableChart from "../sections/TableChart/TableChart";
 import ThemeConstructor from "../sections/ThemeConstructor/ThemeConstructor";
 import Choices from "../sections/Choices";
 import Printables from "../sections/Printables/Printables";
-import { guests, expenses, initialTasks, initialChoices } from "../exampleData";
-import { handleDecision, handleInvite } from "../DBApi";
-
 
 const Container = styled.div`
   display: flex;
@@ -39,26 +36,22 @@ const SectionsContainer = styled.div`
 
 
 const Home = () => {
-
   return (
     <Container>
       <SectionsContainer>
         <Hero />
         <div id="guest-list">
           <GuestList
-            guests={guests}
-            handleInvite={handleInvite}
-            handleDecision={handleDecision}
             isHomePage={true} />
         </div>
         <div id="budget">
-          <Budget isHomePage={true} expenses={expenses} />
+          <Budget isHomePage={true} />
+        </div> 
+        <div id="choices">
+          <Choices isHomePage={true} />
         </div>
         <div id="to-do">
-          <ToDo isHomePage={true} initialTasks={initialTasks} />
-        </div>
-        <div id="choices">
-          <Choices isHomePage={true} initialChoices={initialChoices} />
+          <ToDo isHomePage={true} />
         </div>
         <div id="photo-album">
           <FavouritePhotos isHomePage={true} />

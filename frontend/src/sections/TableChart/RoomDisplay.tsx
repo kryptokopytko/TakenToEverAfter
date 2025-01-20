@@ -4,6 +4,8 @@ import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
 import { RoundTable, RectangularTable } from "../../types";
 import Button from "../../components/ui/Button";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 export const Board = styled.div`
   width: 100%;
@@ -16,7 +18,7 @@ export const Board = styled.div`
 
 const RoomDisplay: React.FC = () => {
     const { roomDimensions, roundTables, setRoundTables, rectangularTables, setRectangularTables } = useTable();
-
+    const { language } = useUser();
     const boardRef = useRef<HTMLDivElement>(null);
     const [boardWidth, setBoardWidth] = useState(0);
     const [boardHeight, setBoardHeight] = useState(0);
@@ -100,7 +102,7 @@ const RoomDisplay: React.FC = () => {
                 ))}
             </Board>
             <Button onClick={() => setShowNames((prev) => !prev)}>
-                {showNames ? "Hide Names" : "Show Names"}
+                {showNames ? translations[language].hideNames : translations[language].showNames}
             </Button>
         </>
 

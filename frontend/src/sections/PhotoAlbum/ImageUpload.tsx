@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Subtitle } from "../../styles/typography";
+import { translations } from "../../translations";
+import { useUser } from "../../providers/UserContext";
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +33,7 @@ const UploadBox = styled.div<{ isDragging: boolean }>`
     border-color: #444;
   }
 `;
+UploadBox.shouldForwardProp = (prop) => !["isDragging"].includes(prop); 
 
 const UploadHint = styled.p`
   font-size: 1rem;
@@ -46,6 +49,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
     const [image, setImage] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const uploadRef = useRef<HTMLDivElement>(null);
+    const { language } = useUser();
 
     const handlePaste = (e: ClipboardEvent) => {
         if (e.clipboardData?.files.length) {
@@ -87,7 +91,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
 
     const processImage = (file: File) => {
         if (!file.type.startsWith("image/")) {
-            alert("Please upload a valid image file.");
+            alert(translations[language].imageUploadError);
             return;
         }
 
@@ -98,7 +102,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
             }
         };
         reader.onerror = () => {
-            alert("Failed to load image. Please try again.");
+            alert(translations[language].imageLoadError);
         };
         reader.readAsDataURL(file);
     };
@@ -135,7 +139,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
 
     return (
         <Container>
-            <Subtitle level={3}>Upload Photo</Subtitle>
+            <Subtitle level={3}>{translations[language].uploadPhoto}</Subtitle>
             {image ? (
                 <ImagePreview src={image} alt="Uploaded" />
             ) : (
@@ -149,7 +153,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
                     onDragLeave={handleDragLeave}
                 >
                     <UploadHint>
-                        Drag & drop your image here, click to select, or paste (Ctrl+V)
+                        {translations[language].dnd}
                     </UploadHint>
                 </UploadBox>
             )}

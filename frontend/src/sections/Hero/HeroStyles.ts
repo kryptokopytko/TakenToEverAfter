@@ -74,11 +74,3 @@ export const Image = styled.img`
     width: 80%;
   }
 `;
-
-export const SummaryText = styled.span`
-  display: inline;
-
-  @media (min-width: 1200px) {
-    display: none;
-  }
-`;

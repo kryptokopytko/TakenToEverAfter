@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { RoundTable, RectangularTable } from "../types";
+import Example from "../exampleData";
 
 interface TableContextType {
     roomDimensions: number[];
@@ -18,32 +19,8 @@ const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
     const [roomDimensions, setRoomDimensions] = useState([12, 12]);
-    const [roundTables, setRoundTables] = useState<RoundTable[]>([{
-        id: "children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
-            'Bernadeta Nowak',
-            'Celina Wiśniewska',
-            'Derek Jankowski',
-            'Eugenia Zawisza',
-            'Felicja Grabowska',
-            'Genowefa Zielińska',
-            'Hiacynta Kaczmarek',
-            'Irenka Lewandowska',
-            'Józefina Szymańska',
-            'Kornela Kamińska']
-    }]);
-    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>([{
-        id: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
-            'Bernadeta Nowak',
-            'Celina Wiśniewska',
-            'Derek Jankowski',
-            'Eugenia Zawisza',
-            'Felicja Grabowska',
-            'Genowefa Zielińska',
-            'Hiacynta Kaczmarek',
-            'Irenka Lewandowska',
-            'Józefina Szymańska',
-            'Kornela Kamińska']
-    }]);
+    const [roundTables, setRoundTables] = useState<RoundTable[]>(Example.roundTables);
+    const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>(Example.rectangularTables);
 
     const addRoundTable = (table: RoundTable) => {
         setRoundTables((prev) => [...prev, table]);

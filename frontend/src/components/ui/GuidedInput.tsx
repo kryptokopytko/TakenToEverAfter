@@ -27,6 +27,7 @@ const SuggestionItem = styled.li<{ isSelected: boolean }>`
     color: ${({ theme }) => theme.body};
   }
 `;
+SuggestionItem.shouldForwardProp = (prop) => prop !== "isSelected";
 
 interface GuidedInputProps extends InputProps {
     suggestions: string[];
@@ -37,11 +38,9 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number>(-1);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-    const [inputValue, setInputValueLocal] = useState<string>(inputProps.value || '');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const userInput = e.target.value;
-        setInputValueLocal(userInput);
 
         const filtered = suggestions.filter(suggestion =>
             suggestion.toLowerCase().includes(userInput.toLowerCase())
@@ -51,7 +50,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
         setActiveSuggestionIndex(-1);
         setShowSuggestions(!!userInput && filtered.length > 0);
 
-        if (setInputValue) {
+        if (userInput == "" && setInputValue) {
             setInputValue(userInput);
         }
 
@@ -62,7 +61,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
 
 
     const handleClick = (suggestion: string) => {
-        setInputValueLocal(suggestion);
         setFilteredSuggestions([]);
         setShowSuggestions(false);
         if (setInputValue) {
@@ -93,7 +91,6 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
         <InputContainer>
             <Input
                 {...inputProps}
-                value={inputValue}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 type={'text'}
@@ -103,7 +100,7 @@ const GuidedInput: React.FC<GuidedInputProps> = ({ suggestions, setInputValue, p
                 <SuggestionsList>
                     {filteredSuggestions.map((suggestion, index) => (
                         <SuggestionItem
-                            key={suggestion}
+                            key={index}
                             isSelected={index === activeSuggestionIndex}
                             onClick={() => handleClick(suggestion)}
                         >
