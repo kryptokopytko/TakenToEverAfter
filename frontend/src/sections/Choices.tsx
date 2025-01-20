@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Description, DescriptionContainer } from "../styles/Description";
 import { useUser } from "../providers/UserContext";
 import { translations } from "../translations";
+import { Expense } from "../types";
 
 const LimitedWidth = styled.span`
     max-width: 50%;
@@ -22,14 +23,51 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
     const FunctionsProxy = useFunctionsProxy();
 
-    const { choices, language } = useUser();
+    const { choices, language, expenseCards, setChoices, setExpenseCards } = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
     };
 
-    const handlePick = (choiceId: number, categoryId: number) => {
-        FunctionsProxy.handleChoicePick(choiceId, categoryId);
+    const handlePick = async (choiceId: number, categoryId: number) => {
+        const choiceCategory = choices.find(card => card.id == categoryId);
+        const choice = choiceCategory?.options.find(option => option.id === choiceId);
+        const expenseCategory = expenseCards.find(card => card.category == choiceCategory?.category);
+        
+        if (!expenseCategory) {
+            const newExpenseCardId = await FunctionsProxy.addExpenseCategory(choiceCategory!.category); 
+            const id = await FunctionsProxy.transferChoiceToExpense(choiceId, choice!, newExpenseCardId);
+            setExpenseCards([...expenseCards, {
+                id: newExpenseCardId,
+                category: choiceCategory!.category,
+                expenses: [{
+                    ...(choice as Expense),
+                    id: id
+                }]
+            }])
+        } else {
+            const id = await FunctionsProxy.transferChoiceToExpense(choiceId, choice!, expenseCategory.id);
+            setExpenseCards(expenseCards.map(card => 
+                card.id === expenseCategory.id
+                    ? {
+                        ...card,
+                        expenses: [
+                            ...card.expenses,
+                            {
+                                ...(choice as Expense),
+                                id: id
+                            }
+                        ]
+                    }
+                    : card
+            ));
+            
+        }
+
+        setChoices(choices.map(card => card.id == categoryId? {
+            ...card,
+            options: card.options.filter(option => option.id != choiceId)
+        } : card))
     };
 
     return (

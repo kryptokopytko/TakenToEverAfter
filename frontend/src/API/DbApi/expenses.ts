@@ -1,4 +1,4 @@
-import { Choice } from "../../types";
+import { Option } from "../../types";
 import api from "./axiosInstance";
 
 export const addExpense = async (
@@ -94,7 +94,7 @@ export const addChoice = async (
 
     const response = await api.post("/expenses/choices/", newChoice, {withCredentials: true});
     console.log("Choice created:", response.data);
-    return response.data;
+    return response.data.id;
   } catch (error) {
     console.error("Error adding choice:", error);
     throw error;
@@ -155,20 +155,15 @@ export const updateChoice = async (
   }
 };
 
-export const handleChoicePick = (
-  choiceId: number,
-  categoryId: number,
-) => {};
-
 export const transferChoiceToExpense = async (
   choiceId: number,
-  choice: Choice,
+  option: Option,
   expenseCardId: number
 ) => {
   try {
     await api.delete(`/expenses/choices/${choiceId}/`, {withCredentials: true});
-    const response = await api.post("/expenses/expenses/", {...choice, expenseCard: expenseCardId}, {withCredentials: true});
-    return response.data;
+    const response = await api.post("/expenses/expenses/", {...option, expenseCard: expenseCardId}, {withCredentials: true});
+    return response.data.id;
   } catch (error) {
     console.error(
       `Error transferring potential expense with ID ${choiceId}:`,
