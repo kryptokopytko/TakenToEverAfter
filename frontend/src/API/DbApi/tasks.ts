@@ -1,3 +1,4 @@
+import { Task, TaskCard } from "../../types";
 import api from "./axiosInstance";
 
 export const updateTask = async (
@@ -6,7 +7,8 @@ export const updateTask = async (
     categoryName: string,
     name: string,
     description: string | null = null,
-    deadline: string | null = null
+    deadline: string | null = null,
+    completed: boolean
   ) => {
     try {
       if (!categoryId) {
@@ -16,9 +18,10 @@ export const updateTask = async (
   
       const updatedTask = {
         category: categoryId,
-        name: name,
-        description: description,
-        deadline: deadline,
+        name,
+        description,
+        deadline,
+        completed
       };
       const response = await api.patch(`/tasks/tasks/${taskId}/`, updatedTask, 
         { withCredentials: true }
@@ -33,9 +36,9 @@ export const updateTask = async (
   
   export const addCategory = async (categoryName: string) => {
     try {
-      const response = await api.post("/todo_list_categories/", categoryName);
+      const response = await api.post("/tasks/todo-list-categories/", {category: categoryName}, { withCredentials: true });
       console.log("New category created:", response.data);
-      return response.data;
+      return response.data.id;
     } catch (error) {
       console.error("Error creating category:", error);
       throw error;
@@ -51,20 +54,19 @@ export const updateTask = async (
   ) => {
     try {
       if (!categoryId) {
-        const newCategory = await addCategory(categoryName);
-        categoryId = newCategory.id;
+        categoryId = await addCategory(categoryName);
       }
   
       const newTask = {
-        categoryId,
+        category: categoryId,
         name,
         description,
         deadline,
       };
   
-      const response = await api.post("/tasks/", newTask);
+      const response = await api.post("/tasks/tasks/", newTask, { withCredentials: true });
       console.log("Task created:", response.data);
-      return response.data;
+      return response.data.id;
     } catch (error) {
       console.error("Error adding task:", error);
       throw error;
@@ -73,26 +75,12 @@ export const updateTask = async (
   
   export const removeTask = async (id: number) => {
     try {
-      const response = await api.delete(`/tasks/${id}/`);
+      const response = await api.delete(`/tasks/tasks/${id}/`, { withCredentials: true });
   
       console.log(`Task with ID ${id} removed successfully.`);
       return response.data;
     } catch (error) {
       console.error(`Error removing task with ID ${id}:`, error);
-      throw error;
-    }
-  };
-  
-  export const updateTaskCompletion = async (
-    taskId: number,
-    isCompleted: boolean
-  ) => {
-    try {
-      const response = await api.patch(`/tasks/${taskId}/`, isCompleted);
-      console.log("Task completion status updated:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error updating task completion status:", error);
       throw error;
     }
   };
@@ -103,7 +91,7 @@ export const updateTask = async (
         account: accountId,
         name: assigneeName,
       };
-      const response = await api.post("/task_assignees/", newAssignee);
+      const response = await api.post("/tasks/task-assignees/", newAssignee, { withCredentials: true });
       console.log("New assignee created:", response.data);
       return response.data;
     } catch (error) {
@@ -123,7 +111,7 @@ export const updateTask = async (
         assignee: assigneeId,
         task: taskId,
       };
-      const response = await api.post("/task_assignments/", newAssignment);
+      const response = await api.post("/tasks/task-assignments/", newAssignment, { withCredentials: true });
       console.log("Task assigned:", response.data);
       return response.data;
     } catch (error) {
@@ -134,14 +122,14 @@ export const updateTask = async (
   
   export const getTasks = async () => {
     try {
-      const response = await api.get(`/tasks/user-tasks`, 
+      const response = await api.get(`/tasks/todo-list-categories`, 
         { withCredentials: true }
       );
-      const taskCards = response.data.taskCards.map((card: TaskCard): TaskCard => {
+      const taskCards = response.data.map((card: TaskCard) => {
         return {
           id: card.id,
           category: card.category,
-          tasks: card.tasks.map((task: Task): Task => ({
+          tasks: card.tasks.map((task: Task) => ({
             id: task.id,
             name: task.name,
             completed: task.completed,

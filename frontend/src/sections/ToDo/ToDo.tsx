@@ -20,7 +20,7 @@ interface ToDoProps {
 }
 
 const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange }) => {
-  const { accountDetails, taskCards, language } = useUser();
+  const { accountDetails, taskCards, language, setTaskCards } = useUser();
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const FunctionsProxy = useFunctionsProxy();
@@ -85,7 +85,21 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
     const task = card.tasks[taskIndex];
 
     { onTaskChange ? onTaskChange(task.name, card.category) : {} };
-    FunctionsProxy.updateTaskCompletion(task.id, !task.completed);
+    FunctionsProxy.updateTask(task.id, card.id, card.category, task.name, task.description, task.deadline, !task.completed);
+    setTaskCards(
+      taskCards.map((card, index) =>
+        index === cardIndex
+          ? {
+              ...card,
+              tasks: card.tasks.map((task, idx) =>
+                idx === taskIndex
+                  ? { ...task, completed: !task.completed }
+                  : task
+              ),
+            }
+          : card
+      )
+    );
   };
 
   const toggleList = () => {
