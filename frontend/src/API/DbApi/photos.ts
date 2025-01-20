@@ -1,31 +1,11 @@
+import { Image } from "../../types";
 import api from "./axiosInstance";
 
-
-export const updateFavoriteStatus = async (
-  imageId: number,
-  isFavorite: boolean
-) => {};
-export const updateApprovedStatus = (
-  imageId: number,
-  isApproved: boolean
-) => {};
-export const addPhotoToApi = async (photo: Image) => {};
-
 export const addPhoto = async (
-  accountId: number,
-  link: string,
-  description: string | null = null,
-  uploader: string | null = null
+  photo: Image
 ) => {
   try {
-    const newPhoto = {
-      account: accountId,
-      link,
-      description,
-      uploader,
-    };
-
-    const response = await api.post("/to_accept_photos/", newPhoto);
+    const response = await api.post("/photos/to_accept_photos/", photo, { withCredentials: true });
     console.log("New photo added:", response.data);
     return response.data;
   } catch (error) {
@@ -36,7 +16,7 @@ export const addPhoto = async (
 
 export const removePhoto = async (photoId: number) => {
   try {
-    const response = await api.delete(`/accepted_photos/${photoId}/`);
+    const response = await api.delete(`/photos/accepted_photos/${photoId}/`, { withCredentials: true });
     console.log(`Photo with ID ${photoId} has been deleted.`);
     return response.data;
   } catch (error) {
@@ -47,7 +27,7 @@ export const removePhoto = async (photoId: number) => {
 
 export const discardPhoto = async (photoId: number) => {
   try {
-    const response = await api.delete(`/to_accept_photos/${photoId}/`);
+    const response = await api.delete(`/photos/to_accept_photos/${photoId}/`, { withCredentials: true });
     console.log(`Photo with ID ${photoId} has been discarded.`);
     return response.data;
   } catch (error) {
@@ -58,7 +38,7 @@ export const discardPhoto = async (photoId: number) => {
 
 export const acceptPhoto = async (photoId: number) => {
   try {
-    const toAcceptResponse = await api.get(`/to_accept_photos/${photoId}/`);
+    const toAcceptResponse = await api.get(`/photos/to_accept_photos/${photoId}/`, { withCredentials: true });
     const photoData = toAcceptResponse.data;
     await api.delete(`/to_accept_photos/${photoId}/`);
 
@@ -71,8 +51,8 @@ export const acceptPhoto = async (photoId: number) => {
     };
 
     const acceptedPhotoResponse = await api.post(
-      "/accepted_photos/",
-      acceptedPhotoData
+      "/photos/accepted_photos/",
+      acceptedPhotoData, { withCredentials: true }
     );
     console.log(
       "Photo has been accepted and moved to the Accepted collection:",
@@ -90,7 +70,7 @@ export const updateFavourite = async (
   isFavourite: boolean
 ) => {
   try {
-    const photoResponse = await api.get(`/accepted_photos/${photoId}/`);
+    const photoResponse = await api.get(`/photos/accepted_photos/${photoId}/`, { withCredentials: true });
     const photo = photoResponse.data;
 
     const updatedPhotoData = {
@@ -99,13 +79,45 @@ export const updateFavourite = async (
     };
 
     const response = await api.patch(
-      `/accepted_photos/${photoId}/`,
-      updatedPhotoData
+      `/photos/accepted_photos/${photoId}/`,
+      updatedPhotoData, { withCredentials: true }
     );
     console.log("Updated photo favourite status:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error updating photo favourite status:", error);
+    throw error;
+  }
+};
+
+export const getPhotos = async () => {
+  try {
+    const photoResponse = await api.get('/photos/accepted-photos/', { withCredentials: true });
+    const toAcceptPhotoResponse = await api.get('/photos/to-accept-photos/', { withCredentials: true });
+
+    const acceptedPhotos = photoResponse.data.map((photo: any) => ({
+      id: photo.id,
+      name: photo.description || undefined,
+      link: photo.link,
+      isFavorite: photo.favourite,
+      author: photo.uploader || undefined,
+      isVertical: photo.is_vertical,
+      isApproved: true,
+    }));
+
+    const toAcceptPhotos = toAcceptPhotoResponse.data.map((photo: any) => ({
+      id: photo.id,
+      name: photo.description || undefined,
+      link: photo.link,
+      isFavorite: false,
+      author: photo.uploader || undefined,
+      isVertical: photo.is_vertical,
+      isApproved: false,
+    }));
+
+    return [...acceptedPhotos, ...toAcceptPhotos];
+  } catch (error) {
+    console.error("Error fetching photos:", error);
     throw error;
   }
 };

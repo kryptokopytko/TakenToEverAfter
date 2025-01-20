@@ -2,7 +2,6 @@ import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import Example from "../exampleData";
 import { useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
@@ -19,10 +18,9 @@ const PhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState("");
     const [photoAuthor, setPhotoAuthor] = useState("");
     const [isVertical, setIsVertical] = useState(false);
-    const [photos, setPhotos] = useState(Example.images);
     const [imageUrl, setImageUrl] = useState<string | null>(null); 
     const FunctionsProxy = useFunctionsProxy();
-    const { language } = useUser();
+    const { language, photos, setPhotos } = useUser();
 
     const handleAddPhoto = async () => {
         try {
@@ -41,8 +39,8 @@ const PhotosPage: React.FC = () => {
                 id: Math.round(Math.random() * 10000000),
             };
 
-            setPhotos((prevPhotos) => [...prevPhotos, newImage]);
-            FunctionsProxy.addPhotoToApi(newImage);
+            setPhotos([...photos, newImage]);
+            FunctionsProxy.addPhoto(newImage);
 
             setPhotoName("");
             setPhotoAuthor("");
@@ -57,15 +55,15 @@ const PhotosPage: React.FC = () => {
     };
 
     const handleApproveChange = (id: number, isApproved: boolean) => {
-        setPhotos((prevPhotos) =>
-            prevPhotos.map((photo) =>
+        setPhotos(
+            photos.map((photo) =>
                 photo.id === id ? { ...photo, isApproved } : photo
             )
         );
     };
 
     const handleDeletePhoto = (id: number) => {
-        setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo.id !== id));
+        setPhotos(photos.filter((photo) => photo.id !== id));
     };
 
     const approvedImages = photos.filter((image) => image.isApproved);

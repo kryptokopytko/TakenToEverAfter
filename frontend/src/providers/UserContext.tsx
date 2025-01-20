@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -15,6 +15,7 @@ interface UserContextType {
     taskCards: TaskCard[];
     expenseCards: ExpenseCard[];
     choices: Choice[];
+    photos: Image[];
     
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
@@ -28,6 +29,7 @@ interface UserContextType {
     setTaskCards: (taskCards: TaskCard[]) => void;
     setExpenseCards: (expenseCards: ExpenseCard[]) => void;
     setChoices: (choices: Choice[]) => void;
+    setPhotos: (photos: Image[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -46,6 +48,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [invitations, setInvitations] = useState<Invitation[]>(Example.invitations);
     const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses);
     const [choices, setChoices] = useState<Choice[]>(Example.choices);
+    const [photos, setPhotos] = useState<Image[]>(Example.images);
 
     return (
         <UserContext.Provider
@@ -62,6 +65,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 taskCards,
                 expenseCards,
                 choices,
+                photos,
 
                 setWeddingDetails,
                 setGuests,
@@ -75,6 +79,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setTaskCards,
                 setExpenseCards,
                 setChoices,
+                setPhotos,
             }}
         >
             {children}

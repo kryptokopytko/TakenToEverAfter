@@ -26,7 +26,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences } from "./API/DbApi/DBApi";
+import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos } from "./API/DbApi/DBApi";
 import Example from "./exampleData";
 import { initialFontSize, initialThemes } from "./styles/theme";
 
@@ -74,7 +74,7 @@ const AppContent = () => {
   const location = useLocation();
   const { 
     isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
-    setGuests, setTags, setInvitations, setExpenseCards, setChoices,
+    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos
    } = useUser();
 
    const {setTheme, setThemes, setFontSize} = useTheme();
@@ -100,6 +100,9 @@ const AppContent = () => {
         setExpenseCards(expenseCards);
         setChoices(choices);
 
+        const photos = await getPhotos();
+        setPhotos(photos);
+
         const {preferences, themes} = await getUserPreferences();
         setFontSize(preferences.fontSize);
         setThemes(themes);
@@ -117,6 +120,7 @@ const AppContent = () => {
         setInvitations(Example.invitations);
         setExpenseCards(Example.expenses);
         setChoices(Example.choices);
+        setPhotos(Example.images);
         setFontSize(initialFontSize);
         setThemes(initialThemes);
         setTheme(initialThemes.nude);

@@ -28,7 +28,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         const image: Image = updatedImages[index];
         image.isFavorite = !image.isFavorite;
         setLocalImages(updatedImages);
-        FunctionsProxy.updateFavoriteStatus(image.id, image.isFavorite);
+        FunctionsProxy.updateFavourite(image.id, image.isFavorite);
     };
 
     const toggleApproved = async (index: number): Promise<void> => {
@@ -37,7 +37,11 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         image.isApproved = !image.isApproved;
         setLocalImages(updatedImages);
         handleApproveChange(image.id, image.isApproved);
-        FunctionsProxy.updateApprovedStatus(image.id, image.isApproved);
+        if (image.isApproved) {
+            await FunctionsProxy.acceptPhoto(image.id);
+        } else {
+            await FunctionsProxy.discardPhoto(image.id);
+        }
     };
 
     const deletePhoto = (id: number) => {

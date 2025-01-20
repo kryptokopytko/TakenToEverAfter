@@ -1,7 +1,6 @@
 import { Heading } from "../../styles/typography";
 import Button, { ButtonContainer } from "../../components/ui/Button";
 import { Container, PhotosContainer, StyledImage } from './FavouritePhotosStyles';
-import Example from "../../exampleData";
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserContext";
@@ -12,8 +11,8 @@ interface FavouritePhotosProps {
 }
 
 const FavouritePhotos: React.FC<FavouritePhotosProps> = ({ isHomePage }) => {
-  const {language} = useUser();
-  const favoritePhotos = Example.images.filter(image => image.isFavorite);
+  const { language, photos } = useUser();
+  const favoritePhotos = photos.filter(image => image.isFavorite);
 
   return (
     <Container>
