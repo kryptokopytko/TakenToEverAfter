@@ -15,71 +15,234 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     const [choiceName, setChoiceName] = useState('');
     const [choiceAmount, setChoiceAmount] = useState('');
     const [choiceCategory, setChoiceCategory] = useState('');
+    const [categoryId, setCategoryId] = useState<number | null>(null);
     const [existingChoice, setExistingChoice] = useState<any | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
     const [choiceDescription, setChoiceDescription] = useState('');
+    const [pros, setPros] = useState('');
+    const [cons, setCons] = useState('');
     const FunctionsProxy = useFunctionsProxy();
-    const { choices, language } = useUser();
+    const { choices, setChoices, language } = useUser();
 
     useEffect(() => {
-        const normalizedChoiceName = choiceName.trim().toLowerCase();
-        const normalizedCategory = choiceCategory.trim().toLowerCase();
-
-        const foundChoice = choices.find(choice =>
-            choice.category.toLowerCase() === normalizedCategory &&
-            choice.options.some(option => option.name.toLowerCase() === normalizedChoiceName)
-        );
-
-        if (foundChoice) {
-            setExistingChoice(foundChoice);
-            setChoiceAmount(foundChoice.options.find(option => option.name.toLowerCase() === normalizedChoiceName)?.amount.toString() || '');
-        } else {
-            setExistingChoice(null);
-        }
-    }, [choiceName, choiceCategory, choices]);
-
-    const handleAddChoice = () => {
-        const parsedAmount = parseFloat(choiceAmount);
-
-        const categoryIndex = choices.findIndex(choice => choice.category.toLowerCase() === choiceCategory.toLowerCase());
-        const choiceExists = categoryIndex !== -1 && choices[categoryIndex].options.some(option => option.name.toLowerCase() === choiceName.toLowerCase());
-
-        if (choiceExists) {
-            setNotification(translations[language].choiceAlreadyExists.replace("{name}", choiceName).replace("{category}", choiceCategory));
-            setTimeout(() => setNotification(null), notificationTimeOut);
-            return;
-        }
-
-        if (categoryIndex === -1) {
-            FunctionsProxy.addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription});
-        } else {
-            FunctionsProxy.updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription});
-        }
-
-        FunctionsProxy.addChoice(choiceCategory, { name: choiceName, amount: parsedAmount, description: choiceDescription });
-        setNotification(translations[language].choiceAdded.replace("{name}", choiceName).replace("{category}", choiceCategory));
-        setTimeout(() => setNotification(null), notificationTimeOut);
-
+        const normalizedExpenseName = choiceName.trim().toLowerCase();
+        const category = choices.find(choiceCard => choiceCard.options.some(option =>
+             option.name.trim().toLowerCase() == normalizedExpenseName
+        ));
         
+        if (category) {
+            setCategoryId(category.id);
+            const choice = category.options.find(option => option.name.toLowerCase() === normalizedExpenseName);
+            setExistingChoice(choice);
+            setChoiceAmount(choice!.amount.toString());
+            setChoiceCategory(category.category);
+            setChoiceDescription(choice!.description);
+            setPros(choice!.pros || '');
+            setCons(choice!.cons || '');
+        } else {
+            const normalizedCategory = choiceCategory.trim().toLowerCase();
+            const category = choices.find(expenseCard => expenseCard.category == normalizedCategory);
+        
+            if (category && choiceName != '') {
+                setCategoryId(category.id);
+            } else {
+                setCategoryId(null);
+            }
+
+            if (choiceName == '') {
+                setChoiceCategory('');
+                setExistingChoice(null);
+                setChoiceAmount('');
+                setChoiceDescription('');
+                setPros('');
+                setCons('');
+            }
+        }
+        
+    }, [choiceName, choiceCategory, choices]);
+    
+    const clear = () => {
         setChoiceName('');
         setChoiceAmount('');
         setChoiceCategory('');
         setChoiceDescription('');
+        setPros('');
+        setCons('');
     };
+    
+    const handleAddChoice = async () => {
+        const choiceAmountValue = Number(choiceAmount);
+    
+        if (!categoryId) {
+            const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
+            setCategoryId(newCategoryId);
+            const choiceId = await FunctionsProxy.addChoice(
+                newCategoryId,
+                choiceName,
+                choiceAmountValue,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices([
+                ...choices,
+                {
+                    id: newCategoryId,
+                    category: choiceCategory,
+                    options: [
+                        {
+                            id: choiceId,
+                            name: choiceName,
+                            amount: choiceAmountValue,
+                            description: choiceDescription,
+                            pros,
+                            cons
+                        }
+                    ]
+                }
+            ]);
+        } else {
+            const choiceId = await FunctionsProxy.addChoice(
+                categoryId,
+                choiceName,
+                choiceAmountValue,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices(
+                choices.map(card => {
+                    if (card.id === categoryId) {
+                        return {
+                            ...card,
+                            options: [
+                                ...card.options,
+                                {
+                                    id: choiceId,
+                                    name: choiceName,
+                                    amount: choiceAmountValue,
+                                    description: choiceDescription,
+                                    pros,
+                                    cons
+                                }
+                            ]
+                        };
+                    }
+                    return card;
+                })
+            );
+        }
+    
+        setNotification(
+            translations[language].choiceAdded
+                .replace('{name}', choiceName)
+                .replace('{category}', choiceCategory)
+        );
+    
+        setTimeout(() => setNotification(null), notificationTimeOut);
+        clear();
+    };
+    
 
 
     const handleRemoveChoice = () => {
-        FunctionsProxy.removeChoice(choiceCategory, choiceName);
+        FunctionsProxy.removeChoice(existingChoice.id);
+        setChoices(
+            choices.map(card => ({
+                ...card,
+                options: card.options.filter(option => option.id !== existingChoice!.id)
+            }))
+        );
         setNotification(translations[language].choiceRemoved.replace("{name}", choiceName).replace("{category}", choiceCategory));
         setTimeout(() => setNotification(null), notificationTimeOut);
     };
 
-    const handleUpdateChoice = () => {
+    const handleUpdateChoice = async () => {
         const parsedAmount = parseFloat(choiceAmount);
-        FunctionsProxy.updateChoice(choiceCategory, choiceName, { amount: parsedAmount, description: choiceDescription });
-        setNotification(translations[language].choiceUpdated.replace("{name}", choiceName).replace("{category}", choiceCategory));
+    
+        const updatedChoice = {
+            id: existingChoice!.id,
+            name: choiceName,
+            amount: parsedAmount,
+            description: choiceDescription,
+            pros: pros,
+            cons: cons
+        };
+    
+        if (!categoryId) {
+            const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
+            setCategoryId(newCategoryId);
+    
+            await FunctionsProxy.updateChoice(
+                existingChoice!.id,
+                newCategoryId,
+                choiceName,
+                parsedAmount,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices([
+                ...choices.map(card => {
+                    if (card.options.some(option => option.id === existingChoice?.id)) {
+                        return {
+                            ...card,
+                            options: card.options.filter(option => option.id !== existingChoice?.id)
+                        };
+                    }
+                    return card;
+                }),
+                {
+                    id: newCategoryId,
+                    category: choiceCategory,
+                    options: [updatedChoice]
+                }
+            ]);
+        } else {
+            await FunctionsProxy.updateChoice(
+                existingChoice!.id,
+                categoryId,
+                choiceName,
+                parsedAmount,
+                choiceDescription,
+                pros,
+                cons
+            );
+    
+            setChoices(
+                choices.map(card => {
+                    if (card.options.some(option => option.id === existingChoice?.id && card.id !== categoryId)) {
+                        return {
+                            ...card,
+                            options: card.options.filter(option => option.id !== existingChoice?.id)
+                        };
+                    }
+                    if (card.id === categoryId) {
+                        return {
+                            ...card,
+                            options: card.options.map(option =>
+                                option.id === existingChoice?.id ? updatedChoice : option
+                            )
+                        };
+                    }
+                    return card;
+                })
+            );
+        }
+    
+        setNotification(
+            translations[language].choiceUpdated
+                .replace("{name}", choiceName)
+                .replace("{category}", choiceCategory)
+        );
+    
         setTimeout(() => setNotification(null), notificationTimeOut);
+        clear();
     };
+    
 
 
 
@@ -126,6 +289,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                     setInputValue={setChoiceCategory}
                     onChange={(e) => setChoiceCategory(e.target.value)}
                 />
+                
                 <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={choiceDescription}
@@ -133,6 +297,19 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                     onChange={(e) => setChoiceDescription(e.target.value)}
                 />
 
+                <Subtitle level={3}>{translations[language].pros}</Subtitle>
+                <Input
+                    value={pros}
+                    placeholder={translations[language].pros}
+                    onChange={(e) => setPros(e.target.value)}
+                />
+
+                <Subtitle level={3}>{translations[language].cons}</Subtitle>
+                <Input
+                    value={cons}
+                    placeholder={translations[language].cons}
+                    onChange={(e) => setCons(e.target.value)}
+                />
 
                 {notification && <Notification>{notification}</Notification>}
 

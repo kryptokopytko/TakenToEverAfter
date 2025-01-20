@@ -56,11 +56,10 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
 
             if (inputExpenseName == '') {
                 setInputCategory('');
+                setExistingExpense(null);
+                setInputExpensePrice('');
+                setInputExpenseDescription('');
             }
-
-            setExistingExpense(null);
-            setInputExpensePrice('');
-            setInputExpenseDescription('');
         }
         
     }, [inputExpenseName, inputCategory, expenseCards]);
@@ -128,6 +127,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     }
+
     const handleAddExpense = async () => {
         const expenseAmount = Number(inputExpensePrice);
 

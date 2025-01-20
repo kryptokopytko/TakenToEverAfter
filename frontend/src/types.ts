@@ -34,8 +34,8 @@ export interface ExpenseCard {
 }
 
 export interface Option extends Expense {
-  pros?: String;
-  cons?: String;
+  pros?: string;
+  cons?: string;
 };
 
 export interface Choice {

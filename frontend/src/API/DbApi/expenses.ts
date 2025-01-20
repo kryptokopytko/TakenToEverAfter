@@ -1,3 +1,4 @@
+import { Choice } from "../../types";
 import api from "./axiosInstance";
 
 export const addExpense = async (
@@ -73,48 +74,104 @@ export const updateExpense = async (
   }
 };
 
-export const removeChoice = (category: string, choiceName: string) => {};
+export const addChoice = async (
+  expenseCard: number,
+  name: string,
+  amount: number,
+  description: string,
+  pros: string,
+  cons: string
+) => {
+  try {
+    const newChoice = {
+      expenseCard,
+      name,
+      amount,
+      description,
+      pros,
+      cons
+    };
 
-export const updateChoice = (
-  category: string,
-  choiceName: string,
-  updatedChoice: { amount: number; description: string }
-) => {};
+    const response = await api.post("/expenses/choices/", newChoice, {withCredentials: true});
+    console.log("Choice created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding choice:", error);
+    throw error;
+  }
+};
+
+export const addChoiceCategory = async (name: string) => {
+  try {
+    const response = await api.post(
+      "/expenses/choice-cards/",
+      { category: name },
+      { withCredentials: true }
+    );
+    console.log("Choice category created:", response.data);
+    return response.data.id;
+  } catch (error) {
+    console.error("Error adding choice category:", error);
+    throw error;
+  }
+};
+
+export const removeChoice = async (id: number) => {
+  try {
+    const response = await api.delete(`/expenses/choices/${id}/`, {withCredentials: true});
+    console.log(`Choice with ID ${id} removed successfully.`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error removing choice with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const updateChoice = async (
+  id: number,
+  expenseCard: number,
+  name: string,
+  amount: number,
+  notes: string | null = null,
+  pros: string,
+  cons: string
+) => {
+  try {
+    const updatedChoice = {
+      expenseCard,
+      name,
+      amount,
+      notes,
+      pros,
+      cons
+    };
+
+    const response = await api.patch(`/expenses/choices/${id}/`, updatedChoice, { withCredentials: true });
+    console.log("Choice updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating choice with ID ${id}:`, error);
+    throw error;
+  }
+};
 
 export const handleChoicePick = (
   choiceId: number,
   categoryId: number,
 ) => {};
 
-export const addChoice = (
-  category: string,
-  choice: { name: string; amount: number; description: string }
-) => {};
-
-export const transferPotentialExpenseToExpense = async (
-  potentialExpenseId: number,
-  price: number,
+export const transferChoiceToExpense = async (
+  choiceId: number,
+  choice: Choice,
   expenseCardId: number
 ) => {
   try {
-    const potentialExpenseResponse = await api.get(
-      `/potential-expenses/${potentialExpenseId}/`, {withCredentials: true}
-    );
-    const potentialExpense = potentialExpenseResponse.data;
-
-    const newExpense = {
-      account: potentialExpense.account,
-      expense_card: expenseCardId,
-      price: price,
-      notes: potentialExpense.notes,
-    };
-    const response = await api.post(`/expenses/`, newExpense);
-    await api.delete(`/potential-expenses/${potentialExpenseId}/`);
-    console.log("Potential expense transferred to expense:", response.data);
+    await api.delete(`/expenses/choices/${choiceId}/`, {withCredentials: true});
+    const response = await api.post("/expenses/expenses/", {...choice, expenseCard: expenseCardId}, {withCredentials: true});
     return response.data;
   } catch (error) {
     console.error(
-      `Error transferring potential expense with ID ${potentialExpenseId}:`,
+      `Error transferring potential expense with ID ${choiceId}:`,
       error
     );
     throw error;
@@ -143,6 +200,7 @@ export const getExpenses = async () => {
     const choicesResponse = await api.get(`/expenses/choice-cards`, {
       withCredentials: true
     });
+    
     const choices = choicesResponse.data.map((choice: any) => {
       return {
         id: choice.id,

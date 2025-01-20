@@ -239,6 +239,8 @@ export const translations = {
       searchGuestPlaceholder: "Search guest name",
       mainTableGuests: "Main Table Guests",
       isTableRound: "Is table round?",
+      pros: "Pros",
+      cons: "Cons",
     },
     polish: {
       login: 'Zaloguj się',
@@ -480,5 +482,7 @@ export const translations = {
       searchGuestPlaceholder: "Wyszukaj nazwisko gościa",
       mainTableGuests: "Goście przy głównyn stole",
       isTableRound: "Czy stół okrągły?",
+      pros: "Zalety",
+      cons: "Wady",
     },
   };
