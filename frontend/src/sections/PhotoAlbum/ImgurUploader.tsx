@@ -58,7 +58,7 @@ const ImgurUploader: React.FC<ImgurUploaderProps> = ({ onImageUpload }) => {
             )}
 
             {error && (
-                'Error: {error}'
+                `Error: ${error}`
             )}
 
             {uploadedUrl && (

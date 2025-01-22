@@ -44,10 +44,11 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
         }
     };
 
-    const deletePhoto = (id: number) => {
+    const deletePhoto = async (id: number) => {
         const updatedImages = localImages.filter(image => image.id !== id);
         setLocalImages(updatedImages);
         handleDeletePhoto(id);
+        await FunctionsProxy.removePhoto(id);
     };
 
     const openFullScreen = (index: number) => {

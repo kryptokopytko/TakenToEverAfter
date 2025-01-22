@@ -23,8 +23,8 @@ const debounce = (func: () => void, delay: number) => {
 
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [themes, setThemes] = useState<Themes>(initialThemes);
-  const [theme, setCurrentTheme] = useState<Theme>(themes.nude);
+  const [themes, setThemes] = useState<Themes>({});
+  const [theme, setCurrentTheme] = useState<Theme>(initialThemes.nude);
   const [customThemeCount, setCustomThemeCount] = useState(0);
   const [fontSize, setFontSize] = useState(initialFontSize);
 
@@ -58,7 +58,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       }));
       setCustomThemeCount((prevCount) => prevCount + 1);
       setCurrentTheme(newTheme);
-      console.log("Custom theme added:", customThemeKey, newTheme);
     } else {
       setCurrentTheme(newTheme);
     }

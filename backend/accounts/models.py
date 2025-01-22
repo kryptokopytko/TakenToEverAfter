@@ -11,3 +11,4 @@ class AccountDetails(models.Model):
     wedding_date = models.DateField(null=True)
     newlyweds_table_id = models.IntegerField(null=True, blank=True)
     budget_limit = models.IntegerField(null=True, blank=True)
+    photo_album_url = models.CharField(max_length=100, unique=True)

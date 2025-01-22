@@ -6,12 +6,12 @@ class AcceptedPhoto(models.Model):
     link = models.URLField(max_length=200)  
     description = models.TextField(null=True)  
     favourite = models.BooleanField(default=False)  
-    uploader = models.CharField(max_length=255, null=True)  
+    uploader = models.CharField(max_length=255, null=True, blank=True)  
     is_vertical = models.BooleanField(default=False, blank=True)
 
 class ToAcceptPhoto(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 
-    link = models.URLField(max_length=200)  
+    link = models.URLField(max_length=500)  
     description = models.TextField(null=True)  
-    uploader = models.CharField(max_length=255, null=True)
+    uploader = models.CharField(max_length=255, null=True, blank=True)
     is_vertical = models.BooleanField(default=False, blank=True)

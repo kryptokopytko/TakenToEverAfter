@@ -2,7 +2,7 @@ import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { SpaceBetweenContainer } from "../styles/section";
 import Input from "../components/ui/Input";
@@ -11,6 +11,7 @@ import Checkbox from "../components/ui/Checkbox";
 import ImgurUploader from "../sections/PhotoAlbum/ImgurUploader";
 import { translations } from "../translations";
 import { useUser } from "../providers/UserContext";
+import { generateQRCode } from "../QRCodeGenerator";
 
 const PhotosPage: React.FC = () => {
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
@@ -20,7 +21,17 @@ const PhotosPage: React.FC = () => {
     const [isVertical, setIsVertical] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null); 
     const FunctionsProxy = useFunctionsProxy();
-    const { language, photos, setPhotos } = useUser();
+    const { language, photos, setPhotos, accountDetails } = useUser();
+    const [ QRCode, setQRCode ] = useState<string | null>(null);
+
+    useEffect(() => {
+      const gen = async () => {
+        const qrCodeBase64 = await generateQRCode("http://192.168.1.55:5173/guest_photos/" + accountDetails.photoAlbumUrl );
+        setQRCode(qrCodeBase64);
+      };
+  
+      gen();
+    }, [accountDetails]);
 
     const handleAddPhoto = async () => {
         try {
@@ -71,6 +82,12 @@ const PhotosPage: React.FC = () => {
 
     return (
         <Container color="light">
+            <Heading level={3}>{translations[language].photoQR}</Heading>
+            {QRCode && 
+                <div>
+                    <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto" }} />
+                </div>
+            }
             <MenuContainer>
                 <Heading level={2}>{translations[language].photos}</Heading>
                 <ImgurUploader onImageUpload={setImageUrl} /> 

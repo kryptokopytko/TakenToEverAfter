@@ -241,6 +241,7 @@ export const translations = {
       isTableRound: "Is table round?",
       pros: "Pros",
       cons: "Cons",
+      photoQR: "Photo Album QR Code",
     },
     polish: {
       login: 'Zaloguj się',
@@ -484,5 +485,6 @@ export const translations = {
       isTableRound: "Czy stół okrągły?",
       pros: "Zalety",
       cons: "Wady",
+      photoQR: "Kod QR do albumu zdjęciowego",
     },
   };

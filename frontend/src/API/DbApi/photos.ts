@@ -5,7 +5,21 @@ export const addPhoto = async (
   photo: Image
 ) => {
   try {
-    const response = await api.post("/photos/to_accept_photos/", photo, { withCredentials: true });
+    const response = await api.post("/photos/to-accept-photos/", photo, { withCredentials: true });
+    console.log("New photo added:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding photo:", error);
+    throw error;
+  }
+};
+
+export const addPhotoByGuest = async (
+  photo: Image,
+  uniqueUrl: string
+) => {
+  try {
+    const response = await api.post("/photos/add-photo-to-accept/", { photo, uniqueUrl});
     console.log("New photo added:", response.data);
     return response.data;
   } catch (error) {
@@ -16,7 +30,7 @@ export const addPhoto = async (
 
 export const removePhoto = async (photoId: number) => {
   try {
-    const response = await api.delete(`/photos/accepted_photos/${photoId}/`, { withCredentials: true });
+    const response = await api.delete(`/photos/to-accept-photos/${photoId}/`, { withCredentials: true });
     console.log(`Photo with ID ${photoId} has been deleted.`);
     return response.data;
   } catch (error) {
@@ -25,22 +39,10 @@ export const removePhoto = async (photoId: number) => {
   }
 };
 
-export const discardPhoto = async (photoId: number) => {
-  try {
-    const response = await api.delete(`/photos/to_accept_photos/${photoId}/`, { withCredentials: true });
-    console.log(`Photo with ID ${photoId} has been discarded.`);
-    return response.data;
-  } catch (error) {
-    console.error("Error discarding photo:", error);
-    throw error;
-  }
-};
-
 export const acceptPhoto = async (photoId: number) => {
   try {
-    const toAcceptResponse = await api.get(`/photos/to_accept_photos/${photoId}/`, { withCredentials: true });
+    const toAcceptResponse = await api.get(`/photos/to-accept-photos/${photoId}/`, { withCredentials: true });
     const photoData = toAcceptResponse.data;
-    await api.delete(`/to_accept_photos/${photoId}/`);
 
     const acceptedPhotoData = {
       account: photoData.account,
@@ -48,12 +50,16 @@ export const acceptPhoto = async (photoId: number) => {
       description: photoData.description,
       favourite: false,
       uploader: photoData.uploader,
+      isVertical: photoData.isVertical
     };
 
     const acceptedPhotoResponse = await api.post(
-      "/photos/accepted_photos/",
+      "/photos/accepted-photos/",
       acceptedPhotoData, { withCredentials: true }
     );
+
+    await api.delete(`/photos/to-accept-photos/${photoId}/`, { withCredentials: true });
+
     console.log(
       "Photo has been accepted and moved to the Accepted collection:",
       acceptedPhotoResponse.data
@@ -65,12 +71,44 @@ export const acceptPhoto = async (photoId: number) => {
   }
 };
 
+export const discardPhoto = async (photoId: number) => {
+  try {
+    const acceptedResponse = await api.get(`/photos/accepted-photos/${photoId}/`, { withCredentials: true });
+    const photoData = acceptedResponse.data;
+
+    const acceptedPhotoData = {
+      account: photoData.account,
+      link: photoData.link,
+      description: photoData.description,
+      favourite: false,
+      uploader: photoData.uploader,
+      isVertical: photoData.isVertical
+    };
+
+    const toAcceptPhotoResponse = await api.post(
+      "/photos/to-accept-photos/",
+      acceptedPhotoData, { withCredentials: true }
+    );
+
+    await api.delete(`/photos/accepted-photos/${photoId}/`, { withCredentials: true });
+
+    console.log(
+      "Photo has been discarded and moved to the ToAccept collection:",
+      toAcceptPhotoResponse.data
+    );
+    return toAcceptPhotoResponse.data;
+  } catch (error) {
+    console.error("Error discarding photo:", error);
+    throw error;
+  }
+};
+
 export const updateFavourite = async (
   photoId: number,
   isFavourite: boolean
 ) => {
   try {
-    const photoResponse = await api.get(`/photos/accepted_photos/${photoId}/`, { withCredentials: true });
+    const photoResponse = await api.get(`/photos/accepted-photos/${photoId}/`, { withCredentials: true });
     const photo = photoResponse.data;
 
     const updatedPhotoData = {
@@ -79,7 +117,7 @@ export const updateFavourite = async (
     };
 
     const response = await api.patch(
-      `/photos/accepted_photos/${photoId}/`,
+      `/photos/accepted-photos/${photoId}/`,
       updatedPhotoData, { withCredentials: true }
     );
     console.log("Updated photo favourite status:", response.data);

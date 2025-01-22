@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Tag, Invitation, Guest
-from accounts.models import Account
+import random
+import string
 
 class TagSerializer(serializers.ModelSerializer):
     account = serializers.PrimaryKeyRelatedField(read_only=True) 
@@ -13,10 +14,21 @@ class TagSerializer(serializers.ModelSerializer):
 class InvitationSerializer(serializers.ModelSerializer):
     account = serializers.PrimaryKeyRelatedField(read_only=True) 
     handedOut = serializers.CharField(source='handed_out', required=False)
+    confirmationUrl = serializers.CharField(source='confirmation_url', read_only=True)
 
     class Meta:
         model = Invitation
-        fields = ('id', 'account', 'handedOut')
+        fields = ('id', 'account', 'handedOut', 'confirmationUrl')
+
+    def generate_unique_url():
+        while True:
+            random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=25))
+            if not Invitation.objects.filter(confirmation_url=random_string).exists():
+                return random_string
+            
+    def create(self, validated_data):
+        validated_data['confirmation_url'] = self.generate_unique_url()
+        return super().create(validated_data)
 
 
 class GuestSerializer(serializers.ModelSerializer):

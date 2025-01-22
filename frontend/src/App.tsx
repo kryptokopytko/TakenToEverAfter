@@ -77,7 +77,7 @@ const AppContent = () => {
     setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos
    } = useUser();
 
-   const {setTheme, setThemes, setFontSize} = useTheme();
+   const { setTheme, setThemes, setFontSize } = useTheme();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -106,7 +106,6 @@ const AppContent = () => {
         const {preferences, themes} = await getUserPreferences();
         setFontSize(preferences.fontSize);
         setThemes(themes);
-        setTheme(initialThemes.nude);
         setTheme(preferences.colorTheme || initialThemes.nude);
         setLanguage(preferences.language);
       } else {
@@ -156,8 +155,8 @@ const AppContent = () => {
               <Route path="/to_do" element={<ToDoPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/registration" element={<RegistrationPage />} />
-              <Route path="/guest_response" element={<GuestResponsePage />} />
-              <Route path="/guest_photos" element={<GuestPhotosPage />} />
+              <Route path="/guest_response/:uniqueUrl" element={<GuestResponsePage />} />
+              <Route path="/guest_photos/:uniqueUrl" element={<GuestPhotosPage />} />
               <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
             </Routes>
           </PageContainer>

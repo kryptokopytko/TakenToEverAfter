@@ -10,6 +10,7 @@ export interface AccountDetails {
   weddingDate: string | null; 
   newlywedsTableId: number | null;
   budgetLimit: number | null; 
+  photoAlbumUrl: string;
 }
 
 export interface WeddingDetails {
@@ -63,6 +64,7 @@ export interface Tag {
 export interface Invitation {
   id: number;
   handedOut: boolean;
+  confirmationUrl: string;
 }
 
 export type Decision = "yes" | "no" | "unknown";

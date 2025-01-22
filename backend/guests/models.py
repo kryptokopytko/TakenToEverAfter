@@ -14,6 +14,7 @@ class Tag(models.Model):
 class Invitation(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 
     handed_out = models.BooleanField(default=False) 
+    confirmation_url = models.CharField(max_length=100, unique=True)
 
 class Guest(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 

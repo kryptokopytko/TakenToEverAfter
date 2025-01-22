@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/ui/Button";
@@ -10,6 +10,11 @@ import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
 import { translations } from "../translations";
 import { useUser } from "../providers/UserContext";
+import { useParams } from "react-router-dom";
+import { useTheme } from "../providers/ThemeContext";
+import { getPreferencesByAlbumUrl } from "../API/DbApi/accounts";
+import { Language, Theme } from "../types";
+import { addPhotoByGuest } from "../API/DbApi/photos";
 
 const GuestPhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState('');
@@ -19,25 +24,44 @@ const GuestPhotosPage: React.FC = () => {
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
     const [areYourExpanded, setareYourExpanded] = useState(true);
     const guestName = new URLSearchParams(location.search).get('guest');
-    const FunctionsProxy = useFunctionsProxy();
-    const { language } = useUser();
+    const { language, setLanguage } = useUser();
+    const { setTheme } = useTheme();
+    const { uniqueUrl } = useParams();
 
-    const handleAddPhoto = () => {
-        const newPhoto = {
-            id: Math.round(Math.random() * 10000000),
-            name: photoName,
-            author: guestName || '',
-            link: photoLink,
-            isApproved: false,
-            isFavorite: false,
-            isVertical: isVertical,
+
+    useEffect(() => {
+        const getPreferences = async () => {
+            if (uniqueUrl) {
+                try {
+                    const preferences = await getPreferencesByAlbumUrl(uniqueUrl);
+                    setLanguage(preferences.language as Language);
+                    setTheme(preferences.theme as Theme);
+                } catch (error) {
+                    console.error('Error fetching preferences:', error);
+                }
+            }
         };
-        setPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
-        FunctionsProxy.addPhotoToApi(newPhoto);
-        setPhotoName('');
-        setPhotoLink('');
-        setIsVertical(false);
-        console.log(newPhoto)
+    
+        getPreferences();
+    }, [uniqueUrl]);
+
+    const handleAddPhoto = async () => {
+        if (uniqueUrl) {
+            const newPhoto = {
+                id: Math.round(Math.random() * 10000000),
+                name: photoName,
+                author: guestName || '',
+                link: photoLink,
+                isApproved: false,
+                isFavorite: false,
+                isVertical: isVertical,
+            };
+            setPhotos((prevPhotos) => [...prevPhotos, newPhoto]);
+            await addPhotoByGuest(newPhoto, uniqueUrl);
+            setPhotoName('');
+            setPhotoLink('');
+            setIsVertical(false);
+        }
     };
 
     const handleApproveChange = (id: number, isApproved: boolean) => {

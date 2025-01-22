@@ -23,7 +23,6 @@ def login(request):
     })
 
 @api_view(['GET'])
-# @api_view(['POST'])
 def logout(request):
     request.session.flush() 
     response = Response({"message": "Logged out successfully"})
