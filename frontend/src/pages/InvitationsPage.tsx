@@ -9,6 +9,7 @@ import { exportToPDF } from "../sections/Printables/exportToPdf";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
 import { translations } from "../translations";
+import useFunctionsProxy from "../API/FunctionHandler";
 
 interface PrintablesPageProps {
 }
@@ -26,13 +27,13 @@ const Invites = styled.div`
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
 }) => {
-    const { guests, language } = useUser();
-
+    const { guests, language, invitations } = useUser();
     const [mainText, setMainText] = useState(translations[language].exampleMainText);
     const [additionalText, setAdditionalText] = useState(translations[language].exampleAdditionalText);
     const [guestText, setGuestText] = useState(translations[language].exampleGuestText);
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
+    const FunctionsProxy = useFunctionsProxy();
 
     useEffect(() => {
         if (language) {
@@ -42,10 +43,25 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
         }
     }, [language]);
 
+    useEffect(() => {
+        const handedOut = invitations
+            .filter((invitation) => invitation.handedOut)
+            .map((invitation) => invitation.id);
+        setDeliveredInvites(handedOut);
+    }, [invitations]); 
+
     const handleExportPDF = () => {
         const inviteIds = guests.map((_, index) => `invite-${index}`);
         exportToPDF(inviteIds);
     };
+
+    function toggleHandedOut(invitationId: number, index: number) {
+        const handedOut = deliveredInvites.includes(index);
+        handedOut ?
+            setDeliveredInvites(deliveredInvites.filter((invite) => invite != index)) 
+            : setDeliveredInvites([...deliveredInvites, index]);
+        FunctionsProxy.changeInvitationStatus(invitationId, !handedOut);
+    }
 
     return (
 
@@ -91,27 +107,25 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             </MenuContainer>
             {showAllInvites ? (
                 <Invites>
-                    {guests.map((guest, index) => (
-                        <div id={`invite-${index}`} key={index}>
-                            <Invitation
-                                mainText={mainText}
-                                additionalText={additionalText}
-                                guestText={guestText}
-                                propsGuestList={[guest]}
-                            />
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
-                                <Checkbox
-                                    checked={deliveredInvites.includes(index)}
-                                    onChange={() => {
-                                        deliveredInvites.includes(index) ?
-                                            setDeliveredInvites(deliveredInvites.filter((invite) => invite != index)) :
-                                            setDeliveredInvites([...deliveredInvites, index])
-                                    }
-                                    }
+                    {invitations.filter(invitation => guests.some(guest => guest.invitationId == invitation.id))
+                        .map((invitation, index) => (
+                            <div id={`invite-${index}`} key={index}>
+                                <Invitation
+                                    mainText={mainText}
+                                    additionalText={additionalText}
+                                    guestText={guestText}
+                                    invitationId={invitation.id}
                                 />
-                                {translations[language].delivered}
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: '2rem' }}>
+                                    <Checkbox
+                                        checked={deliveredInvites.includes(invitation.id)}
+                                        onChange={() =>
+                                            toggleHandedOut(invitation.id, index)
+                                        }
+                                    />
+                                    {translations[language].delivered}
+                                </div>
                             </div>
-                        </div>
                     ))}
                 </Invites>
             ) : (

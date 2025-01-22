@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Body, Heading, Subtitle } from "../../styles/typography";
 import styled from 'styled-components';
 import { useUser } from '../../providers/UserContext';
-import { Guest } from '../../types';
 import { translations } from "../../translations";
+import { generateQRCode } from '../../QRCodeGenerator';
 
 interface InvitationProps {
     additionalText?: string;
     mainText?: string;
     guestText?: string;
-    propsGuestList?: Guest[];
+    invitationId?: number;
     children?: React.ReactNode;
 }
 
@@ -34,9 +34,22 @@ const Border = styled.div`
   }
 `;
 
-const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guestText, additionalText, children }) => {
-    const { account, accountDetails, weddingDetails, guests, language } = useUser();
-    const newGuestList = propsGuestList ? propsGuestList : guests.slice(0, 3);;
+const Invitation: React.FC<InvitationProps> = ({ invitationId, mainText, guestText, additionalText, children }) => {
+    const { account, accountDetails, weddingDetails, guests, language, invitations } = useUser();
+    const newInvitationId = invitationId ? invitationId : guests[0].invitationId;
+    const invitationGuests = guests.filter(guest => guest.invitationId == newInvitationId);
+    const invitationUrl = invitations.find(invitation => invitation.id == newInvitationId)?.confirmationUrl;
+    const [ QRCode, setQRCode ] = useState<string | null>(null);
+
+    useEffect(() => {
+        const gen = async () => {
+            const code = await generateQRCode(`http://localhost/guest_response/${invitationUrl}`);
+            setQRCode(code);
+        };
+    
+        gen();
+    }, [invitationId]);
+
     return (
         <Border>
             <Container>
@@ -49,9 +62,12 @@ const Invitation: React.FC<InvitationProps> = ({ propsGuestList, mainText, guest
                 {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}
                 <Subtitle level={2}>  {guestText ? guestText : translations[language].exampleGuestText}</Subtitle>
 
-                {newGuestList.map((guest, index) => (
+                {invitationGuests.map((guest, index) => (
                     <span key={index}><Body size='big'>{guest.name}</Body></span>
                 ))}
+                
+                {QRCode && <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto" }} />}
+
                 {
                     additionalText && (
                         <Body size="bold">{additionalText}</Body>

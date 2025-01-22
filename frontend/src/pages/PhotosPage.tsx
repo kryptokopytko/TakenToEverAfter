@@ -26,8 +26,8 @@ const PhotosPage: React.FC = () => {
 
     useEffect(() => {
       const gen = async () => {
-        const qrCodeBase64 = await generateQRCode("http://192.168.1.55:5173/guest_photos/" + accountDetails.photoAlbumUrl );
-        setQRCode(qrCodeBase64);
+        const code = await generateQRCode("http://192.168.1.55:5173/guest_photos/" + accountDetails.photoAlbumUrl );
+        setQRCode(code);
       };
   
       gen();

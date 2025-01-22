@@ -13,7 +13,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class InvitationSerializer(serializers.ModelSerializer):
     account = serializers.PrimaryKeyRelatedField(read_only=True) 
-    handedOut = serializers.CharField(source='handed_out', required=False)
+    handedOut = serializers.BooleanField(source='handed_out', required=False)
     confirmationUrl = serializers.CharField(source='confirmation_url', read_only=True)
 
     class Meta:

@@ -85,7 +85,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
                         />
                         <PhotoInfo>
                             <Body>{image.name}</Body>
-                            <Body size="small">by {image.author}</Body>
+                            {image.author && <Body size="small">by {image.author}</Body>}
                         </PhotoInfo>
                         {isGuest ? <></> : <>
                             <Indicator

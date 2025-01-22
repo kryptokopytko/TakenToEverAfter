@@ -26,7 +26,8 @@ export const getGuestsInfo = async () => {
 
     const invitations: Invitation[] = invitationsResponse.data.map((invitation: any) => ({
       id: invitation.id,
-      handedOut: invitation.handed_out
+      handedOut: invitation.handedOut,
+      confirmationUrl: invitation.confirmationUrl
     }));
 
     return {
@@ -173,19 +174,20 @@ export const newInvitation = async () => {
   }
 }
 
-export const handOutInvitation = async (invitationId: number) => {
+export const changeInvitationStatus = async (invitationId: number, handedOut: boolean) => {
   try {
-    const invitationResponse = await api.get(`/invitations/${invitationId}/`);
+    const invitationResponse = await api.get(`/guests/invitations/${invitationId}/`, { withCredentials: true });
     const invitation = invitationResponse.data;
 
     const updatedInvitationData = {
       ...invitation,
-      handed_out: true,
+      handedOut: handedOut,
     };
 
     const response = await api.patch(
-      `/invitations/${invitationId}/`,
-      updatedInvitationData
+      `/guests/invitations/${invitationId}/`,
+      updatedInvitationData,
+      { withCredentials: true }
     );
     console.log("Invitation handed out:", response.data);
     return response.data;
