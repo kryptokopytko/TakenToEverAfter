@@ -37,10 +37,6 @@ interface ListProps {
 const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
   const FunctionsProxy = useFunctionsProxy();
   const { tags, language, guests, setGuests } = useUser();
-
-  function handOutInvitation(invitationId: number) {
-    FunctionsProxy.handOutInvitation(invitationId);
-  }
   
   function handleDecision(guestId: number, decision: boolean) {
     FunctionsProxy.updateGuestConfirmation(guestId, decision);
@@ -73,9 +69,6 @@ const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
             </TagContainer>
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
-                <Button variant="transparent" onClick={() => handOutInvitation(guest.invitationId)}>
-                  {translations[language].invite}
-                </Button>
                 <Button variant="transparent" onClick={() => handleDecision(guest.id, true)}>
                   {translations[language].yes}
                 </Button>

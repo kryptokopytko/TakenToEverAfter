@@ -55,11 +55,12 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
         exportToPDF(inviteIds);
     };
 
-    function toggleHandedOut(invitationId: number, index: number) {
-        const handedOut = deliveredInvites.includes(index);
+    function toggleHandedOut(invitationId: number) {
+        const handedOut = deliveredInvites.includes(invitationId);
+        console.log(handedOut);
         handedOut ?
-            setDeliveredInvites(deliveredInvites.filter((invite) => invite != index)) 
-            : setDeliveredInvites([...deliveredInvites, index]);
+            setDeliveredInvites(prev => prev.filter((invite) => invite != invitationId)) 
+            : setDeliveredInvites(prev => [...prev, invitationId]);
         FunctionsProxy.changeInvitationStatus(invitationId, !handedOut);
     }
 
@@ -120,7 +121,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                                     <Checkbox
                                         checked={deliveredInvites.includes(invitation.id)}
                                         onChange={() =>
-                                            toggleHandedOut(invitation.id, index)
+                                            toggleHandedOut(invitation.id)
                                         }
                                     />
                                     {translations[language].delivered}
