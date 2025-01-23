@@ -22,9 +22,12 @@ const SummaryContainer = styled.div`
 interface GuestListProps {
   isHomePage?: boolean;
   children?: React.ReactNode;
+  sortBy?: 'asc' | 'desc';
+  filterByTag?: string;
+  filterByDecision?: string;
 }
 
-const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
+const GuestList: React.FC<GuestListProps> = ({ isHomePage, children, sortBy, filterByTag, filterByDecision }) => {
   const [isExpanded, setIsExpanded] = useState(!isHomePage);
   const {guests, language} = useUser();
 
@@ -61,6 +64,9 @@ const GuestList: React.FC<GuestListProps> = ({ isHomePage, children }) => {
       <List
         isHomePage={isHomePage} 
         isExpanded={isExpanded} 
+        sortBy={sortBy}
+        filterByDecision={filterByDecision}
+        filterByTag={filterByTag}
       />
       <ButtonContainer>
         {isHomePage ?

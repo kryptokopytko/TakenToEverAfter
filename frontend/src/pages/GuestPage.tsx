@@ -26,7 +26,7 @@ const GuestPage: React.FC = () => {
   const [currentDecision, setCurrentDecision] = useState<Decision | undefined>(undefined);
   const [notification, setNotification] = useState<string>('');
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
-  const [filterByTag, setFilterByTag] = useState<string>('');
+  const [filterByTag, setFilterByTag] = useState<string>('all');
   const [filterByDecision, setFilterByDecision] = useState<string>('all');
   const [hasPlusOne, setHasPlusOne] = useState(false);
   const [pairs, setPairs] = useState<{ guest: string, partner: string }[]>([]);
@@ -347,13 +347,21 @@ const GuestPage: React.FC = () => {
         </ButtonContainer>
       </MenuContainer>
 
-      <GuestList isHomePage={false}>
+      <GuestList
+        isHomePage={false}
+        sortBy={sortBy}
+        {...(filterByTag !== 'all' && { filterByTag })}
+        {...(filterByDecision !== 'all' && { filterByDecision })}
+      >
 
         <SelectorContainer>
           <DropdownSelector
             title={translations[language].filterByTag}
-            initialSelectedOption={filterByTag || "All"}
-            options={tags.map(tag => ({ label: tag.name, value: tag.name }))}
+            initialSelectedOption={filterByTag}
+            options={[
+              { label: translations[language].all, value: "all" },
+              ...tags.map(tag => ({ label: tag.name, value: tag.name }))
+            ]}
             onOptionSelect={(selectedOption) => {
               if (typeof selectedOption === 'string') {
                 setFilterByTag(selectedOption);

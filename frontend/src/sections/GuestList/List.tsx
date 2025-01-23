@@ -32,14 +32,41 @@ const EmptyMessage = styled(Label)`
 interface ListProps {
   isExpanded: boolean;
   isHomePage?: boolean;
+  sortBy?: 'asc' | 'desc';
+  filterByTag?: string;
+  filterByDecision?: string;
 }
 
-const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
+const List: React.FC<ListProps> = ({ isExpanded, isHomePage, sortBy, filterByTag, filterByDecision }) => {
   const FunctionsProxy = useFunctionsProxy();
   const { tags, language, guests, setGuests } = useUser();
   
-  function handleDecision(guestId: number, decision: boolean) {
-    FunctionsProxy.updateGuestConfirmation(guestId, decision);
+  const processedGuests = guests
+    .filter(guest => {
+      if (filterByTag) {
+        const tag = tags.find(t => t.name === filterByTag);
+        if (!tag || !guest.tags.includes(tag.id)) {
+          return false;
+        }
+      }
+
+      if (filterByDecision && guest.decision !== filterByDecision) {
+        return false;
+      }
+
+      return true;
+    });
+
+    if (sortBy) {
+      processedGuests.sort((a, b) => {
+        const comparison = a.name.localeCompare(b.name);
+        return sortBy === 'asc' ? comparison : -comparison;
+      });
+    }
+
+  async function handleDecision(guestId: number, decision: boolean) {
+    const guest = guests.find(guest => guest.id == guestId);
+    await FunctionsProxy.updateGuest({...guest!, decision: decision? "yes" : "no"});
     setGuests(
       guests.map((guest) =>
         guest.id === guestId ? { ...guest, decision: decision? "yes" : "no" } : guest)
@@ -51,7 +78,7 @@ const List: React.FC<ListProps> = ({ isExpanded, isHomePage }) => {
       {guests.length === 0 ? (
         <EmptyMessage>{translations[language].noGuests}</EmptyMessage>
       ) : (
-        guests.map((guest, index) => (
+        processedGuests.map((guest, index) => (
           <GuestItem key={index}>
             <Body size="big">{guest.name}</Body>
             <TagContainer>
