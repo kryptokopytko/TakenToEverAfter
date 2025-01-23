@@ -242,6 +242,7 @@ export const translations = {
       pros: "Pros",
       cons: "Cons",
       photoQR: "Photo Album QR Code",
+      error: "An error occurred, please try again later"
     },
     polish: {
       login: 'Zaloguj się',
@@ -486,5 +487,6 @@ export const translations = {
       pros: "Zalety",
       cons: "Wady",
       photoQR: "Kod QR do albumu zdjęciowego",
+      error: "Wystąpił błąd, spróbuj ponownie później"
     },
   };

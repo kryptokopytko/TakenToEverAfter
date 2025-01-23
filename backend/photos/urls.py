@@ -9,5 +9,5 @@ router.register(r'to-accept-photos', ToAcceptPhotoView)
 
 urlpatterns = router.urls
 urlpatterns += [
-    path('add-photo-to-accept/', AddPhotoToAcceptView.as_view(), name='add-photo-to-accept'),
+    path('add-photo-to-accept/', AddPhotoToAcceptView.as_view(), name='add-photo-to-accept')
 ]

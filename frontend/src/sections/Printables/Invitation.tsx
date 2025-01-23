@@ -4,12 +4,15 @@ import styled from 'styled-components';
 import { useUser } from '../../providers/UserContext';
 import { translations } from "../../translations";
 import { generateQRCode } from '../../QRCodeGenerator';
+import { Guest, InvitationDetails } from '../../types';
 
 interface InvitationProps {
     additionalText?: string;
     mainText?: string;
     guestText?: string;
     invitationId?: number;
+    guestList?: Guest[];
+    details?: InvitationDetails;
     children?: React.ReactNode;
 }
 
@@ -34,32 +37,46 @@ const Border = styled.div`
   }
 `;
 
-const Invitation: React.FC<InvitationProps> = ({ invitationId, mainText, guestText, additionalText, children }) => {
+const Invitation: React.FC<InvitationProps> = ({ invitationId, guestList, mainText, guestText, additionalText, details, children }) => {
     const { account, accountDetails, weddingDetails, guests, language, invitations } = useUser();
     const newInvitationId = invitationId ? invitationId : guests[0].invitationId;
-    const invitationGuests = guests.filter(guest => guest.invitationId == newInvitationId);
-    const invitationUrl = invitations.find(invitation => invitation.id == newInvitationId)?.confirmationUrl;
+    const invitationGuests = guestList? guestList : guests.filter(guest => guest.invitationId == newInvitationId);
     const [ QRCode, setQRCode ] = useState<string | null>(null);
 
     useEffect(() => {
         const gen = async () => {
-            const code = await generateQRCode(`http://localhost/guest_response/${invitationUrl}`);
+            const invitationUrl = invitations.find(invitation => invitation.id == newInvitationId)?.confirmationUrl;
+            const code = await generateQRCode(`http://192.168.1.55:5173/guest_response/${invitationUrl}`);
             setQRCode(code);
         };
     
         gen();
-    }, [invitationId]);
+    }, [invitationId, invitations]);
 
     return (
         <Border>
             <Container>
                 <Heading level={1}></Heading>
-                <Heading level={1}>{account.brideName} {weddingDetails?.brideSurname || ""}</Heading>
+                {details?
+                    <Heading level={1}>{details.brideName} </Heading>
+                    : <Heading level={1}>{account.brideName} {weddingDetails?.brideSurname || ""}</Heading>
+                }
                 <Subtitle level={1}> ------ & ------ </Subtitle>
-                <Heading level={1}>{account.groomName} {weddingDetails?.groomSurname || ""}</Heading>
+                {details?
+                    <Heading level={1}>{details.groomName} </Heading>
+                    : <Heading level={1}>{account.groomName} {weddingDetails?.groomSurname || ""}</Heading>
+                }
+                
                 <Body size='big'>{mainText ? mainText : translations[language].exampleMainText}</Body>
-                <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails && (weddingDetails.weddingTime)}</Subtitle>
-                {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}
+                
+                {details?
+                    <Subtitle level={2}>{details.weddingDate} </Subtitle>
+                    : <>
+                        <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails && (weddingDetails.weddingTime)}</Subtitle>
+                        {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}
+                      </>
+                }
+                
                 <Subtitle level={2}>  {guestText ? guestText : translations[language].exampleGuestText}</Subtitle>
 
                 {invitationGuests.map((guest, index) => (

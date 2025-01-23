@@ -4,7 +4,6 @@ import { Container, MenuContainer } from "../styles/page";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { SpaceBetweenContainer } from "../styles/section";
-import useFunctionsProxy from "../API/FunctionHandler";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import Example from "../exampleData";
 import Checkbox from "../components/ui/Checkbox";
@@ -12,7 +11,7 @@ import { translations } from "../translations";
 import { useUser } from "../providers/UserContext";
 import { useParams } from "react-router-dom";
 import { useTheme } from "../providers/ThemeContext";
-import { getPreferencesByAlbumUrl } from "../API/DbApi/accounts";
+import { getPreferencesByAlbumUrl } from "../API/DbApi/preferences";
 import { Language, Theme } from "../types";
 import { addPhotoByGuest } from "../API/DbApi/photos";
 

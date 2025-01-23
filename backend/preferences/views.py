@@ -1,13 +1,15 @@
-from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import APIException
 from accounts.views import get_account_from_session
 from .models import ColorTheme, ViewPreferences
 from .serializers import ColorThemeSerializer, ViewPreferencesSerializer
-from accounts.models import Account
+from accounts.models import Account, AccountDetails
 from accounts.views import AccountModelViewSet
-
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from guests.models import Invitation
 
 class ColorThemeView(AccountModelViewSet):
     serializer_class = ColorThemeSerializer
@@ -89,3 +91,41 @@ def change_font_size(request):
 
     serializer = ViewPreferencesSerializer(preferences)
     return Response(serializer.data)
+
+class GetPreferencesByAlbumUrlView(APIView):
+    permission_classes = [AllowAny] 
+
+    def post(self, request, *args, **kwargs):
+        photo_album_url = request.data.get('photoAlbumUrl')
+        try:
+            account_details = AccountDetails.objects.get(photo_album_url=photo_album_url)
+            view_preferences = account_details.account.viewpreferences
+            
+            theme_data = ColorThemeSerializer(view_preferences.color_theme).data if view_preferences.color_theme else None
+            
+            return Response({
+                "theme": theme_data,
+                "language": view_preferences.language
+            })
+        
+        except ObjectDoesNotExist:
+            return Response({"detail": f"The album URL '{photo_album_url}' does not exist."}, status=404)
+        
+class GetPreferencesByInvitationUrlView(APIView):
+    permission_classes = [AllowAny] 
+
+    def post(self, request, *args, **kwargs):
+        confirmation_url = request.data.get('confirmationUrl')
+        try:
+            account = Invitation.objects.get(confirmation_url=confirmation_url).account
+            view_preferences = account.viewpreferences
+            
+            theme_data = ColorThemeSerializer(view_preferences.color_theme).data if view_preferences.color_theme else None
+            
+            return Response({
+                "theme": theme_data,
+                "language": view_preferences.language
+            })
+        
+        except ObjectDoesNotExist:
+            return Response({"detail": f"The confirmation URL '{confirmation_url}' does not exist."}, status=404)

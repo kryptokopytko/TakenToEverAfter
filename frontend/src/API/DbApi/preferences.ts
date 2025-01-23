@@ -86,3 +86,33 @@ export const changeFontSize = async (newFontSize: number) => {
     throw error;
   }
 };
+
+export const getPreferencesByAlbumUrl = async (photoAlbumUrl: string) => {
+  try {
+    const response = await api.post(
+      '/preferences/get-preferences-by-album-url/', 
+      { photoAlbumUrl: photoAlbumUrl },
+      {withCredentials: true}
+    );
+
+    return response.data;  
+  } catch (error) {
+    console.error("Error during fetching preferences:", error);
+    throw error;
+  }
+};
+
+export const getPreferencesByConfirmationUrl = async (confirmationUrl: string) => {
+  try {
+    const response = await api.post(
+      '/preferences/get-preferences-by-confirmation-url/', 
+      { confirmationUrl: confirmationUrl },
+      {withCredentials: true}
+    );
+
+    return response.data;  
+  } catch (error) {
+    console.error("Error during fetching preferences:", error);
+    throw error;
+  }
+};

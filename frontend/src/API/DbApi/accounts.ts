@@ -110,18 +110,3 @@ export const checkSession = async () => {
     throw error;
   }
 };
-
-export const getPreferencesByAlbumUrl = async (photoAlbumUrl: string) => {
-  try {
-    const response = await api.post(
-      '/accounts/get-preferences-by-url/', 
-      { photoAlbumUrl: photoAlbumUrl },
-      {withCredentials: true}
-    );
-
-    return response.data;  
-  } catch (error) {
-    console.error("Error during fetching preferences:", error);
-    throw error;
-  }
-};

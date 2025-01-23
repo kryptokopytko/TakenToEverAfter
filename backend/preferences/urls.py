@@ -1,4 +1,5 @@
-from .views import ColorThemeView, ViewPreferencesView, get_user_preferences_and_themes, pick_theme, delete_color_theme, change_font_size
+from .views import ColorThemeView, ViewPreferencesView, get_user_preferences_and_themes, pick_theme, delete_color_theme, change_font_size, \
+    GetPreferencesByAlbumUrlView, GetPreferencesByInvitationUrlView
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 
@@ -13,5 +14,6 @@ urlpatterns += [
     path('pick-theme/<str:theme_key>/', pick_theme, name='pick-theme'),
     path('delete-theme/<str:theme_name>/', delete_color_theme, name='delete-color-theme'),
     path('change-font-size/', change_font_size, name='change-font-size'),
-
+    path('get-preferences-by-album-url/', GetPreferencesByAlbumUrlView.as_view(), name='get_preferences_by_album_url'),
+    path('get-preferences-by-confirmation-url/', GetPreferencesByInvitationUrlView.as_view(), name='get_preferences_by_confirmation_url'),
 ]

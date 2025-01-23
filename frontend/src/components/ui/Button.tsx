@@ -10,7 +10,7 @@ export const ButtonContainer = styled.div`
   gap: 1rem;
 `;
 
-const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string, minWidth?: string }>`
+const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transparent'; size?: 'small' | 'medium' | 'large'; hslColor?: string, minWidth?: string, isPressed?: boolean; }>`
   background-color: ${({ variant, theme, hslColor }) =>
     variant === 'primary' ? theme.primary :
       variant === 'secondary' ? theme.secondary :
@@ -18,7 +18,8 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transp
           hslColor ? hslColor : theme.tertiary};
     color: ${({ variant, theme }) =>
     !variant ? theme.primary : theme.body};
-  border: none;
+  border: ${({ isPressed, theme }) => 
+    isPressed ? `5px solid ${theme.activeBorder || '#333'}` : 'none'};
   border-radius: 0.5rem;
   margin-top: 2rem;
   cursor: pointer;
@@ -35,7 +36,7 @@ const StyledButton = styled.button<{ variant?: 'primary' | 'secondary' | 'transp
     cursor: not-allowed;
   }
 `;
-StyledButton.shouldForwardProp = (prop) => !["variant", "size", "hslColor", "minWidth"].includes(prop);
+StyledButton.shouldForwardProp = (prop) => !["variant", "size", "hslColor", "minWidth", "isPressed"].includes(prop);
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'transparent';
@@ -45,11 +46,12 @@ interface ButtonProps {
   hslColor?: string;
   children: React.ReactNode;
   minWidth?: string;
+  isPressed?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ variant, size = 'medium', onClick, disabled, hslColor, minWidth, children }) => {
+const Button: React.FC<ButtonProps> = ({ variant, size = 'medium', onClick, disabled, hslColor, minWidth, isPressed = false, children }) => {
   return (
-    <StyledButton variant={variant} size={size} onClick={onClick} hslColor={hslColor} disabled={disabled} minWidth={minWidth}>
+    <StyledButton variant={variant} size={size} onClick={onClick} hslColor={hslColor} disabled={disabled} minWidth={minWidth} isPressed={isPressed}>
       <Label size={'small'} color={variant ? 'body' : 'primary'}>
         {children}
       </Label>

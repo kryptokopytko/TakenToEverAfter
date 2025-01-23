@@ -142,17 +142,11 @@ export const updateGroupRank = async (groupId: number, newRank: number) => {
 
 export const updateGuestConfirmation = async (
   guestId: number,
-  confirmation: boolean
+  decision: "yes" | "no"
 ) => {
   try {
-    const guestResponse = await api.get(`/guests/guests/${guestId}/`);
-    const guest = guestResponse.data;
-
-    const updatedGuestData = {
-      ...guest,
-      decision: confirmation ? "yes" : "no",
-    };
-    const response = await api.patch(`/guests/guests/${guestId}/`, updatedGuestData);
+    const response = await api.post("/guests/set-guest-decision/", 
+      {guestId, decision}, { withCredentials: true });
     console.log("Guest confirmation updated:", response.data);
     return response.data;
   } catch (error) {
@@ -193,6 +187,21 @@ export const changeInvitationStatus = async (invitationId: number, handedOut: bo
     return response.data;
   } catch (error) {
     console.error(`Error handing out invitation ID ${invitationId}:`, error);
+    throw error;
+  }
+};
+
+export const getInvitationDetailsByConfirmationUrl = async (confirmationUrl: string) => {
+  try {
+    const response = await api.post(
+      '/guests/get-invitation-details-by-url/', 
+      { confirmationUrl: confirmationUrl },
+      {withCredentials: true}
+    );
+
+    return response.data;  
+  } catch (error) {
+    console.error("Error during fetching invitation details:", error);
     throw error;
   }
 };

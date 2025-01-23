@@ -67,6 +67,12 @@ export interface Invitation {
   confirmationUrl: string;
 }
 
+export interface InvitationDetails {
+  brideName: string,
+  groomName: string,
+  weddingDate: string
+}
+
 export type Decision = "yes" | "no" | "unknown";
 export const decisionTypes = ["yes", "no", "unknown"];
 

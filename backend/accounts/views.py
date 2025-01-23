@@ -5,10 +5,6 @@ from .models import Account, AccountDetails
 from .serializers import AccountSerializer, AccountDetailsSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import APIException
-from django.core.exceptions import ObjectDoesNotExist
-from preferences.serializers import ColorThemeSerializer
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 
 class AccountView(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -70,22 +66,3 @@ class AccountModelViewSet(viewsets.ModelViewSet):
 
     def after_update(self, instance):
         pass
-
-class GetPreferencesByAlbumUrlView(APIView):
-    permission_classes = [AllowAny] 
-
-    def post(self, request, *args, **kwargs):
-        photo_album_url = request.data.get('photoAlbumUrl')
-        try:
-            account_details = AccountDetails.objects.get(photo_album_url=photo_album_url)
-            view_preferences = account_details.account.viewpreferences
-            
-            theme_data = ColorThemeSerializer(view_preferences.color_theme).data if view_preferences.color_theme else None
-            
-            return Response({
-                "theme": theme_data,
-                "language": view_preferences.language
-            })
-        
-        except ObjectDoesNotExist:
-            return Response({"detail": f"The album URL '{photo_album_url}' does not exist."}, status=404)
