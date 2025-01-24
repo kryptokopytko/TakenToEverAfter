@@ -31,3 +31,8 @@ class Guest(models.Model):
         default='unknown'
     ) 
     plus_one = models.BooleanField(default=False, blank=True) 
+
+class Couple(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE) 
+    guest1 = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='couple_guest1')
+    guest2 = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='couple_guest2')

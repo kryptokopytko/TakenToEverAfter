@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Table, MergedTable, Seat, Couple
+from .models import Table, MergedTable, Seat
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,9 +20,3 @@ class SeatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seat
         fields = ('id', 'account', 'table', 'seat_number', 'guest')
-
-
-class CoupleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Couple
-        fields = ('id', 'account', 'guest1', 'guest2')

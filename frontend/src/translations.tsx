@@ -242,7 +242,8 @@ export const translations = {
       pros: "Pros",
       cons: "Cons",
       photoQR: "Photo Album QR Code",
-      error: "An error occurred, please try again later"
+      error: "An error occurred, please try again later",
+      missingPlusOne: "Please provide the name of the plus one for {name}.",
     },
     polish: {
       login: 'Zaloguj się',
@@ -487,6 +488,7 @@ export const translations = {
       pros: "Zalety",
       cons: "Wady",
       photoQR: "Kod QR do albumu zdjęciowego",
-      error: "Wystąpił błąd, spróbuj ponownie później"
+      error: "Wystąpił błąd, spróbuj ponownie później",
+      missingPlusOne: "Proszę podać imię osoby towarzyszącej dla {name}.",
     },
   };

@@ -1,6 +1,7 @@
 from accounts.views import AccountModelViewSet
-from .models import Tag, Invitation, Guest
-from .serializers import TagSerializer, InvitationSerializer, GuestSerializer, EmailGuestSerializer, EmailGuestSerializerPl
+from .models import Tag, Invitation, Guest, Couple
+from .serializers import TagSerializer, InvitationSerializer, GuestSerializer, EmailGuestSerializer, EmailGuestSerializerPl, \
+    CoupleSerializer
 from emails.email_template import send_generic_email
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,6 +29,10 @@ class GuestView(AccountModelViewSet):
             "Guest List",
             "Lista Gości"
         )
+
+class CoupleView(AccountModelViewSet):
+    serializer_class = CoupleSerializer
+    queryset = Couple.objects.all()
 
 class GetInvitationDetailsView(APIView):
     permission_classes = [AllowAny]

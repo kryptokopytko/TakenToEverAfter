@@ -74,7 +74,7 @@ const AppContent = () => {
   const location = useLocation();
   const { 
     isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
-    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos
+    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples
    } = useUser();
 
    const { setTheme, setThemes, setFontSize } = useTheme();
@@ -92,6 +92,7 @@ const AppContent = () => {
         setGuests(guestsInfo.guests);
         setTags(guestsInfo.tags);
         setInvitations(guestsInfo.invitations);
+        setCouples(guestsInfo.couples);
         
         const taskCards = await getTasks();
         setTaskCards(taskCards);
@@ -115,6 +116,7 @@ const AppContent = () => {
         setWeddingDetails(Example.weddingDetails);
         setTaskCards(Example.taskCards); 
         setGuests(Example.guests);
+        setCouples([]);
         setTags(Example.tags);
         setInvitations(Example.invitations);
         setExpenseCards(Example.expenses);

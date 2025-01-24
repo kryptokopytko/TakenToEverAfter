@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Table, MergedTable, Seat, Couple
-from .serializers import TableSerializer, MergedTableSerializer, SeatSerializer, CoupleSerializer
+from .models import Table, MergedTable, Seat
+from .serializers import TableSerializer, MergedTableSerializer, SeatSerializer
 from accounts.views import AccountModelViewSet
 
 class TableView(AccountModelViewSet):
@@ -14,7 +14,3 @@ class MergedTableView(AccountModelViewSet):
 class SeatView(AccountModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.all()
-
-class CoupleView(AccountModelViewSet):
-    serializer_class = CoupleSerializer
-    queryset = Couple.objects.all()

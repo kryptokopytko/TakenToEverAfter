@@ -55,6 +55,12 @@ export interface Guest {
   hasPlusOne: boolean;
 }
 
+export interface Couple {
+  id: number;
+  guest1: number;
+  guest2: number;
+}
+
 export interface Tag {
   id: number;
   name: string;

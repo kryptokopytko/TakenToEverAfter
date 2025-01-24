@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tag, Invitation, Guest
+from .models import Tag, Invitation, Guest, Couple
 import random
 import string
 
@@ -20,7 +20,7 @@ class InvitationSerializer(serializers.ModelSerializer):
         model = Invitation
         fields = ('id', 'account', 'handedOut', 'confirmationUrl')
 
-    def generate_unique_url():
+    def generate_unique_url(self):
         while True:
             random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=25))
             if not Invitation.objects.filter(confirmation_url=random_string).exists():
@@ -71,3 +71,12 @@ class EmailGuestSerializerPl(serializers.ModelSerializer):
 
     def get_decyzja(self, obj):
         return DECISIONS_TO_PL.get(obj.decision, obj.decision)
+    
+class CoupleSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(read_only=True) 
+    guest1 = serializers.PrimaryKeyRelatedField(queryset=Guest.objects.all())
+    guest2 = serializers.PrimaryKeyRelatedField(queryset=Guest.objects.all())
+
+    class Meta:
+        model = Couple
+        fields = ('id', 'account', 'guest1', 'guest2')

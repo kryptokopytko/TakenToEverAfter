@@ -1,12 +1,13 @@
 import api from "./axiosInstance";
-import { Guest, Tag, Invitation } from "../../types";
+import { Guest, Tag, Invitation, Couple } from "../../types";
 
 export const getGuestsInfo = async () => {
   try {
-    const [guestsResponse, tagsResponse, invitationsResponse] = await Promise.all([
+    const [ guestsResponse, tagsResponse, invitationsResponse, couplesResponse ] = await Promise.all([
       api.get("/guests/guests/",  { withCredentials: true }),
       api.get("/guests/tags/",  { withCredentials: true }),
-      api.get("/guests/invitations/",  { withCredentials: true })
+      api.get("/guests/invitations/",  { withCredentials: true }),
+      api.get("/guests/couples/",  { withCredentials: true })
     ]);
 
     const guests: Guest[] = guestsResponse.data.map((guest: any) => ({
@@ -30,10 +31,17 @@ export const getGuestsInfo = async () => {
       confirmationUrl: invitation.confirmationUrl
     }));
 
+    const couples: Couple[] = couplesResponse.data.map((couple: any) => ({
+      id: couple.id,
+      guest1: couple.guest1,
+      guest2: couple.guest2
+    }));
+
     return {
       guests,
       tags,
-      invitations
+      invitations,
+      couples
     };
   } catch (error) {
     console.error("Error fetching guests information:", error);
@@ -73,10 +81,23 @@ export const addGuest = async (guestName: string, groupNumbers: Number[], plusOn
   }
 };
 
+export const addCouple = async (guestId: number, partnerId: number) => {
+  try {
+    const newCouple = {
+      guest1: guestId,
+      guest2: partnerId,
+    };
+    const response = await api.post("/guests/couples/", newCouple, { withCredentials: true });
+    return response.data.id;
+  } catch (error) {
+    console.error("There was an error creating the couple:", error);
+    return -1;
+  }
+}
 
 export const removeGuest = async (id: Number) => {
   try {
-    const response = await api.delete(`/guests/guests/${id}/`);
+    const response = await api.delete(`/guests/guests/${id}/`, { withCredentials: true });
     console.log(`Guest with ID ${id} has been removed.`);
     return response.data;
   } catch (error) {
@@ -101,7 +122,7 @@ export const updateGuestTags = async (
   updatedGroupsId: number[]
 ) => {
   try {
-    const guestResponse = await api.get(`/guests/guests/${guestId}/`);
+    const guestResponse = await api.get(`/guests/guests/${guestId}/`, { withCredentials: true });
     const guest = guestResponse.data;
 
     const updatedGuestData = {
@@ -109,7 +130,7 @@ export const updateGuestTags = async (
       tags: updatedGroupsId,
     };
 
-    const response = await api.patch(`/guests/guests/${guestId}/`, updatedGuestData);
+    const response = await api.patch(`/guests/guests/${guestId}/`, updatedGuestData, { withCredentials: true });
     console.log("Guest updated:", response.data);
     return response.data;
   } catch (error) {
@@ -123,7 +144,7 @@ export const updateGuestTags = async (
 
 export const updateGroupRank = async (groupId: number, newRank: number) => {
   try {
-    const groupResponse = await api.get(`/groups/${groupId}/`);
+    const groupResponse = await api.get(`/groups/${groupId}/`, { withCredentials: true });
     const group = groupResponse.data;
 
     const updatedGroupData = {
@@ -131,29 +152,11 @@ export const updateGroupRank = async (groupId: number, newRank: number) => {
       rank: newRank,
     };
 
-    const response = await api.patch(`/groups/${groupId}/`, updatedGroupData);
+    const response = await api.patch(`/groups/${groupId}/`, updatedGroupData, { withCredentials: true });
     console.log("Group rank updated:", response.data);
     return response.data;
   } catch (error) {
     console.error(`Error updating rank for group ID ${groupId}:`, error);
-    throw error;
-  }
-};
-
-export const updateGuestConfirmation = async (
-  guestId: number,
-  decision: "yes" | "no"
-) => {
-  try {
-    const response = await api.post("/guests/set-guest-decision/", 
-      {guestId, decision}, { withCredentials: true });
-    console.log("Guest confirmation updated:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error(
-      `Error updating confirmation for guest ID ${guestId}:`,
-      error
-    );
     throw error;
   }
 };
@@ -202,6 +205,43 @@ export const getInvitationDetailsByConfirmationUrl = async (confirmationUrl: str
     return response.data;  
   } catch (error) {
     console.error("Error during fetching invitation details:", error);
+    throw error;
+  }
+};
+
+export const updateGuestConfirmation = async (
+  guestId: number,
+  decision: "yes" | "no"
+) => {
+  try {
+    const response = await api.post("/guests/set-guest-decision/", 
+      {guestId, decision}, { withCredentials: true });
+    console.log("Guest confirmation updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Error updating confirmation for guest ID ${guestId}:`,
+      error
+    );
+    throw error;
+  }
+};
+
+export const updatePlusOne = async (
+  guestId: number,
+  hasPlusOne: boolean,
+  partner: string | undefined
+) => {
+  try {
+    // const response = await api.post("/guests/set-guest-decision/", 
+    //   {guestId, decision}, { withCredentials: true });
+    // console.log("Guest confirmation updated:", response.data);
+    // return response.data;
+  } catch (error) {
+    console.error(
+      `Error updating confirmation for guest ID ${guestId}:`,
+      error
+    );
     throw error;
   }
 };

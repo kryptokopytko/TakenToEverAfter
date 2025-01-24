@@ -22,7 +22,7 @@ class AccountDetailsSerializer(serializers.ModelSerializer):
         model = AccountDetails
         fields = ('id', 'account', 'weddingDate', 'newlywedsTableId', 'budgetLimit', 'photoAlbumUrl')
   
-    def generate_unique_url():
+    def generate_unique_url(self):
         while True:
             random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
             if not AccountDetails.objects.filter(photo_album_url=random_string).exists():

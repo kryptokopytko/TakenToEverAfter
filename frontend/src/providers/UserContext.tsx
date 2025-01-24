@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image, Couple } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -8,6 +8,7 @@ interface UserContextType {
     isLogged: boolean;
     weddingDetails: WeddingDetails | null;
     guests: Guest[];
+    couples: Couple[];
     tags: Tag[];
     invitations: Invitation[];
     account: Account;
@@ -21,6 +22,7 @@ interface UserContextType {
     setAccountDetails: (accountDetails: AccountDetails) => void;
     setIsLogged: (logged: boolean) => void;
     setGuests: (guests: Guest[]) => void;
+    setCouples: (couples: Couple[]) => void;
     setTags: (tags: Tag[]) => void;
     setInvitations: (invitations: Invitation[]) => void;
     setWeddingDetails: (weddingDetails: WeddingDetails | null) => void;
@@ -42,6 +44,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [account, setAccount] = useState<Account>(Example.account);
     const [accountDetails, setAccountDetails] = useState<AccountDetails>(Example.accountDetails);
     const [guests, setGuests] = useState<Guest[]>(Example.guests);
+    const [couples, setCouples] = useState<Couple[]>([]);
     const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails);
     const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
     const [tags, setTags] = useState<Tag[]>(Example.tags);
@@ -58,6 +61,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 isLogged,
                 weddingDetails,
                 guests,
+                couples,
                 tags,
                 invitations,
                 account,
@@ -69,6 +73,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
                 setWeddingDetails,
                 setGuests,
+                setCouples,
                 setTags,
                 setInvitations,
                 setAccount,
