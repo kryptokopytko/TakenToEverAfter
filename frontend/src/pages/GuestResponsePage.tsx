@@ -108,6 +108,7 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                 await updateGuestConfirmation(guest.id, responses[guest.id]);
                 if (guest.hasPlusOne) {
                     await updatePlusOne(guest.id, hasPlusOnes[guest.id], plusOnes[guest.id]);
+                    console.log("Plus one updated for ", guest.name);
                 }
             }
             

@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 class TagView(AccountModelViewSet):
     serializer_class = TagSerializer
@@ -48,6 +49,16 @@ class GetInvitationDetailsView(APIView):
             guests = invitation.guests.all()
             account_details = invitation.account.accountdetails
 
+            guest_list_with_modified_plus_one = []
+
+            for guest in guests:
+                modified_has_plus_one = guest.plus_one and not Couple.objects.filter(Q(guest1=guest) | Q(guest2=guest)).exists()
+
+                guest_list_with_modified_plus_one.append({
+                    **GuestSerializer(guest).data,  
+                    "hasPlusOne": modified_has_plus_one, 
+                })
+
             invitation_data = {
                 "invitationId": invitation.id,
                 "brideName": invitation.account.bride_name,
@@ -59,7 +70,7 @@ class GetInvitationDetailsView(APIView):
 
             return Response({
                 "invitation": invitation_data,
-                "guests": guests_data
+                "guests": guest_list_with_modified_plus_one
             }, status=200)
 
         except ObjectDoesNotExist:
@@ -93,3 +104,47 @@ class SetGuestDecisionView(APIView):
             return Response({"detail": f"The guest with ID '{guest_id}' does not exist in this invitation."}, status=404)
         except Exception as e:
             return Response({"detail": f"An error occurred: {str(e)}"}, status=500)
+
+
+class UpdatePlusOneView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            guest_id = request.data.get("guestId")
+            has_plus_one = request.data.get("hasPlusOne")
+            partner_name = request.data.get("partnerName")
+
+            guest = Guest.objects.get(id=guest_id)
+            guest.plus_one = has_plus_one
+            guest.save()
+
+            partner_id = None
+
+            if has_plus_one and partner_name:
+                invitation = guest.invitation
+                partner = Guest.objects.create(
+                    name=partner_name,
+                    invitation=invitation,
+                    plus_one=False,
+                    decision="yes",
+                    account=guest.account
+                )
+                partner_id = partner.id
+
+                Couple.objects.create(account=guest.account, guest1=guest, guest2=partner)
+
+            return Response(
+                {"guestId": guest.id, "partnerId": partner_id},
+                status=200,
+            )
+        except Guest.DoesNotExist:
+            return Response(
+                {"detail": f"The guest with ID '{guest_id}' does not exist in this invitation."},
+                status=404,
+            )
+        except Exception as e:
+            return Response(
+                {"detail": f"An error occurred: {str(e)}"},
+                status=500,
+            )

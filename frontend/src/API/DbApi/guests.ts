@@ -233,13 +233,18 @@ export const updatePlusOne = async (
   partner: string | undefined
 ) => {
   try {
-    // const response = await api.post("/guests/set-guest-decision/", 
-    //   {guestId, decision}, { withCredentials: true });
-    // console.log("Guest confirmation updated:", response.data);
-    // return response.data;
+    const payload = {
+      guestId,
+      hasPlusOne,
+      partnerName: partner || null,
+    };
+
+    await api.post("/guests/update-plus-one/", payload, {
+      withCredentials: true,
+    });  
   } catch (error) {
     console.error(
-      `Error updating confirmation for guest ID ${guestId}:`,
+      `Error updating plus one status for guest ID ${guestId}:`,
       error
     );
     throw error;

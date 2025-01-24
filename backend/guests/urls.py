@@ -1,4 +1,4 @@
-from .views import TagView, InvitationView, GuestView, GetInvitationDetailsView, SetGuestDecisionView, CoupleView
+from .views import TagView, InvitationView, GuestView, GetInvitationDetailsView, SetGuestDecisionView, CoupleView, UpdatePlusOneView
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 
@@ -13,4 +13,5 @@ urlpatterns = router.urls
 urlpatterns += [
     path('get-invitation-details-by-url/', GetInvitationDetailsView.as_view(), name='get_invitation_details_by_url'),
     path('set-guest-decision/', SetGuestDecisionView.as_view(), name='set_guest_decision'),
+    path("update-plus-one/", UpdatePlusOneView.as_view(), name="update-plus-one"),
 ]
