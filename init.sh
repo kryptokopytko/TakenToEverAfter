@@ -36,3 +36,5 @@ do
   python3 manage.py makemigrations $APP
   python3 manage.py migrate $APP
 done
+
+cd ..
