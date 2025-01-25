@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import { Subtitle } from "../styles/typography";
 import { Container } from "../styles/form";
-import { getInvitationDetailsByConfirmationUrl, getPreferencesByConfirmationUrl, updateGuestConfirmation, updatePlusOne } from "../API/DbApi/DBApi";
+import { getInvitationDetailsByConfirmationUrl, getPreferencesByConfirmationUrl, saveAnswer, updateGuestConfirmation, updatePlusOne } from "../API/DbApi/DBApi";
 import Input from "../components/ui/Input";
 import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Invitation from "../sections/Printables/Invitation";
 import { translations } from "../translations";
 import { useUser } from "../providers/UserContext";
-import { Guest, Language, Theme, InvitationDetails } from "../types";
+import { Guest, Language, Theme, InvitationDetails, Question } from "../types";
 import { useTheme } from "../providers/ThemeContext";
 import { useParams } from "react-router-dom";
 import Checkbox from "../components/ui/Checkbox";
@@ -19,14 +19,14 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
     const { language, setLanguage } = useUser();
     const { setTheme } = useTheme();
     const [responses, setResponses] = useState<Record<number, "yes" | "no">>({});
-    const [dietaryPreferences, setDietaryPreferences] = useState<Record<number, string>>({});
-    const [otherPreferences, setOtherPreferences] = useState<Record<number, string>>({});
+    const [answers, setAnswers] = useState<Record<number, Record<number, string>>>({});
     const [hasPlusOnes, setHasPlusOnes] = useState<Record<number, boolean>>({});
     const [plusOnes, setPlusOnes] = useState<Record<number, string>>({});
     const [invitationId, setInvitationId] = useState<number | null>(null);
     const [guestList, setGuestList] = useState<Guest[]>([]);
     const [invitationDetails, setInvitationDetails] = useState<InvitationDetails | null>(null);
     const { uniqueUrl } = useParams();
+    const [questions, setQuestions] = useState<Question[]>([]);
 
     useEffect(() => {
         const getPreferences = async () => {
@@ -36,14 +36,18 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                     setLanguage(preferences.language as Language);
                     setTheme(preferences.theme as Theme);
 
-                    const { invitation, guests } = await getInvitationDetailsByConfirmationUrl(uniqueUrl);
+                    const { invitation, guests, questions } = await getInvitationDetailsByConfirmationUrl(uniqueUrl);
                     setInvitationId(invitation.invitationId);
                     setInvitationDetails({
                         brideName: invitation.brideName,
                         groomName: invitation.groomName,
                         weddingDate: invitation.date,
+                        mainText: invitation.mainText,
+                        additionalText: invitation.additionalText,
+                        guestText: invitation.guestText,
                     });
                     setGuestList(guests);
+                    setQuestions(questions);
                     
                     const initialResponses: Record<number, "yes" | "no"> = {};
                     const initialDietaryPreferences: Record<number, string> = {};
@@ -55,7 +59,6 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                         initialHasPlusOnes[guest.id] = false;
                     });
                     setResponses(initialResponses);
-                    setDietaryPreferences(initialDietaryPreferences);
                     setHasPlusOnes(initialHasPlusOnes);
                 } catch (error) {
                     console.error('Error fetching preferences or invitation details:', error);
@@ -70,12 +73,15 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
         setResponses((prev) => ({ ...prev, [guestId]: decision }));
     };
 
-    const handleDietaryPreferenceChange = (guestId: number, preference: string) => {
-        setDietaryPreferences((prev) => ({ ...prev, [guestId]: preference }));
-    };
-
-    const handleOtherPreferenceChange = (guestId: number, value: string) => {
-        setOtherPreferences((prev) => ({ ...prev, [guestId]: value }));
+    const handleAnswerChange = (questionId: number, guestId: number, answer: string) => {
+        setAnswers((prev) => {
+            const newAnswers = { ...prev };
+            if (!newAnswers[guestId]) {
+                newAnswers[guestId] = {}; 
+            }
+            newAnswers[guestId][questionId] = answer;
+            return newAnswers;
+        });
     };
 
     const handlePlusOneChange = (guestId: number, value: string) => {
@@ -93,12 +99,32 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
             return;
         }
 
+        const hasMissingAnswer = guestList.find((guest) => {
+            return responses[guest.id] == "yes" && questions.some((question) => !answers[guest.id]?.[question.id]);
+        });
+        
+        if (hasMissingAnswer) {
+            alert(
+                translations[language].missingAnswer.replace(
+                    "{name}",
+                    hasMissingAnswer.name
+                )
+            );
+            return;
+        }
+        
         try {
             for (const guest of guestList) {
                 await updateGuestConfirmation(guest.id, responses[guest.id]);
                 if (guest.hasPlusOne) {
                     await updatePlusOne(guest.id, hasPlusOnes[guest.id], plusOnes[guest.id]);
                     console.log("Plus one updated for ", guest.name);
+                }
+
+                if (responses[guest.id] == "yes") {
+                    for (const question of questions) {
+                        await saveAnswer(question.id, guest.id, answers[guest.id][question.id]);
+                    }
                 }
             }
             
@@ -115,6 +141,9 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                 {...(invitationId && { invitationId })} 
                 guestList={guestList}
                 {...(invitationDetails && { details: invitationDetails })}
+                {...(invitationDetails?.mainText && { mainText: invitationDetails.mainText })}
+                {...(invitationDetails?.additionalText && { additionalText: invitationDetails.additionalText })}
+                {...(invitationDetails?.guestText && { guestText: invitationDetails.guestText })}
             >
                 <Subtitle level={2}>{translations[language].question}</Subtitle>
                 {guestList.map((guest, index) => (
@@ -141,46 +170,43 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                             <>
                                 {guest.hasPlusOne && (
                                     <>
-                                    <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
-                                        <Checkbox
-                                            checked={hasPlusOnes[guest.id]}
-                                            onChange={() => handleHasPlusOneChange(guest.id)}
-                                        />
-                                        {translations[language].hasPlusOne}
-                                    </div>
-                                    {hasPlusOnes[guest.id] && (
-                                        <>
-                                            <Subtitle level={3}>{translations[language].namedPartner}:</Subtitle>
-                                            <Input
-                                                size="medium"
-                                                variant="tertiary"
-                                                value={plusOnes[guest.id] || ""}
-                                                onChange={(e) => handlePlusOneChange(guest.id, e.target.value)}
-                                                placeholder={translations[language].namedPartner}
+                                        <div style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                                            <Checkbox
+                                                checked={hasPlusOnes[guest.id]}
+                                                onChange={() => handleHasPlusOneChange(guest.id)}
                                             />
-                                        </>
-                                    )}
+                                            {translations[language].hasPlusOne}
+                                        </div>
+                                        {hasPlusOnes[guest.id] && (
+                                            <>
+                                                <Subtitle level={3}>{translations[language].namedPartner}:</Subtitle>
+                                                <Input
+                                                    size="medium"
+                                                    variant="tertiary"
+                                                    value={plusOnes[guest.id] || ""}
+                                                    onChange={(e) => handlePlusOneChange(guest.id, e.target.value)}
+                                                    placeholder={translations[language].namedPartner}
+                                                />
+                                            </>
+                                        )}
                                   </>
                                 )}
-                                <div style={{ marginTop: "2rem", marginLeft: "2.5rem" }}>
-                                    <DropdownSelector
-                                        initialSelectedOption={dietaryPreferences[guest.id]}
-                                        options={translations[language].dietaryOptions}
-                                        title={translations[language].dietaryPreferencesQuestion}
-                                        onOptionSelect={(option) => handleDietaryPreferenceChange(guest.id, option as string)}
-                                    />
-                                    {dietaryPreferences[guest.id] === "other" && (
-                                        <div style={{ marginTop: "1rem" }}>
-                                            <Input
-                                                size="medium"
-                                                variant="tertiary"
-                                                value={otherPreferences[guest.id] || ""}
-                                                onChange={(e) => handleOtherPreferenceChange(guest.id, e.target.value)}
-                                                placeholder={translations[language].otherPreferencePlaceholder}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
+                                {questions.length && (
+                                    questions.map((question, index) => {
+                                        return (
+                                            <div style={{ marginTop: "2rem", marginLeft: "2.5rem" }} key={index}>
+                                                <DropdownSelector
+                                                    options={question.type == "choice"?
+                                                        question.options!.map(option => ({label: option, value: option}))
+                                                        : [{label: translations[language].yes, value: "yes"},
+                                                        {label: translations[language].no, value: "no"}]
+                                                    }
+                                                    title={question.text}
+                                                    onOptionSelect={(option) => handleAnswerChange(question.id, guest.id, option as string)}
+                                                />
+                                            </div>
+                                        )
+                                }))}
                             </>
                         )}
 

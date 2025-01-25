@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from questionnaire.models import Question
+from questionnaire.serializers import QuestionSerializer
 
 class TagView(AccountModelViewSet):
     serializer_class = TagSerializer
@@ -47,7 +49,9 @@ class GetInvitationDetailsView(APIView):
         try:
             invitation = Invitation.objects.get(confirmation_url=confirmation_url)
             guests = invitation.guests.all()
-            account_details = invitation.account.accountdetails
+            account = invitation.account
+            account_details = account.accountdetails
+            questions = Question.objects.filter(account=account)
 
             guest_list_with_modified_plus_one = []
 
@@ -63,14 +67,16 @@ class GetInvitationDetailsView(APIView):
                 "invitationId": invitation.id,
                 "brideName": invitation.account.bride_name,
                 "groomName": invitation.account.groom_name,
-                "date" : account_details.wedding_date
+                "date" : account_details.wedding_date,
+                "mainText": account_details.invitation_main_text,
+                "additionalText": account_details.invitation_additional_text,
+                "guestText": account_details.invitation_guest_text,
             }
-
-            guests_data = GuestSerializer(guests, many=True).data
 
             return Response({
                 "invitation": invitation_data,
-                "guests": guest_list_with_modified_plus_one
+                "guests": guest_list_with_modified_plus_one,
+                "questions": QuestionSerializer(questions, many=True).data
             }, status=200)
 
         except ObjectDoesNotExist:

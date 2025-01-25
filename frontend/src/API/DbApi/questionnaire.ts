@@ -1,6 +1,5 @@
+import { RawQuestion } from "../../types";
 import api from "./axiosInstance";
-
-export const sendResponse = (guestName: string, response: "yes" | "no") => {};
 
 export const getQuestionnaire = async () => {
     try {
@@ -11,12 +10,9 @@ export const getQuestionnaire = async () => {
       const questions = questionsResponse.data.map((question: any) => {
         return {
           id: question.id,
-          content: question.content,
+          text: question.text,
           type: question.type,
-          options: question.options ? question.options.map((option: any) => ({
-            id: option.id,
-            name: option.name
-          })) : []
+          options: question.options 
         };
       });
   
@@ -42,4 +38,38 @@ export const getQuestionnaire = async () => {
       throw error;
     }
   };
+
+  export const updateQuestions = async (
+    updatedQuestions: RawQuestion[]
+  ) => {
+    try {
+      const response = await api.post("/questionnaire/update-questions/", updatedQuestions, { withCredentials: true });
+      return response.data;
+    } catch (error) {
+      console.error("There was an error updating the questions:", error);
+      return null;
+    }
+  };
   
+  export const saveAnswer = async (
+    questionId: number,
+    guestId: number,
+    answer: string
+  ) => {
+    try {
+      const response = await api.post(
+        "/questionnaire/save-answer/",
+        {
+          questionId,
+          guestId,
+          answer,
+        },
+        { withCredentials: true }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error("There was an error saving the answer:", error);
+      return null;
+    }
+  };

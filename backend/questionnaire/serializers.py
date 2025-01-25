@@ -12,7 +12,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'account', 'content', 'type', 'options')
+        fields = ('id', 'account', 'text', 'type', 'options')
 
 class AnswerSerializer(serializers.ModelSerializer):
     account = serializers.PrimaryKeyRelatedField(read_only=True) 

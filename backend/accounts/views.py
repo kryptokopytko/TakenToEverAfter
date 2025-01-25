@@ -5,6 +5,7 @@ from .models import Account, AccountDetails
 from .serializers import AccountSerializer, AccountDetailsSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import APIException
+import json
 
 class AccountView(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -66,3 +67,22 @@ class AccountModelViewSet(viewsets.ModelViewSet):
 
     def after_update(self, instance):
         pass
+
+@api_view(['POST'])
+def update_account_details(request):
+    account = get_account_from_session(request)
+
+    if not account:
+        return Response({"error": "User account not found in session."}, status=400)
+
+    data = json.loads(request.body)
+
+    account_details, created = AccountDetails.objects.get_or_create(account=account)
+
+    serializer = AccountDetailsSerializer(account_details, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Account details have been updated."}, status=200)
+    else:
+        return Response(serializer.errors, status=400)

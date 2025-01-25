@@ -260,6 +260,7 @@ export const translations = {
       optionPlaceholder: "Enter option here",
       addOption: "Add Option",
       yesNoType: "Yes/No Question",
+      missingAnswer: "{name} has not answered all questions.",
     },
     polish: {
       login: 'Zaloguj się',
@@ -522,5 +523,6 @@ export const translations = {
       optionPlaceholder: "Wprowadź opcję tutaj",
       addOption: "Dodaj opcję",
       yesNoType: "Pytanie Tak/Nie",
+      missingAnswer: "{name} nie odpowiedział/-a na wszystkie pytania, proszę uzupełnić odpowiedzi",
     },
   };

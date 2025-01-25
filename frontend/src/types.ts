@@ -79,7 +79,10 @@ export interface Invitation {
 export interface InvitationDetails {
   brideName: string,
   groomName: string,
-  weddingDate: string
+  weddingDate: string,
+  mainText: string | null,
+  additionalText: string | null,
+  guestText: string | null,
 }
 
 export type Decision = "yes" | "no" | "unknown";
@@ -116,8 +119,14 @@ export interface Themes {
 }
 
 /*********************************************QUESTIONNAIRE**********************************************/
-export interface Question { 
-  text: string; type: "choice" | "yes/no"; options?: string[] 
+export interface RawQuestion { 
+  text: string; 
+  type: "choice" | "yes/no"; 
+  options?: string[] 
+}
+
+export interface Question extends RawQuestion { 
+  id: number,
 }
 
 export interface Answer {

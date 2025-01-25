@@ -1,5 +1,6 @@
 import api from "./axiosInstance";
 import { initialFontSize } from "../../styles/theme";
+import { AccountDetails } from "../../types";
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -108,5 +109,17 @@ export const checkSession = async () => {
   } catch (error) {
     console.error("Error during checking session:", error);
     throw error;
+  }
+};
+
+export const updateAccountDetails = async (
+  updatedAccountDetails: AccountDetails
+) => {
+  try {
+    const response = await api.post(`/accounts/update-account-details/`, updatedAccountDetails, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error("There was an error updating the account details:", error);
+    return null;
   }
 };

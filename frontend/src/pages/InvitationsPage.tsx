@@ -10,6 +10,7 @@ import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
 import { translations } from "../translations";
 import useFunctionsProxy from "../API/FunctionHandler";
+import { RawQuestion } from "../types";
 
 interface PrintablesPageProps {
 }
@@ -61,21 +62,20 @@ const AddOptionButton = styled(Button)`
 
 const PrintablesPage: React.FC<PrintablesPageProps> = ({
 }) => {
-    const { guests, language, invitations, questions, setQuestions } = useUser();
+    const { guests, language, invitations, questions, accountDetails } = useUser();
     const [mainText, setMainText] = useState(translations[language].exampleMainText);
     const [additionalText, setAdditionalText] = useState(translations[language].exampleAdditionalText);
     const [guestText, setGuestText] = useState(translations[language].exampleGuestText);
     const [showAllInvites, setShowAllInvites] = useState(false);
     const [deliveredInvites, setDeliveredInvites] = useState<number[]>([]);
+    const [updatedQuestions, setUpdatedQuestions] = useState<RawQuestion[]>([]);
     const FunctionsProxy = useFunctionsProxy();
 
     useEffect(() => {
-        if (language) {
-            setMainText(translations[language].exampleMainText);
-            setAdditionalText(translations[language].exampleAdditionalText);
-            setGuestText(translations[language].exampleGuestText);
-        }
-    }, [language]);
+        setMainText(accountDetails.invitationMainText || translations[language].exampleMainText);
+        setAdditionalText(accountDetails.invitationAdditionalText || translations[language].exampleAdditionalText);
+        setGuestText(accountDetails.invitationGuestText ||translations[language].exampleGuestText);
+    }, [language, accountDetails]);
 
     useEffect(() => {
         const handedOut = invitations
@@ -83,6 +83,10 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             .map((invitation) => invitation.id);
         setDeliveredInvites(handedOut);
     }, [invitations]); 
+
+    useEffect(() => {
+        setUpdatedQuestions(questions as RawQuestion[]);
+    }, [questions]); 
 
     const handleExportPDF = () => {
         const inviteIds = guests.map((_, index) => `invite-${index}`);
@@ -99,38 +103,38 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     }
 
     const handleAddQuestion = (type: "choice" | "yes/no") => {
-        setQuestions([...questions, { text: "", type, options: type === "choice" ? [""] : undefined }]);
+        setUpdatedQuestions([...updatedQuestions, { text: "", type, options: type === "choice" ? [""] : undefined }]);
       };
 
     const handleRemoveQuestion = (index: number) => {
-        setQuestions(questions.filter((_, i) => i !== index));
+        setUpdatedQuestions(updatedQuestions.filter((_, i) => i !== index));
     };
     
     const handleQuestionChange = (index: number, value: string) => {
-        const newQuestions = [...questions];
+        const newQuestions = [...updatedQuestions];
         newQuestions[index].text = value;
-        setQuestions(newQuestions);
+        setUpdatedQuestions(newQuestions);
       };
       
       const handleOptionChange = (qestionIndex: number, optionIndex: number, value: string) => {
-        const newQuestions = [...questions];
+        const newQuestions = [...updatedQuestions];
           if (newQuestions[qestionIndex].options) {
             newQuestions[qestionIndex].options[optionIndex] = value;
           }
-        setQuestions(newQuestions);
+        setUpdatedQuestions(newQuestions);
       };
       
       const handleAddOption = (qestionIndex: number, length: number) => {
-        const newQuestions = [...questions];
+        const newQuestions = [...updatedQuestions];
         if (newQuestions[qestionIndex].options && newQuestions[qestionIndex].options.length == length) {
             newQuestions[qestionIndex].options = [...newQuestions[qestionIndex].options, ""];
         }
-        setQuestions(newQuestions);
+        setUpdatedQuestions(newQuestions);
       };
 
     const handleRemoveOption = (questionIndex: number, optionIndex: number) => {
-        setQuestions(
-          questions.map((question, qIndex) => 
+        setUpdatedQuestions(
+          updatedQuestions.map((question, qIndex) => 
             qIndex === questionIndex 
               ? {
                   ...question, 
@@ -142,7 +146,42 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
       };
       
 
-    const handleSave = () => {
+    const updateInvitationText = async () => {
+        const hasChanges = 
+            mainText !== translations[language].exampleMainText ||
+            additionalText !== translations[language].exampleAdditionalText ||
+            guestText !== translations[language].exampleGuestText;
+
+        if (hasChanges) {
+            try {
+                const updatedAccountDetails = { ...accountDetails };
+
+                if (mainText !== translations[language].exampleMainText) {
+                    updatedAccountDetails.invitationMainText = mainText;
+                }
+
+                if (additionalText !== translations[language].exampleAdditionalText) {
+                    updatedAccountDetails.invitationAdditionalText = additionalText;
+                }
+
+                if (guestText !== translations[language].exampleGuestText) {
+                    updatedAccountDetails.invitationGuestText = guestText;
+                }
+
+                await FunctionsProxy.updateAccountDetails(updatedAccountDetails);
+            } catch (error) {
+                console.error('Error saving account details:', error);
+            }
+        }
+    };
+
+    const handleSave = async () => {
+        await updateInvitationText();
+        try {
+            await FunctionsProxy.updateQuestions(updatedQuestions);
+        } catch (error) {
+            console.error("Error saving questions:", error);
+        }
     };
 
     return (
@@ -183,7 +222,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
 
                 <QuestionsContainer>
                     <Subtitle level={3}>{translations[language].questionsForGuests}</Subtitle>
-                    {questions.map((question, questionIndex) => (
+                    {updatedQuestions.map((question, questionIndex) => (
                         <InputWrapper key={questionIndex}>
                             <QuestionWrapper>
                                 <Input
