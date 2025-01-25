@@ -22,10 +22,10 @@ cd backend
 
 # Create virtual environment
 
-pip3 install pipenv
+pip3 install pipenv python-dotenv django-cors-headers djangorestframework psycopg2-binary openpyxl
 pipenv shell
 pipenv install django
-pip3 install python-dotenv
+pip3 install python-dotenv django-cors-headers
 
 # Create DJANGO apps.
 
