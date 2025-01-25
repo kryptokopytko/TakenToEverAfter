@@ -15,14 +15,21 @@ fi
 # Create PostgreSQL user and database.
 
 envsubst < init.sql.template > init.sql
-psql -U postgres -f init.sql
+sudo -u postgres psql -d postgres -f init.sql
 rm init.sql
+
+cd backend
+
+# Create virtual environment
+
+pip3 install pipenv
+pipenv shell
+pipenv install django
+pip3 install python-dotenv
 
 # Create DJANGO apps.
 
 APPS=("accounts" "expenses" "guests" "photos" "preferences" "questionnaire" "seating" "tasks")
-
-cd backend
 
 for APP in "${APPS[@]}"
 do
