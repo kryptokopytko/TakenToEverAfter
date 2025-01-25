@@ -551,6 +551,26 @@ const rectangularTables = [{
       'Kornela Kamińska']
 }];
 
+
+
+const dietaryOptionsEng = [
+  { label: "No preference", value: "no_preference" },
+  { label: "Vegetarian", value: "vegetarian" },
+  { label: "Vegan", value: "vegan" },
+  { label: "Lactose-free", value: "lactose_free" },
+  { label: "Gluten-free", value: "gluten_free" },
+  { label: "Other (please specify)", value: "other" },
+];
+
+const dietaryOptionsPl = [
+  { label: "Brak preferencji", value: "no_preference" },
+  { label: "Wegetariańska", value: "vegetarian" },
+  { label: "Wegańska", value: "vegan" },
+  { label: "Bez laktozy", value: "lactose_free" },
+  { label: "Bezglutenowa", value: "gluten_free" },
+  { label: "Inna (proszę określić)", value: "other" },
+];
+
 // *******************************************************************
 const Example = { 
   account, accountDetails, 

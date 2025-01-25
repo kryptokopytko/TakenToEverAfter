@@ -23,8 +23,8 @@ export const getQuestionnaire = async () => {
       const answers = answersResponse.data.map((answer: any) => {
         return {
           id: answer.id,
-          questionId: answer.question.id,
-          guestId: answer.guest.id,
+          questionId: answer.question,
+          guestId: answer.guest,
           answer: answer.answer
         };
       });

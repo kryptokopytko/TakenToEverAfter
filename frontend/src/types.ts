@@ -119,9 +119,11 @@ export interface Themes {
 }
 
 /*********************************************QUESTIONNAIRE**********************************************/
+export type QuestionType = "choice" | "yes/no";
+
 export interface RawQuestion { 
   text: string; 
-  type: "choice" | "yes/no"; 
+  type: QuestionType; 
   options?: string[] 
 }
 

@@ -14,6 +14,7 @@ import DropdownSelector from "../components/ui/Dropdown/Dropdown";
 import Checkbox from "../components/ui/Checkbox";
 import { useUser } from "../providers/UserContext";
 import { translations } from "../translations";
+import QuestionAnswerList from "../sections/GuestList/QuestionAnswerList";
 
 const GuestPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -230,6 +231,7 @@ const GuestPage: React.FC = () => {
   };
 
   return (
+    <>
     <Container>
       <MenuContainer >
         <Heading level={2}>{translations[language].manageGuests}</Heading>
@@ -415,6 +417,8 @@ const GuestPage: React.FC = () => {
         </SelectorContainer>
       </GuestList>
     </Container>
+    <QuestionAnswerList/>
+    </>
   );
 };
 

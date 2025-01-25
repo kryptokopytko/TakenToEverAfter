@@ -1,4 +1,9 @@
-export const translations = {
+interface Translations {
+  polish: { [key: string]: string };
+  english: { [key: string]: string };
+}
+
+export const translations: Translations = {
     english: {
       login: 'Log in',
       logout: 'Log out',
@@ -244,14 +249,6 @@ export const translations = {
       photoQR: "Photo Album QR Code",
       error: "An error occurred, please try again later",
       missingPlusOne: "Please provide the name of the plus one for {name}.",
-      dietaryOptions: [
-        { label: "No preference", value: "no_preference" },
-        { label: "Vegetarian", value: "vegetarian" },
-        { label: "Vegan", value: "vegan" },
-        { label: "Lactose-free", value: "lactose_free" },
-        { label: "Gluten-free", value: "gluten_free" },
-        { label: "Other (please specify)", value: "other" },
-      ],
       questionsForGuests: "Questions for Guests",
       questionPlaceholder: "Enter your question here",
       addQuestion: "Add Question",
@@ -261,6 +258,7 @@ export const translations = {
       addOption: "Add Option",
       yesNoType: "Yes/No Question",
       missingAnswer: "{name} has not answered all questions.",
+      questionsAndAnswers: "Questions and answers",
     },
     polish: {
       login: 'Zaloguj się',
@@ -507,14 +505,6 @@ export const translations = {
       photoQR: "Kod QR do albumu zdjęciowego",
       error: "Wystąpił błąd, spróbuj ponownie później",
       missingPlusOne: "Proszę podać imię osoby towarzyszącej dla {name}.",
-      dietaryOptions: [
-        { label: "Brak preferencji", value: "no_preference" },
-        { label: "Wegetariańska", value: "vegetarian" },
-        { label: "Wegańska", value: "vegan" },
-        { label: "Bez laktozy", value: "lactose_free" },
-        { label: "Bezglutenowa", value: "gluten_free" },
-        { label: "Inna (proszę określić)", value: "other" },
-      ],
       questionsForGuests: "Pytania do gości",
       questionPlaceholder: "Wpisz swoje pytanie",
       addQuestion: "Dodaj pytanie", 
@@ -524,5 +514,6 @@ export const translations = {
       addOption: "Dodaj opcję",
       yesNoType: "Pytanie Tak/Nie",
       missingAnswer: "{name} nie odpowiedział/-a na wszystkie pytania, proszę uzupełnić odpowiedzi",
+      questionsAndAnswers: "Pytania i odpowiedzi",
     },
   };
