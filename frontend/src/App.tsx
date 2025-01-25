@@ -26,7 +26,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos } from "./API/DbApi/DBApi";
+import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos, getQuestionnaire } from "./API/DbApi/DBApi";
 import Example from "./exampleData";
 import { initialFontSize, initialThemes } from "./styles/theme";
 
@@ -74,7 +74,7 @@ const AppContent = () => {
   const location = useLocation();
   const { 
     isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
-    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples
+    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers,
    } = useUser();
 
    const { setTheme, setThemes, setFontSize } = useTheme();
@@ -109,6 +109,10 @@ const AppContent = () => {
         setThemes(themes);
         setTheme(preferences.colorTheme || initialThemes.nude);
         setLanguage(preferences.language);
+
+        const { questions, answers } = await getQuestionnaire();
+        setQuestions(questions);
+        setAnswers(answers);
       } else {
         setIsLogged(false);
         setAccount(Example.account);
@@ -126,6 +130,8 @@ const AppContent = () => {
         setThemes(initialThemes);
         setTheme(initialThemes.nude);
         setLanguage("english");
+        setQuestions([]);
+        setAnswers([]);
     }
   };
 

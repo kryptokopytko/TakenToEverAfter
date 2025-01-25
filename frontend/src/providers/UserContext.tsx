@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image, Couple } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image, Couple, Question, Answer } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -17,6 +17,8 @@ interface UserContextType {
     expenseCards: ExpenseCard[];
     choices: Choice[];
     photos: Image[];
+    questions: Question[];
+    answers: Answer[];
     
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
@@ -32,6 +34,8 @@ interface UserContextType {
     setExpenseCards: (expenseCards: ExpenseCard[]) => void;
     setChoices: (choices: Choice[]) => void;
     setPhotos: (photos: Image[]) => void;
+    setQuestions: (questions: Question[]) => void;
+    setAnswers: (answers: Answer[]) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -52,6 +56,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses);
     const [choices, setChoices] = useState<Choice[]>(Example.choices);
     const [photos, setPhotos] = useState<Image[]>(Example.images);
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [answers, setAnswers] = useState<Answer[]>([]);
 
     return (
         <UserContext.Provider
@@ -70,6 +76,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 expenseCards,
                 choices,
                 photos,
+                questions,
+                answers,
 
                 setWeddingDetails,
                 setGuests,
@@ -85,6 +93,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setExpenseCards,
                 setChoices,
                 setPhotos,
+                setQuestions,
+                setAnswers
             }}
         >
             {children}

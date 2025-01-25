@@ -11,6 +11,9 @@ export interface AccountDetails {
   newlywedsTableId: number | null;
   budgetLimit: number | null; 
   photoAlbumUrl: string;
+  invitationMainText: string | null;
+  invitationAdditionalText: string | null;
+  invitationGuestText: string | null;
 }
 
 export interface WeddingDetails {
@@ -113,23 +116,11 @@ export interface Themes {
 }
 
 /*********************************************QUESTIONNAIRE**********************************************/
-export interface BooleanQuestion {
-  id: number;
-  content: string;
+export interface Question { 
+  text: string; type: "choice" | "yes/no"; options?: string[] 
 }
 
-export interface BooleanAnswer {
-  questionId: number;
-  guestId: number;
-  answer: boolean;
-}
-
-export interface StringQuestion {
-  id: number;
-  content: string;
-}
-
-export interface StringAnswer {
+export interface Answer {
   questionId: number;
   guestId: number;
   answer: string;

@@ -85,16 +85,6 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
     const handleHasPlusOneChange = (guestId: number) => {
         setHasPlusOnes((prev) => ({ ...prev, [guestId]: !prev[guestId] }));
     };
-
-    const isEng = language == 'english';
-    const dietaryOptions = [
-        { label: isEng ? "No preference" : "Brak preferencji", value: "no_preference" },
-        { label: isEng ? "Vegetarian" : "Wegetariańska", value: "vegetarian" },
-        { label: isEng ? "Vegan" : "Wegańska", value: "vegan" },
-        { label: isEng ? "Lactose-free" : "Bez laktozy", value: "lactose_free" },
-        { label: isEng ? "Gluten-free" : "Bezglutenowa", value: "gluten_free" },
-        { label: isEng ? "Other (please specify)" : "Inna (proszę określić)", value: "other" },
-    ]; 
     
     const handleSavingResponse = async () => {
         const hasMissingPlusOne = guestList.find(guest => hasPlusOnes[guest.id] && !plusOnes[guest.id]);
@@ -175,7 +165,7 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                                 <div style={{ marginTop: "2rem", marginLeft: "2.5rem" }}>
                                     <DropdownSelector
                                         initialSelectedOption={dietaryPreferences[guest.id]}
-                                        options={dietaryOptions}
+                                        options={translations[language].dietaryOptions}
                                         title={translations[language].dietaryPreferencesQuestion}
                                         onOptionSelect={(option) => handleDietaryPreferenceChange(guest.id, option as string)}
                                     />

@@ -17,10 +17,15 @@ class AccountDetailsSerializer(serializers.ModelSerializer):
     newlywedsTableId = serializers.IntegerField(source='newlyweds_table_id', allow_null=True)
     budgetLimit = serializers.DecimalField(source='budget_limit', max_digits=10, decimal_places=2, allow_null=True)
     photoAlbumUrl = serializers.CharField(source='photo_album_url', read_only=True)
+    invitationMainText = serializers.CharField(source='invitation_main_text', allow_null = True)
+    invitationAdditionalText = serializers.CharField(source='invitation_additional_text', allow_null = True)
+    invitationGuestText = serializers.CharField(source='invitation_guest_text', allow_null = True)
 
     class Meta:
         model = AccountDetails
-        fields = ('id', 'account', 'weddingDate', 'newlywedsTableId', 'budgetLimit', 'photoAlbumUrl')
+        fields = ('id', 'account', 'weddingDate', 'newlywedsTableId', 'budgetLimit', 'photoAlbumUrl', 
+            'invitationMainText', 'invitationAdditionalText', 'invitationGuestText'
+        )
   
     def generate_unique_url(self):
         while True:

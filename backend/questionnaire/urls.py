@@ -1,11 +1,9 @@
-from .views import BooleanQuestionView, BooleanAnswerView, StringAnswerView, StringQuestionView
+from .views import QuestionView, AnswerView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 
-router.register(r'boolean-questions', BooleanQuestionView)
-router.register(r'boolean-answers', BooleanAnswerView)
-router.register(r'string-questions', StringQuestionView)
-router.register(r'string-answers', StringAnswerView)
+router.register(r'questions', QuestionView)
+router.register(r'answers', AnswerView)
 
 urlpatterns = router.urls

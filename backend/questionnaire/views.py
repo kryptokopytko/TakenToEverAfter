@@ -1,20 +1,11 @@
-from rest_framework import viewsets
-from .models import BooleanQuestion, BooleanAnswer, StringQuestion, StringAnswer
-from .serializers import BooleanQuestionSerializer, BooleanAnswerSerializer, StringQuestionSerializer, StringAnswerSerializer
+from .models import Question, Answer
+from .serializers import QuestionSerializer, AnswerSerializer
 from accounts.views import AccountModelViewSet
 
-class BooleanQuestionView(AccountModelViewSet):
-    serializer_class = BooleanQuestionSerializer
-    queryset = BooleanQuestion.objects.all()
+class QuestionView(AccountModelViewSet):
+    serializer_class = QuestionSerializer
+    queryset = Question.objects.all()
 
-class BooleanAnswerView(AccountModelViewSet):
-    serializer_class = BooleanAnswerSerializer
-    queryset = BooleanAnswer.objects.all()
-
-class StringQuestionView(AccountModelViewSet):
-    serializer_class = StringQuestionSerializer
-    queryset = StringQuestion.objects.all()
-
-class StringAnswerView(AccountModelViewSet):
-    serializer_class = StringAnswerSerializer
-    queryset = StringAnswer.objects.all()
+class AnswerView(AccountModelViewSet):
+    serializer_class = AnswerSerializer
+    queryset = Answer.objects.all()
