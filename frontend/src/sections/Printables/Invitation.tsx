@@ -39,7 +39,7 @@ const Border = styled.div`
 
 const Invitation: React.FC<InvitationProps> = ({ invitationId, guestList, mainText, guestText, additionalText, details, children }) => {
     const { account, accountDetails, weddingDetails, guests, language, invitations } = useUser();
-    const newInvitationId = invitationId ? invitationId : guests[0].invitationId;
+    const newInvitationId = invitationId ? invitationId :  guests.length? guests[0].invitationId : -1;
     const invitationGuests = guestList? guestList : guests.filter(guest => guest.invitationId == newInvitationId);
     const [ QRCode, setQRCode ] = useState<string | null>(null);
 

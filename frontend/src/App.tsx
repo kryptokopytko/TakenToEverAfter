@@ -72,7 +72,7 @@ const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
   const { 
-    isLogged, language, setLanguage, setViewLocation, setAccount, setAccountDetails, setWeddingDetails, setTaskCards,
+    isLogged, language, setIsLogged, setLanguage, setViewLocation, setAccount, setAccountDetails, setWeddingDetails, setTaskCards,
     setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers,
    } = useUser();
 
@@ -101,6 +101,7 @@ const AppContent = () => {
     const fetchSession = async () => {
       const sessionData = await checkSession();
       if (sessionData.isAuthenticated) {
+        setIsLogged(true);
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
         setWeddingDetails(null);
@@ -131,6 +132,7 @@ const AppContent = () => {
         setQuestions(questions);
         setAnswers(answers);
       } else {
+        setIsLogged(false);
         setLanguage("english");
         setExampleData();
     }
