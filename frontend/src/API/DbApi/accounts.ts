@@ -52,12 +52,14 @@ export const registerUser = async (
       budgetLimit: null,
     });
 
+    await login(email);
+
     const viewPreferencesResponse = await api.post("/preferences/view-preferences/", {
       account: accountId,
       language: language, 
       colorTheme: null,
       fontSize: initialFontSize,
-    });
+    }, { withCredentials: true } );
 
     return {
       account: accountResponse.data,
