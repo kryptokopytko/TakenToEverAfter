@@ -4,7 +4,6 @@ import { Heading } from "../../styles/typography";
 
 const QuestionAnswerList = () => {
   const { guests, questions, answers, language } = useUser();
-  console.log(answers);
 
   const getAnswerStatistics = (questionId: number, type: "choice" | "yes/no", option: string) => {
     const guestsWithAnswer = guests.filter((guest) => {

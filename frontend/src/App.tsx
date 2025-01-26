@@ -23,7 +23,6 @@ import { UserProvider, useUser } from "./providers/UserContext";
 import { useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import PersonalityQuizPage from "./pages/PersonalityQuizPage";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos, getQuestionnaire } from "./API/DbApi/DBApi";
@@ -165,7 +164,6 @@ const AppContent = () => {
               <Route path="/registration" element={<RegistrationPage />} />
               <Route path="/guest_response/:uniqueUrl" element={<GuestResponsePage />} />
               <Route path="/guest_photos/:uniqueUrl" element={<GuestPhotosPage />} />
-              <Route path="/toxic_personality_quiz" element={<PersonalityQuizPage />} />
             </Routes>
           </PageContainer>
           <Footer />
