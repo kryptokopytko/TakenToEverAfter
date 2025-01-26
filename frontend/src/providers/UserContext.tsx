@@ -41,23 +41,24 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
+    const defaultLanguage: Language = "english"; 
     const [viewLocation, setViewLocation] = useState("Home");
-    const [language, setLanguage] = useState<Language>("english");
+    const [language, setLanguage] = useState<Language>(defaultLanguage);
     const [isLogged, setIsLogged] = useState(false);
 
-    const [account, setAccount] = useState<Account>(Example.account);
+    const [account, setAccount] = useState<Account>(Example.account[defaultLanguage]);
     const [accountDetails, setAccountDetails] = useState<AccountDetails>(Example.accountDetails);
-    const [guests, setGuests] = useState<Guest[]>(Example.guests);
+    const [guests, setGuests] = useState<Guest[]>(Example.guests[defaultLanguage]);
     const [couples, setCouples] = useState<Couple[]>([]);
-    const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails);
-    const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards);
-    const [tags, setTags] = useState<Tag[]>(Example.tags);
+    const [weddingDetails, setWeddingDetails] = useState<WeddingDetails | null>(Example.weddingDetails[defaultLanguage]);
+    const [taskCards, setTaskCards] = useState<TaskCard[]>(Example.taskCards[defaultLanguage]);
+    const [tags, setTags] = useState<Tag[]>(Example.tags[defaultLanguage]);
     const [invitations, setInvitations] = useState<Invitation[]>(Example.invitations);
-    const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses);
-    const [choices, setChoices] = useState<Choice[]>(Example.choices);
-    const [photos, setPhotos] = useState<Image[]>(Example.images);
+    const [expenseCards, setExpenseCards] = useState<ExpenseCard[]>(Example.expenses[defaultLanguage]);
+    const [choices, setChoices] = useState<Choice[]>(Example.choices[defaultLanguage]);
+    const [photos, setPhotos] = useState<Image[]>(Example.images[language]);
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [answers, setAnswers] = useState<Answer[]>([]);
+    const [answers, setAnswers] = useState<Answer[]>(Example.answers[language]);
 
     return (
         <UserContext.Provider

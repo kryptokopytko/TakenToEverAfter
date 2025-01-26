@@ -5,6 +5,8 @@ import { Body } from '../../styles/typography';
 import useFunctionsProxy from "../../API/FunctionHandler";
 import { Container, Indicator, PhotoCard, PhotoImage, PhotoInfo } from './PhotoAlbumStyles';
 import FullScreenModal from './FullScreenModal';
+import { translations } from '../../translations';
+import { useUser } from '../../providers/UserContext';
 
 interface PhotoAlbumProps {
     images: Image[];
@@ -18,6 +20,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
     const [localImages, setLocalImages] = useState<Image[]>(images.map((image) => ({ ...image })));
     const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
     const FunctionsProxy = useFunctionsProxy();
+    const { language } = useUser();
 
     useEffect(() => {
         setLocalImages(images);
@@ -85,7 +88,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ images, isExpanded, handleAppro
                         />
                         <PhotoInfo>
                             <Body>{image.name}</Body>
-                            {image.author && <Body size="small">by {image.author}</Body>}
+                            {image.author && <Body size="small">{translations[language].by} {image.author}</Body>}
                         </PhotoInfo>
                         {isGuest ? <></> : <>
                             <Indicator

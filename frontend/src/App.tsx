@@ -72,17 +72,35 @@ const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
   const { 
-    isLogged, setLanguage, setViewLocation, setAccount, setIsLogged, setAccountDetails, setWeddingDetails, setTaskCards,
+    isLogged, language, setLanguage, setViewLocation, setAccount, setAccountDetails, setWeddingDetails, setTaskCards,
     setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers,
    } = useUser();
 
    const { setTheme, setThemes, setFontSize } = useTheme();
 
+  const setExampleData = () => {
+    setAccount(Example.account[language]);
+    setAccountDetails(Example.accountDetails);
+    setWeddingDetails(Example.weddingDetails[language]);
+    setTaskCards(Example.taskCards[language]); 
+    setGuests(Example.guests[language]);
+    setCouples([]);
+    setTags(Example.tags[language]);
+    setInvitations(Example.invitations);
+    setExpenseCards(Example.expenses[language]);
+    setChoices(Example.choices[language]);
+    setPhotos(Example.images[language]);
+    setFontSize(initialFontSize);
+    setThemes(initialThemes);
+    setTheme(initialThemes.nude);
+    setQuestions(Example.questions[language]);
+    setAnswers(Example.answers[language]);
+  }
+
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await checkSession();
       if (sessionData.isAuthenticated) {
-        setIsLogged(true);
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
         setWeddingDetails(null);
@@ -113,29 +131,20 @@ const AppContent = () => {
         setQuestions(questions);
         setAnswers(answers);
       } else {
-        setIsLogged(false);
-        setAccount(Example.account);
-        setAccountDetails(Example.accountDetails);
-        setWeddingDetails(Example.weddingDetails);
-        setTaskCards(Example.taskCards); 
-        setGuests(Example.guests);
-        setCouples([]);
-        setTags(Example.tags);
-        setInvitations(Example.invitations);
-        setExpenseCards(Example.expenses);
-        setChoices(Example.choices);
-        setPhotos(Example.images);
-        setFontSize(initialFontSize);
-        setThemes(initialThemes);
-        setTheme(initialThemes.nude);
         setLanguage("english");
-        setQuestions([]);
-        setAnswers([]);
+        setExampleData();
     }
   };
 
     fetchSession();
   }, [isLogged]);
+
+
+  useEffect(() => {
+    if (!isLogged) {
+      setExampleData();
+    }
+  }, [language]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
