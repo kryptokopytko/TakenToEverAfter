@@ -20,7 +20,7 @@ interface ThemeConstructorPageProps { }
 
 const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     const FunctionsProxy = useFunctionsProxy();
-    const { themes, setThemes } = useTheme();
+    const { theme, themes, setThemes } = useTheme();
     const savedThemes = Object.keys(themes).filter(themeKey => !themeKey.startsWith('custom'));
     const newThemes = Object.keys(themes).filter(themeKey => themeKey.startsWith('custom'));
     const { language } = useUser();
@@ -48,15 +48,15 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
 
         const newThemesCopy = { ...themes };
         const themeData = newThemesCopy[themeKey];
-        
+
         FunctionsProxy.addNewTheme(newName, themeData);
-        
+
         const { [themeKey]: removed, ...restOfThemes } = themes;
         setThemes(
             { ...restOfThemes, [newName]: themeData }
         );
-          
-          
+
+
         setInputValues((prevValues) => {
             const updatedValues = { ...prevValues };
             delete updatedValues[themeKey];
@@ -66,7 +66,7 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
     const handleDelete = (themeKey: string) => {
 
         FunctionsProxy.deleteTheme(themeKey);
-        
+
         const newThemesCopy = { ...themes };
 
 
@@ -113,7 +113,9 @@ const ThemeConstructorPage: React.FC<ThemeConstructorPageProps> = () => {
                     )}
                 </ThemeContainer>
             </MenuContainer>
-            <ThemeConstructor />
+            <div style={{ backgroundColor: theme.light }}>
+                <ThemeConstructor />
+            </div>
         </Container>
     );
 };

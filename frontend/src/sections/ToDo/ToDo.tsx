@@ -90,13 +90,13 @@ const ToDo: React.FC<ToDoProps> = ({ isHomePage, onDeadlineChange, onTaskChange 
       taskCards.map((card, index) =>
         index === cardIndex
           ? {
-              ...card,
-              tasks: card.tasks.map((task, idx) =>
-                idx === taskIndex
-                  ? { ...task, completed: !task.completed }
-                  : task
-              ),
-            }
+            ...card,
+            tasks: card.tasks.map((task, idx) =>
+              idx === taskIndex
+                ? { ...task, completed: !task.completed }
+                : task
+            ),
+          }
           : card
       )
     );

@@ -33,9 +33,9 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
         const choiceCategory = choices.find(card => card.id == categoryId);
         const choice = choiceCategory?.options.find(option => option.id === choiceId);
         const expenseCategory = expenseCards.find(card => card.category == choiceCategory?.category);
-        
+
         if (!expenseCategory) {
-            const newExpenseCardId = await FunctionsProxy.addExpenseCategory(choiceCategory!.category); 
+            const newExpenseCardId = await FunctionsProxy.addExpenseCategory(choiceCategory!.category);
             const id = await FunctionsProxy.transferChoiceToExpense(choiceId, choice!, newExpenseCardId);
             setExpenseCards([...expenseCards, {
                 id: newExpenseCardId,
@@ -47,7 +47,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
             }])
         } else {
             const id = await FunctionsProxy.transferChoiceToExpense(choiceId, choice!, expenseCategory.id);
-            setExpenseCards(expenseCards.map(card => 
+            setExpenseCards(expenseCards.map(card =>
                 card.id === expenseCategory.id
                     ? {
                         ...card,
@@ -61,10 +61,10 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
                     }
                     : card
             ));
-            
+
         }
 
-        setChoices(choices.map(card => card.id == categoryId? {
+        setChoices(choices.map(card => card.id == categoryId ? {
             ...card,
             options: card.options.filter(option => option.id != choiceId)
         } : card))
@@ -80,7 +80,7 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
                 {choices.map((choice, choiceIndex) => {
 
                     return (
-                        <Card color='light' key={choiceIndex}>
+                        <Card color='primary' key={choiceIndex}>
                             <SpaceBetweenContainer border>
                                 <Heading level={4}>{choice.category}</Heading>
                             </SpaceBetweenContainer>
@@ -99,7 +99,22 @@ const Choices: React.FC<ChoicesProps> = ({ isHomePage }) => {
                                         </Button>
                                     </LimitedWidth>
                                     <DescriptionContainer rmove={-8}>
-                                        <Description>{option.description}</Description>
+                                        <Description>
+                                            {option.description}
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                                                <div>
+                                                    {option.pros
+                                                        ? option.pros.split(',').map((pro, index) => <div key={index}>+ {pro}</div>)
+                                                        : ""}
+                                                </div>
+                                                <div>
+                                                    {option.cons
+                                                        ? option.cons.split(',').map((pro, index) => <div key={index}>- {pro}</div>)
+                                                        : ""}
+                                                </div>
+                                            </div>
+
+                                        </Description>
                                     </DescriptionContainer>
 
                                 </SpaceBetweenContainer>

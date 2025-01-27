@@ -1,4 +1,4 @@
-import { Heading, Subtitle } from "../styles/typography";
+import { Body, Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
 import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
@@ -19,18 +19,25 @@ const PhotosPage: React.FC = () => {
     const [photoName, setPhotoName] = useState("");
     const [photoAuthor, setPhotoAuthor] = useState("");
     const [isVertical, setIsVertical] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string | null>(null); 
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const FunctionsProxy = useFunctionsProxy();
     const { language, photos, setPhotos, accountDetails } = useUser();
-    const [ QRCode, setQRCode ] = useState<string | null>(null);
+    const [QRCode, setQRCode] = useState<string | null>(null);
 
+    const networkAddress = __NETWORK_ADDRESS__;
+    const port = window.location.port;
+    const guestPhotosUploadLink = `http://${networkAddress}:${port}/guest_photos/${accountDetails.photoAlbumUrl}`;
     useEffect(() => {
-      const gen = async () => {
-        const code = await generateQRCode("http://192.168.1.55:5173/guest_photos/" + accountDetails.photoAlbumUrl );
-        setQRCode(code);
-      };
-  
-      gen();
+        const gen = async () => {
+            // const networkAddress = __NETWORK_ADDRESS__;
+            // const port = window.location.port;
+            // guestPhotosUploadLink = `http://${networkAddress}:${port}/guest_photos/${accountDetails.photoAlbumUrl}`;
+            console.log(guestPhotosUploadLink);
+            const code = await generateQRCode(guestPhotosUploadLink);
+            setQRCode(code);
+        };
+
+        gen();
     }, [accountDetails]);
 
     const handleAddPhoto = async () => {
@@ -82,15 +89,10 @@ const PhotosPage: React.FC = () => {
 
     return (
         <Container color="light">
-            <Heading level={3}>{translations[language].photoQR}</Heading>
-            {QRCode && 
-                <div>
-                    <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto" }} />
-                </div>
-            }
+
             <MenuContainer>
                 <Heading level={2}>{translations[language].photos}</Heading>
-                <ImgurUploader onImageUpload={setImageUrl} /> 
+                <ImgurUploader onImageUpload={setImageUrl} />
 
                 <Subtitle level={3}>{translations[language].photoName}</Subtitle>
                 <Input
@@ -115,6 +117,17 @@ const PhotosPage: React.FC = () => {
                 <ButtonContainer>
                     <Button onClick={handleAddPhoto}>{translations[language].addPhoto}</Button>
                 </ButtonContainer>
+                {QRCode &&
+                    <div style={{ marginTop: '2rem' }}>
+                        <Heading level={4}>{translations[language].photoQR}</Heading>
+                        <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto" }} />
+                        <a href={guestPhotosUploadLink}>
+                            <Body>
+                                {guestPhotosUploadLink}
+                            </Body>
+                        </a>
+                    </div>
+                }
             </MenuContainer>
 
             <div>

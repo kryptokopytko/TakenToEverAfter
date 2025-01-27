@@ -46,9 +46,12 @@ const Home = () => {
         </div>
         <div id="budget">
           <Budget isHomePage={true} />
-        </div> 
+        </div>
         <div id="choices">
           <Choices isHomePage={true} />
+        </div>
+        <div id="table-chart">
+          <TableChart isHomePage={true} />
         </div>
         <div id="to-do">
           <ToDo isHomePage={true} />
@@ -56,9 +59,7 @@ const Home = () => {
         <div id="photo-album">
           <FavouritePhotos isHomePage={true} />
         </div>
-        <div id="table-chart">
-          <TableChart />
-        </div>
+
         <div id="theme-constructor">
           <ThemeConstructor isHomePage={true} />
         </div>

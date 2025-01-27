@@ -51,9 +51,6 @@ const OptionWrapper = styled.div`
   margin-top: 0.5rem;
 `;
 
-const OptionInput = styled.input`
-  flex: 1;
-`;
 
 const AddOptionButton = styled(Button)`
   margin-top: 0.5rem;
@@ -74,7 +71,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
     useEffect(() => {
         setMainText(accountDetails.invitationMainText || translations[language].exampleMainText);
         setAdditionalText(accountDetails.invitationAdditionalText || translations[language].exampleAdditionalText);
-        setGuestText(accountDetails.invitationGuestText ||translations[language].exampleGuestText);
+        setGuestText(accountDetails.invitationGuestText || translations[language].exampleGuestText);
     }, [language, accountDetails]);
 
     useEffect(() => {
@@ -82,11 +79,11 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
             .filter((invitation) => invitation.handedOut)
             .map((invitation) => invitation.id);
         setDeliveredInvites(handedOut);
-    }, [invitations]); 
+    }, [invitations]);
 
     useEffect(() => {
         setUpdatedQuestions(questions as RawQuestion[]);
-    }, [questions]); 
+    }, [questions]);
 
     const handleExportPDF = () => {
         const inviteIds = guests.map((_, index) => `invite-${index}`);
@@ -97,57 +94,57 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
         const handedOut = deliveredInvites.includes(invitationId);
         console.log(handedOut);
         handedOut ?
-            setDeliveredInvites(prev => prev.filter((invite) => invite != invitationId)) 
+            setDeliveredInvites(prev => prev.filter((invite) => invite != invitationId))
             : setDeliveredInvites(prev => [...prev, invitationId]);
         FunctionsProxy.changeInvitationStatus(invitationId, !handedOut);
     }
 
     const handleAddQuestion = (type: "choice" | "yes/no") => {
         setUpdatedQuestions([...updatedQuestions, { text: "", type, options: type === "choice" ? [""] : undefined }]);
-      };
+    };
 
     const handleRemoveQuestion = (index: number) => {
         setUpdatedQuestions(updatedQuestions.filter((_, i) => i !== index));
     };
-    
+
     const handleQuestionChange = (index: number, value: string) => {
         const newQuestions = [...updatedQuestions];
         newQuestions[index].text = value;
         setUpdatedQuestions(newQuestions);
-      };
-      
-      const handleOptionChange = (qestionIndex: number, optionIndex: number, value: string) => {
+    };
+
+    const handleOptionChange = (qestionIndex: number, optionIndex: number, value: string) => {
         const newQuestions = [...updatedQuestions];
-          if (newQuestions[qestionIndex].options) {
+        if (newQuestions[qestionIndex].options) {
             newQuestions[qestionIndex].options[optionIndex] = value;
-          }
+        }
         setUpdatedQuestions(newQuestions);
-      };
-      
-      const handleAddOption = (qestionIndex: number, length: number) => {
+    };
+
+    const handleAddOption = (qestionIndex: number, length: number) => {
         const newQuestions = [...updatedQuestions];
         if (newQuestions[qestionIndex].options && newQuestions[qestionIndex].options.length == length) {
             newQuestions[qestionIndex].options = [...newQuestions[qestionIndex].options, ""];
         }
         setUpdatedQuestions(newQuestions);
-      };
+    };
 
     const handleRemoveOption = (questionIndex: number, optionIndex: number) => {
         setUpdatedQuestions(
-          updatedQuestions.map((question, qIndex) => 
-            qIndex === questionIndex 
-              ? {
-                  ...question, 
-                  options: question.options?.filter((_, oIndex) => oIndex !== optionIndex) 
-                } 
-              : question
-          )
+            updatedQuestions.map((question, qIndex) =>
+                qIndex === questionIndex
+                    ? {
+                        ...question,
+                        options: question.options?.filter((_, oIndex) => oIndex !== optionIndex)
+                    }
+                    : question
+            )
         );
-      };
-      
+    };
+
 
     const updateInvitationText = async () => {
-        const hasChanges = 
+        const hasChanges =
             mainText !== translations[language].exampleMainText ||
             additionalText !== translations[language].exampleAdditionalText ||
             guestText !== translations[language].exampleGuestText;
@@ -235,27 +232,27 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                             </QuestionWrapper>
 
                             {question.type === "choice" && (
-                            <div>
-                                {question.options?.map((option, optionIndex) => (
-                                    <OptionWrapper key={optionIndex}>
-                                        <OptionInput
-                                            type="text"
-                                            value={option}
-                                            onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
-                                            placeholder={translations[language].optionPlaceholder}
-                                        />
-                                        <RemoveButton onClick={() => handleRemoveOption(questionIndex, optionIndex)}>✖</RemoveButton>
-                                    </OptionWrapper>
-                                ))}
-                                <AddOptionButton onClick={() => handleAddOption(questionIndex, question.options!.length)}>
-                                    {translations[language].addOption}
-                                </AddOptionButton>
-                            </div>
-                        )}
+                                <div>
+                                    {question.options?.map((option, optionIndex) => (
+                                        <OptionWrapper key={optionIndex}>
+                                            <Input
+                                                type="text"
+                                                value={option}
+                                                onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
+                                                placeholder={translations[language].optionPlaceholder}
+                                            />
+                                            <RemoveButton onClick={() => handleRemoveOption(questionIndex, optionIndex)}>✖</RemoveButton>
+                                        </OptionWrapper>
+                                    ))}
+                                    <AddOptionButton onClick={() => handleAddOption(questionIndex, question.options!.length)}>
+                                        {translations[language].addOption}
+                                    </AddOptionButton>
+                                </div>
+                            )}
 
-                        {question.type === "yes/no" && (
-                            <Subtitle level={4}>{translations[language].yesNoType}</Subtitle>
-                        )}
+                            {question.type === "yes/no" && (
+                                <Subtitle level={4}>{translations[language].yesNoType}</Subtitle>
+                            )}
 
                         </InputWrapper>
                     ))}
@@ -299,7 +296,7 @@ const PrintablesPage: React.FC<PrintablesPageProps> = ({
                                     {translations[language].delivered}
                                 </div>
                             </div>
-                    ))}
+                        ))}
                 </Invites>
             ) : (
                 <div id="invite-single">

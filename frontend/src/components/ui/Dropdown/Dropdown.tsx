@@ -58,17 +58,18 @@ const DropdownSelector: React.FC<DropdownSelectorProps> = ({ options, onOptionSe
                 <Subtitle color={color} level={3}>{title} {isOpen ? "▵" : "▿"}</Subtitle>
             </SelectorButton>
             <DropdownMenu isOpen={isOpen}>
-                {options.map((option) => (
-                    <RadioButton key={option.value}>
-                        <input
-                            type={multiSelect ? "checkbox" : "radio"}
-                            name="dropdown"
-                            checked={selectedOptions.includes(option.value)}
-                            onChange={() => handleOptionClick(option)}
-                        />
-                        {option.label}
-                    </RadioButton>
-                ))}
+                {options.length ?
+                    options.map((option) => (
+                        <RadioButton key={option.value}>
+                            <input
+                                type={multiSelect ? "checkbox" : "radio"}
+                                name="dropdown"
+                                checked={selectedOptions.includes(option.value)}
+                                onChange={() => handleOptionClick(option)}
+                            />
+                            {option.label}
+                        </RadioButton>
+                    )) : "list is empty"}
             </DropdownMenu>
         </SelectorContainer>
     );

@@ -74,7 +74,7 @@ const ThemeDisplay: React.FC<ThemeDisplayProps> = ({ themes, themeKeys, title, i
                             </ColorRow>
                             {!isSaved ? (
                                 <ButtonContainer>
-                                    <Button onClick={() => pickTheme(themeKey)}>{translations[language].pick}</Button>
+                                    <Button onClick={() => pickTheme(themeKey)}>{translations[language].pickThis}</Button>
                                     <Button onClick={() => handleSave(themeKey)}>{translations[language].save}</Button>
                                 </ButtonContainer>
                             ) : (

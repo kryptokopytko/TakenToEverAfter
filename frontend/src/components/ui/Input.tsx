@@ -72,6 +72,7 @@ export interface InputProps {
     disabled?: boolean;
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     type?: 'text' | 'number' | 'date' | 'email' | 'password';
+    readonly?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -82,6 +83,7 @@ const Input: React.FC<InputProps> = ({
     placeholder,
     disabled,
     type = 'text',
+    readonly
 }) => {
     return (
         <InputContainer>
@@ -95,6 +97,7 @@ const Input: React.FC<InputProps> = ({
                 />
             ) : (
                 <StyledInput
+                    readOnly={readonly || false}
                     variant={variant}
                     size={size}
                     value={value}

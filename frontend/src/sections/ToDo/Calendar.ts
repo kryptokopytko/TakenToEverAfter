@@ -76,7 +76,6 @@ export const StyledCalendar = styled(Calendar)`
       background: ${({ theme }) => theme.secondary} !important;
       color: ${({ theme }) => theme.body};
       font-weight: bold;
-      border: 2px solid ${({ theme }) => theme.body};
     }
   }
 

@@ -1,7 +1,7 @@
 declare module "*.svg" {
-    const content: string;
-    export default content;
-  }
+  const content: string;
+  export default content;
+}
 
 declare module "*.png" {
   const content: string;
@@ -13,4 +13,6 @@ declare module "*.jpg" {
   export default content;
 }
 
-declare module 'qrcode';
+declare module "qrcode";
+
+declare const __NETWORK_ADDRESS__: string;

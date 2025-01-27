@@ -9,11 +9,11 @@ export const PhotoCard = styled.div`
   cursor: pointer;
   max-width: 40rem;
   max-height: 50rem;
+  height: fit-content;
   width: auto;
-  height: auto;
   display: block;
   margin: 0 auto;
-
+  padding-bottom: 1rem;
   box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
   &:hover {
     transform: scale(1.05);
@@ -51,7 +51,7 @@ export const Indicator = styled.span<{ isChecked?: boolean; isLeft?: boolean }>`
     transform: scale(1.15);
   }
 `;
-Indicator.shouldForwardProp = (prop) => !["isChecked", "isLeft"].includes(prop); 
+Indicator.shouldForwardProp = (prop) => !["isChecked", "isLeft"].includes(prop);
 
 export const FullScreenModal = styled.div<{ visible: boolean }>`
   display: ${(props) => (props.visible ? "flex" : "none")};
@@ -65,7 +65,7 @@ export const FullScreenModal = styled.div<{ visible: boolean }>`
   align-items: center;
   z-index: 999;
 `;
-FullScreenModal.shouldForwardProp = (prop) => !["visible"].includes(prop); 
+FullScreenModal.shouldForwardProp = (prop) => !["visible"].includes(prop);
 
 export const FullScreenImage = styled.img`
   max-width: 90%;

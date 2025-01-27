@@ -14,8 +14,8 @@ const RegistrationPage: React.FC = () => {
     const searchParams = new URLSearchParams(location.search);
     const userEmail = searchParams.get('mail');
     const { language } = useUser();
-    
-    const [email, setEmail] = useState(userEmail? userEmail : '');
+
+    const [email, setEmail] = useState(userEmail ? userEmail : '');
     const [weddingDate, setWeddingDate] = useState('');
     const [groomName, setGroomName] = useState('');
     const [brideName, setBrideName] = useState('');
@@ -24,27 +24,27 @@ const RegistrationPage: React.FC = () => {
 
     const handleEmailChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => setEmail(e.target.value);
-      
-      const handleWeddingDateChange = (
+    ) => setEmail(e.target.value);
+
+    const handleWeddingDateChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => setWeddingDate(e.target.value);
-      
-      const handleGroomNameChange = (
+    ) => setWeddingDate(e.target.value);
+
+    const handleGroomNameChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => setGroomName(e.target.value);
-      
-      const handleBrideNameChange = (
+    ) => setGroomName(e.target.value);
+
+    const handleBrideNameChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => setBrideName(e.target.value);
-      
+    ) => setBrideName(e.target.value);
+
     const validateForm = (email: string, groomName: string, brideName: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (groomName.length < 3 || brideName.length < 3) {
             return translations[language].nameTooShort;
         }
-    
+
         if (!emailRegex.test(email)) {
             return translations[language].invalidEmail;
         }
@@ -79,7 +79,7 @@ const RegistrationPage: React.FC = () => {
                 <Form>
                     <div style={{ textAlign: 'center' }}>
                         <Heading level={2}>{translations[language].welcome},<br /> {groomName} & {brideName}</Heading>
-                         <p>
+                        <p>
                             {translations[language].registrationSuccess}
                             {weddingDate ? ` ${translations[language].weddingDateMessage} ${weddingDate}.` : ""}
                         </p>
@@ -92,16 +92,18 @@ const RegistrationPage: React.FC = () => {
     return (
         <Container>
             <Form>
-                <div style={{ marginBottom: '-2rem' }}>
+                <div >
                     <Heading level={2}>{translations[language].register}</Heading>
                 </div>
 
-                <Label>{translations[language].email}</Label>
+                <Label>Email</Label>
                 <Input
                     type="email"
+
                     value={email}
                     onChange={handleEmailChange}
                     placeholder={userEmail ? userEmail : translations[language].emailPlaceholder}
+                    readonly
                 />
 
                 <Label>{translations[language].weddingDate}</Label>

@@ -24,23 +24,23 @@ const LoginPage: React.FC = () => {
         if (!response.credential) {
             throw new Error("Credential is missing from the Google login response.");
         }
-        
+
         const decodedToken = jwtDecode<GoogleJwtPayload>(response.credential);
         const email = decodedToken.email;
 
         try {
-          const isUserRegistered = await isRegistrated(email);
-          if (isUserRegistered) {
-            const response = await getUserByEmail(email);
-            await login(email);
-            setIsLogged(true);
-            setAccount(response);
-            setErrorMessage(null);
-          } else {
-            navigate('/registration?mail=' + email );
-          }
+            const isUserRegistered = await isRegistrated(email);
+            if (isUserRegistered) {
+                const response = await getUserByEmail(email);
+                await login(email);
+                setIsLogged(true);
+                setAccount(response);
+                setErrorMessage(null);
+            } else {
+                navigate('/registration?mail=' + email);
+            }
         } catch (error) {
-          console.error("Error during Google login process:", error);
+            console.error("Error during Google login process:", error);
         }
     };
 
@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
 
     if (isLogged) {
         return (
-            <Container>
+            <Container style={{ margin: '10%' }}>
                 <Form>
                     <div style={{ textAlign: 'center' }}>
                         <Heading level={2}>{translations[language].welcomeBack}</Heading>
@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
     }
 
     return (
-        <Container>
+        <Container style={{ margin: '10%' }}>
             <Form>
                 <div style={{ marginLeft: '-3rem' }}>
                     <Heading level={2}>{translations[language].login}</Heading>
@@ -80,8 +80,8 @@ const LoginPage: React.FC = () => {
                         onError={handleGoogleLoginError}
                     />
                 </ButtonContainer>
-                
-               
+
+
             </Form>
         </Container>
     );

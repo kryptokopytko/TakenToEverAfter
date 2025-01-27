@@ -10,6 +10,8 @@ const ImgurUploader: React.FC<ImgurUploaderProps> = ({ onImageUpload }) => {
     const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const imgurAuthorization = import.meta.env.VITE_IMGUR_AUTHORIZATION;
+
     const uploadToImgur = async (imageBase64: string) => {
         setUploading(true);
         setError(null);
@@ -21,7 +23,7 @@ const ImgurUploader: React.FC<ImgurUploaderProps> = ({ onImageUpload }) => {
             const response = await fetch('https://api.imgur.com/3/image', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Client-ID e0b5453b9ed3b6f',
+                    'Authorization': imgurAuthorization,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -37,7 +39,7 @@ const ImgurUploader: React.FC<ImgurUploaderProps> = ({ onImageUpload }) => {
             }
 
             setUploadedUrl(data.data.link);
-            onImageUpload(data.data.link)
+            onImageUpload(data.data.link);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to upload image');
         } finally {
@@ -53,19 +55,11 @@ const ImgurUploader: React.FC<ImgurUploaderProps> = ({ onImageUpload }) => {
         <>
             <ImageUpload onImageUpload={handleImageUpload} />
 
-            {uploading && (
-                'Uploading image to Imgur...'
-            )}
+            {uploading && 'Uploading image to Imgur...'}
 
-            {error && (
-                `Error: ${error}`
-            )}
+            {error && `Error: ${error}`}
 
-            {uploadedUrl && (
-                <>
-                    {uploadedUrl}
-                </>
-            )}
+            {uploadedUrl && <>{uploadedUrl}</>}
         </>
     );
 };

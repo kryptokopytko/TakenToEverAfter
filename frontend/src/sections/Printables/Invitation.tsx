@@ -39,17 +39,19 @@ const Border = styled.div`
 
 const Invitation: React.FC<InvitationProps> = ({ invitationId, guestList, mainText, guestText, additionalText, details, children }) => {
     const { account, accountDetails, weddingDetails, guests, language, invitations } = useUser();
-    const newInvitationId = invitationId ? invitationId :  guests.length? guests[0].invitationId : -1;
-    const invitationGuests = guestList? guestList : guests.filter(guest => guest.invitationId == newInvitationId);
-    const [ QRCode, setQRCode ] = useState<string | null>(null);
+    const newInvitationId = invitationId ? invitationId : guests.length ? guests[0].invitationId : -1;
+    const invitationGuests = guestList ? guestList : guests.filter(guest => guest.invitationId == newInvitationId);
+    const [QRCode, setQRCode] = useState<string | null>(null);
 
     useEffect(() => {
         const gen = async () => {
             const invitationUrl = invitations.find(invitation => invitation.id == newInvitationId)?.confirmationUrl;
-            const code = await generateQRCode(`http://192.168.1.55:5173/guest_response/${invitationUrl}`);
+            const networkAddress = __NETWORK_ADDRESS__;
+            const port = window.location.port;
+            const code = await generateQRCode(`http://${networkAddress}:${port}/guest_response/${invitationUrl}`);
             setQRCode(code);
         };
-    
+
         gen();
     }, [invitationId, invitations]);
 
@@ -57,40 +59,40 @@ const Invitation: React.FC<InvitationProps> = ({ invitationId, guestList, mainTe
         <Border>
             <Container>
                 <Heading level={1}></Heading>
-                {details?
+                {details ?
                     <Heading level={1}>{details.brideName} </Heading>
                     : <Heading level={1}>{account.brideName} {weddingDetails?.brideSurname || ""}</Heading>
                 }
                 <Subtitle level={1}> ------ & ------ </Subtitle>
-                {details?
+                {details ?
                     <Heading level={1}>{details.groomName} </Heading>
                     : <Heading level={1}>{account.groomName} {weddingDetails?.groomSurname || ""}</Heading>
                 }
-                
+
                 <Body size='big'>{mainText ? mainText : translations[language].exampleMainText}</Body>
-                
-                {details?
+
+                {details ?
                     <Subtitle level={2}>{details.weddingDate} </Subtitle>
                     : <>
                         <Subtitle level={2}>{accountDetails.weddingDate} {weddingDetails && (weddingDetails.weddingTime)}</Subtitle>
                         {weddingDetails && (<Body size='big'>{weddingDetails.weddingLocation.join(', ')}</Body>)}
-                      </>
+                    </>
                 }
-                
+
                 <Subtitle level={2}>  {guestText ? guestText : translations[language].exampleGuestText}</Subtitle>
 
                 {invitationGuests.map((guest, index) => (
                     <span key={index}><Body size='big'>{guest.name}</Body></span>
                 ))}
-                
-                {QRCode && <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto" }} />}
+
+                {QRCode && <img src={QRCode} alt="QR Code" style={{ maxWidth: "100%", height: "auto", margin: '1rem' }} />}
 
                 {
                     additionalText && (
                         <Body size="bold">{additionalText}</Body>
                     )
                 }
-                {children && ( 
+                {children && (
                     <div>{children}</div>
                 )}
             </Container >

@@ -27,9 +27,9 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
     useEffect(() => {
         const normalizedExpenseName = choiceName.trim().toLowerCase();
         const category = choices.find(choiceCard => choiceCard.options.some(option =>
-             option.name.trim().toLowerCase() == normalizedExpenseName
+            option.name.trim().toLowerCase() == normalizedExpenseName
         ));
-        
+
         if (category) {
             setCategoryId(category.id);
             const choice = category.options.find(option => option.name.toLowerCase() === normalizedExpenseName);
@@ -42,7 +42,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         } else {
             const normalizedCategory = choiceCategory.trim().toLowerCase();
             const category = choices.find(expenseCard => expenseCard.category == normalizedCategory);
-        
+
             if (category && choiceName != '') {
                 setCategoryId(category.id);
             } else {
@@ -58,9 +58,9 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 setCons('');
             }
         }
-        
+
     }, [choiceName, choiceCategory, choices]);
-    
+
     const clear = () => {
         setChoiceName('');
         setChoiceAmount('');
@@ -69,10 +69,10 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
         setPros('');
         setCons('');
     };
-    
+
     const handleAddChoice = async () => {
         const choiceAmountValue = Number(choiceAmount);
-    
+
         if (!categoryId) {
             const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
             setCategoryId(newCategoryId);
@@ -84,7 +84,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 pros,
                 cons
             );
-    
+
             setChoices([
                 ...choices,
                 {
@@ -111,7 +111,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 pros,
                 cons
             );
-    
+
             setChoices(
                 choices.map(card => {
                     if (card.id === categoryId) {
@@ -134,17 +134,17 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 })
             );
         }
-    
+
         setNotification(
             translations[language].choiceAdded
                 .replace('{name}', choiceName)
                 .replace('{category}', choiceCategory)
         );
-    
+
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     };
-    
+
 
 
     const handleRemoveChoice = () => {
@@ -161,7 +161,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
 
     const handleUpdateChoice = async () => {
         const parsedAmount = parseFloat(choiceAmount);
-    
+
         const updatedChoice = {
             id: existingChoice!.id,
             name: choiceName,
@@ -170,11 +170,11 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             pros: pros,
             cons: cons
         };
-    
+
         if (!categoryId) {
             const newCategoryId = await FunctionsProxy.addChoiceCategory(choiceCategory);
             setCategoryId(newCategoryId);
-    
+
             await FunctionsProxy.updateChoice(
                 existingChoice!.id,
                 newCategoryId,
@@ -184,7 +184,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 pros,
                 cons
             );
-    
+
             setChoices([
                 ...choices.map(card => {
                     if (card.options.some(option => option.id === existingChoice?.id)) {
@@ -211,7 +211,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 pros,
                 cons
             );
-    
+
             setChoices(
                 choices.map(card => {
                     if (card.options.some(option => option.id === existingChoice?.id && card.id !== categoryId)) {
@@ -232,17 +232,17 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 })
             );
         }
-    
+
         setNotification(
             translations[language].choiceUpdated
                 .replace("{name}", choiceName)
                 .replace("{category}", choiceCategory)
         );
-    
+
         setTimeout(() => setNotification(null), notificationTimeOut);
         clear();
     };
-    
+
 
 
 
@@ -289,20 +289,20 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                     setInputValue={setChoiceCategory}
                     onChange={(e) => setChoiceCategory(e.target.value)}
                 />
-                
+
                 <Subtitle level={3}>{translations[language].description}</Subtitle>
                 <Input
                     value={choiceDescription}
                     placeholder={translations[language].description}
                     onChange={(e) => setChoiceDescription(e.target.value)}
                 />
-
                 <Subtitle level={3}>{translations[language].pros}</Subtitle>
                 <Input
                     value={pros}
                     placeholder={translations[language].pros}
                     onChange={(e) => setPros(e.target.value)}
                 />
+                {translations[language].prosText}
 
                 <Subtitle level={3}>{translations[language].cons}</Subtitle>
                 <Input
@@ -310,6 +310,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                     placeholder={translations[language].cons}
                     onChange={(e) => setCons(e.target.value)}
                 />
+                {translations[language].consText}
 
                 {notification && <Notification>{notification}</Notification>}
 
@@ -327,7 +328,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
                 </ButtonContainer>
             </MenuContainer>
 
-            <Choices/>
+            <Choices />
         </Container>
     );
 };
