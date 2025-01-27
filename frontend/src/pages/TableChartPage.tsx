@@ -10,7 +10,6 @@ import { RoundTable, RectangularTable } from "../types";
 import { useTable } from "../providers/TableContext";
 import GuidedInput from "../components/ui/GuidedInput";
 import { useUser } from "../providers/UserContext";
-import { SpaceBetweenContainer } from "../styles/section";
 import { translations } from "../translations";
 
 interface TableChartPageProps { }
@@ -21,7 +20,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         addRoundTable, addRectangularTable, roundTables, rectangularTables
     } = useTable();
 
-    const { guests, language } = useUser();
+    const { language } = useUser();
 
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");
@@ -33,8 +32,6 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     const [roomLength, setRoomLength] = useState(roomDimensions[1].toString());
     const [tableToRemove, setTableToRemove] = useState("");
     const allTableNames = [...roundTables.map((t) => t.name), ...rectangularTables.map((t) => t.name)];
-    const [selectedGuests, setSelectedGuests] = useState<string[]>([]);
-    const [inputValue, setInputValue] = useState("");
 
     useEffect(() => {
         setRoomWidth(roomDimensions[0].toString());
@@ -104,7 +101,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     };
 
     const handleRemoveTable = () => {
-        const roundTableToRemove: RoundTable | undefined = roundTables.find((table) => table.name == tableToRemove);
+        const roundTableToRemove = roundTables.find((table) => table.name == tableToRemove);
         const rectangularTableToRemove = rectangularTables.find((table) => table.name == tableToRemove);
 
         const toRemove = roundTableToRemove || rectangularTableToRemove;
@@ -276,45 +273,6 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                         {translations[language].removeTable}
                     </Button>
                 </ButtonContainer>
-                <HorizontalLine />
-                <Heading level={3}>{translations[language].assignGuests}</Heading>
-                <GuidedInput
-                    suggestions={guests.map(guest => guest.name)}
-                    value={inputValue}
-                    setInputValue={setInputValue}
-                    placeholder={translations[language].searchGuestPlaceholder}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                <ButtonContainer>
-                    <Button
-                        onClick={() => {
-                            if (selectedGuests.includes(inputValue)) {
-                                setSelectedGuests(selectedGuests.filter(guest => guest !== inputValue));
-                            } else {
-                                setSelectedGuests([...selectedGuests, inputValue]);
-                            }
-                        }}
-                    >
-                        {selectedGuests.includes(inputValue) ? translations[language].delete : translations[language].add}
-                    </Button>
-                </ButtonContainer>
-                <HorizontalLine />
-
-                <Subtitle level={3}>{translations[language].mainTableGuests}:</Subtitle>
-                {selectedGuests.map((guest, index) => (
-                    <div key={index}>
-                        <SpaceBetweenContainer>
-                            <div style={{ marginTop: '2rem' }}>
-                                {guest}</div>
-                            <Button
-                                onClick={() => setSelectedGuests(selectedGuests.filter(item => item !== guest))}
-                            >
-                                {translations[language].delete}
-                            </Button>
-                        </SpaceBetweenContainer>
-                    </div>
-                ))}
-
             </MenuContainer>
 
             <TableChart/>

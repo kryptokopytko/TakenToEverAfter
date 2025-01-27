@@ -63,6 +63,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
         
         setRoundTables(updatedRoundTables);
         setRectangularTables(updatedRectangularTables);
+        await FunctionsProxy.deleteTable(tableId);
     }
 
     return (

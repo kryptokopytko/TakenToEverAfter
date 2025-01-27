@@ -27,8 +27,8 @@ export const getTables = async () => {
             x: table.x,
             y: table.y,
             guests: tableGuests[table.id] || [],
-            width: table.seatsNumber.width, 
-            length: table.seatsNumber.length,
+            width: table.width, 
+            length: table.length,
           }));
 
       const circularTables = tablesResponse.data
@@ -39,7 +39,7 @@ export const getTables = async () => {
             x: table.x,
             y: table.y,
             guests: tableGuests[table.id] || [],
-            seats: table.seatsNumber,
+            seats: table.width,
           }));
     
   
