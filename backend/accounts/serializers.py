@@ -14,7 +14,9 @@ class AccountSerializer(serializers.ModelSerializer):
     
 class AccountDetailsSerializer(serializers.ModelSerializer):
     weddingDate = serializers.DateField(source='wedding_date')
-    newlywedsTableId = serializers.IntegerField(source='newlyweds_table_id', allow_null=True)
+    newlywedsTableId = serializers.IntegerField(source='newlyweds_table_id', allow_null=True, required=False)
+    roomWidth = serializers.IntegerField(source='room_width', allow_null=True, required=False)
+    roomLength = serializers.IntegerField(source='room_length', allow_null=True, required=False)
     budgetLimit = serializers.DecimalField(source='budget_limit', max_digits=10, decimal_places=2, allow_null=True)
     photoAlbumUrl = serializers.CharField(source='photo_album_url', read_only=True)
     invitationMainText = serializers.CharField(source='invitation_main_text', allow_null = True, required=False)
@@ -23,7 +25,7 @@ class AccountDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountDetails
-        fields = ('id', 'account', 'weddingDate', 'newlywedsTableId', 'budgetLimit', 'photoAlbumUrl', 
+        fields = ('id', 'account', 'weddingDate', 'newlywedsTableId', 'roomWidth', 'roomLength', 'budgetLimit', 'photoAlbumUrl', 
             'invitationMainText', 'invitationAdditionalText', 'invitationGuestText'
         )
   

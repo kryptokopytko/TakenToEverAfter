@@ -1,55 +1,70 @@
 import { createContext, useContext, ReactNode, useState } from "react";
 import { RoundTable, RectangularTable } from "../types";
 import Example from "../exampleData";
+import useFunctionsProxy from "../API/FunctionHandler";
 
 interface TableContextType {
     roomDimensions: number[];
     roundTables: RoundTable[];
     rectangularTables: RectangularTable[];
-    updateRoomDimensions: (x: string, y: string) => void;
-    addRoundTable: (table: RoundTable) => void;
-    addRectangularTable: (table: RectangularTable) => void;
-    updateTablePosition: (id: string, x: number, y: number) => void;
-    handleUpdateTablePosition: (id: string, x: number, y: number) => void;
-    setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
+    updateRoomDimensions: (x: number, y: number) => void;
+    addRoundTable: (table:  Omit<RoundTable, "id">) => void;
+    addRectangularTable: (table:  Omit<RectangularTable, "id">) => void;
+    updateTablePosition: (id: number, x: number, y: number) => void;
+    deleteTable: (id: number) => void;
+    setRoomDimensions: React.Dispatch<React.SetStateAction<number[]>>;
     setRectangularTables: React.Dispatch<React.SetStateAction<RectangularTable[]>>;
+    setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
-    const [roomDimensions, setRoomDimensions] = useState([16, 7]);
+    const [roomDimensions, setRoomDimensions] = useState(Example.roomDismensions);
     const [roundTables, setRoundTables] = useState<RoundTable[]>(Example.roundTables);
     const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>(Example.rectangularTables);
+    const FunctionsProxy = useFunctionsProxy();
 
-    const addRoundTable = (table: RoundTable) => {
-        setRoundTables((prev) => [...prev, table]);
+    const addRoundTable = async (table:  Omit<RoundTable, "id">) => {
+        const id = await FunctionsProxy.addTable(table.name, table.x, table.y, table.seats, "circular");
+        setRoundTables((prev) => [...prev, {...table, id: id || 0}]);
     };
 
-    const addRectangularTable = (table: RectangularTable) => {
-        setRectangularTables((prev) => [...prev, table]);
+    const addRectangularTable = async (table: Omit<RectangularTable, "id">) => {
+        const id = await FunctionsProxy.addTable(table.name, table.x, table.y, {length: table.length, width: table.width}, "rectangular");
+        setRectangularTables((prev) => [...prev, {...table, id: id || 0}]);
     };
 
-    const updateTablePosition = (id: string, x: number, y: number) => {
+    const updateTablePosition = async (id: number, x: number, y: number) => {
+        const rectTable = rectangularTables.find(table => table.id == id);
+        if (rectTable) { 
+            setRectangularTables((prev) =>
+                prev.map((table) => (table.id === id ? { ...table, x, y } : table))
+            );
+            await FunctionsProxy.updateTable(id, "rectangular", {...rectTable, x: x, y: y});
+        }
+
+        const roundTable = roundTables.find(table => table.id == id);
         setRoundTables((prev) =>
             prev.map((table) => (table.id === id ? { ...table, x, y } : table))
         );
-        setRectangularTables((prev) =>
-            prev.map((table) => (table.id === id ? { ...table, x, y } : table))
-        );
+        await FunctionsProxy.updateTable(id, "circular", {...roundTable!, x: x, y: y});
+       
     };
 
-    const updateRoomDimensions = (width: string, length: string) => {
-        const numWidth = Number(width);
-        const numLength = Number(length);
-        if (!isNaN(numWidth) && Number(numWidth) != 0 && !isNaN(numLength) && Number(numLength) != 0) {
-            setRoomDimensions([numWidth, numLength]);
-        }
+    const updateRoomDimensions = async (width: number, length: number) => {
+        setRoomDimensions([width, length]);
+        await FunctionsProxy.updateRoomDimensions(width, length);
     };
 
-    const handleUpdateTablePosition = (id: string, x: number, y: number) => {
-        updateTablePosition(id, x, y);
-    };
+    const deleteTable = async (tableId: number) => {
+        const updatedRoundTables = roundTables.filter((table) => table.id !== tableId);
+        const updatedRectangularTables = rectangularTables.filter((table) => table.id !== tableId);
+        
+        setRoundTables(updatedRoundTables);
+        setRectangularTables(updatedRectangularTables);
+        await FunctionsProxy.deleteTable(tableId);
+    }
 
     return (
         <TableContext.Provider
@@ -61,9 +76,10 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
                 addRoundTable,
                 addRectangularTable,
                 updateTablePosition,
-                handleUpdateTablePosition,
-                setRoundTables,
+                deleteTable,
+                setRoomDimensions,
                 setRectangularTables,
+                setRoundTables,
             }}
         >
             {children}

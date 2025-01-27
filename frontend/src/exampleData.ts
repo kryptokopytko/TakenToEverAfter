@@ -11,6 +11,7 @@ import {
   Choice,
   Question,
   Answer,
+  RoundTable,
 } from "./types";
 
 // ***********************ACCOUNT*********************************
@@ -1186,9 +1187,11 @@ const imagesPl: Image[] = [
 const images = { english: imagesEng, polish: imagesPl };
 
 // **********************SEATINGS*************************************
-const roundTables = [
+const roomDismensions = [12, 12];
+
+const roundTables: RoundTable[] = [
   {
-    id: "children",
+    id: 0, name:"children",
     x: 600,
     y: 600,
     seats: 12,
@@ -1208,28 +1211,19 @@ const roundTables = [
   },
 ];
 
-const rectangularTables = [
-  {
-    id: "main",
-    x: 50,
-    y: 50,
-    width: 3,
-    length: 12,
-    guests: [
-      "Antoni Kowalski",
-      "Bernadeta Nowak",
-      "Celina Wiśniewska",
-      "Derek Jankowski",
-      "Eugenia Zawisza",
-      "Felicja Grabowska",
-      "Genowefa Zielińska",
-      "Hiacynta Kaczmarek",
-      "Irenka Lewandowska",
-      "Józefina Szymańska",
-      "Kornela Kamińska",
-    ],
-  },
-];
+const rectangularTables = [{
+  id: 1, name: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
+      'Bernadeta Nowak',
+      'Celina Wiśniewska',
+      'Derek Jankowski',
+      'Eugenia Zawisza',
+      'Felicja Grabowska',
+      'Genowefa Zielińska',
+      'Hiacynta Kaczmarek',
+      'Irenka Lewandowska',
+      'Józefina Szymańska',
+      'Kornela Kamińska']
+}];
 
 // **********************QUESTIONNAIRE**********************************
 
@@ -1335,9 +1329,7 @@ const Example = {
   taskCards,
   choices,
   images,
-  roundTables,
-  rectangularTables,
-  questions,
-  answers,
+  roundTables, rectangularTables, roomDismensions,
+  questions, answers,
 };
 export default Example;

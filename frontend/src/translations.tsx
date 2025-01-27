@@ -263,7 +263,7 @@ export const translations: Translations = {
     assignPeopleToTable: "Assign People To Seats",
     manageTables: "Manage Tables",
     consText: "Separate multiple cons with coma",
-    prosText: "Separate multiple pros with coma"
+    prosText: "Separate multiple pros with coma",
 
   },
   polish: {

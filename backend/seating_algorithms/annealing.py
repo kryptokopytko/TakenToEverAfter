@@ -1,7 +1,7 @@
 import math
 import random
 from typing import List, Dict, Tuple
-from utils import randomly_assign_people_to_tables, calculate_total_score, swap_people
+from .utils import randomly_assign_people_to_tables, calculate_total_score, swap_people
 
 def generate_new_solution(current_solution: List[List[str]], tables: List[int]) -> List[List[str]]:
     new_solution = [table.copy() for table in current_solution]

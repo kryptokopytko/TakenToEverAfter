@@ -35,7 +35,7 @@ const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
           </ButtonsContainer>
         </div>
       </SpaceBetweenContainer>
-      <RoomDisplay />
+      <RoomDisplay {...(isHomePage && { isHomePage })} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 from itertools import combinations
-from utils import calculate_base_pair_score
+from .utils import calculate_base_pair_score
 
 def calculate_base_pair_scores(people: List[str], groups: Dict[str, List[str]], 
                          weights: Dict[str, int]) -> Dict[Tuple[str, str], int]:

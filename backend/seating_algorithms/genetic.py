@@ -1,7 +1,7 @@
 import random
 from copy import deepcopy
 from typing import List, Dict
-from utils import randomly_assign_people_to_tables, calculate_total_score, swap_people
+from .utils import randomly_assign_people_to_tables, calculate_total_score, swap_people
 
 class GeneticTableAssignment:
     def __init__(

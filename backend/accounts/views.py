@@ -86,3 +86,25 @@ def update_account_details(request):
         return Response({"message": "Account details have been updated."}, status=200)
     else:
         return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def update_room_dismensions(request):
+    account = get_account_from_session(request)
+
+    if not account:
+        return Response({"error": "User account not found in session."}, status=400)
+
+    data = request.data
+    room_width = data.get("roomWidth")
+    room_length = data.get("roomLength")
+
+    if room_width is not None:
+        account.accountdetails.room_width = room_width
+
+    if room_length is not None:
+        account.accountdetails.room_length = room_length
+
+    account.accountdetails.save()
+
+    serializer = AccountDetailsSerializer(account.accountdetails)
+    return Response(serializer.data, status=200)
