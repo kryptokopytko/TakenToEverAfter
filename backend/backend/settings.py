@@ -148,10 +148,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_CREDENTIALS = True 
+
+NETWORK_ADDRESS = os.getenv('NETWORK_ADDRESS')
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:5173',
      'https://localhost:5173',
-     'http://192.168.1.55:5173'
+     f'http://{NETWORK_ADDRESS}:5173',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -67,7 +67,7 @@ class GetPhotosByAlbumUrlView(APIView):
                 photo_album_url=photo_album_url
             )
 
-            photos = account_details.account.accepted_photos
+            photos = AcceptedPhoto.objects.filter(account=account_details.account)
             serialized_photos = AcceptedPhotoSerializer(photos, many=True)
 
             return Response({"photos": serialized_photos.data})

@@ -189,7 +189,17 @@ export const getPhotosByAlbumUrl = async (photoAlbumUrl: string) => {
       { withCredentials: true }
     );
 
-    return response.data;
+    const acceptedPhotos = response.data.photos.map((photo: any) => ({
+      id: photo.id,
+      name: photo.description || undefined,
+      link: photo.link,
+      isFavorite: photo.favourite,
+      author: photo.uploader || undefined,
+      isVertical: photo.is_vertical,
+      isApproved: true,
+    }));
+
+    return acceptedPhotos;
   } catch (error) {
     console.error("Error during fetching photos:", error);
     throw error;

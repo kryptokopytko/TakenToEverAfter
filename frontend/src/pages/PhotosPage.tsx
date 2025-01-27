@@ -27,12 +27,9 @@ const PhotosPage: React.FC = () => {
     const networkAddress = __NETWORK_ADDRESS__;
     const port = window.location.port;
     const guestPhotosUploadLink = `http://${networkAddress}:${port}/guest_photos/${accountDetails.photoAlbumUrl}`;
+    
     useEffect(() => {
         const gen = async () => {
-            // const networkAddress = __NETWORK_ADDRESS__;
-            // const port = window.location.port;
-            // guestPhotosUploadLink = `http://${networkAddress}:${port}/guest_photos/${accountDetails.photoAlbumUrl}`;
-            console.log(guestPhotosUploadLink);
             const code = await generateQRCode(guestPhotosUploadLink);
             setQRCode(code);
         };
