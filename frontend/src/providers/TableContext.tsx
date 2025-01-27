@@ -13,6 +13,8 @@ interface TableContextType {
     updateTablePosition: (id: number, x: number, y: number) => void;
     deleteTable: (id: number) => void;
     setRoomDimensions: React.Dispatch<React.SetStateAction<number[]>>;
+    setRectangularTables: React.Dispatch<React.SetStateAction<RectangularTable[]>>;
+    setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -51,9 +53,6 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateRoomDimensions = async (width: number, length: number) => {
-        // const numWidth = Number(width);
-        // const numLength = Number(length);
-        // if (!isNaN(numWidth) && Number(numWidth) != 0 && !isNaN(numLength) && Number(numLength) != 0) {
         setRoomDimensions([width, length]);
         await FunctionsProxy.updateRoomDimensions(width, length);
     };
@@ -78,6 +77,8 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
                 updateTablePosition,
                 deleteTable,
                 setRoomDimensions,
+                setRectangularTables,
+                setRoundTables,
             }}
         >
             {children}

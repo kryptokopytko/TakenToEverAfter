@@ -63,12 +63,14 @@ export const getTables = async () => {
     try {
       const tableData = {
         name,
-        position_x: x,
-        position_y: y,
-        seatsNumber,
+        x: x,
+        y: y,
+        width: shape === "circular"? seatsNumber : (seatsNumber as { length: number; width: number }).width, 
+        ...(shape === "rectangular" && { length: (seatsNumber as { length: number; width: number }).length }),
         shape,
       };
-  
+
+      console.log(tableData);
       const response = await api.post("/seating/tables/", tableData, { withCredentials: true });
       return response.data;
     } catch (error) {
@@ -112,7 +114,7 @@ export const getTables = async () => {
   export const updateRoomDimensions = async (roomWidth: number, roomLength: number) => {
     try {
       const response = await api.post(
-        "/accounts/update-room-dimensions/",
+        "/accounts/update-room-dismensions/",
         { roomWidth, roomLength },
         { withCredentials: true }
       );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
 import { Heading, Subtitle } from "../styles/typography";
 import Input from "../components/ui/Input";
@@ -29,12 +29,17 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     const [rectWidth, setRectWidth] = useState("");
     const [rectLength, setRectLength] = useState("");
     const [notification, setNotification] = useState<string | null>(null);
-    const [roomWidth, setRoomWidth] = useState("");
-    const [roomLength, setRoomLength] = useState("");
+    const [roomWidth, setRoomWidth] = useState(roomDimensions[0].toString());
+    const [roomLength, setRoomLength] = useState(roomDimensions[1].toString());
     const [tableToRemove, setTableToRemove] = useState("");
     const allTableNames = [...roundTables.map((t) => t.name), ...rectangularTables.map((t) => t.name)];
     const [selectedGuests, setSelectedGuests] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
+
+    useEffect(() => {
+        setRoomWidth(roomDimensions[0].toString());
+        setRoomLength(roomDimensions[1].toString());
+    }, [roomDimensions]);
 
     const placeNewTable = (
         newTableDismensions: {seats: number} | {width: number, length: number},
@@ -51,7 +56,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 ...rectangularTables.map((table) => table.length),
                 ...roundTables.map((table) => (table.seats * 0.5) / Math.PI)
             );
-            return (maxTableLength / roomDimensions[1]) * 100 + spacing;
+            return (maxTableLength / roomDimensions[1]) * 100 + spacing | 5;
         };
 
         const rowHeight = calculateRowHeight();
@@ -75,7 +80,6 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
 
             return { x: currentX, y: currentY };
         } else if ("seats" in newTableDismensions) {
-
             const diameter = (newTableDismensions.seats * 0.5) / Math.PI;
             const scaledDiameter = (diameter / roomDimensions[0]) * 100;
 
@@ -93,7 +97,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                 }
             }
 
-            return { x: currentX - scaledDiameter, y: currentY };
+            return { x: Math.round(currentX - scaledDiameter), y: currentY };
         }
 
         throw new Error("Unknown table type");
@@ -184,7 +188,13 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     value={roomWidth}
                     type="number"
                     placeholder={translations[language].roomWidthPlaceholder}
-                    onChange={(e) => { setRoomWidth(e.target.value); updateRoomDimensions(Number(e.target.value), Number(roomLength)) }}
+                    onChange={(e) => {
+                        const value = Number(e.target.value);
+                        if (!isNaN(value)) { 
+                            setRoomWidth(e.target.value);
+                            updateRoomDimensions(value, Number(roomLength));
+                        }
+                    }}
                 />
 
                 <Subtitle level={3}>{translations[language].roomLength}</Subtitle>
@@ -192,14 +202,20 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     value={roomLength}
                     type="number"
                     placeholder={translations[language].roomLengthPlaceholder}
-                    onChange={(e) => { setRoomLength(e.target.value); updateRoomDimensions(Number(roomWidth), Number(e.target.value)) }}
+                    onChange={(e) => { 
+                        const value = Number(e.target.value);
+                        if (!isNaN(value)) { 
+                            setRoomLength(e.target.value);
+                            updateRoomDimensions(Number(roomWidth), value); 
+                        }
+                    }}
 
                 />
                 
                 <HorizontalLine />
                 <Heading level={3}>{translations[language].addTable}</Heading>
                 
-                <Subtitle level={3}>{translations[language].nameOptional}</Subtitle>
+                <Subtitle level={3}>{translations[language].name}</Subtitle>
                 <Input
                     value={tableName}
                     placeholder={translations[language].tableNamePlaceholder}

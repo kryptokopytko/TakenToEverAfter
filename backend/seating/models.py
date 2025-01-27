@@ -11,7 +11,8 @@ class Table(models.Model):
     ])
     position_x = models.IntegerField()  
     position_y = models.IntegerField()  
-    seats_number = models.JSONField() 
+    width = models.IntegerField()  
+    length = models.IntegerField(null=True)  
 
 class Seat(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) 

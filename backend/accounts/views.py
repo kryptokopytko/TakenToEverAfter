@@ -88,7 +88,7 @@ def update_account_details(request):
         return Response(serializer.errors, status=400)
 
 @api_view(['POST'])
-def update_room_dismensions(self, request, *args, **kwargs):
+def update_room_dismensions(request):
     account = get_account_from_session(request)
 
     if not account:
@@ -99,12 +99,12 @@ def update_room_dismensions(self, request, *args, **kwargs):
     room_length = data.get("roomLength")
 
     if room_width is not None:
-        account.account_details.room_width = room_width
+        account.accountdetails.room_width = room_width
 
     if room_length is not None:
-        account.account_details.room_length = room_length
+        account.accountdetails.room_length = room_length
 
-    account.account_details.save()
+    account.accountdetails.save()
 
-    serializer = AccountDetailsSerializer(account.account_details)
+    serializer = AccountDetailsSerializer(account.accountdetails)
     return Response(serializer.data, status=200)
