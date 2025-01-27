@@ -2,7 +2,6 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
-import { RoundTable, RectangularTable } from "../../types";
 import Button, {ButtonContainer} from "../../components/ui/Button";
 import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
@@ -17,8 +16,8 @@ export const Board = styled.div`
   border: 2px solid ${({ theme }) => theme.dark};
 `;
 
-const RoomDisplay: React.FC<{ isHomePage: boolean }> = ({ isHomePage }) => {
-    const { roomDimensions, roundTables, setRoundTables, rectangularTables, setRectangularTables } = useTable();
+const RoomDisplay: React.FC<{ isHomePage?: boolean }> = ({ isHomePage }) => {
+    const { roomDimensions, roundTables, rectangularTables, updateTablePosition } = useTable();
     const { language } = useUser();
     const boardRef = useRef<HTMLDivElement>(null);
     const [boardWidth, setBoardWidth] = useState(0);
@@ -46,21 +45,11 @@ const RoomDisplay: React.FC<{ isHomePage: boolean }> = ({ isHomePage }) => {
         };
     }, [roomDimensions]);
 
-    const updateTableShapePosition = (id: string, x: number, y: number) => {
+    const updateTableShapePosition = (id: number, x: number, y: number) => {
         const newX = Math.min(Math.max(x * 1000 / boardWidth, 0), 1000);
         const newY = Math.min(Math.max(y * 1000 / boardHeight, 0), 1000);
 
-        setRoundTables((prevRoundTables: RoundTable[]) =>
-            prevRoundTables.map((table) =>
-                table.id === id ? { ...table, x: newX, y: newY } : table
-            )
-        );
-
-        setRectangularTables((prevRectangularTables: RectangularTable[]) =>
-            prevRectangularTables.map((table) =>
-                table.id === id ? { ...table, x: newX, y: newY } : table
-            )
-        );
+        updateTablePosition(id, newX, newY);
     };
 
     return (

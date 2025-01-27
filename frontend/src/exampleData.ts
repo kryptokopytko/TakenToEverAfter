@@ -1,4 +1,4 @@
-import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag, Invitation, ExpenseCard, Choice, Question, Answer } from "./types";
+import { Guest, Image, TaskCard, Account, AccountDetails, WeddingDetails, Tag, Invitation, ExpenseCard, Choice, Question, Answer, RoundTable } from "./types";
 
 // ***********************ACCOUNT*********************************
 const accountEng: Account = {
@@ -934,8 +934,8 @@ const images = { english: imagesEng, polish: imagesPl };
 // **********************SEATINGS*************************************
 const roomDismensions = [12, 12];
 
-const roundTables = [{
-  id: "children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
+const roundTables: RoundTable[] = [{
+  id: 0, name:"children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
       'Bernadeta Nowak',
       'Celina Wiśniewska',
       'Derek Jankowski',
@@ -949,7 +949,7 @@ const roundTables = [{
 }];
 
 const rectangularTables = [{
-  id: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
+  id: 1, name: "main", x: 50, y: 50, width: 3, length: 12, guests: ['Antoni Kowalski',
       'Bernadeta Nowak',
       'Celina Wiśniewska',
       'Derek Jankowski',

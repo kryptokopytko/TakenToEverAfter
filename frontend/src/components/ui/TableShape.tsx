@@ -2,13 +2,13 @@ import React, { useRef, useMemo } from "react";
 import styled from "styled-components";
 
 interface TableShapeProps {
-    id: string;
+    id: number;
     x: number;
     y: number;
     height: number;
     width: number;
     isOval: boolean;
-    updatePosition: (id: string, x: number, y: number) => void;
+    updatePosition: (id: number, x: number, y: number) => void;
     children: React.ReactNode;
     guests: string[];
 }

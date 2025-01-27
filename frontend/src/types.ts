@@ -139,8 +139,8 @@ export interface Answer {
 
 /*********************************************SEATING****************************************************/
 export interface Table {
-  id: string;
-  name?: string;
+  id: number;
+  name: string;
   x: number;
   y: number;
   guests: string[];
