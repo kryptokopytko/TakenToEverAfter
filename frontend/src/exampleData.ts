@@ -932,6 +932,8 @@ const imagesPl: Image[] = [
 const images = { english: imagesEng, polish: imagesPl };
 
 // **********************SEATINGS*************************************
+const roomDismensions = [12, 12];
+
 const roundTables = [{
   id: "children", x: 600, y: 600, seats: 12, guests: ['Antoni Kowalski',
       'Bernadeta Nowak',
@@ -1047,7 +1049,7 @@ const Example = {
   tags, guests, invitations,
   expenses, taskCards, choices,
   images,
-  roundTables, rectangularTables, 
+  roundTables, rectangularTables, roomDismensions,
   questions, answers,
 };
 export default Example;

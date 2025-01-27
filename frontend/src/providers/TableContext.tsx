@@ -13,12 +13,13 @@ interface TableContextType {
     handleUpdateTablePosition: (id: string, x: number, y: number) => void;
     setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
     setRectangularTables: React.Dispatch<React.SetStateAction<RectangularTable[]>>;
+    setRoomDimensions: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
 
 export const TableProvider = ({ children }: { children: ReactNode }) => {
-    const [roomDimensions, setRoomDimensions] = useState([12, 12]);
+    const [roomDimensions, setRoomDimensions] = useState(Example.roomDismensions);
     const [roundTables, setRoundTables] = useState<RoundTable[]>(Example.roundTables);
     const [rectangularTables, setRectangularTables] = useState<RectangularTable[]>(Example.rectangularTables);
 
@@ -64,6 +65,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
                 handleUpdateTablePosition,
                 setRoundTables,
                 setRectangularTables,
+                setRoomDimensions,
             }}
         >
             {children}

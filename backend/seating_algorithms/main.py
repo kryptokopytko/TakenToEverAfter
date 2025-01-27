@@ -1,9 +1,9 @@
-from local_search import iteratively_improve_assignment
-from utils import calculate_total_score, randomly_assign_people_to_tables
-from greedy import greedily_assign_people_to_tables
-from annealing import optimize_table_assignment
-from genetic import genetic_algorithm_table_assignment
-from high_var_sample import people, tables, groups, weights
+from .local_search import iteratively_improve_assignment
+from .utils import calculate_total_score, randomly_assign_people_to_tables
+from .greedy import greedily_assign_people_to_tables
+from .annealing import optimize_table_assignment
+from .genetic import genetic_algorithm_table_assignment
+from .high_var_sample import people, tables, groups, weights
 
 random_result = randomly_assign_people_to_tables(people, tables)
 random_score = calculate_total_score(random_result, groups, weights)

@@ -7,7 +7,7 @@ import { SpaceBetweenContainer } from "../../styles/section";
 import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
 
-const TableChart: React.FC = () => {
+const TableChart: React.FC<{ isHomePage: boolean }> = ({ isHomePage }) => {
   const {language} = useUser();
 
   return (
@@ -20,7 +20,7 @@ const TableChart: React.FC = () => {
           </Button>
         </div>
       </SpaceBetweenContainer>
-      <RoomDisplay />
+      <RoomDisplay isHomePage={isHomePage}/>
     </div>
   );
 };

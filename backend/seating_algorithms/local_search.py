@@ -1,5 +1,5 @@
 from typing import List, Dict, Tuple
-from utils import swap_people, calculate_table_score
+from .utils import swap_people, calculate_table_score
 
 def improve_assignment(assignment: List[List[str]], groups: Dict[str, List[str]], 
                                 weights: Dict[str, int]) -> Tuple[List[List[str]], bool]:

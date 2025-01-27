@@ -25,9 +25,10 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TableProvider } from "./providers/TableContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos, getQuestionnaire } from "./API/DbApi/DBApi";
+import { checkSession, getTasks, getGuestsInfo, getExpenses, getUserPreferences, getPhotos, getQuestionnaire, getTables } from "./API/DbApi/DBApi";
 import Example from "./exampleData";
 import { initialFontSize, initialThemes } from "./styles/theme";
+import { useTable } from "./providers/TableContext";
 
 
 const AppContainer = styled.div`
@@ -77,6 +78,7 @@ const AppContent = () => {
    } = useUser();
 
    const { setTheme, setThemes, setFontSize } = useTheme();
+   const { setRoundTables, setRectangularTables, setRoomDimensions } = useTable();
 
   const setExampleData = () => {
     setAccount(Example.account[language]);
@@ -90,11 +92,16 @@ const AppContent = () => {
     setExpenseCards(Example.expenses[language]);
     setChoices(Example.choices[language]);
     setPhotos(Example.images[language]);
+    setQuestions(Example.questions[language]);
+    setAnswers(Example.answers[language]);
+
     setFontSize(initialFontSize);
     setThemes(initialThemes);
     setTheme(initialThemes.nude);
-    setQuestions(Example.questions[language]);
-    setAnswers(Example.answers[language]);
+
+    setRectangularTables(Example.rectangularTables);
+    setRoundTables(Example.roundTables);
+    setRoomDimensions(Example.roomDismensions);
   }
 
   useEffect(() => {
@@ -105,6 +112,11 @@ const AppContent = () => {
         setAccount(sessionData.account);
         setAccountDetails(sessionData.accountDetails);
         setWeddingDetails(null);
+
+        const roomDismensions = sessionData.accountDetails.roomWidth && sessionData.accountDetails.roomLength?
+          [sessionData.accountDetails.roomWidth, sessionData.accountDetails.roomLength]
+          : Example.roomDismensions;
+        setRoomDimensions(roomDismensions);
         
         const guestsInfo = await getGuestsInfo();
         setGuests(guestsInfo.guests);
@@ -131,6 +143,10 @@ const AppContent = () => {
         const { questions, answers } = await getQuestionnaire();
         setQuestions(questions);
         setAnswers(answers);
+
+        const { rectangularTables, circularTables } = await getTables();
+        setRectangularTables(rectangularTables);
+        setRoundTables(circularTables);
       } else {
         setIsLogged(false);
         setLanguage("english");

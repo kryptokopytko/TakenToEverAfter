@@ -260,6 +260,7 @@ export const translations: Translations = {
       missingAnswer: "{name} has not answered all questions.",
       questionsAndAnswers: "Questions and answers",
       by: "by",
+      manageTables: "Manage tables",
     },
     polish: {
       login: 'Zaloguj się',
@@ -517,5 +518,6 @@ export const translations: Translations = {
       missingAnswer: "{name} nie odpowiedział/-a na wszystkie pytania, proszę uzupełnić odpowiedzi",
       questionsAndAnswers: "Pytania i odpowiedzi",
       by: "autor:",
+      manageTables: "Zarządzaj stołami",
     },
   };

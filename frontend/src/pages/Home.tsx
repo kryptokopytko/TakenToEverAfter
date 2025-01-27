@@ -57,7 +57,7 @@ const Home = () => {
           <FavouritePhotos isHomePage={true} />
         </div>
         <div id="table-chart">
-          <TableChart />
+          <TableChart isHomePage={true}/>
         </div>
         <div id="theme-constructor">
           <ThemeConstructor isHomePage={true} />

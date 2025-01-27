@@ -3,9 +3,10 @@ import styled from "styled-components";
 import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
 import { RoundTable, RectangularTable } from "../../types";
-import Button from "../../components/ui/Button";
+import Button, {ButtonContainer} from "../../components/ui/Button";
 import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
+import { Link } from "react-router-dom";
 
 export const Board = styled.div`
   width: 100%;
@@ -16,7 +17,7 @@ export const Board = styled.div`
   border: 2px solid ${({ theme }) => theme.dark};
 `;
 
-const RoomDisplay: React.FC = () => {
+const RoomDisplay: React.FC<{ isHomePage: boolean }> = ({ isHomePage }) => {
     const { roomDimensions, roundTables, setRoundTables, rectangularTables, setRectangularTables } = useTable();
     const { language } = useUser();
     const boardRef = useRef<HTMLDivElement>(null);
@@ -101,9 +102,14 @@ const RoomDisplay: React.FC = () => {
                     </TableShape>
                 ))}
             </Board>
-            <Button onClick={() => setShowNames((prev) => !prev)}>
-                {showNames ? translations[language].hideNames : translations[language].showNames}
-            </Button>
+            {isHomePage ? <ButtonContainer>
+                    <Link to="table_chart">
+                        <Button>{translations[language].manageTables}</Button>
+                    </Link>
+                    <Button onClick={() => setShowNames((prev) => !prev)}>
+                        {showNames ? translations[language].hideNames : translations[language].showNames}
+                    </Button>
+                </ButtonContainer> : <></>}
         </>
 
     );
