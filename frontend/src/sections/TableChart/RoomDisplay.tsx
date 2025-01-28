@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import TableShape from "../../components/ui/TableShape";
 import { useTable } from "../../providers/TableContext";
-import Button, {ButtonContainer} from "../../components/ui/Button";
+import Button, { ButtonContainer } from "../../components/ui/Button";
 import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
 import { Link } from "react-router-dom";
@@ -70,7 +70,7 @@ const RoomDisplay: React.FC<{ isHomePage?: boolean }> = ({ isHomePage }) => {
                         isOval={true}
                         guests={showNames ? table.guests : []}
                     >
-                        {table.id}
+                        {table.name}
                     </TableShape>
                 ))}
 
@@ -87,7 +87,7 @@ const RoomDisplay: React.FC<{ isHomePage?: boolean }> = ({ isHomePage }) => {
                         isOval={false}
                         guests={showNames ? table.guests : []}
                     >
-                        {table.id}
+                        {table.name}
                     </TableShape>
                 ))}
             </Board>
@@ -96,13 +96,13 @@ const RoomDisplay: React.FC<{ isHomePage?: boolean }> = ({ isHomePage }) => {
                     <Link to="table_chart">
                         <Button>{translations[language].manageTables}</Button>
                     </Link>
-                    
+
                     : <></>
                 }
-               <Button onClick={() => setShowNames((prev) => !prev)}>
+                <Button onClick={() => setShowNames((prev) => !prev)}>
                     {showNames ? translations[language].hideNames : translations[language].showNames}
                 </Button>
-            </ButtonContainer> 
+            </ButtonContainer>
         </>
 
     );

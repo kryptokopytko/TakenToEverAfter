@@ -267,7 +267,6 @@ const GuestPage: React.FC = () => {
             />
             {translations[language].hasPlusOne}
           </div>
-
           <DropdownSelector
             title={translations[language].invitation}
             initialSelectedOption={currentGuest ? currentGuest.invitationId.toString() : "new"}

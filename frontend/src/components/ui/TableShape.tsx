@@ -87,10 +87,10 @@ const TableShape: React.FC<TableShapeProps> = ({
         };
     }, [id, x, y]);
 
-    
+
     const guestPositions = useMemo(() => {
         if (isOval) {
-            
+
             const radius = Math.min(width, height) / 2;
             return guests.map((guest, index) => {
                 const angle = (2 * Math.PI * index) / guests.length;
@@ -100,7 +100,7 @@ const TableShape: React.FC<TableShapeProps> = ({
                 return { guest, left, top };
             });
         } else {
-            
+
             return guests.map((guest, index) => {
                 const totalGuests = guests.length;
                 const perimeter = 2 * (width + height);
@@ -110,19 +110,19 @@ const TableShape: React.FC<TableShapeProps> = ({
                 let left = 0, top = 0;
 
                 if (currentDistance < width) {
-                    
+
                     left = currentDistance;
                     top = -30;
                 } else if (currentDistance < width + height) {
-                    
+
                     left = width + 60;
                     top = currentDistance - width;
                 } else if (currentDistance < 2 * width + height) {
-                    
+
                     left = width - (currentDistance - width - height);
                     top = height + 30;
                 } else {
-                    
+
                     left = -60;
                     top = height - (currentDistance - 2 * width - height);
                 }

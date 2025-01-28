@@ -265,8 +265,11 @@ export const translations: Translations = {
     consText: "Separate multiple cons with coma",
     prosText: "Separate multiple pros with coma",
     saveLayout: "Save Table Layout",
+    listOfTables: "List Of Tables"
   },
   polish: {
+    listOfTables: "Lista stołów",
+
     consText: "Rozdzielaj poszczególne wady przecinkiem",
     prosText: "Rozdzielaj poszczególne zalety przecinkiem",
 

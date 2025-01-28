@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, MenuContainer, Notification, notificationTimeOut } from "../styles/page";
-import { Heading, Subtitle } from "../styles/typography";
+import { Body, Heading, Subtitle } from "../styles/typography";
 import Input from "../components/ui/Input";
 import Button, { ButtonContainer } from "../components/ui/Button";
 import Checkbox from "../components/ui/Checkbox";
@@ -19,9 +19,8 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
         updateRoomDimensions, roomDimensions, deleteTable,
         addRoundTable, addRectangularTable, roundTables, rectangularTables
     } = useTable();
-
-    const { language } = useUser();
-
+    const { language, guests } = useUser();
+    const numberOfSeats = roundTables.reduce((acc, table) => acc + table.seats, 0) + rectangularTables.reduce((acc, table) => acc + table.length * 2 + table.width * 2, 0);
     const [isRound, setIsRound] = useState(false);
     const [tableName, setTableName] = useState("");
     const [roundSeats, setRoundSeats] = useState("");
@@ -39,7 +38,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
     }, [roomDimensions]);
 
     const placeNewTable = (
-        newTableDismensions: {seats: number} | {width: number, length: number},
+        newTableDismensions: { seats: number } | { width: number, length: number },
         roomDimensions: [number, number],
         roundTables: RoundTable[],
         rectangularTables: RectangularTable[]
@@ -135,7 +134,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     seats,
                     guests: []
                 };
-                const { x, y } = placeNewTable({seats}, roomDimensions as [number, number], roundTables, rectangularTables);
+                const { x, y } = placeNewTable({ seats }, roomDimensions as [number, number], roundTables, rectangularTables);
                 newTable.x = x;
                 newTable.y = y;
                 addRoundTable(newTable);
@@ -157,7 +156,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     y: 0,
                     guests: [],
                 };
-                const { x, y } = placeNewTable({width, length}, roomDimensions as [number, number], roundTables, rectangularTables);
+                const { x, y } = placeNewTable({ width, length }, roomDimensions as [number, number], roundTables, rectangularTables);
                 newTable.x = x;
                 newTable.y = y;
                 addRectangularTable(newTable);
@@ -187,7 +186,7 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     placeholder={translations[language].roomWidthPlaceholder}
                     onChange={(e) => {
                         const value = Number(e.target.value);
-                        if (!isNaN(value)) { 
+                        if (!isNaN(value)) {
                             setRoomWidth(e.target.value);
                             updateRoomDimensions(value, Number(roomLength));
                         }
@@ -199,19 +198,19 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     value={roomLength}
                     type="number"
                     placeholder={translations[language].roomLengthPlaceholder}
-                    onChange={(e) => { 
+                    onChange={(e) => {
                         const value = Number(e.target.value);
-                        if (!isNaN(value)) { 
+                        if (!isNaN(value)) {
                             setRoomLength(e.target.value);
-                            updateRoomDimensions(Number(roomWidth), value); 
+                            updateRoomDimensions(Number(roomWidth), value);
                         }
                     }}
 
                 />
-                
+
                 <HorizontalLine />
                 <Heading level={3}>{translations[language].addTable}</Heading>
-                
+
                 <Subtitle level={3}>{translations[language].name}</Subtitle>
                 <Input
                     value={tableName}
@@ -273,9 +272,46 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                         {translations[language].removeTable}
                     </Button>
                 </ButtonContainer>
+                <HorizontalLine />
+
+
+                <Heading level={3}>{translations[language].listOfTables}</Heading>
+
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gap: "2rem",
+                        marginTop: "2rem",
+                        marginBottom: "2rem",
+
+                    }}
+                >
+                    <Body size="bold" >Table Name</Body>
+                    <Body size="bold" >Type</Body>
+                    <Body size="bold" >Capacity</Body>
+
+                    {roundTables.map((table) => (
+                        <React.Fragment key={table.name}>
+                            <div>{table.name}</div>
+                            <div>Round</div>
+                            <div>{table.seats}</div>
+                        </React.Fragment>
+                    ))}
+
+                    {rectangularTables.map((table) => (
+                        <React.Fragment key={table.name}>
+                            <div>{table.name}</div>
+                            <div>Rectangular</div>
+                            <div>{table.length * 2 + table.width * 2}</div>
+                        </React.Fragment>
+                    ))}
+                </div>
+                <Body size='big'>Total number of seats: {numberOfSeats}</Body>
+                <Body size='big'>Total number of guests: {guests.length}</Body>
             </MenuContainer>
 
-            <TableChart/>
+            <TableChart />
         </Container>
     );
 };

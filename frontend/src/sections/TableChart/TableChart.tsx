@@ -19,10 +19,16 @@ const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
   const { language, isLogged } = useUser();
   const FunctionProxy = useFunctionsProxy();
   const { saveTableLayout, setRectangularTables, setRoundTables } = useTable();
-
+  const { guests } = useUser();
+  const { roundTables, rectangularTables } = useTable();
+  const numberOfSeats = roundTables.reduce((acc, table) => acc + table.seats, 0) + rectangularTables.reduce((acc, table) => acc + table.length * 2 + table.width * 2, 0);
   const handleAssigningPeople = async () => {
     await FunctionProxy.assignPeopleToTables(false);
     if (isLogged) {
+      if (numberOfSeats !== guests.length) {
+        alert("Number of seats needs to match number of guests, but it doesn't.\n\nnumber of guests: " + guests.length + " number of seats: " + numberOfSeats)
+        return;
+      }
       const { rectangularTables, circularTables } = await getTables();
       setRectangularTables(rectangularTables);
       setRoundTables(circularTables);

@@ -70,6 +70,7 @@ const PhotosPage: React.FC = () => {
             };
             setNewPhotos([...newPhotos, newPhoto]);
             await addPhotoByGuest(newPhoto, uniqueUrl);
+            alert("Photo successfully added, waiting for approval from newlyweds. Link to the photo: " + imageUrl)
             setPhotoName('');
             setImageUrl(null);
             setIsVertical(false);

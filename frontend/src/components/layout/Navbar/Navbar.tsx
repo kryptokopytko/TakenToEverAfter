@@ -13,10 +13,8 @@ import { translations } from "../../../translations";
 import useFunctionsProxy from "../../../API/FunctionHandler";
 
 const Navbar: React.FC = () => {
-
   const { setIsLogged, account, accountDetails, isLogged, language, setLanguage, viewLocation } = useUser();
   const { setTheme, theme, themes } = useTheme();
-
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
 
@@ -39,7 +37,7 @@ const Navbar: React.FC = () => {
       try {
         await logout();
         setIsLogged(false);
-      } catch (e) {}
+      } catch (e) { }
     } else {
       navigate('/login');
     }
@@ -68,13 +66,13 @@ const Navbar: React.FC = () => {
           <LogoContainer>
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
-                <Heading level={3} color="primary">{`${account.brideName} & ${account.groomName}`}</Heading>
+              <Heading level={3} color="primary">{`${account.brideName} & ${account.groomName}`}</Heading>
             </NamesContainer>
           </LogoContainer>
         </StyledLink>
         {accountDetails.weddingDate && (<DateContainer>
           {calculateDaysLeft() > 0 ?
-              <Label size='small' color='primary'>{calculateDaysLeft() + " " + translations[language].daysLeft}</Label> : <></>
+            <Label size='small' color='primary'>{calculateDaysLeft() + " " + translations[language].daysLeft}</Label> : <></>
           }
           <Label size='small' color='primary'>{accountDetails.weddingDate} </Label>
         </DateContainer>)}
@@ -132,9 +130,9 @@ const Navbar: React.FC = () => {
             <div>
               <div style={{ marginLeft: '-1.6rem' }}>
                 <div>
-                <Button onClick={handleLoginChange} variant="transparent">
-                  <Label color="tertiary">{isLogged ? translations[language].logout : translations[language].login}</Label>
-                </Button>
+                  <Button onClick={handleLoginChange} variant="transparent">
+                    <Label color="tertiary">{isLogged ? translations[language].logout : translations[language].login}</Label>
+                  </Button>
                 </div>
                 <Button onClick={handleLanguageChange} variant="transparent">
                   <Label color="tertiary">{translations[language].changeLanguage}</Label>
