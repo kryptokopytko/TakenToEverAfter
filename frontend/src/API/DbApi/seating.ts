@@ -8,16 +8,20 @@ export const getTables = async () => {
         api.get("/seating/seats/",  { withCredentials: true }),
       ]);
   
-      const tableGuests = seatsResponse.data.reduce((acc: any, seat: any) => {
-        const { table, guest } = seat;
-        if (!acc[table]) {
-          acc[table] = [];
+      const tableGuests: { [tableId: number]: string[] } = {};
+      
+      seatsResponse.data.forEach((seat: any) => {
+        const tableId = seat.table.id;
+        const guestName = seat.guest.name;
+        const seatNumber = seat.seatNumber;
+  
+        if (!tableGuests[tableId]) {
+          tableGuests[tableId] = [];
         }
-        if (guest) {
-          acc[table].push(guest);
-        }
-        return acc;
-      }, {});
+      
+        tableGuests[tableId][seatNumber - 1] = guestName;
+      });
+  
   
       const rectangularTables = tablesResponse.data
         .filter((table: any) => table.shape == 'rectangular')
