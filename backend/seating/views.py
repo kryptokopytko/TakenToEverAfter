@@ -17,11 +17,13 @@ class SeatView(AccountModelViewSet):
     queryset = Seat.objects.all()
 
 @api_view(['GET'])
-def assign_guests_to_seats(request):
+def assign_guests_to_seats(request, fast_alg):
     account = get_account_from_session(request)
 
     if not account:
         return Response({"error": "User account not found in session."}, status=400)
+    
+    fast_algorithm = fast_alg.lower() == 'true'
     
     guests = Guest.objects.filter(account=account)
     guests_list = list(guests.values_list('id', flat=True))
@@ -48,7 +50,7 @@ def assign_guests_to_seats(request):
             "seats": seats_count
         })
 
-    seatings = assign(guests_list, tags_with_guests, weights, tables_list)
+    seatings = assign(guests_list, tags_with_guests, weights, tables_list, fast_algorithm)
     
     with transaction.atomic():
         for guest_id, table_id, seat_number in seatings:
@@ -56,7 +58,7 @@ def assign_guests_to_seats(request):
                 account=account,
                 table_id=table_id,
                 seat_number=seat_number,
-                guest_id=guest_id
+                defaults={'guest_id': guest_id}
             )
 
 

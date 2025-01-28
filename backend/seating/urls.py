@@ -9,5 +9,5 @@ router.register(r'seats', SeatView)
 
 urlpatterns = router.urls
 urlpatterns += [
-    path('assign-guests/', assign_guests_to_seats, name='assign_guests'),
+    path('assign-guests/<str:fast_alg>/', assign_guests_to_seats, name='assign_guests'),
 ]

@@ -27,6 +27,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
     const FunctionsProxy = useFunctionsProxy();
 
     const addRoundTable = async (table:  Omit<RoundTable, "id">) => {
+        console.log(table.x, table.y);
         const id = await FunctionsProxy.addTable(table.name, table.x, table.y, table.seats, "circular");
         setRoundTables((prev) => [...prev, {...table, id: id || 0}]);
     };

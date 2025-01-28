@@ -91,14 +91,18 @@ const RoomDisplay: React.FC<{ isHomePage?: boolean }> = ({ isHomePage }) => {
                     </TableShape>
                 ))}
             </Board>
-            {isHomePage ? <ButtonContainer>
+            <ButtonContainer>
+                {isHomePage ?
                     <Link to="table_chart">
                         <Button>{translations[language].manageTables}</Button>
                     </Link>
-                    <Button onClick={() => setShowNames((prev) => !prev)}>
-                        {showNames ? translations[language].hideNames : translations[language].showNames}
-                    </Button>
-                </ButtonContainer> : <></>}
+                    
+                    : <></>
+                }
+               <Button onClick={() => setShowNames((prev) => !prev)}>
+                    {showNames ? translations[language].hideNames : translations[language].showNames}
+                </Button>
+            </ButtonContainer> 
         </>
 
     );

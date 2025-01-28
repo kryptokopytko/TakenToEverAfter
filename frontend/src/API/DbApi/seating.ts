@@ -67,8 +67,8 @@ export const getTables = async () => {
     try {
       const tableData = {
         name,
-        x: x,
-        y: y,
+        x: Math.round(x),
+        y: Math.round(y),
         width: shape === "circular"? seatsNumber : (seatsNumber as { length: number; width: number }).width, 
         ...(shape === "rectangular" && { length: (seatsNumber as { length: number; width: number }).length }),
         shape,
@@ -76,7 +76,7 @@ export const getTables = async () => {
 
       console.log(tableData);
       const response = await api.post("/seating/tables/", tableData, { withCredentials: true });
-      return response.data;
+      return response.data.id;
     } catch (error) {
       console.error("Error adding table:", error);
       throw error;
@@ -130,10 +130,10 @@ export const getTables = async () => {
     }
   };
 
-  export const assignPeopleToTables = async () => {
+  export const assignPeopleToTables = async (fast_algorithm = false) => {
     try {
       const response = await api.get(
-        "/seating/assign-guests/",
+        `/seating/assign-guests/${fast_algorithm}`,
         { withCredentials: true }
       );
       return response.data;
