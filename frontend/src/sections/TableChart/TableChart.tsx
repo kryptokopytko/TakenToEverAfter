@@ -8,13 +8,27 @@ import { translations } from "../../translations";
 import { useUser } from "../../providers/UserContext";
 import { ButtonsContainer } from "../../components/layout/Navbar/NavbarStyles";
 import { Link } from "react-router-dom";
+import useFunctionsProxy from "../../API/FunctionHandler";
+import { useTable } from "../../providers/TableContext";
+import { getTables } from "../../API/DbApi/seating";
 
 interface TableChartProps {
   isHomePage?: boolean;
 }
 
 const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
-  const { language } = useUser();
+  const { language, isLogged } = useUser();
+  const FunctionProxy = useFunctionsProxy();
+  const { saveTableLayout, setRectangularTables, setRoundTables } = useTable();
+
+  const handleAssigningPeople = async () => {
+    await FunctionProxy.assignPeopleToTables();
+    if (isLogged) {
+      const { rectangularTables, circularTables } = await getTables();
+      setRectangularTables(rectangularTables);
+      setRoundTables(circularTables);
+    }
+  }
 
   return (
     <div id="table-chart">
@@ -23,7 +37,12 @@ const TableChart: React.FC<TableChartProps> = ({ isHomePage }) => {
         <div style={{ marginBottom: '2rem' }}>
 
           <ButtonsContainer>
-            <Button>{translations[language].assignPeopleToTable}</Button>
+            <Button onClick={() => saveTableLayout()}>
+              {translations[language].saveLayout}
+            </Button>
+            <Button onClick={() => handleAssigningPeople()}>
+              {translations[language].assignPeopleToTable}
+            </Button>
             <Button onClick={() => exportToPDF("table-chart")}>
               {translations[language].exportToPDF}
             </Button>

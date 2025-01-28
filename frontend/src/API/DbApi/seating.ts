@@ -86,13 +86,14 @@ export const getTables = async () => {
   ) => {
     try {
       const tableData = {
-        ...updatedData,
-        position_x: updatedData.x,
-        position_y: updatedData.y,
-        seatsNumber: shape == "circular" ? (updatedData as RoundTable).seats : 
-        { length: (updatedData as RectangularTable).width, width: (updatedData as RectangularTable).length },
+        name: updatedData.name,
+        x: Math.round(updatedData.x),
+        y: Math.round(updatedData.y),
+        width: shape === "circular"? (updatedData as RoundTable).seats : (updatedData as RectangularTable).width, 
+        ...(shape === "rectangular" && { length: (updatedData as RectangularTable).length}),
+        shape,
       };
-
+      console.log(tableId, tableData);
       const response = await api.put(`/seating/tables/${tableId}/`, tableData, { withCredentials: true });
       return response.data;
     } catch (error) {
@@ -124,3 +125,16 @@ export const getTables = async () => {
       throw error;
     }
   };
+
+  export const assignPeopleToTables = async () => {
+    try {
+      const response = await api.get(
+        "/seating/assign-guests/",
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error assigning people:", error);
+      throw error;
+    }
+  }

@@ -15,6 +15,7 @@ interface TableContextType {
     setRoomDimensions: React.Dispatch<React.SetStateAction<number[]>>;
     setRectangularTables: React.Dispatch<React.SetStateAction<RectangularTable[]>>;
     setRoundTables: React.Dispatch<React.SetStateAction<RoundTable[]>>;
+    saveTableLayout: () => void;
 }
 
 const TableContext = createContext<TableContextType | undefined>(undefined);
@@ -41,16 +42,22 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
             setRectangularTables((prev) =>
                 prev.map((table) => (table.id === id ? { ...table, x, y } : table))
             );
-            await FunctionsProxy.updateTable(id, "rectangular", {...rectTable, x: x, y: y});
         }
 
-        const roundTable = roundTables.find(table => table.id == id);
         setRoundTables((prev) =>
             prev.map((table) => (table.id === id ? { ...table, x, y } : table))
         );
-        await FunctionsProxy.updateTable(id, "circular", {...roundTable!, x: x, y: y});
-       
     };
+
+    const saveTableLayout = async () => {
+        for (const rectTable of rectangularTables) { 
+            await FunctionsProxy.updateTable(rectTable.id, "rectangular", rectTable);
+        }
+
+        for (const roundTable of roundTables) {
+            await FunctionsProxy.updateTable(roundTable.id, "circular", roundTable);
+        }
+    }
 
     const updateRoomDimensions = async (width: number, length: number) => {
         setRoomDimensions([width, length]);
@@ -80,6 +87,7 @@ export const TableProvider = ({ children }: { children: ReactNode }) => {
                 setRoomDimensions,
                 setRectangularTables,
                 setRoundTables,
+                saveTableLayout,
             }}
         >
             {children}

@@ -264,7 +264,7 @@ export const translations: Translations = {
     manageTables: "Manage Tables",
     consText: "Separate multiple cons with coma",
     prosText: "Separate multiple pros with coma",
-
+    saveLayout: "Save Table Layout",
   },
   polish: {
     consText: "Rozdzielaj poszczególne wady przecinkiem",
@@ -526,6 +526,7 @@ export const translations: Translations = {
     questionsAndAnswers: "Pytania i odpowiedzi",
     by: "autor:",
     assignPeopleToTable: "Przypisz gości do miejsc",
-    manageTables: "Zarządzaj stołami"
+    manageTables: "Zarządzaj stołami",
+    saveLayout: "Zapisz ustawienie stołów",
   },
 };
