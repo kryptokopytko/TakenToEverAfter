@@ -29,19 +29,20 @@ def assign_guests_to_seats(request, fast_alg):
     guests_list = list(guests.values_list('id', flat=True))
 
     tags = Tag.objects.filter(account=account)
-    weights = list(tags.values_list('rank', flat=True))
 
     tags_with_guests = {}
+    weights = {}
 
     for tag in tags:
         tags_with_guests[tag.id] = list(tag.guests.values_list('id', flat=True))
+        weights[tag.id] = tag.rank
 
     tables = Table.objects.filter(account=account)
     tables_list = []
 
     for table in tables:
         if table.shape == 'rectangular':
-            seats_count = table.width * table.length
+            seats_count = (table.width + table.length) * 2
         elif table.shape == 'circular':
             seats_count = table.width
 
