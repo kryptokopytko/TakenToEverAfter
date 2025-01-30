@@ -287,14 +287,14 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
 
                     }}
                 >
-                    <Body size="bold" >Table Name</Body>
-                    <Body size="bold" >Type</Body>
-                    <Body size="bold" >Capacity</Body>
+                    <Body size="bold">{translations[language].tableName}</Body>
+                    <Body size="bold">{translations[language].type}</Body>
+                    <Body size="bold">{translations[language].capacity}</Body>
 
                     {roundTables.map((table) => (
                         <React.Fragment key={table.name}>
                             <div>{table.name}</div>
-                            <div>Round</div>
+                            <div>{translations[language].round}</div>
                             <div>{table.seats}</div>
                         </React.Fragment>
                     ))}
@@ -302,13 +302,13 @@ const TableChartPage: React.FC<TableChartPageProps> = () => {
                     {rectangularTables.map((table) => (
                         <React.Fragment key={table.name}>
                             <div>{table.name}</div>
-                            <div>Rectangular</div>
+                            <div>{translations[language].rectangular}</div>
                             <div>{table.length * 2 + table.width * 2}</div>
                         </React.Fragment>
                     ))}
                 </div>
-                <Body size='big'>Total number of seats: {numberOfSeats}</Body>
-                <Body size='big'>Total number of guests: {guests.length}</Body>
+                <Body size='big'>{translations[language].totalSeats}: {numberOfSeats}</Body>
+                <Body size='big'>{translations[language].totalGuests}: {guests.length}</Body>
             </MenuContainer>
 
             <TableChart />

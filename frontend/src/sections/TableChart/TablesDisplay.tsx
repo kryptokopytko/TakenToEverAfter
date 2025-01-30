@@ -28,9 +28,9 @@ const TablesDisplay: React.FC<TablesDisplayProps> = ({
 
                     return (
                         <li key={table.id}>
-                            Name/ID: {table.id}, Seats: {table.seats}, Diameter: {diameter}m
-                            x: {table.x},  y: {table.y}
-
+                            {translations[language].nameId}: {table.id}, {translations[language].seats}: {table.seats}, 
+                            {translations[language].diameter}: {diameter}m, 
+                            x: {table.x}, y: {table.y}
                             <div style={{ width: `${scaledDiameter}%`, aspectRatio: "1" }}>
                             </div>
                         </li>
@@ -45,8 +45,9 @@ const TablesDisplay: React.FC<TablesDisplayProps> = ({
 
                     return (
                         <li key={table.id}>
-                            Name/ID: {table.id}, Width: {table.width}m, Length: {table.length}m,
-                            x: {table.x},  y: {table.y}
+                            {translations[language].nameId}: {table.id}, {translations[language].width}: {table.width}m, 
+                            {translations[language].length}: {table.length}m, 
+                            x: {table.x}, y: {table.y}
                             <div
                                 style={{
                                     width: `${scaledWidth}%`,

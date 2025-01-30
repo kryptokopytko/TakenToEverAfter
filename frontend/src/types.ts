@@ -169,3 +169,9 @@ export interface TaskCard {
   category: string;
   tasks: Task[];
 }
+
+/****************************************************************************************************************/
+export interface GuestPageProps {
+  names: {groom: string, bride: string},
+  date: string | null
+}

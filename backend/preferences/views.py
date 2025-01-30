@@ -105,7 +105,9 @@ class GetPreferencesByAlbumUrlView(APIView):
             
             return Response({
                 "theme": theme_data,
-                "language": view_preferences.language
+                "language": view_preferences.language,
+                "names": {"groom": account_details.account.groom_name, "bride": account_details.account.bride_name},
+                "date": account_details.wedding_date
             })
         
         except ObjectDoesNotExist:
@@ -124,7 +126,7 @@ class GetPreferencesByInvitationUrlView(APIView):
             
             return Response({
                 "theme": theme_data,
-                "language": view_preferences.language
+                "language": view_preferences.language,
             })
         
         except ObjectDoesNotExist:

@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image, Couple, Question, Answer } from "../types";
+import { Guest, Account, AccountDetails, WeddingDetails, Language, TaskCard, Tag, Invitation, ExpenseCard, Choice, Image, Couple, Question, Answer, GuestPageProps } from "../types";
 import Example from "../exampleData";
 
 interface UserContextType {
@@ -19,6 +19,7 @@ interface UserContextType {
     photos: Image[];
     questions: Question[];
     answers: Answer[];
+    guestPageProps: GuestPageProps | null;
     
     setAccount: (account: Account) => void;
     setAccountDetails: (accountDetails: AccountDetails) => void;
@@ -36,6 +37,7 @@ interface UserContextType {
     setPhotos: (photos: Image[]) => void;
     setQuestions: (questions: Question[]) => void;
     setAnswers: (answers: Answer[]) => void;
+    setGuestPageProps: (props: GuestPageProps | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -59,6 +61,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [photos, setPhotos] = useState<Image[]>(Example.images[language]);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [answers, setAnswers] = useState<Answer[]>(Example.answers[language]);
+    const [guestPageProps, setGuestPageProps] = useState<GuestPageProps | null>(null);
 
     return (
         <UserContext.Provider
@@ -79,6 +82,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 photos,
                 questions,
                 answers,
+                guestPageProps,
 
                 setWeddingDetails,
                 setGuests,
@@ -95,7 +99,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setChoices,
                 setPhotos,
                 setQuestions,
-                setAnswers
+                setAnswers,
+                setGuestPageProps
             }}
         >
             {children}

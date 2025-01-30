@@ -74,7 +74,7 @@ const AppContent = () => {
   const location = useLocation();
   const { 
     isLogged, language, setIsLogged, setLanguage, setViewLocation, setAccount, setAccountDetails, setWeddingDetails, setTaskCards,
-    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers,
+    setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers, setGuestPageProps
    } = useUser();
 
    const { setTheme, setThemes, setFontSize } = useTheme();
@@ -97,11 +97,15 @@ const AppContent = () => {
 
     setFontSize(initialFontSize);
     setThemes(initialThemes);
-    setTheme(initialThemes.nude);
 
     setRectangularTables(Example.rectangularTables);
     setRoundTables(Example.roundTables);
     setRoomDimensions(Example.roomDismensions);
+
+    if (!location.pathname.includes("guest_response") && !location.pathname.includes("guest_photos")) {
+      setGuestPageProps(null);
+      setTheme(initialThemes.nude);
+    }
   }
 
   useEffect(() => {
@@ -147,6 +151,8 @@ const AppContent = () => {
         const { rectangularTables, circularTables } = await getTables();
         setRectangularTables(rectangularTables);
         setRoundTables(circularTables);
+
+        setGuestPageProps(null);
       } else {
         setIsLogged(false);
         setLanguage("english");

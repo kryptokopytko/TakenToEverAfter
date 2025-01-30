@@ -24,7 +24,7 @@ const PhotosPage: React.FC = () => {
     const [newPhotos, setNewPhotos] = useState<Image[]>([]);
     const [approvedPhotos, setApprovedPhotos] = useState<Image[]>([]);
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
-    const { language, setLanguage } = useUser();
+    const { language, setLanguage, setGuestPageProps } = useUser();
     const { setTheme } = useTheme();
     const { uniqueUrl } = useParams();
 
@@ -35,6 +35,11 @@ const PhotosPage: React.FC = () => {
                     const preferences = await getPreferencesByAlbumUrl(uniqueUrl);
                     setLanguage(preferences.language as Language);
                     setTheme(preferences.theme as Theme);
+                    setGuestPageProps({
+                        names: {bride: preferences.names.bride, groom: preferences.names.groom},
+                        date: preferences.date
+                    });
+
                 } catch (error) {
                     console.error('Error fetching preferences:', error);
                 }
