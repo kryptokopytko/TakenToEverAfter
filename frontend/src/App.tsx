@@ -72,19 +72,19 @@ export const PageContainer = styled.div`
 const AppContent = () => {
   const { theme, fontSize } = useTheme();
   const location = useLocation();
-  const { 
+  const {
     isLogged, language, setIsLogged, setLanguage, setViewLocation, setAccount, setAccountDetails, setWeddingDetails, setTaskCards,
     setGuests, setTags, setInvitations, setExpenseCards, setChoices, setPhotos, setCouples, setQuestions, setAnswers,
-   } = useUser();
+  } = useUser();
 
-   const { setTheme, setThemes, setFontSize } = useTheme();
-   const { setRoundTables, setRectangularTables, setRoomDimensions } = useTable();
+  const { setTheme, setThemes, setFontSize } = useTheme();
+  const { setRoundTables, setRectangularTables, setRoomDimensions } = useTable();
 
   const setExampleData = () => {
     setAccount(Example.account[language]);
     setAccountDetails(Example.accountDetails);
     setWeddingDetails(Example.weddingDetails[language]);
-    setTaskCards(Example.taskCards[language]); 
+    setTaskCards(Example.taskCards[language]);
     setGuests(Example.guests[language]);
     setCouples([]);
     setTags(Example.tags[language]);
@@ -113,17 +113,17 @@ const AppContent = () => {
         setAccountDetails(sessionData.accountDetails);
         setWeddingDetails(null);
 
-        const roomDismensions = sessionData.accountDetails.roomWidth && sessionData.accountDetails.roomLength?
+        const roomDismensions = sessionData.accountDetails.roomWidth && sessionData.accountDetails.roomLength ?
           [sessionData.accountDetails.roomWidth, sessionData.accountDetails.roomLength]
           : Example.roomDismensions;
         setRoomDimensions(roomDismensions);
-        
+
         const guestsInfo = await getGuestsInfo();
         setGuests(guestsInfo.guests);
         setTags(guestsInfo.tags);
         setInvitations(guestsInfo.invitations);
         setCouples(guestsInfo.couples);
-        
+
         const taskCards = await getTasks();
         setTaskCards(taskCards);
 
@@ -134,7 +134,7 @@ const AppContent = () => {
         const photos = await getPhotos();
         setPhotos(photos);
 
-        const {preferences, themes} = await getUserPreferences();
+        const { preferences, themes } = await getUserPreferences();
         setFontSize(preferences.fontSize);
         setThemes(themes);
         setTheme(preferences.colorTheme || initialThemes.nude);
@@ -151,8 +151,8 @@ const AppContent = () => {
         setIsLogged(false);
         setLanguage("english");
         setExampleData();
-    }
-  };
+      }
+    };
 
     fetchSession();
   }, [isLogged]);
@@ -178,7 +178,6 @@ const AppContent = () => {
           <PageContainer>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
               <Route path="/table_chart" element={<TableChartPage />} />
               <Route path="/budget" element={<BudgetPage />} />
               <Route path="/theme_constructor" element={<ThemeConstructorPage />} />

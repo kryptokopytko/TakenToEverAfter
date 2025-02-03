@@ -157,11 +157,20 @@ const Navbar: React.FC = () => {
               onOptionSelect={(selected) => {
                 const section = sections.find(sec => sec.english.name === selected);
                 if (section) {
-                  window.location.href = `/${section.english.name.toLowerCase().replace(" ", "_")}`;
+                  const linkSection = sectionLinks.find(link => link.name === section.english.name);
+
+                  if (linkSection) {
+                    window.location.href = linkSection.link;
+                  } else {
+                    console.error("No link for section: ", section.english.name);
+                  }
+                } else {
+                  console.error("No section: ", selected);
                 }
+
+
               }}
               initialSelectedOption={sectionLinks.find((item) => item.link === viewLocation)?.name ?? 'Home'}
-
             />
           </div>
         </MobileMenu>
