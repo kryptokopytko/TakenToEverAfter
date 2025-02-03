@@ -53,6 +53,8 @@ def assign_guests_to_seats(request, fast_alg):
 
     seatings = assign(guests_list, tags_with_guests, weights, tables_list, fast_algorithm)
     
+    Seat.objects.filter(account=account).delete()
+    
     with transaction.atomic():
         for guest_id, table_id, seat_number in seatings:
             Seat.objects.update_or_create(
