@@ -13,7 +13,7 @@ import { translations } from "../../../translations";
 import useFunctionsProxy from "../../../API/FunctionHandler";
 
 const Navbar: React.FC = () => {
-  const { setIsLogged, account, accountDetails, isLogged, language, setLanguage, viewLocation } = useUser();
+  const { setIsLogged, account, accountDetails, isLogged, language, setLanguage, viewLocation, guestPageProps } = useUser();
   const { setTheme, theme, themes } = useTheme();
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const FunctionsProxy = useFunctionsProxy();
@@ -52,9 +52,11 @@ const Navbar: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const newDate = guestPageProps? guestPageProps.date : accountDetails.weddingDate;
+
   const calculateDaysLeft = () => {
     const today = new Date();
-    const wedding = new Date(convertDateFormat(accountDetails.weddingDate!));
+    const wedding = new Date(convertDateFormat(newDate!));
     const differenceInTime = wedding.getTime() - today.getTime();
     return Math.ceil(differenceInTime / (1000 * 3600 * 24));
   };
@@ -66,15 +68,18 @@ const Navbar: React.FC = () => {
           <LogoContainer>
             <img src={logo} alt="logo" style={{ height: "6rem" }} />
             <NamesContainer>
-              <Heading level={3} color="primary">{`${account.brideName} & ${account.groomName}`}</Heading>
+              <Heading level={3} color="primary">
+                {`${guestPageProps? guestPageProps.names.bride : account.brideName} & 
+                ${guestPageProps? guestPageProps.names.groom : account.groomName}`}
+              </Heading>
             </NamesContainer>
           </LogoContainer>
         </StyledLink>
-        {accountDetails.weddingDate && (<DateContainer>
+        {newDate && (<DateContainer>
           {calculateDaysLeft() > 0 ?
             <Label size='small' color='primary'>{calculateDaysLeft() + " " + translations[language].daysLeft}</Label> : <></>
           }
-          <Label size='small' color='primary'>{accountDetails.weddingDate} </Label>
+          <Label size='small' color='primary'>{newDate} </Label>
         </DateContainer>)}
         <ButtonsContainer>
 

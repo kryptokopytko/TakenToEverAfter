@@ -9,13 +9,13 @@ def assign(people, groups, weights, tables_with_ids, fast_algorithm=False):
     greedy_result = greedily_assign_people_to_tables(people, groups, weights, tables_seats)
     result = greedy_result
 
-    # if not fast_algorithm:
-    #     greedy_score = calculate_total_score(greedy_result, groups, weights)
-    #     annealing_result = optimize_table_assignment(people, groups, weights, tables_seats)
-    #     annealing_score = calculate_total_score(annealing_result, groups, weights)
+    if not fast_algorithm:
+        greedy_score = calculate_total_score(greedy_result, groups, weights)
+        annealing_result = optimize_table_assignment(people, groups, weights, tables_seats)
+        annealing_score = calculate_total_score(annealing_result, groups, weights)
 
-    #     if greedy_score < annealing_score:
-    #         result = annealing_score
+        if greedy_score < annealing_score:
+            result = annealing_result
     
     result_map = []
     for table_index, table in enumerate(result):

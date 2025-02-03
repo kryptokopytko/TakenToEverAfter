@@ -1,6 +1,5 @@
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
-import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import { useEffect, useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
@@ -24,7 +23,7 @@ const PhotosPage: React.FC = () => {
     const [newPhotos, setNewPhotos] = useState<Image[]>([]);
     const [approvedPhotos, setApprovedPhotos] = useState<Image[]>([]);
     const [areApprovedExpanded, setAreApprovedExpanded] = useState(true);
-    const { language, setLanguage } = useUser();
+    const { language, setLanguage, setGuestPageProps } = useUser();
     const { setTheme } = useTheme();
     const { uniqueUrl } = useParams();
 
@@ -35,6 +34,11 @@ const PhotosPage: React.FC = () => {
                     const preferences = await getPreferencesByAlbumUrl(uniqueUrl);
                     setLanguage(preferences.language as Language);
                     setTheme(preferences.theme as Theme);
+                    setGuestPageProps({
+                        names: {bride: preferences.names.bride, groom: preferences.names.groom},
+                        date: preferences.date
+                    });
+
                 } catch (error) {
                     console.error('Error fetching preferences:', error);
                 }
@@ -111,7 +115,6 @@ const PhotosPage: React.FC = () => {
             </MenuContainer>
 
             <div>
-                <FavouritePhotos />
                 <SpaceBetweenContainer>
                     <Subtitle level={1}>{translations[language].approvedPhotos}</Subtitle>
                     <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>

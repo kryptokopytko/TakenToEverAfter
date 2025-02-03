@@ -58,7 +58,9 @@ const ToDoPage = () => {
     };
 
     const handleUpdateTask = async () => {
-        await FunctionsProxy.updateTask(taskId!, taskCategory.id, taskCategory.name, taskName, taskDescription, taskDeadline);
+        const card = taskCards.find((card) => card.tasks.find((task) => task.id === taskId));
+        const task = card?.tasks.find((task) => task.id === taskId);
+        await FunctionsProxy.updateTask(taskId!, taskCategory.id, taskCategory.name, taskName, taskDescription, taskDeadline, task?.completed || false);
         setNotification(translations[language].taskUpdated.replace("{taskName}", taskName).replace("{taskCategory}", taskCategory.name));
         setTimeout(() => setNotification(null), notificationTimeOut);
        

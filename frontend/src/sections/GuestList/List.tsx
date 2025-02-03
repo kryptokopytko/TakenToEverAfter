@@ -97,7 +97,7 @@ const List: React.FC<ListProps> = ({ isExpanded, isHomePage, sortBy, filterByTag
             {guest.decision === 'unknown' && !isHomePage ? (
               <DecisionButtons>
                 <Button variant="transparent" onClick={() => handleDecision(guest.id, true)}>
-                  {translations[language].yes}
+                  {translations[language].yes}/
                 </Button>
                 <Button variant="transparent" onClick={() => handleDecision(guest.id, false)}>
                   {translations[language].no}

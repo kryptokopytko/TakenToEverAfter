@@ -46,7 +46,7 @@ const BudgetPage: React.FC<BudgetPageProps> = () => {
             setInputExpenseDescription(existingSubExpense!.description);
         } else {
             const normalizedCategory = inputCategory.trim().toLowerCase();
-            const category = expenseCards.find(expenseCard => expenseCard.category == normalizedCategory);
+            const category = expenseCards.find(expenseCard => expenseCard.category.trim().toLowerCase() == normalizedCategory);
         
             if (category && inputExpenseName != '') {
                 setCategoryId(category.id);

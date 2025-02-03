@@ -265,7 +265,15 @@ export const translations: Translations = {
     consText: "Separate multiple cons with coma",
     prosText: "Separate multiple pros with coma",
     saveLayout: "Save Table Layout",
-    listOfTables: "List Of Tables"
+    listOfTables: "List Of Tables",
+    circularTables: "Circular Tables",
+    nameId: "Name/ID",
+    diameter: "Diameter",
+    tableName: "Table Name",
+    type: "Type",
+    capacity: "Capacity",
+    totalSeats: "Total number of seats",
+    totalGuests: "Total number of guests"
   },
   polish: {
     listOfTables: "Lista stołów",
@@ -531,5 +539,11 @@ export const translations: Translations = {
     assignPeopleToTable: "Przypisz gości do miejsc",
     manageTables: "Zarządzaj stołami",
     saveLayout: "Zapisz ustawienie stołów",
+    diameter: "Średnica",
+    tableName: "Nazwa stołu",
+    type: "Typ",
+    capacity: "Pojemność",
+    totalSeats: "Łączna liczba miejsc",
+    totalGuests: "Łączna liczba gości"
   },
 };

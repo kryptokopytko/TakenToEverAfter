@@ -16,7 +16,7 @@ import Checkbox from "../components/ui/Checkbox";
 interface GuestResponseProps { }
 
 const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
-    const { language, setLanguage } = useUser();
+    const { language, setLanguage, setGuestPageProps } = useUser();
     const { setTheme } = useTheme();
     const [responses, setResponses] = useState<Record<number, "yes" | "no">>({});
     const [answers, setAnswers] = useState<Record<number, Record<number, string>>>({});
@@ -60,6 +60,12 @@ const GuestResponsePage: React.FC<GuestResponseProps> = ({ }) => {
                     });
                     setResponses(initialResponses);
                     setHasPlusOnes(initialHasPlusOnes);
+
+                    setGuestPageProps({
+                        names: {bride: invitation.brideName, groom: invitation.groomName},
+                        date: invitation.date
+                    });
+
                 } catch (error) {
                     console.error('Error fetching preferences or invitation details:', error);
                 }

@@ -36,8 +36,8 @@ def greedily_assign_people_to_tables(people: List[str], groups: Dict[str, List[s
         table_idx = used_people[existing_person]
         
         if remaining_capacity[table_idx] > 0:
-            exisiting_person_index = assignment[table_idx].index(existing_person)
-            if (len(assignment[table_idx]) - remaining_capacity[table_idx]) / 2 <= exisiting_person_index:
+            existing_person_index = assignment[table_idx].index(existing_person)
+            if len(assignment[table_idx]) / 2 <= existing_person_index:
                 assignment[table_idx].insert(0, person)
             else:
                 assignment[table_idx].append(person)
@@ -57,8 +57,9 @@ def greedily_assign_people_to_tables(people: List[str], groups: Dict[str, List[s
             if try_assign_to_existing_table(person1, person2):
                 continue
 
-        if try_assign_to_same_table(person1, person2):
-            continue
+        if person1 not in used_people and person2 not in used_people:
+            if try_assign_to_same_table(person1, person2):
+                continue
 
         for person in (person1, person2):
             if person not in used_people:
