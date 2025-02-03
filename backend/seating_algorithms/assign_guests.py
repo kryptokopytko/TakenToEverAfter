@@ -15,7 +15,7 @@ def assign(people, groups, weights, tables_with_ids, fast_algorithm=False):
         annealing_score = calculate_total_score(annealing_result, groups, weights)
 
         if greedy_score < annealing_score:
-            result = annealing_score
+            result = annealing_result
     
     result_map = []
     for table_index, table in enumerate(result):
