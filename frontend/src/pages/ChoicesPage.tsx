@@ -41,7 +41,7 @@ const ChoicesPage: React.FC<ChoicesPageProps> = () => {
             setCons(choice!.cons || '');
         } else {
             const normalizedCategory = choiceCategory.trim().toLowerCase();
-            const category = choices.find(expenseCard => expenseCard.category == normalizedCategory);
+            const category = choices.find(expenseCard => expenseCard.category.trim().toLowerCase() == normalizedCategory);
 
             if (category && choiceName != '') {
                 setCategoryId(category.id);

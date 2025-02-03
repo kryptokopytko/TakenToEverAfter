@@ -1,6 +1,5 @@
 import { Heading, Subtitle } from "../styles/typography";
 import { Container, MenuContainer } from "../styles/page";
-import FavouritePhotos from "../sections/PhotoAlbum/FavouritePhotos";
 import PhotoAlbum from "../sections/PhotoAlbum/PhotoAlbum";
 import { useEffect, useState } from "react";
 import Button, { ButtonContainer } from "../components/ui/Button";
@@ -116,7 +115,6 @@ const PhotosPage: React.FC = () => {
             </MenuContainer>
 
             <div>
-                <FavouritePhotos />
                 <SpaceBetweenContainer>
                     <Subtitle level={1}>{translations[language].approvedPhotos}</Subtitle>
                     <Button onClick={() => setAreApprovedExpanded(!areApprovedExpanded)}>

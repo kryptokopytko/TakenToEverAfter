@@ -30,7 +30,7 @@ interface BudgetProps {
 const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
     const [isExpanded, setIsExpanded] = useState(!isHomePage);
-    const {expenseCards, language} = useUser();
+    const {expenseCards, language, accountDetails } = useUser();
 
     const toggleList = () => {
         setIsExpanded((prev) => !prev);
@@ -38,7 +38,7 @@ const Budget: React.FC<BudgetProps> = ({ isHomePage }) => {
 
     const totalSpent = expenseCards.reduce((total, card) => total +
         card.expenses.reduce((sum, exp) => sum + exp.amount, 0), 0);
-    const totalBudget = 3000;
+    const totalBudget = accountDetails.budgetLimit || 3000;
     const remainingBudget = totalBudget - totalSpent;
     const pieData = expenseCards.map((expenseCard) => ({
         label: expenseCard.category,
